@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@mantine/core": "^3.4.3",
+    "@mantine/dates": "^3.4.3",
+    "@mantine/hooks": "^3.4.3",
+    "@mantine/modals": "^3.4.3",
+    "@mantine/notifications": "^3.4.3",
+    "dayjs": "^1.10.7",
+    "sass": "^1.45.1"
+  }
+}

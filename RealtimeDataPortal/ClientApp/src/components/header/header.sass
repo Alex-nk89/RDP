@@ -1,0 +1,35 @@
+@import '../../style/_variables'
+
+.header
+    display: flex
+    align-items: center
+    height: 66px
+    padding: 14px 20px
+    box-shadow: 0 0 2rem 0 rgba(41, 48, 66, .1)
+    .menu-btn
+        margin-right: 1rem
+        &:hover > svg
+            color: $main-color
+    .search
+        width: 100%
+        max-width: 240px
+        margin-right: 1rem
+        &-field
+            > div
+                > input
+                    background: #f7f9fc
+        & div
+            border: none
+    .user
+        flex-grow: 1
+        display: inherit
+        justify-content: flex-end
+    .user-name
+        .menu-open
+            transition: .5s all
+            transform: rotate(180deg)
+        .menu-close
+            transition: .5s all
+            transform: rotate(0deg)
+
+
