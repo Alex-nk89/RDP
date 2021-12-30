@@ -10,7 +10,7 @@ namespace RealtimeDataPortal.Controllers
         static User user = new User();
 
         [HttpGet("GetUser")]
-        public User GetUser ()
+        public User GetUser()
         {
             user.GetUser();
             return user;

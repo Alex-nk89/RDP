@@ -6,6 +6,7 @@
     height: 66px
     padding: 14px 20px
     box-shadow: 0 0 2rem 0 rgba(41, 48, 66, .1)
+    background: #fff
     .menu-btn
         margin-right: 1rem
         &:hover > svg
@@ -18,12 +19,14 @@
             > div
                 > input
                     background: #f7f9fc
-        & div
-            border: none
+                
     .user
         flex-grow: 1
         display: inherit
         justify-content: flex-end
+    .configurator-item
+            display: flex
+            justify-content: space-between
     .user-name
         .menu-open
             transition: .5s all

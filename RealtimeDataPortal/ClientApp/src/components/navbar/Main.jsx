@@ -5,7 +5,7 @@ const Main = () => {
 
     return (
         <NavLink exact to="/">
-            <IoHome />
+            <IoHome size={16}/>
             <span>Главная</span>
         </NavLink>
     )

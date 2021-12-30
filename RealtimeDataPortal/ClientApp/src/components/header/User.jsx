@@ -1,40 +1,40 @@
 import React, { useState } from "react";
-import { Menu, Switch } from "@mantine/core";
+import { Menu } from "@mantine/core";
 
-import { IoChevronDown } from "react-icons/io5";
+import { IoChevronDown, IoBuild, IoSettings } from "react-icons/io5";
 
-const User = () => {
+const User = ({ user }) => {
     const [openedMenu, setOpenedMenu] = useState(false);
-
-    const user = 
-        <div className="user-name">
-            Нагайцев Александр Евгеньевич
-            <IoChevronDown className={openedMenu ? "menu-open" : "menu-close" }/>
-        </div>
+    console.log(user)
 
     const openMenu = () => setOpenedMenu(true);
-
     const closeMenu = () => setOpenedMenu(false);
 
-    return (
-        <div className="user">
-            <Menu
-                size="lg"
-                control={user}
-                opened={openedMenu}
-                onOpen={openMenu}
-                onClose={closeMenu}>
-                <Menu.Item>Администрирование</Menu.Item>
-                <Menu.Item>Конфигуратор</Menu.Item>
-                <Menu.Item>
-                    <label>
-                        <span>Конфигуратор страниц</span>
-                        <Switch size="xs"/>
-                    </label>         
-                </Menu.Item>
-            </Menu>
+    const userBlock = user?.administrator || user?.configurator ?
+        <Menu
+            size="lg"
+            control={
+                <div className="user-name">
+                    {user.name}
+                    <IoChevronDown className={openedMenu ? "menu-open" : "menu-close"} />
+                </div>
+            }
+            opened={openedMenu}
+            onOpen={openMenu}
+            onClose={closeMenu}>
+            { user?.administrator ? <Menu.Item icon={<IoBuild />}>Администрирование</Menu.Item> : null}
+            { user?.configurator ? <Menu.Item icon={<IoSettings />}>Конфигурирование</Menu.Item> : null}
+        </Menu>
+        :
+        <div className="user-name">
+            {user.name}
         </div>
+
+    return (
+        <>{userBlock}</>
     )
 }
 
 export default User;
+
+{/*  */ }

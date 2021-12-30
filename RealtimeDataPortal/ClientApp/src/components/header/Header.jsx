@@ -6,9 +6,9 @@ import User from "./User";
 
 import "./header.sass";
 
-const Header = ({ openedNavbar, setOpenNavbar }) => {
+const Header = ({ user, proccess, openedNavbar, setOpenNavbar }) => {
 
-    const search = 
+    const search =
         <ActionIcon>
             <IoSearch size={20} color="#6c757d" />
         </ActionIcon>
@@ -19,7 +19,7 @@ const Header = ({ openedNavbar, setOpenNavbar }) => {
         <header>
             <div className="header">
                 <div className="menu-btn" onClick={openNavbar} >
-                    <IoMenu size={30}/>
+                    <IoMenu size={30} />
                 </div>
                 <div className="search">
                     <TextInput
@@ -27,7 +27,10 @@ const Header = ({ openedNavbar, setOpenNavbar }) => {
                         rightSection={search}
                         className="search-field" />
                 </div>
-                <User />
+                <div className="user">
+                    <User user={user} />
+                </div>
+
             </div>
         </header>
     )
