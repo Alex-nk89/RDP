@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
 export const useRequest = () => {
-    const [proccess, setProccess] = useState('waiting');
+    const [proccess, setProccess] = useState('loading');
     const [error, setError] = useState(null);
 
     const request = useCallback(
@@ -12,16 +12,15 @@ export const useRequest = () => {
                 `rdp/${controllerMethod}` :
                 `${window.location.origin}/RealtimeDataPortal/rdp/${controllerMethod}`;
 
-            setProccess('loading');
+            //setProccess('loading');
 
             try {
-                const response = await fetch(url);
+                const response = await fetch(url, { method, body, headers});
                 const data = await response.json();
 
                 if(!response.ok)
                     throw new Error(response.json());
 
-                setProccess('confirmed');
                 return data;
             } catch (e) {
                 setProccess('error');
@@ -29,5 +28,5 @@ export const useRequest = () => {
             }
         }, []);
 
-        return { proccess, error, request };
+        return { proccess, setProccess, error, request };
 }

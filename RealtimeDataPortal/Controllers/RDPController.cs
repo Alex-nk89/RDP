@@ -10,10 +10,21 @@ namespace RealtimeDataPortal.Controllers
         static User user = new User();
 
         [HttpGet("GetUser")]
-        public User GetUser()
+        public Object GetUser()
         {
-            user.GetUser();
             return user;
         }
+
+        [HttpGet("GetMenu")]
+        public Object GetMenu(int parentId, bool isFullView)
+        {
+            TreesMenu menuList = new TreesMenu();
+
+            if (!isFullView)
+                isFullView = user.isFullView; // || user.isConfigurator || user.isAdministrator;
+
+            return menuList.GetMenu(parentId, isFullView);
+        }
+        
     }
 }

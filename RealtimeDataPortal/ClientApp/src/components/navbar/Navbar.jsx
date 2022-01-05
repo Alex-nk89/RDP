@@ -2,11 +2,12 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { IoStatsChart } from "react-icons/io5";
 
-import Main from "./Main"
+import Main from "./menuItems/menuItem/main/Main";
+import MenuItems from "./menuItems/MenuItems";
 
 import "../navbar/navbar.sass";
 
-const Navbar = ({ openedNavbar }) => {
+const Navbar = ({ openedNavbar, isConfigModeOn }) => {
 
     return (
         <div className={ openedNavbar ? "side-navbar" : "side-navbar side-navbar-close" }>
@@ -15,7 +16,8 @@ const Navbar = ({ openedNavbar }) => {
                 Realtime Data Portal
             </NavLink>
             <div className="side-navbar-items">
-                <Main />
+                <Main isConfigModeOn={isConfigModeOn} />
+                <MenuItems isConfigModeOn={isConfigModeOn} />
             </div>
         </div>
     )

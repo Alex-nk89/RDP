@@ -6,10 +6,15 @@ namespace RealtimeDataPortal.Models
     public class User
     {
         public string Name { get; set; } = "";
-        public List<string> Groups { get; set; } = new List<string>();
-        public bool FullView { get; set; } = false;
-        public bool Configurator { get; set; } = false;
-        public bool Administrator { get; set; } = false;
+        public List<string> Groups { get; set; } = new List<string>() { "FullView", "Administrator", "Configurator" };
+        public bool isFullView { get; set; } = false;
+        public bool isConfigurator { get; set; } = false;
+        public bool isAdministrator { get; set; } = false;
+
+        public User()
+        {
+            GetUser();
+        }
 
         public void GetUser()
         {
@@ -30,19 +35,19 @@ namespace RealtimeDataPortal.Models
             Access access = new Access();
             var accessList = access.GetAccess();
 
-            if(Groups.Contains(accessList.Where(al => al.Function == "fullView").Select(al => al.ADGroup).First()))
+            if (Groups.Contains(accessList.Where(al => al.Function == "fullView").Select(al => al.ADGroup).First()))
             {
-                FullView = true;
+                isFullView = true;
             }
 
-            if (Groups.Contains(accessList.Where(al => al.Function == "configuratorer").Select(al => al.ADGroup).First()))
+            if (Groups.Contains(accessList.Where(al => al.Function == "configurator").Select(al => al.ADGroup).First()))
             {
-                Configurator = true;
+                isConfigurator = true;
             }
 
             if (Groups.Contains(accessList.Where(al => al.Function == "administrator").Select(al => al.ADGroup).First()))
             {
-                Administrator = true;
+                isAdministrator = true;
             }
         }
     }

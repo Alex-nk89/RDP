@@ -11,12 +11,13 @@ namespace RealtimeDataPortal
 
         }
 
-        //public RDPContext(DbContextOptions<RDPContext> options) : base(options)
-        //{
-        //
-        //}
+        public RDPContext(DbContextOptions<RDPContext> options) : base(options)
+        {
+        
+        }
 
         public virtual DbSet<Access> Access { get; set; } = null!;
+        public virtual DbSet<TreesMenu> TreesMenu { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,7 +26,15 @@ namespace RealtimeDataPortal
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Access>(entity =>
+            {
+                entity.HasKey("Id");
+            });
 
+            modelBuilder.Entity<TreesMenu>(entity =>
+            {
+                entity.HasKey("Id");
+            });
         }
 
 

@@ -1,12 +1,12 @@
-import React from "react";
-import { TextInput, ActionIcon } from "@mantine/core";
+import React, { useMemo } from "react";
+import { TextInput, ActionIcon, Skeleton } from "@mantine/core";
 import { IoSearch, IoMenu } from "react-icons/io5";
 
-import User from "./User";
+import User from "./user/User";
 
 import "./header.sass";
 
-const Header = ({ user, proccess, openedNavbar, setOpenNavbar }) => {
+const Header = ({ user, proccess, openedNavbar, setOpenNavbar, isConfigModeOn, setIsConfigModeOn }) => {
 
     const search =
         <ActionIcon>
@@ -14,6 +14,22 @@ const Header = ({ user, proccess, openedNavbar, setOpenNavbar }) => {
         </ActionIcon>
 
     const openNavbar = () => setOpenNavbar(!openedNavbar);
+
+    const setUserBlockContent = (proccess, user, isConfigModeOn, setIsConfigModeOn) => {
+        switch (proccess) {
+            case 'loading':
+                return <Skeleton width={200} height={14} />;
+            case 'confirmed':
+                return <User user={user} isConfigModeOn={isConfigModeOn} setIsConfigModeOn={setIsConfigModeOn} />;
+            default:
+                return <p>Error</p>
+        }
+    }
+
+    const userBlock = useMemo(() => {
+        return setUserBlockContent(proccess, user, isConfigModeOn, setIsConfigModeOn);
+        //eslint-disable-next-line
+    }, [proccess, isConfigModeOn]);
 
     return (
         <header>
@@ -28,7 +44,7 @@ const Header = ({ user, proccess, openedNavbar, setOpenNavbar }) => {
                         className="search-field" />
                 </div>
                 <div className="user">
-                    <User user={user} />
+                    {userBlock}
                 </div>
 
             </div>
@@ -37,3 +53,5 @@ const Header = ({ user, proccess, openedNavbar, setOpenNavbar }) => {
 }
 
 export default Header;
+
+   // <User user={user} isConfigModeOn={isConfigModeOn} setIsConfigModeOn={setIsConfigModeOn} />

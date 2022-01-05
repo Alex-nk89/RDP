@@ -1,10 +1,11 @@
 @import '../../style/_variables'
+$navbar-width: 280px
     
 .side-navbar
     position: sticky
     display: flex
     flex-direction: column
-    width: 260px
+    width: $navbar-width
     height: 100vh
     margin-left: 0px
     padding: 18px
@@ -24,24 +25,36 @@
             font-size: 22px
     &-items
         margin-top: 2rem
-        svg
+        svg:first-child
             margin-right: .5rem
-        & a
+        svg:nth-last-child(1)
+            color: #e2e8ee
+            transition: .5s transform
+            transform: rotate(0deg)
+        svg.folder_open:nth-last-child(1)
+            transition: .5s transform
+            transform: rotate(180deg)
+        & a, p
             display: flex
             align-items: center
-            height: 2.2em
+            min-height: 2.2em
+            margin: 3px 0
             padding: .5em 1em
             border-radius: 5px
-            font-weight: 500
             text-decoration: none
+            word-break: break-word
             color: #e2e8ee
+            cursor: pointer
             span
                 flex-grow: 1
                 word-break: break-all
-            &:hover
+            /** &:hover
                 color: #fff
-                background: rgba(255, 255, 255, .4)
+                background: rgba(255, 255, 255, .4) **/
+        .active-link
+            color: #fff
+            background: rgba(255, 255, 255, .2)
 
 .side-navbar-close
-    margin-left: -260px
+    margin-left: -$navbar-width
     transition: .5s margin-left
