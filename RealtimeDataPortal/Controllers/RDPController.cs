@@ -12,7 +12,15 @@ namespace RealtimeDataPortal.Controllers
         [HttpGet("GetUser")]
         public Object GetUser()
         {
-            return user;
+            try
+            {
+                return user;
+            }
+            catch
+            {
+                return StatusCode(401, new { Message = "Не удалось получить данные о пользователе. Попробуйте " + 
+                    "перезапустить приложение." });
+            }
         }
 
         [HttpGet("GetMenu")]
@@ -25,6 +33,6 @@ namespace RealtimeDataPortal.Controllers
 
             return menuList.GetMenu(parentId, isFullView);
         }
-        
+
     }
 }

@@ -12,21 +12,24 @@ export const useRequest = () => {
                 `rdp/${controllerMethod}` :
                 `${window.location.origin}/RealtimeDataPortal/rdp/${controllerMethod}`;
 
-            //setProccess('loading');
-
             try {
-                const response = await fetch(url, { method, body, headers});
+                const response = await fetch(url, { method, body, headers });
                 const data = await response.json();
 
-                if(!response.ok)
-                    throw new Error(response.json());
+                if (!response.ok) {
+                    setError({
+                        statusCode: response.status,
+                        statusText: response.statusText,
+                        message: data.message
+                    })
+                    throw new Error();
+                }
 
                 return data;
-            } catch (e) {
+            } catch {
                 setProccess('error');
-                setError(e.message)
             }
         }, []);
 
-        return { proccess, setProccess, error, request };
+    return { proccess, setProccess, error, request };
 }
