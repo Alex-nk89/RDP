@@ -8,6 +8,7 @@ namespace RealtimeDataPortal.Models
         public string Name { get; set; } = null!;
         public int IdParent { get; set; }
         public string Type { get; set; } = null!;
+        public int IdComponent { get; set; }
         [NotMapped]
         public bool isFullView { get; set; } = false;
 

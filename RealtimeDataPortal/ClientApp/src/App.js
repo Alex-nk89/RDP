@@ -31,12 +31,11 @@ const App = () => {
                     setOpenNavbar={setOpenNavbar}
                     openedNavbar={openedNavbar}
                     user={user}
-                    proccess={proccess}
                     isConfigModeOn={isConfigModeOn}
                     setIsConfigModeOn={setIsConfigModeOn} />
-                <Container padding='md' size='md'>
+                <Container size='md' className='container'>
                     <Route exact path='/' component={Home} />
-                    <Route exact path="/Page" component={ExternalPage} />
+                    <Route exact path="/Page/:id" component={ExternalPage} />
                     <Route exact path="/Error" component={ErrorsPage} />
                 </Container>
             </main>

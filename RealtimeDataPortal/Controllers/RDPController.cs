@@ -18,7 +18,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(401, new { Message = "Не удалось получить данные о пользователе. Попробуйте " + 
+                return StatusCode(401, new { Message = "Не удалось получить данные о пользователе. Попробуйте " +
                     "перезапустить приложение." });
             }
         }
@@ -34,5 +34,21 @@ namespace RealtimeDataPortal.Controllers
             return menuList.GetMenu(parentId, isFullView);
         }
 
+        [HttpGet("GetLink")]
+        public Object GetLink (int id)
+        {
+            try
+            {
+                ExternalPages externalPages = new ExternalPages();
+                var link = externalPages.GetLink(id);
+
+                return link;
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "Не удалось получить данные о странице. Попробуйте " +
+                    "перезапустить приложение." });
+            }
+        }
     }
 }

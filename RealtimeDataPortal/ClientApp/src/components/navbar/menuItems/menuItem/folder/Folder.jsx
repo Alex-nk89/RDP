@@ -17,13 +17,13 @@ const Folder = ({ id, name, isFullView, isConfigModeOn }) => {
 
     const isOpenFolder = folderState ? 'folder_open' : null
 
-    const menuItems = items.map(item =>
-        item.type === 'folder' ?
-            <li key={item.id}>
-                <Folder id={item.id} name={item.name} isFullView={item.isFullView} isConfigModeOn={isConfigModeOn} />
+    const menuItems = items.map(({ id, name, isFullView, type, idComponent }) =>
+        type === 'folder' ?
+            <li key={id}>
+                <Folder id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} />
             </li> :
-            <li key={item.id} >
-                <Page id={item.id} name={item.name} type={item.type} isConfigModeOn={isConfigModeOn}/>
+            <li key={id} >
+                <Page id={id} name={name} type={type} idComponent={idComponent} isConfigModeOn={isConfigModeOn}/>
             </li>);
 
     const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'}/> : null;
