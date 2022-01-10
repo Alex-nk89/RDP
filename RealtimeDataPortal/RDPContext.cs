@@ -19,6 +19,7 @@ namespace RealtimeDataPortal
         public virtual DbSet<Access> Access { get; set; } = null!;
         public virtual DbSet<TreesMenu> TreesMenu { get; set; } = null!;
         public virtual DbSet<ExternalPages> ExternalPages { get; set; } = null!;
+        public virtual DbSet<AccessToComponent> AccessToComponent { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -38,6 +39,11 @@ namespace RealtimeDataPortal
             });
 
             modelBuilder.Entity<ExternalPages>(entity =>
+            {
+                entity.HasKey("Id");
+            });
+
+            modelBuilder.Entity<AccessToComponent>(entity =>
             {
                 entity.HasKey("Id");
             });

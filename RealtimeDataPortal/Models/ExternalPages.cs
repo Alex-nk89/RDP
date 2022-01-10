@@ -1,4 +1,6 @@
-﻿namespace RealtimeDataPortal.Models
+﻿using RealtimeDataPortal.Models.Exceptions;
+
+namespace RealtimeDataPortal.Models
 {
     public class ExternalPages
     {
@@ -18,6 +20,8 @@
                         Name = tm.Name,
                         Link = ep.Link
                     }).FirstOrDefault();
+
+                if (link == null) throw new NotFoundException("Страница не найдена");
 
                 return link;
             }

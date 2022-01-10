@@ -15,7 +15,7 @@ const ExternalPage = () => {
     useEffect(() => {
         request(`GetLink?id=${id}`)
             .then(externalPage => {
-                if(Object.keys(externalPage) !== 0) {
+                if(Object.keys(externalPage).length !== 0) {
                     setExternalPage(externalPage);
                     setProccess('confirmed');
                 }
@@ -27,7 +27,9 @@ const ExternalPage = () => {
         <>
             <h3 className="title">{externalPage?.name}</h3>
 
-            <div className="external-page"></div>
+            <div className="info-block external-page">
+                <iframe title={externalPage?.link} src={externalPage?.link} width='100%' height='100%' seamless></iframe>
+            </div>
         </>
 
 

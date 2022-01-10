@@ -13,7 +13,27 @@ const Folder = ({ id, name, isFullView, isConfigModeOn }) => {
     const [items, setItems] = useState([]);
     const [folderState, setFolderState] = useState(false);
 
-    const toChangeFolderState = () => setFolderState(!folderState);
+    //const toChangeFolderState = () => setFolderState(!folderState);
+    const toChangeFolderState = () => {
+        if(!folderState) {
+            request(`GetMenu`, 'POST', JSON.stringify({
+                IdParent: id,
+                isFullView: isFullView,
+            }))
+                .then(menuItems =>{
+                    setItems(menuItems);
+                    setFolderState(true);
+                });
+        } else {
+            setFolderState(false);
+
+            // Таймаут установлен для того чтобы сначала плавно закрывался блок со сложенными элементами меню,
+            // а после закрытия (как заканчивается анимация) данные в блоке уничтожались
+            setTimeout(() => {
+                setItems([]);
+            }, 500)
+        }
+    }
 
     const isOpenFolder = folderState ? 'folder_open' : null
 
@@ -23,23 +43,32 @@ const Folder = ({ id, name, isFullView, isConfigModeOn }) => {
                 <Folder id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} />
             </li> :
             <li key={id} >
-                <Page id={id} name={name} type={type} idComponent={idComponent} isConfigModeOn={isConfigModeOn}/>
+                <Page id={id} name={name} type={type} idComponent={idComponent} isConfigModeOn={isConfigModeOn} />
             </li>);
 
-    const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'}/> : null;
+    const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'} /> : null;
 
-    useEffect(() => {
-        request(`GetMenu?parentId=${id}`)
-            .then(menuItems => setItems(menuItems));
+    /* useEffect(() => {
+        if (!folderState) {
+            setItems([])
+        } else {
+            //request(`GetMenu?parentId=${id}`)
+            request(`GetMenu`, 'POST', JSON.stringify({
+                IdParent: id,
+                isFullView: isFullView,
+            }))
+                .then(menuItems => setItems(menuItems));
+        }
+
         //eslint-disable-next-line
-    }, [])
+    }, [folderState]) */
 
     return (
         <div className='folder'>
             <div className='folder-with-configurator'>
                 <p onClick={toChangeFolderState}>
                     <IoFolder />
-                    <span>{name}</span>
+                    <span>{name} {isFullView.toString()}</span>
                     {isConfigModeOn ? null : <IoChevronDown className={`folder ${isOpenFolder}`} />}
                 </p>
                 {menuConfig}

@@ -2,11 +2,7 @@ import { useState, useCallback } from 'react';
 
 export const useRequest = () => {
     const [proccess, setProccess] = useState('loading');
-    const [error, setError] = useState({
-        statusCode: 204,
-        statusText: 'No Content',
-        message: 'Нет данных'
-    });
+    const [error, setError] = useState({});
 
     const request = useCallback(
         async (controllerMethod, method = 'GET', body = null, headers = { 'Content-Type': 'application/json' }) => {
@@ -26,6 +22,7 @@ export const useRequest = () => {
                         statusText: response.statusText,
                         message: data.message
                     })
+
                     throw new Error();
                 }
 

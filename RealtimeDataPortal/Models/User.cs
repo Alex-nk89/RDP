@@ -6,7 +6,7 @@ namespace RealtimeDataPortal.Models
     public class User
     {
         public string Name { get; set; } = "";
-        public List<string> Groups { get; set; } = new List<string>() { "FullView", "Administrator", "Configurator" };
+        public List<string> Groups { get; set; } = new List<string>() { "Administrator", "Configurator", "GTU75view", "testView" };
         public bool isFullView { get; set; } = false;
         public bool isConfigurator { get; set; } = false;
         public bool isAdministrator { get; set; } = false;

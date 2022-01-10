@@ -5,63 +5,50 @@ namespace RealtimeDataPortal.Models
     public class TreesMenu
     {
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = "";
         public int IdParent { get; set; }
-        public string Type { get; set; } = null!;
+        public string Type { get; set; } = "";
         public int IdComponent { get; set; }
         [NotMapped]
         public bool isFullView { get; set; } = false;
+        [NotMapped]
+        public string? ADGroupToAccess { get; set; }
 
 
-        public List<TreesMenu> GetMenu(int idParent, bool isFullView = false)
+        public Object GetMenu(int idParent, List<string> groups, bool isFullView = false)
         {
-            using(RDPContext db = new RDPContext())
+            using(RDPContext rdp_base = new RDPContext())
             {
-                var menuItems = db.TreesMenu.Where(tm => tm.IdParent == idParent).OrderBy(tm => tm.Name).ToList();
+                IQueryable<TreesMenu> treesMenus = rdp_base.TreesMenu.Where(tm => tm.IdParent == idParent).Distinct();
 
-                //if (!isFullView)
-                //{
+                if(!isFullView)
+                {
+                    treesMenus = (from tm in treesMenus
+                                  join atc in rdp_base.AccessToComponent on tm.Id equals atc.IdComponent into menuItems
+                                  from menuItem in menuItems.DefaultIfEmpty()
+                                  where groups.Contains(menuItem.ADGroupToAccess)
+                                  select new TreesMenu()
+                                  {
+                                      Id = tm.Id,
+                                      Name = tm.Name,
+                                      IdParent = tm.IdParent,
+                                      Type = tm.Type,
+                                      IdComponent = tm.IdComponent,
+                                      isFullView = menuItem.IdChildren == 0 ? true : false
+                                  }).Distinct();
 
-                //}
+                    List<TreesMenu> lists = new List<TreesMenu>(treesMenus.ToList());
 
-                return menuItems;
+                    //foreach(var list in lists)
+                    //{
+                    //    if(treesMenus.Where(tm => tm.Id))
+                    //}
+
+
+                }
+
+                return treesMenus.ToList();
             }
         }
     }
 }
-
-
-//var listElements = (from tp in db.TreePlants
-//                    join ac in db.Access on tp.Id equals ac.IdPage
-//                    where tp.ParentId == parentId
-//                    where GetGroups().IndexOf(ac.ADGroup) >= 0
-//                    orderby tp.Name
-//                    select new TreePlant()
-//                    {
-//                        Id = tp.Id,
-//                        Name = tp.Name,
-//                        ParentId = tp.ParentId,
-//                        GraphicId = tp.GraphicId,
-//                        TableId = tp.TableId,
-//                        MnemoschemeId = tp.MnemoschemeId,
-//                        ExternalPageId = tp.ExternalPageId,
-//                        FullAccess = ac.IdChildren == 0 ? true : false
-//                    })
-//                                        .Distinct()
-//                                        .AsNoTracking()
-//                                        .ToList();
-
-//from tp in db.TreePlants
-//where tp.ParentId == parentId
-//orderby tp.Name
-//select new TreePlant()
-//{
-//    Id = tp.Id,
-//    Name = tp.Name,
-//    ParentId = tp.ParentId,
-//    GraphicId = tp.GraphicId,
-//    TableId = tp.TableId,
-//    MnemoschemeId = tp.MnemoschemeId,
-//    ExternalPageId = tp.ExternalPageId,
-//    FullAccess = true
-//}).AsNoTracking().ToList();

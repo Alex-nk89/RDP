@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RealtimeDataPortal.Models;
+using RealtimeDataPortal.Models.Exceptions;
 
 namespace RealtimeDataPortal.Controllers
 {
@@ -23,15 +24,15 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
-        [HttpGet("GetMenu")]
-        public Object GetMenu(int parentId, bool isFullView)
+        [HttpPost("GetMenu")]
+        public Object GetMenu(TreesMenu treesMenu)
         {
             TreesMenu menuList = new TreesMenu();
 
-            if (!isFullView)
-                isFullView = user.isFullView; // || user.isConfigurator || user.isAdministrator;
+            if (!treesMenu.isFullView)
+                treesMenu.isFullView = user.isFullView; // || user.isConfigurator || user.isAdministrator;
 
-            return menuList.GetMenu(parentId, isFullView);
+            return menuList.GetMenu(treesMenu.IdParent, user.Groups, treesMenu.isFullView);
         }
 
         [HttpGet("GetLink")]
@@ -43,6 +44,14 @@ namespace RealtimeDataPortal.Controllers
                 var link = externalPages.GetLink(id);
 
                 return link;
+            }
+            catch(NotFoundException ex)
+            {
+                return StatusCode(404, new { Message = ex.Message });
+            }
+            catch(ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
