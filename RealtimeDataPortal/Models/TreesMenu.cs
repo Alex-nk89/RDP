@@ -21,7 +21,7 @@ namespace RealtimeDataPortal.Models
             {
                 IQueryable<TreesMenu> treesMenus = rdp_base.TreesMenu.Where(tm => tm.IdParent == idParent).Distinct();
 
-                if(!isFullView)
+                if (!isFullView)
                 {
                     treesMenus = (from tm in treesMenus
                                   join atc in rdp_base.AccessToComponent on tm.Id equals atc.IdComponent into menuItems
@@ -36,18 +36,33 @@ namespace RealtimeDataPortal.Models
                                       IdComponent = tm.IdComponent,
                                       isFullView = menuItem.IdChildren == 0 ? true : false
                                   }).Distinct();
-
-                    List<TreesMenu> lists = new List<TreesMenu>(treesMenus.ToList());
-
-                    //foreach(var list in lists)
-                    //{
-                    //    if(treesMenus.Where(tm => tm.Id))
-                    //}
-
-
                 }
 
-                return treesMenus.ToList();
+                List<TreesMenu> treesMenu = treesMenus.ToList();
+
+                // Могут быть случаи когда папке назначен полный доступ по какой-то группе и одновременно с этим 
+                // вложенному элементу (например, графику) назначен доступ с такой же группой. В этом случае 
+                // запрос получает задвоенную информации по папке (с признаком FullAccess равным true и false)
+                if (!isFullView)
+                {
+                    List<TreesMenu> lists = new List<TreesMenu>(treesMenu);
+
+                    foreach (var list in lists)
+                    {
+                        if (list.isFullView == false)
+                        {
+                            if (treesMenus.
+                                Where(tm => tm.Name == list.Name && tm.IdParent == list.IdParent
+                                    && tm.Type == list.Type && tm.IdComponent == list.IdComponent && tm.isFullView == true)
+                                .Count() == 1)
+                            {
+                                treesMenu.Remove(list);
+                            }
+                        }
+                    }
+                }
+
+                return treesMenu;
             }
         }
     }

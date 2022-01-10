@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { IoFolder, IoChevronDown } from 'react-icons/io5';
 import { Collapse } from '@mantine/core';
 
@@ -13,7 +13,6 @@ const Folder = ({ id, name, isFullView, isConfigModeOn }) => {
     const [items, setItems] = useState([]);
     const [folderState, setFolderState] = useState(false);
 
-    //const toChangeFolderState = () => setFolderState(!folderState);
     const toChangeFolderState = () => {
         if(!folderState) {
             request(`GetMenu`, 'POST', JSON.stringify({
@@ -48,27 +47,12 @@ const Folder = ({ id, name, isFullView, isConfigModeOn }) => {
 
     const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'} /> : null;
 
-    /* useEffect(() => {
-        if (!folderState) {
-            setItems([])
-        } else {
-            //request(`GetMenu?parentId=${id}`)
-            request(`GetMenu`, 'POST', JSON.stringify({
-                IdParent: id,
-                isFullView: isFullView,
-            }))
-                .then(menuItems => setItems(menuItems));
-        }
-
-        //eslint-disable-next-line
-    }, [folderState]) */
-
     return (
         <div className='folder'>
             <div className='folder-with-configurator'>
                 <p onClick={toChangeFolderState}>
                     <IoFolder />
-                    <span>{name} {isFullView.toString()}</span>
+                    <span>{name}</span>
                     {isConfigModeOn ? null : <IoChevronDown className={`folder ${isOpenFolder}`} />}
                 </p>
                 {menuConfig}

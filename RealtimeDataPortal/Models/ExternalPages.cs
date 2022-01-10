@@ -21,7 +21,7 @@ namespace RealtimeDataPortal.Models
                         Link = ep.Link
                     }).FirstOrDefault();
 
-                if (link == null) throw new NotFoundException("Страница не найдена");
+                if (link == null) throw new NotFoundException("Страница не найдена.");
 
                 return link;
             }
