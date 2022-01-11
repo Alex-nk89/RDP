@@ -12,6 +12,8 @@ namespace RealtimeDataPortal.Models
         [NotMapped]
         public bool isFullView { get; set; } = false;
         [NotMapped]
+        public int? IdChildren { get; set; }
+        [NotMapped]
         public string? ADGroupToAccess { get; set; }
 
 

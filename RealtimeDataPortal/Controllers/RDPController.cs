@@ -30,7 +30,7 @@ namespace RealtimeDataPortal.Controllers
             TreesMenu menuList = new TreesMenu();
 
             if (!treesMenu.isFullView)
-                treesMenu.isFullView = user.isFullView; // || user.isConfigurator || user.isAdministrator;
+                treesMenu.isFullView = user.isFullView || user.isConfigurator || user.isAdministrator;
 
             return menuList.GetMenu(treesMenu.IdParent, user.Groups, treesMenu.isFullView);
         }
@@ -41,7 +41,7 @@ namespace RealtimeDataPortal.Controllers
             try
             {
                 ExternalPages externalPages = new ExternalPages();
-                var link = externalPages.GetLink(id);
+                var link = externalPages.GetLink(id, user);
 
                 return link;
             }

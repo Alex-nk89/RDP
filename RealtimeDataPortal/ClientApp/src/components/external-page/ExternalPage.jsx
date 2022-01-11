@@ -21,7 +21,7 @@ const ExternalPage = () => {
                 }
             });
             //eslint-disable-next-line
-    }, [])
+    }, [id])
 
     const page = 
         <>
