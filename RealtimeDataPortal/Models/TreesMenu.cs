@@ -67,5 +67,25 @@ namespace RealtimeDataPortal.Models
                 return treesMenu;
             }
         }
+
+        public List<TreesMenu> GetComponentInformation(int id)
+        {
+            using(RDPContext rdp_base = new RDPContext())
+            {
+                return rdp_base.TreesMenu.Where(ci => ci.Id == id)
+                    .Join(rdp_base.AccessToComponent,
+                    ci => ci.Id,
+                    atc => atc.IdComponent,
+                    (ci, atc) => new TreesMenu
+                    {
+                        Id = ci.Id,
+                        Name = ci.Name,
+                        IdParent = ci.IdParent,
+                        Type = ci.Type,
+                        IdComponent = ci.IdComponent,
+                        ADGroupToAccess = atc.ADGroupToAccess
+                    }).ToList();
+            }
+        }
     }
 }

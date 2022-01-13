@@ -45,7 +45,7 @@ const Folder = ({ id, name, isFullView, isConfigModeOn }) => {
                 <Page id={id} name={name} type={type} idComponent={idComponent} isConfigModeOn={isConfigModeOn} />
             </li>);
 
-    const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'} /> : null;
+    const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'} id={id}/> : null;
 
     return (
         <div className='folder'>

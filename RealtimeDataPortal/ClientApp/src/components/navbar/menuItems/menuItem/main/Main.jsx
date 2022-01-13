@@ -8,7 +8,7 @@ import './main.sass';
 const Main = ({ isConfigModeOn }) => {
     const activeLink = useLocation().pathname === '/' ? 'active-link' : null;
 
-    const menuConfig = isConfigModeOn ? <MenuOptions type='folder'/> : null;
+    const menuConfig = isConfigModeOn ? <MenuOptions type='main-folder' id={0}/> : null;
 
     return (
         <div className={`main-with-configurator ${activeLink}`}>

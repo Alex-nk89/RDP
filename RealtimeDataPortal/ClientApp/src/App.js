@@ -8,6 +8,7 @@ import Home from './components/home/Home';
 import ExternalPage from './components/external-page/ExternalPage';
 //import Page_404 from './components/Page_404';
 import ErrorsPage from './components/errors-page/ErrorsPage';
+import Configurator from './components/configurator/Configurator';
 import AppPreloader from './components/loader/appPreloader';
 import { useRequest } from './hooks/useRequest';
 
@@ -36,6 +37,7 @@ const App = () => {
                 <Container size='md' className='container'>
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Page/:id" component={ExternalPage} />
+                    <Route exact path="/Configurator/:operation/:id" component={Configurator} />
                     <Route exact path="/Error" component={ErrorsPage} />
                 </Container>
             </main>
@@ -55,7 +57,7 @@ const App = () => {
 
     switch (proccess) {
         case 'loading':
-            return <AppPreloader />
+            return <main><AppPreloader /></main>
         case 'confirmed':
             return app;
         case 'error':

@@ -59,5 +59,19 @@ namespace RealtimeDataPortal.Controllers
                     "перезапустить приложение." });
             }
         }
+
+        [HttpGet("GetComponentInformation")]
+        public Object GetComponentInformation (int id)
+        {
+            try
+            {
+                return new TreesMenu().GetComponentInformation(id);
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "Не удалось получить данные о компоненте. Попробуйте " +
+                    "перезапустить приложение." });
+            }
+        }
     }
 }

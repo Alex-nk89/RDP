@@ -1,10 +1,11 @@
+import { Link } from "react-router-dom";
 import { IoOptionsOutline, IoPencil, IoTrashBin, IoFolder, IoReader, IoTrendingUp, IoGrid } from "react-icons/io5";
 import { Menu, Divider } from "@mantine/core";
 
 import './menuOptions.sass';
 
 
-const MenuOptions = ({ type }) => {
+const MenuOptions = ({ type, id }) => {
     const configButton = <div><IoOptionsOutline /></div>
 
     const menuAttributes = {
@@ -13,29 +14,56 @@ const MenuOptions = ({ type }) => {
         transitionDuration: 300
     }
 
+    const createOptions = [
+        <Menu.Label key={5}>Создать:</Menu.Label>,
+        <Menu.Item key={1} icon={<IoFolder />} component={Link} to={`/Configurator/add-folder/${id}`}>
+            Новая папка
+        </Menu.Item>,
+        <Menu.Item key={2} icon={<IoReader />} component={Link} to={`/Configurator/add-external-page/${id}`}>
+            Внешняя страница
+        </Menu.Item>,
+        <Menu.Item key={3} icon={<IoTrendingUp />} component={Link} to={`/Configurator/add-graphic/${id}`}>
+            График
+        </Menu.Item>,
+        <Menu.Item key={4} icon={<IoGrid />} component={Link} to={`/Configurator/add-table/${id}`}>
+            Таблица реального времени
+        </Menu.Item>
+    ]
+
+    const changeOptions = [
+        <Menu.Item key={6} icon={<IoPencil />} component={Link} to={`/Configurator/change/${id}`}>
+            Редактировать
+        </Menu.Item>,
+        <Menu.Item key={7} icon={<IoTrashBin />} className='remove-item' component={Link} to={`/Configurator/remove/${id}`}>
+            Удалить
+        </Menu.Item>
+    ]
+
     const menuForFolder =
         <Menu
             {...menuAttributes}>
-            <Menu.Item icon={<IoPencil />}>Редактировать</Menu.Item>
-            <Menu.Item icon={<IoTrashBin />} className='remove-item'>Удалить</Menu.Item>
+            {changeOptions}
             <Divider />
-            <Menu.Label>Создать:</Menu.Label>
-            <Menu.Item icon={<IoFolder />}>Новая папка</Menu.Item>
-            <Menu.Item icon={<IoReader />}>Внешняя страница</Menu.Item>
-            <Menu.Item icon={<IoTrendingUp />}>График</Menu.Item>
-            <Menu.Item icon={<IoGrid />}>Таблица реального времени</Menu.Item>
+            {createOptions}
+        </Menu>
+
+    const menuForMain =
+        <Menu
+            {...menuAttributes}>
+            {createOptions}
         </Menu>
 
     const menuForPage =
         <Menu
             {...menuAttributes}>
-            <Menu.Item icon={<IoPencil />}>Редактировать</Menu.Item>
-            <Menu.Item icon={<IoTrashBin />} className='remove-item'>Удалить</Menu.Item>
+            {changeOptions}
         </Menu>
 
     switch (type) {
         case 'folder':
             return menuForFolder;
+        case 'main-folder':
+            return menuForMain;
         default:
             return menuForPage;
     }

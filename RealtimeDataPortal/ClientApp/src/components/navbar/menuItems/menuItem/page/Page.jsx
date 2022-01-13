@@ -14,7 +14,7 @@ const Page = ({ id, name, type, isConfigModeOn, idComponent }) => {
 
     const activeLink = useLocation().pathname === link.path ? 'active-link' : null;
 
-    const menuConfig = isConfigModeOn ? <MenuOptions /> : null;
+    const menuConfig = isConfigModeOn ? <MenuOptions id={id} type={type}/> : null;
 
     useEffect(() => {
         switch (type) {

@@ -35,7 +35,7 @@ const ExternalPage = () => {
 
     switch(proccess) {
         case 'loading':
-            return <AppPreloader height='95hv'/>;
+            return <AppPreloader height/>;
         case 'confirmed':
             return page;
         case 'error':
