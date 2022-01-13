@@ -46,10 +46,9 @@ namespace RealtimeDataPortal.CheckAccess
             if (treesMenu.Count() >= 1)
                 return true;
 
-            // получить родителя элемента и прогнать их
-            int[] idParents = treesMenu.Where(tm => tm.Id == id).Select(tm => tm.IdParent).ToArray();
+            int[] idParents = treesMenuWithAccesses.Where(tm => tm.Id == id).Select(tm => tm.IdParent).Distinct().ToArray();
 
-            List<TreesMenu> parents = treesMenu.Where(tm => idParents.Contains(tm.Id)).ToList();
+            List<TreesMenu> parents = treesMenuWithAccesses.Where(tm => idParents.Contains(tm.Id)).ToList();
 
             foreach(var item in parents)
             {
