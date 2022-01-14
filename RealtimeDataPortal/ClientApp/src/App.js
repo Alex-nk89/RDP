@@ -20,11 +20,16 @@ const App = () => {
     const [openedNavbar, setOpenNavbar] = useState(true);
     const [user, setUser] = useState({});
     const [isConfigModeOn, setIsConfigModeOn] = useState(false);
+    const [updateNavbar, setUpdateNavbar] = useState(false);
+
+    const updatingNavbar = () => {
+        setUpdateNavbar(!updateNavbar);
+    }
 
     const app =
         <>
             <nav>
-                <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} />
+                <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar}/>
             </nav>
 
             <main>
@@ -37,7 +42,7 @@ const App = () => {
                 <Container size='md' className='container'>
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Page/:id" component={ExternalPage} />
-                    <Route exact path="/Configurator/:operation/:id" component={Configurator} />
+                    <Route exact path="/Configurator/:operation/:id" render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />}/>
                     <Route exact path="/Error" component={ErrorsPage} />
                 </Container>
             </main>

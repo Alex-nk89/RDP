@@ -4,12 +4,15 @@ import { useForm } from '@mantine/hooks';
 import { IoAdd } from 'react-icons/io5';
 
 import { useRequest } from '../..';
+import { useNotification } from '../..';
 
 import './addChangeFolder.sass';
 
-const AddChangeFolder = ({ componentInfo, type }) => {
-    const { request, proccess, setProccess, error } = useRequest();
+const AddChangeFolder = ({ componentInfo, type, updatingNavbar }) => {
+    const { request, error } = useRequest();
+    const { show } = useNotification();
     const [title, setTitle] = useState(null);
+    const [loadingForButton, setLoadingForButton] = useState(false);
     const [accesses, setAccesses] = useState([]);
     const [oldAccesses, setOldAccesses] = useState([]);
 
@@ -48,14 +51,33 @@ const AddChangeFolder = ({ componentInfo, type }) => {
             Id: type === 'add' ? 0 : componentInfo.id,
             Name: values.name,
             IdParent: type === 'add' ? componentInfo.id : componentInfo.idParent,
-            Type: componentInfo.type,
+            Type: 'folder',
             IdComponent: componentInfo.idComponent,
             ADGroups: accesses,
             AdGroupsOld: oldAccesses
         };
 
+        setLoadingForButton(true);
+
         request('AddChangeFolder', 'POST', JSON.stringify(folder))
-            .then(result => console.log(result));
+            .then(result => {
+                if (Object.keys(result).length !== 0) {
+                    show('success', result.message);
+
+                    if (type === 'add') {
+                        form.reset();
+                        setAccesses([]);
+                    }
+
+                } else {
+                    show('error', error.message);
+                }
+
+            })
+            .finally(() => {
+                setLoadingForButton(false);
+                updatingNavbar();
+            });
     }
 
     const addAccessIcon =
@@ -131,7 +153,7 @@ const AddChangeFolder = ({ componentInfo, type }) => {
 
                     <Space h="md" />
 
-                    <Button type="submit">Сохранить</Button>
+                    <Button type="submit" loading={loadingForButton}>Сохранить</Button>
 
                 </form>
             </div>

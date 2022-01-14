@@ -20,7 +20,7 @@ namespace RealtimeDataPortal.Models
         [NotMapped]
         public string[]? ADGroupsOld { get; set; }
 
-        public void Deconstruct(out int Id, out string Name, out int IdParent, out string Type, out int IdComponent, 
+        public void Deconstruct(out int Id, out string Name, out int IdParent, out string Type, out int IdComponent,
             out string[] ADGroups, out string[] ADGroupsOld)
         {
             Id = this.Id;
@@ -28,14 +28,14 @@ namespace RealtimeDataPortal.Models
             IdParent = this.IdParent;
             Type = this.Type;
             IdComponent = this.IdComponent;
-            ADGroups = this.ADGroups ?? new string[] {};
-            ADGroupsOld = this.ADGroupsOld ?? new string[] {};
+            ADGroups = this.ADGroups ?? new string[] { };
+            ADGroupsOld = this.ADGroupsOld ?? new string[] { };
         }
 
 
         public Object GetMenu(int idParent, List<string> groups, bool isFullView = false)
         {
-            using(RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new RDPContext())
             {
                 IQueryable<TreesMenu> treesMenus = rdp_base.TreesMenu.Where(tm => tm.IdParent == idParent).Distinct();
 
@@ -86,7 +86,7 @@ namespace RealtimeDataPortal.Models
 
         public TreesMenu GetComponentInformation(int id)
         {
-            using(RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new RDPContext())
             {
                 TreesMenu treesMenus = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new TreesMenu();
 
@@ -102,12 +102,31 @@ namespace RealtimeDataPortal.Models
 
         public int AddNewComponent(TreesMenu treesMenu)
         {
-            using(RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new RDPContext())
             {
                 rdp_base.TreesMenu.Update(treesMenu);
                 rdp_base.SaveChanges();
 
                 return treesMenu.Id;
+            }
+        }
+
+        public void DeleteElement(int id)
+        {
+            using(RDPContext rdp_base = new RDPContext())
+            {
+                TreesMenu removedElement = new TreesMenu() { Id = id };
+                rdp_base.TreesMenu.Remove(removedElement);
+
+                List<AccessToComponent> accessToComponent = rdp_base.AccessToComponent
+                    .Where(atc => atc.IdComponent == id && (atc.IdChildren == 0 || atc.IdChildren == null)).Distinct().ToList();
+
+                foreach(var access in accessToComponent)
+                {
+                    new AccessToComponent().DeleteAccessToComponent(id, access.IdChildren, access.ADGroupToAccess);
+                }
+
+                rdp_base.SaveChanges();
             }
         }
     }

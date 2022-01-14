@@ -108,5 +108,19 @@ namespace RealtimeDataPortal.Controllers
                     "перезапустить приложение." });
             }
         }
+
+        [HttpGet("DeleteElement")]
+        public Object DeleteElement(int id)
+        {
+            try
+            {
+                return new { Message = "Компонент удален" };
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При удалении произошла ошибка. Попробуйте " +
+                    "перезапустить приложение." });
+            }
+        }
     }
 }

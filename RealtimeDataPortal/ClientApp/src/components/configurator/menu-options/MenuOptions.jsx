@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
 import { IoOptionsOutline, IoPencil, IoTrashBin, IoFolder, IoReader, IoTrendingUp, IoGrid } from "react-icons/io5";
-import { Menu, Divider } from "@mantine/core";
+import { Menu, Divider, Text } from "@mantine/core";
+import { useModals } from "@mantine/modals";
+
+import { useRequest } from "..";
+import { useNotification } from "..";
 
 import './menuOptions.sass';
 
-
 const MenuOptions = ({ type, id }) => {
+    const { request, error } = useRequest();
+    const { show } = useNotification();
+    const modal = useModals();
     const configButton = <div><IoOptionsOutline /></div>
 
     const menuAttributes = {
@@ -13,6 +19,26 @@ const MenuOptions = ({ type, id }) => {
         size: 'lg',
         transitionDuration: 300
     }
+
+    const deleteElement = () => {
+        request(`DeleteElement?id=${id}`)
+            .then(result => {
+                if (Object.keys(result).length !== 0) show('success', result.message)
+                else show('error', error.message)
+            })
+    }
+
+    const openModal = () => modal.openConfirmModal({
+        title: 'Удаление компонента',
+        children: (
+            <Text size="sm">
+                Вы уверены что хотите продолжить? Отменить удаление будет не возможно!
+            </Text>
+        ),
+        labels: { confirm: 'Удалить', cancel: 'Отменить' },
+        confirmProps: { color: 'red' },
+        onConfirm: () => deleteElement
+    })
 
     const createOptions = [
         <Menu.Label key={5}>Создать:</Menu.Label>,
@@ -34,7 +60,7 @@ const MenuOptions = ({ type, id }) => {
         <Menu.Item key={6} icon={<IoPencil />} component={Link} to={`/Configurator/change-${type}/${id}`}>
             Редактировать
         </Menu.Item>,
-        <Menu.Item key={7} icon={<IoTrashBin />} className='remove-item' component={Link} to={`/Configurator/remove-${type}/${id}`}>
+        <Menu.Item key={7} icon={<IoTrashBin />} className='remove-item' onClick={openModal}>
             Удалить
         </Menu.Item>
     ]

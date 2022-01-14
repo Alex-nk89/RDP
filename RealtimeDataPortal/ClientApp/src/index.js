@@ -9,17 +9,23 @@ import "./index.sass"
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { NotificationsProvider } from '@mantine/notifications';
+import { ModalsProvider } from '@mantine/modals';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
 	<MantineProvider>
-		<BrowserRouter basename={baseUrl}>
-			<App />
-    	</BrowserRouter>
-  	</MantineProvider>,
-  rootElement);
+		<NotificationsProvider>
+			<ModalsProvider>
+				<BrowserRouter basename={baseUrl}>
+					<App />
+				</BrowserRouter>
+			</ModalsProvider>
+		</NotificationsProvider>
+	</MantineProvider>,
+	rootElement);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -7,7 +7,7 @@ import MenuItems from "./menuItems/MenuItems";
 
 import "../navbar/navbar.sass";
 
-const Navbar = ({ openedNavbar, isConfigModeOn }) => {
+const Navbar = ({ openedNavbar, isConfigModeOn, updateNavbar }) => {
 
     return (
         <div className={ openedNavbar ? "side-navbar" : "side-navbar side-navbar-close" }>
@@ -17,7 +17,7 @@ const Navbar = ({ openedNavbar, isConfigModeOn }) => {
             </NavLink>
             <div className="side-navbar-items">
                 <Main isConfigModeOn={isConfigModeOn} />
-                <MenuItems isConfigModeOn={isConfigModeOn} />
+                <MenuItems isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar} />
             </div>
         </div>
     )

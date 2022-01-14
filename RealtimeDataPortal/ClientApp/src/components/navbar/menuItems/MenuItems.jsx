@@ -5,13 +5,14 @@ import { useRequest } from '../../../hooks/useRequest';
 import Folder from './menuItem/folder/Folder';
 import Page from './menuItem/page/Page';
 
-const MenuItems = ({ isConfigModeOn }) => {
+const MenuItems = ({ isConfigModeOn, updateNavbar }) => {
+    
     const { request, proccess, setProccess } = useRequest();
     const [items, setItems] = useState([]);
 
     const menuItems = items.map(({ id, name, isFullView, type, idComponent }) =>
         type === 'folder' ?
-            <Folder key={id} id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} /> :
+            <Folder key={id} id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar}/> :
             <Page key={id} id={id} name={name} type={type} idComponent={idComponent} isConfigModeOn={isConfigModeOn} />);
 
     const menu = (proccess, menuItems) => {
@@ -27,15 +28,17 @@ const MenuItems = ({ isConfigModeOn }) => {
 
     useEffect(() => {
         request(`GetMenu`, 'POST', JSON.stringify({}))
-            .then(menuItems => setItems(menuItems))
+            .then(menuItems => {
+                setItems(menuItems);
+            })
             .then(() => setProccess('confirmed'));
         //eslint-disable-next-line
-    }, []);
+    }, [updateNavbar]);
 
     const itemsBlock = useMemo(() => {
         return menu(proccess, menuItems);
         //eslint-disable-next-line
-    }, [proccess, isConfigModeOn])
+    }, [proccess, isConfigModeOn, updateNavbar])
 
 
     return (

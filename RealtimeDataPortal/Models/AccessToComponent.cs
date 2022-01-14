@@ -54,10 +54,10 @@
                 rdp_base.AccessToComponent.RemoveRange(accessToComponent);
                 rdp_base.SaveChanges();
 
-                int idParent = rdp_base.TreesMenu.Where(tm => tm.Id == tm.IdComponent).Select(tm => tm.IdParent).First();
+                int idParent = rdp_base.TreesMenu.Where(tm => tm.Id == idComponent).Select(tm => tm.IdParent).First();
                 int countChildren = rdp_base.TreesMenu.Where(tm => tm.IdParent == idParent).Count();
 
-                if(countChildren == 1)
+                if(countChildren > 1)
                 {
                     DeleteAccessToComponent(idParent, idComponent, adGroupToAccess);
                 }

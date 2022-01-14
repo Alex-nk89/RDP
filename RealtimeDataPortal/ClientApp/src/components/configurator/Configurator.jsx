@@ -8,7 +8,7 @@ import { AddChangeFolder } from '.';
 
 
 
-const Configurator = () => {
+const Configurator = ({ updatingNavbar }) => {
     const { id, operation } = useParams();
     const { request, proccess, setProccess, error } = useRequest();
     const [componentInfo, setComponentInfo] = useState({});
@@ -16,9 +16,9 @@ const Configurator = () => {
     function form(componentInfo) {
         switch (operation) {
             case 'add-folder':
-                return <AddChangeFolder componentInfo={componentInfo} type="add" />;
+                return <AddChangeFolder componentInfo={componentInfo} type="add" updatingNavbar={updatingNavbar} />;
             case 'change-folder':
-                return <AddChangeFolder componentInfo={componentInfo} type="change" />;
+                return <AddChangeFolder componentInfo={componentInfo} type="change" updatingNavbar={updatingNavbar} />;
             default:
                 return null;
         }
