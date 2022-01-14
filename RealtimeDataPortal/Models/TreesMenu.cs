@@ -15,6 +15,22 @@ namespace RealtimeDataPortal.Models
         public int? IdChildren { get; set; }
         [NotMapped]
         public string? ADGroupToAccess { get; set; }
+        [NotMapped]
+        public string[]? ADGroups { get; set; }
+        [NotMapped]
+        public string[]? ADGroupsOld { get; set; }
+
+        public void Deconstruct(out int Id, out string Name, out int IdParent, out string Type, out int IdComponent, 
+            out string[] ADGroups, out string[] ADGroupsOld)
+        {
+            Id = this.Id;
+            Name = this.Name;
+            IdParent = this.IdParent;
+            Type = this.Type;
+            IdComponent = this.IdComponent;
+            ADGroups = this.ADGroups ?? new string[] {};
+            ADGroupsOld = this.ADGroupsOld ?? new string[] {};
+        }
 
 
         public Object GetMenu(int idParent, List<string> groups, bool isFullView = false)
@@ -68,23 +84,30 @@ namespace RealtimeDataPortal.Models
             }
         }
 
-        public List<TreesMenu> GetComponentInformation(int id)
+        public TreesMenu GetComponentInformation(int id)
         {
             using(RDPContext rdp_base = new RDPContext())
             {
-                return rdp_base.TreesMenu.Where(ci => ci.Id == id)
-                    .Join(rdp_base.AccessToComponent,
-                    ci => ci.Id,
-                    atc => atc.IdComponent,
-                    (ci, atc) => new TreesMenu
-                    {
-                        Id = ci.Id,
-                        Name = ci.Name,
-                        IdParent = ci.IdParent,
-                        Type = ci.Type,
-                        IdComponent = ci.IdComponent,
-                        ADGroupToAccess = atc.ADGroupToAccess
-                    }).ToList();
+                TreesMenu treesMenus = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new TreesMenu();
+
+                string[] adGroups = rdp_base.AccessToComponent
+                    .Where(atc => atc.IdComponent == id && atc.IdChildren == 0)
+                    .Select(tm => tm.ADGroupToAccess).ToArray();
+
+                treesMenus.ADGroups = adGroups;
+
+                return treesMenus;
+            }
+        }
+
+        public int AddNewComponent(TreesMenu treesMenu)
+        {
+            using(RDPContext rdp_base = new RDPContext())
+            {
+                rdp_base.TreesMenu.Update(treesMenu);
+                rdp_base.SaveChanges();
+
+                return treesMenu.Id;
             }
         }
     }

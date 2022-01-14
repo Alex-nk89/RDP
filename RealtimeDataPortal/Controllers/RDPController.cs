@@ -73,5 +73,40 @@ namespace RealtimeDataPortal.Controllers
                     "перезапустить приложение." });
             }
         }
+
+        [HttpPost("AddChangeFolder")]
+        public Object AddChangeFolder(TreesMenu treesMenu)
+        {
+            AccessToComponent accessToComponent = new AccessToComponent();
+            (int id, string Name, int idParent, string type, int idComponent, string[] adGroups, string[] adGroupsOld) = treesMenu;
+
+            try
+            {
+                id = treesMenu.AddNewComponent(treesMenu);
+
+                string[] addedAccesses =  adGroups.Except(adGroupsOld).ToArray();
+
+                foreach(var addedAccess in addedAccesses)
+                {
+                    accessToComponent.AddAccessToComponent(id, 0, addedAccess);
+                }
+
+                string[] deletedAccesses = adGroupsOld.Except(adGroups).ToArray();
+
+                foreach(var deletedAccess in deletedAccesses)
+                {
+                    accessToComponent.DeleteAccessToComponent(id, 0, deletedAccess);
+                }
+
+                return new { Message = "Изменения успешно внесены" };
+            }
+            catch(Exception ex)
+            {
+                string error = ex.Message;
+
+                return StatusCode(500, new { Message = "Не удалось внести изменения. Попробуйте " +
+                    "перезапустить приложение." });
+            }
+        }
     }
 }

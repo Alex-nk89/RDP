@@ -31,10 +31,10 @@ const MenuOptions = ({ type, id }) => {
     ]
 
     const changeOptions = [
-        <Menu.Item key={6} icon={<IoPencil />} component={Link} to={`/Configurator/change/${id}`}>
+        <Menu.Item key={6} icon={<IoPencil />} component={Link} to={`/Configurator/change-${type}/${id}`}>
             Редактировать
         </Menu.Item>,
-        <Menu.Item key={7} icon={<IoTrashBin />} className='remove-item' component={Link} to={`/Configurator/remove/${id}`}>
+        <Menu.Item key={7} icon={<IoTrashBin />} className='remove-item' component={Link} to={`/Configurator/remove-${type}/${id}`}>
             Удалить
         </Menu.Item>
     ]

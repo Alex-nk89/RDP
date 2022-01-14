@@ -26,24 +26,23 @@ const MenuItems = ({ isConfigModeOn }) => {
     }
 
     useEffect(() => {
-        //request(`GetMenu`)
-        request(`GetMenu`, 'POST', JSON.stringify({ }))
+        request(`GetMenu`, 'POST', JSON.stringify({}))
             .then(menuItems => setItems(menuItems))
-    .then(() => setProccess('confirmed'));
+            .then(() => setProccess('confirmed'));
         //eslint-disable-next-line
     }, []);
 
-const itemsBlock = useMemo(() => {
-    return menu(proccess, menuItems);
-    //eslint-disable-next-line
-}, [proccess, isConfigModeOn])
+    const itemsBlock = useMemo(() => {
+        return menu(proccess, menuItems);
+        //eslint-disable-next-line
+    }, [proccess, isConfigModeOn])
 
 
-return (
-    <>
-        {itemsBlock}
-    </>
-)
+    return (
+        <>
+            {itemsBlock}
+        </>
+    )
 }
 
 export default MenuItems;
