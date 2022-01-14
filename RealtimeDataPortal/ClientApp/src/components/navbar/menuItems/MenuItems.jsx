@@ -38,7 +38,7 @@ const MenuItems = ({ isConfigModeOn, updateNavbar }) => {
     const itemsBlock = useMemo(() => {
         return menu(proccess, menuItems);
         //eslint-disable-next-line
-    }, [proccess, isConfigModeOn, updateNavbar])
+    }, [proccess, isConfigModeOn, items])
 
 
     return (

@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react';
 
 export const useRequest = () => {
-    const [proccess, setProccess] = useState('loading');
+    const [proccess, setProccess] = useState('waiting');
     const [error, setError] = useState({});
 
     const request = useCallback(
         async (controllerMethod, method = 'GET', body = null, headers = { 'Content-Type': 'application/json' }) => {
+            setProccess('loading');
 
             // Так как приложении при публикации кладется в папку, а не в корень
             const url = window.location.href.includes("localhost") ?

@@ -22,9 +22,7 @@ const App = () => {
     const [isConfigModeOn, setIsConfigModeOn] = useState(false);
     const [updateNavbar, setUpdateNavbar] = useState(false);
 
-    const updatingNavbar = () => {
-        setUpdateNavbar(!updateNavbar);
-    }
+    const updatingNavbar = () => setUpdateNavbar(!updateNavbar);
 
     const app =
         <>
