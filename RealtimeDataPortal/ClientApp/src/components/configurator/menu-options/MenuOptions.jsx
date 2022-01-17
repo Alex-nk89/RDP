@@ -8,7 +8,7 @@ import { useNotification } from "..";
 
 import './menuOptions.sass';
 
-const MenuOptions = ({ type, id }) => {
+const MenuOptions = ({ type, id, updatingNavbar }) => {
     const { request, error } = useRequest();
     const { show } = useNotification();
     const modal = useModals();
@@ -26,6 +26,7 @@ const MenuOptions = ({ type, id }) => {
                 if (Object.keys(result).length !== 0) show('success', result.message)
                 else show('error', error.message)
             })
+            .then(updatingNavbar())
     }
 
     const openModal = () => modal.openConfirmModal({
@@ -37,7 +38,7 @@ const MenuOptions = ({ type, id }) => {
         ),
         labels: { confirm: 'Удалить', cancel: 'Отменить' },
         confirmProps: { color: 'red' },
-        onConfirm: () => deleteElement
+        onConfirm: () => deleteElement()
     })
 
     const createOptions = [

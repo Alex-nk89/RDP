@@ -8,7 +8,7 @@ import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 import './folder.sass';
 import Page from '../page/Page';
 
-const Folder = ({ id, name, isFullView, isConfigModeOn, updateNavbar }) => {
+const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
     const { request, proccess, setProccess } = useRequest();
     const [items, setItems] = useState([]);
     const [folderState, setFolderState] = useState(false);
@@ -44,13 +44,13 @@ const Folder = ({ id, name, isFullView, isConfigModeOn, updateNavbar }) => {
     const menuItems = items.map(({ id, name, isFullView, type, idComponent }) =>
         type === 'folder' ?
             <li key={id}>
-                <Folder id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} />
+                <Folder id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} updatingNavbar={updatingNavbar} />
             </li> :
             <li key={id} >
                 <Page id={id} name={name} type={type} idComponent={idComponent} isConfigModeOn={isConfigModeOn} />
             </li>);
 
-    const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'} id={id} /> : null;
+    const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'} id={id} updatingNavbar={updatingNavbar} /> : null;
 
     const loader = proccess === 'loading' ? <Loader size={16} sx={(theme) => ({ stroke: theme.colors.gray[0]})}/> : null;
 

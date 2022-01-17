@@ -6,6 +6,7 @@ import Header from './components/header/Header';
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import ExternalPage from './components/external-page/ExternalPage';
+import Graphics from './components/graphics/Graphics';
 //import Page_404 from './components/Page_404';
 import ErrorsPage from './components/errors-page/ErrorsPage';
 import Configurator from './components/configurator/Configurator';
@@ -27,7 +28,7 @@ const App = () => {
     const app =
         <>
             <nav>
-                <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar}/>
+            <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar} updatingNavbar={updatingNavbar}/>
             </nav>
 
             <main>
@@ -40,6 +41,7 @@ const App = () => {
                 <Container size='md' className='container'>
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Page/:id" component={ExternalPage} />
+                    <Route exact path="/Graphics/:id" component={Graphics} />
                     <Route exact path="/Configurator/:operation/:id" render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />}/>
                     <Route exact path="/Error" component={ErrorsPage} />
                 </Container>

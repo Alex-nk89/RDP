@@ -21,6 +21,8 @@ namespace RealtimeDataPortal
         public virtual DbSet<ExternalPages> ExternalPages { get; set; } = null!;
         public virtual DbSet<AccessToComponent> AccessToComponent { get; set; } = null!;
 
+        public virtual DbSet<Graphics> Graphics { get; set; } = null!;
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=RDP_Base;Trusted_Connection=True;");
@@ -44,6 +46,11 @@ namespace RealtimeDataPortal
             });
 
             modelBuilder.Entity<AccessToComponent>(entity =>
+            {
+                entity.HasKey("Id");
+            });
+
+            modelBuilder.Entity<Graphics>(entity =>
             {
                 entity.HasKey("Id");
             });

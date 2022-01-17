@@ -27,7 +27,7 @@ const Page = ({ id, name, type, isConfigModeOn, idComponent }) => {
             case 'graphic':
                 setLink({
                     icon: <IoTrendingUpOutline />,
-                    path: '/graphic'
+                    path: `/graphics/${idComponent}`
                 });
                 break;
             case 'table':

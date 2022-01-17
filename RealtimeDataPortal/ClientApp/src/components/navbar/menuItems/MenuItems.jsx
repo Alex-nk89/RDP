@@ -5,20 +5,27 @@ import { useRequest } from '../../../hooks/useRequest';
 import Folder from './menuItem/folder/Folder';
 import Page from './menuItem/page/Page';
 
-const MenuItems = ({ isConfigModeOn, updateNavbar }) => {
+const MenuItems = ({ isConfigModeOn, updateNavbar, updatingNavbar }) => {
     
     const { request, proccess, setProccess } = useRequest();
     const [items, setItems] = useState([]);
 
     const menuItems = items.map(({ id, name, isFullView, type, idComponent }) =>
         type === 'folder' ?
-            <Folder key={id} id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar}/> :
+            <Folder 
+                key={id} 
+                id={id} 
+                name={name} 
+                isFullView={isFullView} 
+                isConfigModeOn={isConfigModeOn} 
+                updateNavbar={updateNavbar}
+                updatingNavbar={updatingNavbar}/> :
             <Page key={id} id={id} name={name} type={type} idComponent={idComponent} isConfigModeOn={isConfigModeOn} />);
 
     const menu = (proccess, menuItems) => {
         switch (proccess) {
             case 'loading':
-                return <Skeleton height="2.2em" className="skeleton" />;
+                return <Skeleton height="2.7em" className="skeleton" />;
             case 'confirmed':
                 return menuItems;
             default:

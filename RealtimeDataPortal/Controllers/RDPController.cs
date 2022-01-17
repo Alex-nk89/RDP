@@ -82,6 +82,9 @@ namespace RealtimeDataPortal.Controllers
 
             try
             {
+                if (!user.isConfigurator)
+                    throw new ForbiddenException("Нет доступа к конфигуратору. Изменения не были внесены");
+
                 id = treesMenu.AddNewComponent(treesMenu);
 
                 string[] addedAccesses =  adGroups.Except(adGroupsOld).ToArray();
@@ -100,7 +103,11 @@ namespace RealtimeDataPortal.Controllers
 
                 return new { Message = "Изменения успешно внесены" };
             }
-            catch(Exception ex)
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
+            }
+            catch (Exception ex)
             {
                 string error = ex.Message;
 
@@ -114,11 +121,37 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                new TreesMenu().DeleteElement(id);
+
                 return new { Message = "Компонент удален" };
             }
             catch
             {
                 return StatusCode(500, new { Message = "При удалении произошла ошибка. Попробуйте " +
+                    "перезапустить приложение." });
+            }
+        }
+
+        [HttpGet("GetAttributesForGraphic")]
+        public Object GetAttributesForGraphic(int id)
+        {
+            try
+            {
+                Graphics attributesGraphic = new Graphics().GetAttributesForGraphic(id);
+
+                return new
+                {
+                    Id = attributesGraphic.Id,
+                    Name = attributesGraphic.Name
+                };
+            }
+            catch(NotFoundException ex)
+            {
+                return StatusCode(404, new { Message = ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При загрузке данных произошла ошибка. Попробуйте " +
                     "перезапустить приложение." });
             }
         }
