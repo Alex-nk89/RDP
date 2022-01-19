@@ -41,18 +41,18 @@ namespace RealtimeDataPortal.CheckAccess
         private bool CheckAccessToPage (User user, List<TreesMenu> treesMenuWithAccesses, int id, int? idChildren = null)
         {
             List<TreesMenu> treesMenu = treesMenuWithAccesses
-                .Where(tm => tm.IdComponent == id && tm.IdChildren == idChildren).ToList();
+                .Where(tm => tm.ComponentId == id && tm.ChildrenId == idChildren).ToList();
 
             if (treesMenu.Count() >= 1)
                 return true;
 
-            int[] idParents = treesMenuWithAccesses.Where(tm => tm.Id == id).Select(tm => tm.IdParent).Distinct().ToArray();
+            int[] idParents = treesMenuWithAccesses.Where(tm => tm.Id == id).Select(tm => tm.ParentId).Distinct().ToArray();
 
             List<TreesMenu> parents = treesMenuWithAccesses.Where(tm => idParents.Contains(tm.Id)).ToList();
 
             foreach(var item in parents)
             {
-                if(CheckAccessToPage(user, treesMenuWithAccesses, item.IdParent, item.IdChildren))
+                if(CheckAccessToPage(user, treesMenuWithAccesses, item.ParentId, item.ChildrenId))
                     return true;
             }
 

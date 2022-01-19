@@ -28,7 +28,7 @@ const App = () => {
     const app =
         <>
             <nav>
-            <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar} updatingNavbar={updatingNavbar}/>
+                <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar} updatingNavbar={updatingNavbar}/>
             </nav>
 
             <main>
@@ -66,7 +66,7 @@ const App = () => {
         case 'confirmed':
             return app;
         case 'error':
-            return <ErrorsPage {...error} />
+            return <main><ErrorsPage {...error} /></main>
         default:
             return null;
     }

@@ -3,9 +3,7 @@ import { useParams } from 'react-router-dom';
 
 
 import { useRequest } from '../../hooks/useRequest';
-import ErrorsPage from '../errors-page/ErrorsPage';
-import AppPreloader from '../loader/appPreloader';
-import HeaderGraphics from './header/HeaderGraphics';
+import { ErrorsPage, AppPreloader, TabContent } from './Index';
 
 import './graphics.sass';
 
@@ -13,16 +11,33 @@ const Graphics = () => {
     const { request, error, proccess, setProccess } = useRequest();
     const { id } = useParams();
     const [attributesGraphic, setAttributesGraphic] = useState({});
+    const [activeTab, setActiveTab] = useState(0);
 
-    const graphic = <>
-        <HeaderGraphics attributesGraphic={attributesGraphic} />
+    const tabsNames = Object.keys(attributesGraphic).length === 0 ? [] :
+        [...new Set(attributesGraphic.map(item => item.typeName))];
+
+    const tabsContent = tabsNames.length > 0 ? tabsNames.map((item, index) =>
+        <TabContent 
+            key={index} 
+            attributesGraphic={attributesGraphic} 
+            tabName={item} 
+            activeTab={activeTab} 
+            setActiveTab={setActiveTab}
+            index={index}
+            tabsNames={tabsNames} />) : null;
+
+    const graphic = Object.keys(attributesGraphic).length === 0 ? null : <>
+        {tabsContent}
     </>;
 
     useEffect(() => {
         request(`GetAttributesForGraphic?id=${id}`)
             .then(attributesGraphic => {
-                setAttributesGraphic(attributesGraphic);
-                setProccess('confirmed');
+                if (Object.keys(attributesGraphic).length !== 0) {
+                    setAttributesGraphic(attributesGraphic);
+                    setProccess('confirmed');
+                }
+
             });
         //eslint-disable-next-line
     }, [id]);
@@ -30,11 +45,11 @@ const Graphics = () => {
 
     switch (proccess) {
         case 'loading':
-            return <AppPreloader height />;
+            return <AppPreloader height='calc(100vh - 116px)' />;
         case 'confirmed':
             return graphic;
         case 'error':
-            return <ErrorsPage {...error} />
+            return <ErrorsPage {...error} height='calc(100vh - 116px)' />
         default:
             return null;
     }

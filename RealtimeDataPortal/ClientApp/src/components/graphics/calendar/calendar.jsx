@@ -1,11 +1,17 @@
-import { DatePicker } from '@mantine/dates';
+import { MonthCalendar, DayCalendar, RangeCalendar } from '../Index';
 
-const Calendar = () => {
+const Calendar = ({ calendar, setDate }) => {
 
-
-    return(
-        <DatePicker placeholder="Pick date" />
-    )
+    switch (calendar) {
+        case 'month':
+            return <MonthCalendar setDate={setDate} />;
+        case 'day':
+            return <DayCalendar setDate={setDate} />;
+        case 'range':
+            return <RangeCalendar setDate={setDate} />
+        default:
+            return null;
+    }
 }
 
 export default Calendar;

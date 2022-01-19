@@ -17,7 +17,7 @@ const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
     useEffect(() => {
         if (folderState) {
             request(`GetMenu`, 'POST', JSON.stringify({
-                IdParent: id,
+                ParentId: id,
                 isFullView: isFullView,
             }))
                 .then(menuItems => {
@@ -41,13 +41,13 @@ const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
 
     const isOpenFolder = thereIsItem ? 'folder_open' : null
 
-    const menuItems = items.map(({ id, name, isFullView, type, idComponent }) =>
+    const menuItems = items.map(({ id, name, isFullView, type, componentId }) =>
         type === 'folder' ?
             <li key={id}>
                 <Folder id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} updatingNavbar={updatingNavbar} />
             </li> :
             <li key={id} >
-                <Page id={id} name={name} type={type} idComponent={idComponent} isConfigModeOn={isConfigModeOn} />
+                <Page id={id} name={name} type={type} componentId={componentId} isConfigModeOn={isConfigModeOn} />
             </li>);
 
     const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'} id={id} updatingNavbar={updatingNavbar} /> : null;

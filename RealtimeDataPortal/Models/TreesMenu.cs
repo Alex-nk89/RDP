@@ -6,13 +6,15 @@ namespace RealtimeDataPortal.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = "";
-        public int IdParent { get; set; }
+        public int ParentId { get; set; }
         public string Type { get; set; } = "";
-        public int IdComponent { get; set; }
+        public int ComponentId { get; set; }
+
+
         [NotMapped]
         public bool isFullView { get; set; } = false;
         [NotMapped]
-        public int? IdChildren { get; set; }
+        public int? ChildrenId { get; set; }
         [NotMapped]
         public string? ADGroupToAccess { get; set; }
         [NotMapped]
@@ -20,24 +22,24 @@ namespace RealtimeDataPortal.Models
         [NotMapped]
         public string[]? ADGroupsOld { get; set; }
 
-        public void Deconstruct(out int Id, out string Name, out int IdParent, out string Type, out int IdComponent,
+        public void Deconstruct(out int Id, out string Name, out int ParentId, out string Type, out int ComponentId,
             out string[] ADGroups, out string[] ADGroupsOld)
         {
             Id = this.Id;
             Name = this.Name;
-            IdParent = this.IdParent;
+            ParentId = this.ParentId;
             Type = this.Type;
-            IdComponent = this.IdComponent;
+            ComponentId = this.ComponentId;
             ADGroups = this.ADGroups ?? new string[] { };
             ADGroupsOld = this.ADGroupsOld ?? new string[] { };
         }
 
 
-        public Object GetMenu(int idParent, List<string> groups, bool isFullView = false)
+        public Object GetMenu(int parentId, List<string> groups, bool isFullView = false)
         {
             using (RDPContext rdp_base = new RDPContext())
             {
-                IQueryable<TreesMenu> treesMenus = rdp_base.TreesMenu.Where(tm => tm.IdParent == idParent).Distinct();
+                IQueryable<TreesMenu> treesMenus = rdp_base.TreesMenu.Where(tm => tm.ParentId == parentId).Distinct();
 
                 if (!isFullView)
                 {
@@ -49,9 +51,9 @@ namespace RealtimeDataPortal.Models
                                   {
                                       Id = tm.Id,
                                       Name = tm.Name,
-                                      IdParent = tm.IdParent,
+                                      ParentId = tm.ParentId,
                                       Type = tm.Type,
-                                      IdComponent = tm.IdComponent,
+                                      ComponentId = tm.ComponentId,
                                       isFullView = menuItem.IdChildren == 0 ? true : false
                                   }).Distinct();
                 }
@@ -70,8 +72,8 @@ namespace RealtimeDataPortal.Models
                         if (list.isFullView == false)
                         {
                             if (treesMenus.
-                                Where(tm => tm.Name == list.Name && tm.IdParent == list.IdParent
-                                    && tm.Type == list.Type && tm.IdComponent == list.IdComponent && tm.isFullView == true)
+                                Where(tm => tm.Name == list.Name && tm.ParentId == list.ParentId
+                                    && tm.Type == list.Type && tm.ComponentId == list.ComponentId && tm.isFullView == true)
                                 .Count() == 1)
                             {
                                 treesMenu.Remove(list);

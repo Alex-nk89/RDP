@@ -3,17 +3,16 @@ import { Button } from '@mantine/core';
 
 import './errorsPage.sass';
 
-const ErrorsPage = ({ statusCode, statusText, message, nonFullHeight }) => {
-    const height = nonFullHeight ? 'non-full-height' : null;
+const ErrorsPage = ({ statusCode, statusText, message, height }) => {
 
-    return <main>
-        <div className={`errors-page errors-page_${height}`}>
+    return (
+        <div className='errors-page' style={{ height: height}}>
             <h1>{statusCode}</h1>
             <h2>{statusText}.</h2>
             <p>{message}</p>
             <Link to="/"><Button>На главную</Button></Link>
         </div>
-    </main>
+    )
 }
 
 export default ErrorsPage;

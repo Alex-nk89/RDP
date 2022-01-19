@@ -5,7 +5,7 @@ import './appPreloader.sass';
 const AppPreloader = ({ height }) => {
 
     return (
-            <div className={`app-preloader ${height ? 'app-preloader_height' : null}`}>
+            <div className='app-preloader' style={{ height: height}}>
                 <Loader size={70}/>
             </div>
     )

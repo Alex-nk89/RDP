@@ -20,8 +20,14 @@ namespace RealtimeDataPortal
         public virtual DbSet<TreesMenu> TreesMenu { get; set; } = null!;
         public virtual DbSet<ExternalPages> ExternalPages { get; set; } = null!;
         public virtual DbSet<AccessToComponent> AccessToComponent { get; set; } = null!;
-
         public virtual DbSet<Graphics> Graphics { get; set; } = null!;
+        public virtual DbSet<Products> Products { get; set; } = null!;
+        public virtual DbSet<ProductsParameters> ProductsParameters { get; set; } = null!;
+        public virtual DbSet<ProductParameterGroups> ProductParameterGroups { get; set; } = null!;
+        public virtual DbSet<Server> Server { get; set; } = null!;
+        public virtual DbSet<Tags> Tags { get; set; } = null!;
+        public virtual DbSet<TagsParameter> TagsParameter { get; set; } = null!;
+        public virtual DbSet<TagsType> TagsType { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -52,7 +58,42 @@ namespace RealtimeDataPortal
 
             modelBuilder.Entity<Graphics>(entity =>
             {
-                entity.HasKey("Id");
+                entity.HasKey("ComponentId");
+            });
+
+            modelBuilder.Entity<Products>(entity =>
+            {
+                entity.HasKey("ProductId");
+            });
+
+            modelBuilder.Entity<ProductsParameters>(entity =>
+            {
+                entity.HasKey("ProductsParametersId");
+            });
+
+            modelBuilder.Entity<Server>(entity =>
+            {
+                entity.HasKey("ServerId");
+            });
+
+            modelBuilder.Entity<Tags>(entity =>
+            {
+                entity.HasKey("TagId");
+            });
+
+            modelBuilder.Entity<TagsParameter>(entity =>
+            {
+                entity.HasKey("TagParameterId");
+            });
+
+            modelBuilder.Entity<TagsType>(entity =>
+            {
+                entity.HasKey("TagTypeId");
+            });
+
+            modelBuilder.Entity<ProductParameterGroups>(entity =>
+            {
+                entity.HasKey("ProductParameterGroupsId");
             });
         }
 

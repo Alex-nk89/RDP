@@ -6,7 +6,7 @@ import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 
 import './page.sass';
 
-const Page = ({ id, name, type, isConfigModeOn, idComponent }) => {
+const Page = ({ id, name, type, isConfigModeOn, componentId }) => {
     const [link, setLink] = useState({
         icon: null,
         path: ''
@@ -21,13 +21,13 @@ const Page = ({ id, name, type, isConfigModeOn, idComponent }) => {
             case 'external-page':
                 setLink({
                     icon: <IoReaderOutline/>,
-                    path: `/page/${idComponent}`
+                    path: `/page/${componentId}`
                 });
                 break;
             case 'graphic':
                 setLink({
                     icon: <IoTrendingUpOutline />,
-                    path: `/graphics/${idComponent}`
+                    path: `/graphics/${componentId}`
                 });
                 break;
             case 'table':

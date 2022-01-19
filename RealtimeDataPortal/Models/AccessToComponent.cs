@@ -33,7 +33,7 @@
                     rdp_base.AccessToComponent.Add(accessToComponent);
 
                     idChildren = idComponent;
-                    idComponent = rdp_base.TreesMenu.Where(tm => tm.Id == idComponent).Select(tm => tm.IdParent).First();
+                    idComponent = rdp_base.TreesMenu.Where(tm => tm.Id == idComponent).Select(tm => tm.ParentId).First();
 
                     if(idComponent != 0)
                         AddAccessToComponent(idComponent, idChildren, adGroupToAccess);
@@ -54,8 +54,8 @@
                 rdp_base.AccessToComponent.RemoveRange(accessToComponent);
                 rdp_base.SaveChanges();
 
-                int idParent = rdp_base.TreesMenu.Where(tm => tm.Id == idComponent).Select(tm => tm.IdParent).First();
-                int countChildren = rdp_base.TreesMenu.Where(tm => tm.IdParent == idParent).Count();
+                int idParent = rdp_base.TreesMenu.Where(tm => tm.Id == idComponent).Select(tm => tm.ParentId).First();
+                int countChildren = rdp_base.TreesMenu.Where(tm => tm.ParentId == idParent).Count();
 
                 if(countChildren > 1)
                 {

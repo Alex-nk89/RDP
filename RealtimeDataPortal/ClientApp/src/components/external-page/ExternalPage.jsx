@@ -35,11 +35,11 @@ const ExternalPage = () => {
 
     switch(proccess) {
         case 'loading':
-            return <AppPreloader height/>;
+            return <AppPreloader height='calc(100vh - 122px)'/>;
         case 'confirmed':
             return page;
         case 'error':
-            return <ErrorsPage {...error} nonFullHeight={true}/>;
+            return <ErrorsPage {...error} height='calc(100vh - 116px)'/>;
         default:
             return null;
     }

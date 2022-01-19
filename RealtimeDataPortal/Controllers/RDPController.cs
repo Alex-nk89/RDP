@@ -32,7 +32,7 @@ namespace RealtimeDataPortal.Controllers
             if (!treesMenu.isFullView)
                 treesMenu.isFullView = user.isFullView || user.isConfigurator || user.isAdministrator;
 
-            return menuList.GetMenu(treesMenu.IdParent, user.Groups, treesMenu.isFullView);
+            return menuList.GetMenu(treesMenu.ParentId, user.Groups, treesMenu.isFullView);
         }
 
         [HttpGet("GetLink")]
@@ -137,17 +137,29 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                Graphics attributesGraphic = new Graphics().GetAttributesForGraphic(id);
+                List<AttributesGraphics> attributesGraphic = new Graphics().GetAttributesForGraphic(id);
 
-                return new
-                {
-                    Id = attributesGraphic.Id,
-                    Name = attributesGraphic.Name
-                };
+                return attributesGraphic;
             }
             catch(NotFoundException ex)
             {
                 return StatusCode(404, new { Message = ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При загрузке данных произошла ошибка. Попробуйте " +
+                    "перезапустить приложение." });
+            }
+        }
+
+        [HttpPost("GetGraphic")]
+        public Object GetGraphic (Query query)
+        {
+            try
+            {
+                List<History> history = new Query().GetGraphic(query, user);
+
+                return new { };
             }
             catch
             {

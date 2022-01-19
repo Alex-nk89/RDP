@@ -1,15 +1,80 @@
-.header-graphic
-    display: flex
-    flex-wrap: wrap
-    .title
+@import '../../style/_variables'
+.tabs
+    margin-top: 2rem
+    .mantine-Tabs-tabControl
+        padding: .5rem 1rem
+        background: #fff
+        border: 1px solid $main-color
+        &:hover
+            background: $main-color
+            color: #fff
+    .mantine-Tabs-tabActive
+        background: $main-color
+        color: #fff
+.tab-content
+    display: none
+    height: 100%
+    background: transparent
+    &_visible
         display: block
-        flex-grow: 1
-    &__settings
+    .header
+        box-shadow: none
+        padding: 1rem 2rem
+        .title
+            font-size: 1.1rem
+    .fullscreen
+        position: fixed
+        top: 15px
+        right: 15px
+        bottom: 15px
+        left: 15px
+        margin-top: 0
+        z-index: 9999
+    .graphic
+        height: 400px
+        padding: 1rem 2rem
+    &__header
         display: flex
-        flex-wrap: nowrap
-        button
-            width: 2rem
-            height: 2rem
-            padding: 0
-        input:
-            height: 2rem
+        flex-wrap: wrap
+        .title
+            margin-top: 1rem
+        .settings
+            display: flex
+            flex-wrap: wrap
+            &__calendar
+                margin-top: 1rem
+                &__choise-date
+                    display: flex
+                    justify-content: space-between
+                    align-items: center
+                .mantine-Select-root
+                    max-width: 150px
+                .mantine-DatePicker-root
+                    max-width: 110px
+                .mantine-TimeInput-root
+                    max-width: 100px
+            &__additional
+                display: flex
+                flex-wrap: nowrap
+                margin-top: 1rem
+
+@media ( max-width: 1400px )
+    .tab-content
+        .graphic
+            height: 370px
+
+@media ( max-width: 1200px )
+    .tab-content
+        .graphic
+            height: 350px
+
+@media ( max-width: 992px )
+    .tab-content
+        .graphic
+            height: 300px
+
+@media ( max-width: 768px )
+    .tab-content
+        .graphic
+            height: 270px
+    

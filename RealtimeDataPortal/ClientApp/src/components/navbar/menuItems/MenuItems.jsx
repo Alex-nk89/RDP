@@ -10,7 +10,8 @@ const MenuItems = ({ isConfigModeOn, updateNavbar, updatingNavbar }) => {
     const { request, proccess, setProccess } = useRequest();
     const [items, setItems] = useState([]);
 
-    const menuItems = items.map(({ id, name, isFullView, type, idComponent }) =>
+
+    const menuItems = items.map(({ id, name, isFullView, type, ComponentId }) =>
         type === 'folder' ?
             <Folder 
                 key={id} 
@@ -20,7 +21,7 @@ const MenuItems = ({ isConfigModeOn, updateNavbar, updatingNavbar }) => {
                 isConfigModeOn={isConfigModeOn} 
                 updateNavbar={updateNavbar}
                 updatingNavbar={updatingNavbar}/> :
-            <Page key={id} id={id} name={name} type={type} idComponent={idComponent} isConfigModeOn={isConfigModeOn} />);
+            <Page key={id} id={id} name={name} type={type} ComponentId={ComponentId} isConfigModeOn={isConfigModeOn} />);
 
     const menu = (proccess, menuItems) => {
         switch (proccess) {

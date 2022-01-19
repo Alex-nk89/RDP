@@ -18,7 +18,7 @@ namespace RealtimeDataPortal.Models
             {
                 var link = context.ExternalPages.
                     Where(l => l.Id == id).
-                    Join(context.TreesMenu, ep => ep.Id, tm => tm.IdComponent,
+                    Join(context.TreesMenu, ep => ep.Id, tm => tm.ComponentId,
                     (ep, tm) => new
                     {
                         Id = tm.Id,
