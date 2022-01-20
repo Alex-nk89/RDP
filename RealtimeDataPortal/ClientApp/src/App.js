@@ -31,7 +31,7 @@ const App = () => {
                 <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar} updatingNavbar={updatingNavbar}/>
             </nav>
 
-            <main>
+            <main className={`${openedNavbar ? 'navbarOpen' : ''}`}>
                 <Header
                     setOpenNavbar={setOpenNavbar}
                     openedNavbar={openedNavbar}

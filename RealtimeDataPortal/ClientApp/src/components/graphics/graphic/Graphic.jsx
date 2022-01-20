@@ -7,7 +7,7 @@ import { AppPreloader, ErrorsPage } from '../Index';
 
 const Graphic = ({ attributes, date }) => {
     console.log(attributes);
-    const { nameParameter, calendar } = { ...attributes };
+    const { nameParameter, calendar, serverConnection } = { ...attributes };
     const { request, proccess, setProcces, error } = useRequest();
     const [fullScreen, setFullScreen] = useState(false);
 
@@ -32,7 +32,8 @@ const Graphic = ({ attributes, date }) => {
         request('GetGraphic', 'POST', JSON.stringify({ 
             Calendar: calendar,
             StartDate: date.start,
-            EndDate: date.end
+            EndDate: date.end,
+            //ServerConnection: serverConnection
         }))
     }, [])
 

@@ -1,4 +1,5 @@
 @import './style/_fonts'
+@import './style/_variables'
 
 html
     font-family: "Poppins"
@@ -7,6 +8,14 @@ html
 main
     width: 100%
     background: #f7f9fc
+    transition: .5s margin-left
+
+.navbarOpen
+    margin-left: $navbar-width
+    transition: .5s margin-left
+
+nav
+    position: fixed
     
 #root
     display: flex

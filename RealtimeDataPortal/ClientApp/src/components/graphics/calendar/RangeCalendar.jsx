@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Select, Button, Space } from '@mantine/core';
-import 'dayjs/locale/ru';
 import { DatePicker, TimeInput } from '@mantine/dates';
 import { IoSync } from 'react-icons/io5';
+import 'dayjs/locale/ru';
 
 const selectList = [
     { value: "1", label: "Последние 10 минут" },
@@ -30,8 +30,7 @@ const RangeCalendar = ({ setDate }) => {
         size: 'xs',
         local:'ru',
         inputFormat: "DD.MM.YYYY",
-        placeholder: 'Выберите дату',
-        dropdownType: "modal"
+        placeholder: 'Выберите дату'
     }
 
     const choiseDay = selectDate => {
@@ -70,7 +69,7 @@ const RangeCalendar = ({ setDate }) => {
     }
 
     const selectRange = visibleCalendarRange ? <>
-        <DatePicker value={startDayRange} onChange={setStartDayRange} {...settingsCalendar}/>
+        <DatePicker value={startDayRange} onChange={setStartDayRange} {...settingsCalendar} local='ru'/>
         <Space w="xs" />
         <TimeInput value={startTimeRange} onChange={setStartTimeRange} size='xs'/>
         <Space w="xs" />

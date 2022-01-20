@@ -5,9 +5,9 @@
         public string StartDate { get; set; } = string.Empty;
         public string EndDate { get; set; } = string.Empty;
         public string Calendar { get; set; } = string.Empty;
-        public string ServerConnection { get; set; } = string.Empty!;
+        public string? ServerConnection { get; set; } = string.Empty!;
 
-        public void Deconstruct(out string startDate, out string endDate, out string calendar, out string serverConnection)
+        public void Deconstruct(out string startDate, out string endDate, out string calendar, out string? serverConnection)
         {
             startDate = this.StartDate;
             endDate = this.EndDate;
@@ -24,7 +24,7 @@
             //if (!check.GetAccess(id, user))
             //    throw new ForbiddenException("У Вас нет доступа к странице.");
 
-            (string startDate, string endDate, string calendar) = query;
+            (string startDate, string endDate, string calendar, string? serverConnection) = query;
 
             // Для суточных добавляем день (так данные от сегодня фактически показывают данные за вчера)
             // и добавляем 3 часа чтобы быть уверенным о том, что изменения успели записаться в БД
