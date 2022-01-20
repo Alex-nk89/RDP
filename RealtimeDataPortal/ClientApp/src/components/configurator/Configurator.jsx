@@ -4,13 +4,14 @@ import { useParams } from "react-router-dom";
 import { useRequest } from "../../hooks/useRequest";
 import AppPreloader from "../loader/appPreloader";
 import ErrorsPage from '../errors-page/ErrorsPage';
-import { AddChangeFolder } from '.';
+import { AddChangeFolder, useNotification } from '.';
 
 
 
 const Configurator = ({ updatingNavbar }) => {
     const { id, operation } = useParams();
     const { request, proccess, setProccess, error } = useRequest();
+    const { show } = useNotification();
     const [componentInfo, setComponentInfo] = useState({});
 
     function form(componentInfo) {
@@ -27,8 +28,10 @@ const Configurator = ({ updatingNavbar }) => {
     useEffect(() => {
         request(`GetComponentInformation?id=${id}`)
             .then(componentInfo => {
-                setComponentInfo(componentInfo);
-                setProccess('confirmed');
+                if (Object.keys(componentInfo).length !== 0) {
+                    setComponentInfo(componentInfo);
+                    setProccess('confirmed');
+                }
             })
         //eslint-disable-next-line
     }, [id, operation])

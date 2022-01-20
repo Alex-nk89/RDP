@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RealtimeDataPortal.Models.Exceptions;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealtimeDataPortal.Models
@@ -10,9 +11,14 @@ namespace RealtimeDataPortal.Models
         [NotMapped]
         public string Name { get; set; } = string.Empty;
 
-        public List<AttributesGraphics> GetAttributesForGraphic(int id)
+        public List<AttributesGraphics> GetAttributesForGraphic(int id, User user)
         {
-            using(RDPContext rdp_base = new RDPContext())
+            CheckAccess.CheckAccess check = new CheckAccess.CheckAccess();
+
+            if (!check.GetAccess(id, user))
+                throw new ForbiddenException("У Вас нет доступа к странице.");
+
+            using (RDPContext rdp_base = new RDPContext())
             {
                 List<AttributesGraphics> attributes = (from trees in rdp_base.TreesMenu
                     join graphics in rdp_base.Graphics on trees.ComponentId equals graphics.ComponentId into grp
@@ -41,6 +47,8 @@ namespace RealtimeDataPortal.Models
                         ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
                             $";User Id={server.UserName};Password={server.Password}"
                     }).ToList();
+
+                if (attributes.Count == 0) throw new NotFoundException("Страница не найдена.");
 
                 return attributes;
             }

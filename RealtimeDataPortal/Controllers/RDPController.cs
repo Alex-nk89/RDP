@@ -65,7 +65,14 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.isConfigurator)
+                    throw new ForbiddenException("Нет доступа к конфигуратору");
+
                 return new TreesMenu().GetComponentInformation(id);
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -121,9 +128,16 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.isConfigurator)
+                    throw new ForbiddenException("Нет доступа к конфигуратору. Изменения не были внесены");
+
                 new TreesMenu().DeleteElement(id);
 
                 return new { Message = "Компонент удален" };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -137,13 +151,17 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                List<AttributesGraphics> attributesGraphic = new Graphics().GetAttributesForGraphic(id);
+                List<AttributesGraphics> attributesGraphic = new Graphics().GetAttributesForGraphic(id, user);
 
                 return attributesGraphic;
             }
             catch(NotFoundException ex)
             {
                 return StatusCode(404, new { Message = ex.Message });
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
