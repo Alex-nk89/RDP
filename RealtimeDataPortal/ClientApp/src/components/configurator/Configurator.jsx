@@ -4,14 +4,13 @@ import { useParams } from "react-router-dom";
 import { useRequest } from "../../hooks/useRequest";
 import AppPreloader from "../loader/appPreloader";
 import ErrorsPage from '../errors-page/ErrorsPage';
-import { AddChangeFolder, useNotification } from '.';
+import { AddChangeFolder } from '.';
 
 
 
 const Configurator = ({ updatingNavbar }) => {
     const { id, operation } = useParams();
     const { request, proccess, setProccess, error } = useRequest();
-    const { show } = useNotification();
     const [componentInfo, setComponentInfo] = useState({});
 
     function form(componentInfo) {

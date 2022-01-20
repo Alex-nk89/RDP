@@ -42,7 +42,9 @@ namespace RealtimeDataPortal.Models
                         Name = trees.Name,
                         NameParameter = productParameter.NameParameter,
                         TagId = parameterGroup.TagId,
+                        TagName = tag.TagName,
                         TypeName = tagType.TypeName,
+                        WwResolution = tagType.WwResolution,
                         Calendar = tagType.Calendar,
                         ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
                             $";User Id={server.UserName};Password={server.Password}"

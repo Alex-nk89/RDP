@@ -6,8 +6,7 @@ import { useRequest } from '../Index';
 import { AppPreloader, ErrorsPage } from '../Index';
 
 const Graphic = ({ attributes, date }) => {
-    console.log(attributes);
-    const { nameParameter, calendar, serverConnection } = { ...attributes };
+    const { nameParameter, calendar, serverConnection, tagName, wwResolution } = { ...attributes };
     const { request, proccess, setProcces, error } = useRequest();
     const [fullScreen, setFullScreen] = useState(false);
 
@@ -30,10 +29,12 @@ const Graphic = ({ attributes, date }) => {
 
     useEffect(() => {
         request('GetGraphic', 'POST', JSON.stringify({ 
+            TagName: tagName,
+            StartDate: date.start !== null ? new Date(date.start) : null,
+            EndDate: date.end !== null ? new Date(date.end) : null,
+            WwResolution: wwResolution,
             Calendar: calendar,
-            StartDate: date.start,
-            EndDate: date.end,
-            //ServerConnection: serverConnection
+            ServerConnection: serverConnection
         }))
     }, [])
 
