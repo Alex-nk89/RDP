@@ -177,7 +177,7 @@ namespace RealtimeDataPortal.Controllers
             {
                 var dataGraphics = new Query().GetGraphic(query, user);
 
-                return new { };
+                return dataGraphics;
             }
             catch
             {

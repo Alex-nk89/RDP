@@ -40,6 +40,7 @@ namespace RealtimeDataPortal.Models
                     {
                         ComponentId = trees.ComponentId,
                         Name = trees.Name,
+                        Position = product.Position,
                         Round = product.Round,
                         NameParameter = productParameter.NameParameter,
                         TagId = parameterGroup.TagId,
@@ -47,6 +48,7 @@ namespace RealtimeDataPortal.Models
                         TypeName = tagType.TypeName,
                         WwResolution = tagType.WwResolution,
                         Calendar = tagType.Calendar,
+                        VisibleToGraphic = tagType.VisibleToGraphic,
                         ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
                             $";User Id={server.UserName};Password={server.Password}"
                     }).ToList();

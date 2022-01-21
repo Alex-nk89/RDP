@@ -11,6 +11,7 @@ import DayCalendar from "./calendar/DayCalendar";
 import RangeCalendar from "./calendar/RangeCalendar";
 
 import { useRequest } from '../../hooks/useRequest';
+import { useFormateDate } from '../../hooks/useFormateDate';
 
 export { TabsHeader, ErrorsPage, AppPreloader, HeaderGraphics, TabContent, Graphic, useRequest, Settings, Calendar,
-    MonthCalendar, DayCalendar, RangeCalendar };
+    MonthCalendar, DayCalendar, RangeCalendar, useFormateDate };

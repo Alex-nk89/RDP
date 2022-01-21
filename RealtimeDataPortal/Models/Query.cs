@@ -147,7 +147,7 @@ namespace RealtimeDataPortal.Models
                 {
                     history.Add(new History()
                     {
-                        DateTime = (DateTime)result["Datetime"],
+                        DateTime = DateTime.Parse(result["Datetime"].ToString()),
                         Value = result["value"] == DBNull.Value ? null : Math.Round((double)result["Value"], round)
                     });
                 }
