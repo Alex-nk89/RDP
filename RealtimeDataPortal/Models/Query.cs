@@ -10,9 +10,10 @@ namespace RealtimeDataPortal.Models
         public string Calendar { get; set; } = string.Empty;
         public string? ServerConnection { get; set; }
         public int? WwResolution { get; set; }
+        public int Round { get; set; }
 
-        public void Deconstruct(out DateTime? startDate, out DateTime? endDate, out string calendar, out string? serverConnection,
-            out string tagName, out int? wwResolution)
+        public void Deconstruct(out DateTime? startDate, out DateTime? endDate, out string calendar, 
+            out string? serverConnection, out string tagName, out int? wwResolution, out int round)
         {
             tagName = this.TagName;
             startDate = this.StartDate;
@@ -20,10 +21,16 @@ namespace RealtimeDataPortal.Models
             calendar = this.Calendar;
             serverConnection = this.ServerConnection;
             wwResolution = this.WwResolution;
+            round = this.Round;
         }
 
-        public List<History> GetGraphic(Query query, User user)
+        public Object GetGraphic(Query query, User user)
         {
+            (DateTime? startDate, DateTime? endDate, string calendar, string? serverConnection, string tagName, int? wwResolution,
+                int round) = query;
+
+            List<History> history = new List<History>();
+
             DateTime start = DateTime.Now;
             DateTime end = DateTime.Now;
             // Единицы измерения
@@ -36,13 +43,6 @@ namespace RealtimeDataPortal.Models
             double? limitHihi = null;
             double? limitLo = null;
             double? limitLolo = null;
-
-            //CheckAccess.CheckAccess check = new CheckAccess.CheckAccess();
-
-            //if (!check.GetAccess(id, user))
-            //    throw new ForbiddenException("У Вас нет доступа к странице.");
-
-            (DateTime? startDate, DateTime? endDate, string calendar, string? serverConnection, string tagName, int? wwResolution) = query;
 
             // Для суточных добавляем день (так данные от сегодня фактически показывают данные за вчера)
             // и добавляем 3 часа чтобы быть уверенным о том, что изменения успели записаться в БД
@@ -129,24 +129,32 @@ namespace RealtimeDataPortal.Models
                 // чтобы в результате было не более 480 значений
                 if ((end.Subtract(start).TotalMilliseconds / wwResolution) > 480)
                         wwResolution = (int)Math.Round(end.Subtract(start).TotalMilliseconds / 480);
+
+                // Дата в запросе форматируется под старые сервера
+                string sqlExpression = $"select v_History.DateTime, v_History.Value " +
+                        $"from [Runtime].[dbo].[v_History] " +
+                        $"where v_History.TagName = '{tagName}' " +
+                        $"and v_History.DateTime >= '{start.ToString("yyyy-MM-dd HH:mm")}' " + 
+                        $"and v_History.DateTime <= '{end.ToString("yyyy-MM-dd HH:mm")}' " +
+                        $"and v_History.wwRetrievalMode = 'cyclic' " +
+                        $"and v_History.wwResolution = '{wwResolution}'";
+
+                connection.Open();
+                OleDbCommand command = new OleDbCommand(sqlExpression, connection);
+                OleDbDataReader result = command.ExecuteReader();
+
+                while (result.Read())
+                {
+                    history.Add(new History()
+                    {
+                        DateTime = (DateTime)result["Datetime"],
+                        Value = result["value"] == DBNull.Value ? null : Math.Round((double)result["Value"], round)
+                    });
+                }
             }
 
-            return new List<History>();
+            return new { History = history, Parameters = new { unit, scaleMaxEU, scaleMinEU, limitHi, limitHihi, limitLo, limitLolo } };
         } 
     }
 }
-
-//public string TagName { get; set; }
-//public string TagType { get; set; }
-//public string NameType { get; set; }
-//public string ParameterName { get; set; }
-//public string Position { get; set; }
-//public int WwResolution { get; set; }
-//public string CalendarType { get; set; }
-//public bool VisibleToGraphic { get; set; }
-//public bool ShowLimit { get; set; }
-//public int IdServer { get; set; }
-//public string Color { get; set; }
-//public int Round { get; set; }
-//public string NameGraphic { get; set; }
 

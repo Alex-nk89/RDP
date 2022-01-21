@@ -175,7 +175,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                List<History> history = new Query().GetGraphic(query, user);
+                var dataGraphics = new Query().GetGraphic(query, user);
 
                 return new { };
             }

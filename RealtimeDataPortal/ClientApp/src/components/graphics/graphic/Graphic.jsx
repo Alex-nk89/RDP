@@ -6,7 +6,7 @@ import { useRequest } from '../Index';
 import { AppPreloader, ErrorsPage } from '../Index';
 
 const Graphic = ({ attributes, date }) => {
-    const { nameParameter, calendar, serverConnection, tagName, wwResolution } = { ...attributes };
+    const { round, nameParameter, calendar, serverConnection, tagName, wwResolution } = { ...attributes };
     const { request, proccess, setProcces, error } = useRequest();
     const [fullScreen, setFullScreen] = useState(false);
 
@@ -28,14 +28,16 @@ const Graphic = ({ attributes, date }) => {
         </div>
 
     useEffect(() => {
-        request('GetGraphic', 'POST', JSON.stringify({ 
+        request('GetGraphic', 'POST', JSON.stringify({
             TagName: tagName,
             StartDate: date.start !== null ? new Date(date.start) : null,
             EndDate: date.end !== null ? new Date(date.end) : null,
+            Round: round,
             WwResolution: wwResolution,
             Calendar: calendar,
             ServerConnection: serverConnection
         }))
+        .then(dataGraphic => console.log(dataGraphic));
     }, [])
 
     switch (proccess) {

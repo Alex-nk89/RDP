@@ -40,6 +40,7 @@ namespace RealtimeDataPortal.Models
                     {
                         ComponentId = trees.ComponentId,
                         Name = trees.Name,
+                        Round = product.Round,
                         NameParameter = productParameter.NameParameter,
                         TagId = parameterGroup.TagId,
                         TagName = tag.TagName,
