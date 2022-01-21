@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-
-import { useRequest } from '../../hooks/useRequest';
-import { ErrorsPage, AppPreloader, TabContent } from './Index';
+import { ErrorsPage, AppPreloader, TabContent, useRequest} from './Index';
 
 import './graphics.sass';
 
@@ -37,7 +35,6 @@ const Graphics = () => {
                     setAttributesGraphic(attributesGraphic);
                     setProccess('confirmed');
                 }
-
             });
         //eslint-disable-next-line
     }, [id]);

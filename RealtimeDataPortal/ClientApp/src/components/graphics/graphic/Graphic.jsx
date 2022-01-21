@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { ActionIcon } from "@mantine/core";
 import { IoExpand, IoContract } from 'react-icons/io5';
-import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceLine } from 'recharts';
 
-import { AppPreloader, ErrorsPage, useFormateDate, useRequest } from '../Index';
+import { AppPreloader, ErrorsPage, useFormateDate, useRequest, ApexChart } from '../Index';
 
 const Graphic = ({ attributes, date }) => {
     const { round, nameParameter, calendar, serverConnection, tagName, wwResolution, visibleToGraphic,
         position } = { ...attributes };
-    const { request, proccess, setProcces, error } = useRequest();
+    const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
     const [fullScreen, setFullScreen] = useState(false);
-    const [history, setHistory] = useState([]);
+    const [data, setData] = useState([]);
 
     const openFullScreen = () => setFullScreen(!fullScreen);
 
@@ -25,12 +24,8 @@ const Graphic = ({ attributes, date }) => {
                 </ActionIcon>
             </div>
 
-            <div className='graphic'>
-                <ResponsiveContainer>
-                    <LineChart data={history}>
-                        <Line type='linear' dataKey='value' strokeWidth={2} />
-                    </LineChart>
-                </ResponsiveContainer>
+            <div id={`${tagName}`} className='graphic'>
+                <ApexChart id={`${tagName}`} data={data}/>
             </div>
         </div>
 
@@ -47,15 +42,17 @@ const Graphic = ({ attributes, date }) => {
             }))
                 .then(dataGraphic => {
                     if (Object.keys(dataGraphic).length !== 0) {
-                        Object.keys(dataGraphic.history).forEach(item => {
-                            history.push({
-                                name: formateDate(item.datetime, attributes[0].calendar),
-                                value: item.value,
-                                unit: dataGraphic.parameters.unit
-                            });
+                        dataGraphic.history.forEach(item => {
+                            const startDate = dataGraphic.history[0].dateTime;
+                            const endDate = dataGraphic.history[dataGraphic.history.length - 1].dateTime;
+                            
+                            data.push({
+                                x: formateDate(item.dateTime, startDate, endDate),
+                                y: item.value
+                            })
                         });
-
-                        setProcces('confirmed');
+                        
+                        setProccess('confirmed');
                     }
                 });
     }, [])

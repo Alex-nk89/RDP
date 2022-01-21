@@ -50,7 +50,7 @@ namespace RealtimeDataPortal.Models
             {
                 if(startDate is null || endDate is null)
                 {
-                    start = DateTime.Now;
+                    start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                     end = start.AddDays(1);
                 }
 
@@ -74,7 +74,8 @@ namespace RealtimeDataPortal.Models
 
             if(calendar ==  "range" && (startDate is null || endDate is null))
             {
-                start.AddHours(-1);
+                end = DateTime.Now;
+                start = end.AddHours(-1);
             }
 
             // Получение доп.значений для тэга (шкала, лимиты)

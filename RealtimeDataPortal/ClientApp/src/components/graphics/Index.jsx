@@ -9,9 +9,10 @@ import Calendar from './calendar/Calendar';
 import MonthCalendar from "./calendar/MonthCalendar";
 import DayCalendar from "./calendar/DayCalendar";
 import RangeCalendar from "./calendar/RangeCalendar";
+import ApexChart from "./graphic/ApexChart";
 
-import { useRequest } from '../../hooks/useRequest';
 import { useFormateDate } from '../../hooks/useFormateDate';
+import { useRequest } from '../../hooks/useRequest';
 
-export { TabsHeader, ErrorsPage, AppPreloader, HeaderGraphics, TabContent, Graphic, useRequest, Settings, Calendar,
-    MonthCalendar, DayCalendar, RangeCalendar, useFormateDate };
+export { TabsHeader, ErrorsPage, AppPreloader, HeaderGraphics, TabContent, Graphic, Settings, Calendar,
+    MonthCalendar, DayCalendar, RangeCalendar, useFormateDate, useRequest, ApexChart };
