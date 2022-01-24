@@ -1,4 +1,4 @@
-import { ResponsiveContainer, ReferenceLine, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { ReferenceLine, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 const Chart = ({ attributes, data, isScale, scale }) => {
     const { color, nameType, unit } = { ...attributes };
@@ -21,7 +21,7 @@ const Chart = ({ attributes, data, isScale, scale }) => {
 
             <CartesianGrid strokeDasharray="1 1" />
             <XAxis dataKey="name" tickMargin={15} minTickGap={15} />
-            <YAxis dataKey="value" domain={domain} tickCount={10} tickMargin={15} width={80}
+            <YAxis dataKey="value" type='number' domain={domain} tickCount={10} tickMargin={15} width={80}
                 interval="preserveStart" label={{ value: unit, position: "left", angle: -90 }} />
             <Tooltip contentStyle={styleTooltip} />
         </LineChart>

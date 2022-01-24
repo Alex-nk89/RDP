@@ -8,6 +8,7 @@ const TabContent = ({ attributesGraphic, tabName, activeTab, index, tabsNames, s
         start: null,
         end: null
     });
+
     const parameter = attributesGraphic.filter(item => item.typeName === tabName);
 
     const graphic = parameter.map(item =>

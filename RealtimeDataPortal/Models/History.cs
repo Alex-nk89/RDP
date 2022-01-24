@@ -2,7 +2,7 @@
 {
     public class History
     {
-        public DateTime DateTime { get; set; }
+        public DateTime? DateTime { get; set; }
         public double? Value { get; set; }
     }
 }

@@ -1,10 +1,10 @@
 import { useCallback } from "react"
 
 export const useFormateDate = () => {
-    const formateDate = useCallback((date, startDate, endDate) => {
+    const formateDate = useCallback((date, calendar, startDate, endDate) => {
         date = new Date(date);
 
-        const differenceInTime = ((new Date(endDate)) - (new Date(startDate)));
+        const differenceInTime = calendar === 'range' ? ((new Date(endDate)) - (new Date(startDate))) : 0;
 
         let mm = date.getMinutes();
         let hh = date.getHours();
@@ -17,11 +17,19 @@ export const useFormateDate = () => {
         if (dd < 10) dd = `0${dd}`;
         if (MM < 10) MM = `0${MM}`;
 
-        if (differenceInTime <= 86400000)
-            return `${hh}:${mm}`;
-        else if (differenceInTime > 86400000 && differenceInTime <= 2678400000)
-            return `${dd}.${MM}.${yyyy}`;
-        else return `${dd}.${MM}.${yyyy} ${hh}:${mm}`;
+        switch (calendar) {
+            case 'range':
+                if (differenceInTime <= 86400000)
+                    return `${hh}:${mm}`;
+                else
+                    return `${dd}.${MM}.${yyyy} ${hh}:${mm}`;
+            case 'day':
+                return `${hh}:00`;
+            case 'month':
+                return `${dd}.${MM}.${yyyy}`;
+            default:
+                return '';
+        }
     }, []);
 
     return { formateDate };

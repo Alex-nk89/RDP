@@ -18,7 +18,7 @@ const selectList = [
 ];
 
 const RangeCalendar = ({ setDate }) => {
-    const [select, setSelect] = useState('4');
+    const [select, setSelect] = useState(null);
     const [visibleCalendarDay, setVisibleCalendarDay] = useState(false);
     const [visibleCalendarRange, setVisibleCalendarRange] = useState(false);
     const [startDayRange, setStartDayRange] = useState(new Date());
@@ -155,7 +155,7 @@ const RangeCalendar = ({ setDate }) => {
 
     return (
         <div className='settings__calendar__choise-date'>
-            <Select size='xs' data={selectList} value={select} onChange={setSelect} />
+            <Select size='xs' data={selectList} value={select} onChange={setSelect} placeholder='Выберите время'/>
             <Space w="xs" />
 
             {selectDay}

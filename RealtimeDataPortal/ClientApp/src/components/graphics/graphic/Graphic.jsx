@@ -37,8 +37,8 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
         if (visibleToGraphic)
             request('GetGraphic', 'POST', JSON.stringify({
                 TagName: tagName,
-                StartDate: date.start !== null ? new Date(date.start) : null,
-                EndDate: date.end !== null ? new Date(date.end) : null,
+                StartDate: date.start,// !== null ? new Date(date.start) : null,
+                EndDate: date.end,// !== null ? new Date(date.end) : null,
                 Round: round,
                 WwResolution: wwResolution,
                 Calendar: calendar,
@@ -51,16 +51,17 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                             const endDate = dataGraphic.history[dataGraphic.history.length - 1].dateTime;
                             
                             dataTemp.push({
-                                name: formateDate(item.dateTime, startDate, endDate),
+                                name: formateDate(item.dateTime, calendar, startDate, endDate),
                                 value: item.value
                             });
                         });
                         
                         setData(dataTemp);
-                        setScale([dataGraphic.minEU, dataGraphic.maxEU]);
+                        setScale([dataGraphic.parameters.scaleMinEU, dataGraphic.parameters.scaleMaxEU]);
                         setProccess('confirmed');
                     }
                 });
+                //eslint-disable-next-line
     }, [date])
 
     switch (proccess) {
