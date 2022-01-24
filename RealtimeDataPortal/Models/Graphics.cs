@@ -33,6 +33,8 @@ namespace RealtimeDataPortal.Models
                     from tag in tags.DefaultIfEmpty()
                     join tt in rdp_base.TagsType on tag.TagTypeId equals tt.TagTypeId into tagsType
                     from tagType in tagsType.DefaultIfEmpty()
+                    join tp in rdp_base.TagsParameter on tag.TagParameterId equals tp.TagParameterId into tagsParameters
+                    from tagParameter in tagsParameters.DefaultIfEmpty()
                     join srvr in rdp_base.Server on tag.ServerId equals srvr.ServerId into servers
                     from server in servers.DefaultIfEmpty()
                     where trees.Type == "graphic" && trees.ComponentId == id
@@ -49,6 +51,7 @@ namespace RealtimeDataPortal.Models
                         WwResolution = tagType.WwResolution,
                         Calendar = tagType.Calendar,
                         VisibleToGraphic = tagType.VisibleToGraphic,
+                        Color = tagParameter.Color,
                         ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
                             $";User Id={server.UserName};Password={server.Password}"
                     }).ToList();

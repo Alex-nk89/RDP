@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ActionIcon } from "@mantine/core";
 import { IoExpand, IoContract } from 'react-icons/io5';
 
@@ -6,11 +6,10 @@ import { AppPreloader, ErrorsPage, useFormateDate, useRequest, ApexChart } from 
 
 const Graphic = ({ attributes, date }) => {
     const { round, nameParameter, calendar, serverConnection, tagName, wwResolution, visibleToGraphic,
-        position } = { ...attributes };
+        position, color } = { ...attributes };
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
     const [fullScreen, setFullScreen] = useState(false);
-    const [data, setData] = useState([]);
 
     const openFullScreen = () => setFullScreen(!fullScreen);
 
@@ -25,11 +24,11 @@ const Graphic = ({ attributes, date }) => {
             </div>
 
             <div id={`${tagName}`} className='graphic'>
-                <ApexChart id={`${tagName}`} data={data}/>
+                <ApexChart attributes={attributes}/>
             </div>
         </div>
 
-    useEffect(() => {
+    /* useEffect(() => {
         if (visibleToGraphic)
             request('GetGraphic', 'POST', JSON.stringify({
                 TagName: tagName,
@@ -41,7 +40,7 @@ const Graphic = ({ attributes, date }) => {
                 ServerConnection: serverConnection
             }))
                 .then(dataGraphic => {
-                    if (Object.keys(dataGraphic).length !== 0) {
+                    if (Object.keys(dataGraphic).length === 0) {
                         dataGraphic.history.forEach(item => {
                             const startDate = dataGraphic.history[0].dateTime;
                             const endDate = dataGraphic.history[dataGraphic.history.length - 1].dateTime;
@@ -49,13 +48,13 @@ const Graphic = ({ attributes, date }) => {
                             data.push({
                                 x: formateDate(item.dateTime, startDate, endDate),
                                 y: item.value
-                            })
+                            });
                         });
                         
                         setProccess('confirmed');
                     }
                 });
-    }, [])
+    }, []) */
 
     switch (proccess) {
         case 'loading':
