@@ -1,13 +1,11 @@
 import ReactApexChart from "react-apexcharts";
 
-const ApexChart = ({ id, attributes }) => {
-  console.log(attributes);
-
+const ApexChart = ({ id, attributes, data }) => {
   const { tagName, calendar, color } = { ...attributes };
 
-  const data = [{ name: '1', data: 6 }, { name: '2', data: 2 }, { name: '3', data: 1 }, { name: '4', data: 4 },
+  /* const data = [{ name: '1', data: 6 }, { name: '2', data: 2 }, { name: '3', data: 1 }, { name: '4', data: 4 },
   { name: '5', data: 10 }, { name: '6', data: 8 },
-  { name: '7', data: 9 }, { name: '8', data: 4 }, { name: '9', data: 5 }, { name: '10', data: 2 }];
+  { name: '7', data: 9 }, { name: '8', data: 4 }, { name: '9', data: 5 }, { name: '10', data: 2 }]; */
 
   const series = [{
     data: data
@@ -40,6 +38,9 @@ const ApexChart = ({ id, attributes }) => {
     },
     stroke: {
       width: 2
+    },
+    xaxis: {
+      type: 'category'
     }
   }
 

@@ -9,8 +9,8 @@ export const useFormateDate = () => {
         let mm = date.getMinutes();
         let hh = date.getHours();
         let dd = date.getDate();
-        let MM = date.getMonth();
-        const yyyy = date.getYear();
+        let MM = date.getMonth() + 1;
+        const yyyy = date.getFullYear();
 
         if (mm < 10) mm = `0${mm}`;
         if (hh < 10) hh = `0${hh}`;

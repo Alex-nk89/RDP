@@ -2,14 +2,15 @@ import { useState, useEffect, useRef } from 'react';
 import { ActionIcon } from "@mantine/core";
 import { IoExpand, IoContract } from 'react-icons/io5';
 
-import { AppPreloader, ErrorsPage, useFormateDate, useRequest, ApexChart } from '../Index';
+import { AppPreloader, ErrorsPage, useFormateDate, useRequest, Chart } from '../Index';
 
 const Graphic = ({ attributes, date }) => {
     const { round, nameParameter, calendar, serverConnection, tagName, wwResolution, visibleToGraphic,
-        position, color } = { ...attributes };
+        position } = { ...attributes };
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
     const [fullScreen, setFullScreen] = useState(false);
+    let [data, setData] = useState([]);
 
     const openFullScreen = () => setFullScreen(!fullScreen);
 
@@ -24,11 +25,13 @@ const Graphic = ({ attributes, date }) => {
             </div>
 
             <div id={`${tagName}`} className='graphic'>
-                <ApexChart attributes={attributes}/>
+                <Chart attributes={attributes} data={data}/>
             </div>
         </div>
 
-    /* useEffect(() => {
+    useEffect(() => {
+        let dataTemp = [];
+
         if (visibleToGraphic)
             request('GetGraphic', 'POST', JSON.stringify({
                 TagName: tagName,
@@ -40,21 +43,22 @@ const Graphic = ({ attributes, date }) => {
                 ServerConnection: serverConnection
             }))
                 .then(dataGraphic => {
-                    if (Object.keys(dataGraphic).length === 0) {
+                    if (Object.keys(dataGraphic).length !== 0) {
                         dataGraphic.history.forEach(item => {
                             const startDate = dataGraphic.history[0].dateTime;
                             const endDate = dataGraphic.history[dataGraphic.history.length - 1].dateTime;
                             
-                            data.push({
-                                x: formateDate(item.dateTime, startDate, endDate),
-                                y: item.value
+                            dataTemp.push({
+                                name: formateDate(item.dateTime, startDate, endDate),
+                                value: item.value
                             });
                         });
                         
+                        setData(dataTemp);
                         setProccess('confirmed');
                     }
                 });
-    }, []) */
+    }, [date])
 
     switch (proccess) {
         case 'loading':

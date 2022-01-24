@@ -1,6 +1,7 @@
 import { ResponsiveContainer, ReferenceLine, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
-const Chart = ({ data }) => {
+const Chart = ({ attributes, data }) => {
+    const { color, nameType, unit } = { ...attributes };
     const styleTooltip = {
         color: "#000",
         borderRadius: "5px",
@@ -9,7 +10,20 @@ const Chart = ({ data }) => {
     };
 
     return (
-            <LineChart width={700} height={300} />
+        <LineChart data={data} syncId={nameType} width={700} height={300}>
+            <Line type="linear" dataKey="value" stroke={color} dot={false} strokeWidth={2} />
+
+            <ReferenceLine /* y={limits.hihi} */ stroke="#ff0000" strokeWidth={2} strokeDasharray="3 3" />
+            <ReferenceLine /* y={limits.hi} */ stroke="#ffc700" strokeWidth={2} strokeDasharray="3 3" />
+            <ReferenceLine /* y={limits.lo} */ stroke="#ffc700" strokeWidth={2} strokeDasharray="3 3" />
+            <ReferenceLine /* y={limits.lolo} */ stroke="#ff0000" strokeWidth={2} strokeDasharray="3 3" />
+
+            <CartesianGrid strokeDasharray="1 1" />
+            <XAxis dataKey="name" tickMargin={15} minTickGap={15} />
+            <YAxis dataKey="value" /* domain={scale} */ tickCount={10} tickMargin={15} width={80}
+                interval="preserveStart" label={{ value: unit, position: "left", angle: -90 }} />
+            <Tooltip contentStyle={styleTooltip} />
+        </LineChart>
     )
 }
 export default Chart;
