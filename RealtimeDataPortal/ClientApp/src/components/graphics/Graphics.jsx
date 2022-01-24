@@ -11,6 +11,9 @@ const Graphics = () => {
     const [attributesGraphic, setAttributesGraphic] = useState({});
     const [activeTab, setActiveTab] = useState(0);
 
+    const [isScale, setIsScale] = useState(false);
+    const [isVisibleTable, setIsVisibleTable] = useState(true);
+
     const tabsNames = Object.keys(attributesGraphic).length === 0 ? [] :
         [...new Set(attributesGraphic.map(item => item.typeName))];
 
@@ -22,7 +25,11 @@ const Graphics = () => {
             activeTab={activeTab} 
             setActiveTab={setActiveTab}
             index={index}
-            tabsNames={tabsNames} />) : null;
+            tabsNames={tabsNames}
+            isScale={isScale}
+            setIsScale={setIsScale}
+            isVisibleTable={isVisibleTable}
+            setIsVisibleTable={setIsVisibleTable} />) : null;
 
     const graphic = Object.keys(attributesGraphic).length === 0 ? null : <>
         {tabsContent}

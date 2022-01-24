@@ -31,8 +31,8 @@ namespace RealtimeDataPortal.Models
 
             List<History> history = new List<History>();
 
-            DateTime start = DateTime.Now;
-            DateTime end = DateTime.Now;
+            DateTime start = startDate ?? DateTime.Now;
+            DateTime end = endDate ?? DateTime.Now;
             // Единицы измерения
             string? unit = null;
             // Шкала

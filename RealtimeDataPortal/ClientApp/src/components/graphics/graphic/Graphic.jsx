@@ -2,15 +2,16 @@ import { useState, useEffect, useRef } from 'react';
 import { ActionIcon } from "@mantine/core";
 import { IoExpand, IoContract } from 'react-icons/io5';
 
-import { AppPreloader, ErrorsPage, useFormateDate, useRequest, Chart } from '../Index';
+import { AppPreloader, ErrorsPage, useFormateDate, useRequest, Chart, TableForGraphic } from '../Index';
 
-const Graphic = ({ attributes, date }) => {
+const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
     const { round, nameParameter, calendar, serverConnection, tagName, wwResolution, visibleToGraphic,
         position } = { ...attributes };
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
     const [fullScreen, setFullScreen] = useState(false);
     let [data, setData] = useState([]);
+    const [scale, setScale] = useState([]);
 
     const openFullScreen = () => setFullScreen(!fullScreen);
 
@@ -25,7 +26,8 @@ const Graphic = ({ attributes, date }) => {
             </div>
 
             <div id={`${tagName}`} className='graphic'>
-                <Chart attributes={attributes} data={data}/>
+                <Chart attributes={attributes} data={data} isScale={isScale} scale={scale}/>
+                <TableForGraphic attributes={attributes} data={data} />
             </div>
         </div>
 
@@ -55,6 +57,7 @@ const Graphic = ({ attributes, date }) => {
                         });
                         
                         setData(dataTemp);
+                        setScale([dataGraphic.minEU, dataGraphic.maxEU]);
                         setProccess('confirmed');
                     }
                 });

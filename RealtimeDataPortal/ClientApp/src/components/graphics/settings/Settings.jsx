@@ -4,17 +4,25 @@ import { BsTable } from 'react-icons/bs';
 
 import { Calendar } from '../Index'
 
-const Settings = ({ calendar, setDate }) => {
-    const settingsToggle = {
+const Settings = ({ calendar, setDate, isScale, setIsScale, isVisibleTable, setIsVisibleTable }) => {
+    const settingsOn = {
+        compact: true,
+        variant: 'filled',
+        color: 'indigo',
+        size: 'md'
+    }
+
+    const settingsOff = {
         compact: true,
         variant: 'light',
         size: 'md'
     }
 
-    const settingsIcon = {
-        size: 16,
-        color: 'gray'
-    }
+    const settingsScaleToggle = isScale ? settingsOn : settingsOff;
+    const settingsTableToggle = isVisibleTable ? settingsOn : settingsOff;
+
+    const toggleScale = () => setIsScale(!isScale);
+    const toggleVisibleTable = () => setIsVisibleTable(!isVisibleTable);
 
     return (
         <div className="settings">
@@ -26,32 +34,32 @@ const Settings = ({ calendar, setDate }) => {
                 <Space w="xs" />
 
                 <Tooltip label='Сменить вид'>
-                    <Button {...settingsToggle} variant="filled" color='indigo'>
-                        <IoGridOutline {...settingsIcon} color='white'/>
+                    <Button {...settingsOff}>
+                        <IoGridOutline size={16}/>
                     </Button>
                 </Tooltip>
 
                 <Space w="xs" />
 
-                <Tooltip label='Масштабировать'>
-                    <Button {...settingsToggle}>
-                        <IoTrendingUpOutline {...settingsIcon} />
+                <Tooltip label='Масштабировать' onClick={toggleScale}>
+                    <Button {...settingsScaleToggle}>
+                        <IoTrendingUpOutline size={16} color={isScale ? 'white' : null}/>
                     </Button>
                 </Tooltip>
 
                 <Space w="xs" />
 
-                <Tooltip label='Скрыть таблицы'>
-                    <Button {...settingsToggle}>
-                        <BsTable {...settingsIcon} />
+                <Tooltip label='Скрыть таблицы' onClick={toggleVisibleTable}>
+                    <Button {...settingsTableToggle}>
+                        <BsTable size={16} color={isVisibleTable ? 'white' : null}/>
                     </Button>
                 </Tooltip>
 
                 <Space w="xs" />
 
                 <Tooltip label='Печать'>
-                    <Button {...settingsToggle}>
-                        <IoPrintOutline {...settingsIcon} />
+                    <Button {...settingsOff}>
+                        <IoPrintOutline size={16} />
                     </Button>
                 </Tooltip>
             </div>
