@@ -10,10 +10,14 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
     const [fullScreen, setFullScreen] = useState(false);
-    let [data, setData] = useState([]);
     const [scale, setScale] = useState([]);
+    let [data, setData] = useState([]);
+    const graphicContainer = useRef(null);
+    const [widthGraphic, setWidthGraphic] = useState(800);
 
     const openFullScreen = () => setFullScreen(!fullScreen);
+
+    const table = isVisibleTable && !fullScreen ? <TableForGraphic attributes={attributes} data={data} /> : null;
 
     const graphic =
         <div className={`info-block ${fullScreen ? 'fullscreen' : null}`}>
@@ -25,9 +29,9 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                 </ActionIcon>
             </div>
 
-            <div id={`${tagName}`} className='graphic'>
-                <Chart attributes={attributes} data={data} isScale={isScale} scale={scale}/>
-                <TableForGraphic attributes={attributes} data={data} />
+            <div id={`${tagName}`} className='graphic' ref={graphicContainer}>
+                <Chart attributes={attributes} data={data} isScale={isScale} scale={scale} width={widthGraphic}/>
+                {table}
             </div>
         </div>
 
@@ -62,7 +66,11 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                     }
                 });
                 //eslint-disable-next-line
-    }, [date])
+    }, [date]);
+
+    /* useEffect(() => {
+        setWidthGraphic(graphicContainer.current.clientWidth - 150);
+    }, [fullScreen]) */
 
     switch (proccess) {
         case 'loading':
