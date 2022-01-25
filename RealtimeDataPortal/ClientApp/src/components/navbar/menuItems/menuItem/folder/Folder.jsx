@@ -21,6 +21,7 @@ const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
                 isFullView: isFullView,
             }))
                 .then(menuItems => {
+                    console.log(menuItems);
                     setItems(menuItems);
                     setThereIsItem(true);
                     setProccess('confirmed');

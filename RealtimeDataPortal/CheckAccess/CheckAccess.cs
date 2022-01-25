@@ -46,7 +46,7 @@ namespace RealtimeDataPortal.CheckAccess
             if (treesMenu.Count() >= 1)
                 return true;
 
-            int[] idParents = treesMenuWithAccesses.Where(tm => tm.Id == id).Select(tm => tm.ParentId).Distinct().ToArray();
+            int[] idParents = treesMenuWithAccesses.Where(tm => tm.ComponentId == id).Select(tm => tm.ParentId).Distinct().ToArray();
 
             List<TreesMenu> parents = treesMenuWithAccesses.Where(tm => idParents.Contains(tm.Id)).ToList();
 

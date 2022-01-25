@@ -39,7 +39,17 @@ namespace RealtimeDataPortal.Models
         {
             using (RDPContext rdp_base = new RDPContext())
             {
-                IQueryable<TreesMenu> treesMenus = rdp_base.TreesMenu.Where(tm => tm.ParentId == parentId).Distinct();
+                IQueryable<TreesMenu> treesMenus = rdp_base.TreesMenu
+                    .Where(tm => tm.ParentId == parentId)
+                    .Select(tm => new TreesMenu() {
+                        Id = tm.Id,
+                        Name = tm.Name,
+                        ParentId = tm.ParentId,
+                        Type = tm.Type,
+                        ComponentId= tm.ComponentId,
+                        isFullView = true
+                    })
+                    .Distinct();
 
                 if (!isFullView)
                 {
