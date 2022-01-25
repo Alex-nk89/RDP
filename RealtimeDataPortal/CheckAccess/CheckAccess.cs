@@ -29,7 +29,11 @@ namespace RealtimeDataPortal.CheckAccess
                                          join atc in rdp_base.AccessToComponent on tm.Id equals atc.IdComponent into accesses
                                          from access in accesses.DefaultIfEmpty()
                                          where user.Groups.Contains(access.ADGroupToAccess)
-                                         select tm).ToList();
+                                         select new TreesMenu()
+                                         {
+                                             Id = tm.Id,
+                                             ChildrenId = access.IdChildren
+                                         }).ToList();
             }
 
             if (type is null)
@@ -43,19 +47,28 @@ namespace RealtimeDataPortal.CheckAccess
             using (RDPContext rdp_base = new RDPContext())
             {
                 List<TreesMenu> treesMenu = treesMenuWithAccesses
-                .Where(tm => tm.ComponentId == id && tm.ChildrenId == idChildren).ToList();
+                .Where(tm => tm.Id == id && tm.ChildrenId == idChildren).ToList();
 
                 if (treesMenu.Count() >= 1)
                     return true;
 
-                int[] idParents = rdp_base.TreesMenu.Where(tm => tm.ComponentId == id).Select(tm => tm.ParentId)
-                    .Distinct().ToArray();
+                //int[] idParents = rdp_base.TreesMenu.Where(tm => tm.Id == id).Select(tm => tm.ParentId)
+                //    .Distinct().ToArray();
 
-                List<TreesMenu> parents = treesMenuWithAccesses.Where(tm => idParents.Contains(tm.Id)).ToList();
+                //List<TreesMenu> parents = treesMenuWithAccesses.Where(tm => idParents.Contains(tm.Id)).ToList();
+                List<TreesMenu> parents = (from tm in rdp_base.TreesMenu
+                                           join atc in rdp_base.AccessToComponent on tm.Id equals atc.IdComponent into accesses
+                                           from access in accesses.DefaultIfEmpty()
+                                           where rdp_base.TreesMenu.Where(tm => tm.Id == id).Select(tm => tm.ParentId).Distinct().ToArray().Contains(tm.Id)
+                                           select new TreesMenu()
+                                           {
+                                               Id = tm.Id,
+                                               ChildrenId = access.IdChildren
+                                           }).ToList();
 
                 foreach (var item in parents)
                 {
-                    if (CheckAccessToPage(user, treesMenuWithAccesses, item.ParentId, item.ChildrenId))
+                    if (CheckAccessToPage(user, treesMenuWithAccesses, item.Id, item.ChildrenId))
                         return true;
                 }
 
