@@ -21,7 +21,7 @@ const MenuItems = ({ isConfigModeOn, updateNavbar, updatingNavbar }) => {
                 isConfigModeOn={isConfigModeOn} 
                 updateNavbar={updateNavbar}
                 updatingNavbar={updatingNavbar}/> :
-            <Page key={id} id={id} name={name} type={type} ComponentId={ComponentId} isConfigModeOn={isConfigModeOn} />);
+            <Page key={id} id={id} name={name} type={type} isConfigModeOn={isConfigModeOn} />);
 
     const menu = (proccess, menuItems) => {
         switch (proccess) {

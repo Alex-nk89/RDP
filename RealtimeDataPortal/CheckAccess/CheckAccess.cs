@@ -4,7 +4,7 @@ namespace RealtimeDataPortal.CheckAccess
 {
     public class CheckAccess
     {
-        public bool  GetAccess(int id, User user, string? type = null)
+        public bool GetAccess(int id, User user, string? type = null)
         {
             // Проверка доступа к странице.
             // 1. Проверка у пользователя ролей полного просмотра (isFullView), конфигуратора (isConfigurator), 
@@ -38,25 +38,29 @@ namespace RealtimeDataPortal.CheckAccess
             return false;
         }
 
-        private bool CheckAccessToPage (User user, List<TreesMenu> treesMenuWithAccesses, int id, int? idChildren = null)
+        private bool CheckAccessToPage(User user, List<TreesMenu> treesMenuWithAccesses, int id, int? idChildren = null)
         {
-            List<TreesMenu> treesMenu = treesMenuWithAccesses
+            using (RDPContext rdp_base = new RDPContext())
+            {
+                List<TreesMenu> treesMenu = treesMenuWithAccesses
                 .Where(tm => tm.ComponentId == id && tm.ChildrenId == idChildren).ToList();
 
-            if (treesMenu.Count() >= 1)
-                return true;
-
-            int[] idParents = treesMenuWithAccesses.Where(tm => tm.ComponentId == id).Select(tm => tm.ParentId).Distinct().ToArray();
-
-            List<TreesMenu> parents = treesMenuWithAccesses.Where(tm => idParents.Contains(tm.Id)).ToList();
-
-            foreach(var item in parents)
-            {
-                if(CheckAccessToPage(user, treesMenuWithAccesses, item.ParentId, item.ChildrenId))
+                if (treesMenu.Count() >= 1)
                     return true;
-            }
 
-            return false;
+                int[] idParents = rdp_base.TreesMenu.Where(tm => tm.ComponentId == id).Select(tm => tm.ParentId)
+                    .Distinct().ToArray();
+
+                List<TreesMenu> parents = treesMenuWithAccesses.Where(tm => idParents.Contains(tm.Id)).ToList();
+
+                foreach (var item in parents)
+                {
+                    if (CheckAccessToPage(user, treesMenuWithAccesses, item.ParentId, item.ChildrenId))
+                        return true;
+                }
+
+                return false;
+            }
         }
-    }   
+    }
 }

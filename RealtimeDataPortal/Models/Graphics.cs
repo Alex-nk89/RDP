@@ -37,7 +37,7 @@ namespace RealtimeDataPortal.Models
                     from tagParameter in tagsParameters.DefaultIfEmpty()
                     join srvr in rdp_base.Server on tag.ServerId equals srvr.ServerId into servers
                     from server in servers.DefaultIfEmpty()
-                    where trees.Type == "graphic" && trees.ComponentId == id
+                    where trees.Type == "graphic" && trees.Id == id
                     select new AttributesGraphics()
                     {
                         ComponentId = trees.ComponentId,

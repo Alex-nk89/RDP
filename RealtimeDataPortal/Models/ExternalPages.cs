@@ -14,12 +14,12 @@ namespace RealtimeDataPortal.Models
             if (!check.GetAccess(id, user))
                 throw new ForbiddenException("У Вас нет доступа к странице.");
 
-            using(RDPContext context = new RDPContext())
+            using(RDPContext rdp_base = new RDPContext())
             {
-                var link = context.ExternalPages.
-                    Where(l => l.Id == id).
-                    Join(context.TreesMenu, ep => ep.Id, tm => tm.ComponentId,
-                    (ep, tm) => new
+                var link = rdp_base.TreesMenu
+                    .Where(tm => tm.Id == id)
+                    .Join(rdp_base.ExternalPages, tm => tm.ComponentId, ep => ep.Id,
+                    (tm, ep) => new
                     {
                         Id = tm.Id,
                         Name = tm.Name,
