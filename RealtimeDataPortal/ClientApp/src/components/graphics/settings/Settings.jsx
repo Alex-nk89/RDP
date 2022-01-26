@@ -24,6 +24,8 @@ const Settings = ({ calendar, setDate, isScale, setIsScale, isVisibleTable, setI
     const toggleScale = () => setIsScale(!isScale);
     const toggleVisibleTable = () => setIsVisibleTable(!isVisibleTable);
 
+    const toPrint = () => window.print();
+
     return (
         <div className="settings">
             <div className='settings__calendar'>
@@ -58,7 +60,7 @@ const Settings = ({ calendar, setDate, isScale, setIsScale, isVisibleTable, setI
                 <Space w="xs" />
 
                 <Tooltip label='Печать'>
-                    <Button {...settingsOff}>
+                    <Button {...settingsOff} onClick={toPrint}>
                         <IoPrintOutline size={16} />
                     </Button>
                 </Tooltip>

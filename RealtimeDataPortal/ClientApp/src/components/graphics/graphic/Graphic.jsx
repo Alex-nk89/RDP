@@ -9,28 +9,34 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
         position } = { ...attributes };
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
-    const [fullScreen, setFullScreen] = useState(false);
-    const [scale, setScale] = useState([]);
-    let [data, setData] = useState([]);
-    const graphicContainer = useRef(null);
-    const [widthGraphic, setWidthGraphic] = useState(800);
+    const [data, setData] = useState([]);
+    const [sizeGraphic, setSizeGraphic] = useState({});
+    const graphicContainer = useRef();
 
-    const openFullScreen = () => setFullScreen(!fullScreen);
+    const observer = useRef(
+        new ResizeObserver(entries => {
+            const { width, height } = entries[0].contentRect;
+            setSizeGraphic({
+                width: width - 70,
+                height: height
+            })
+        })
+    );
 
-    const table = isVisibleTable && !fullScreen ? <TableForGraphic attributes={attributes} data={data} /> : null;
+    useEffect(() => {
+        observer.current.observe(graphicContainer.current);
+    }, [graphicContainer, observer]);
+
+    const table = isVisibleTable ? <TableForGraphic attributes={attributes} data={data} /> : null;
 
     const graphic =
-        <div className={`info-block ${fullScreen ? 'fullscreen' : null}`}>
+        <div className='info-block'  ref={graphicContainer}>
             <div className='header'>
                 <h5 className='title'>{nameParameter}, поз. {position}</h5>
-
-                <ActionIcon onClick={openFullScreen}>
-                    {fullScreen ? <IoContract size={18} /> : <IoExpand size={18} />}
-                </ActionIcon>
             </div>
 
-            <div id={`${tagName}`} className='graphic' ref={graphicContainer}>
-                <Chart attributes={attributes} data={data} isScale={isScale} scale={scale} width={widthGraphic}/>
+            <div id={`${tagName}`} className='graphic'>
+                <Chart attributes={attributes} data={data} isScale={isScale} size={sizeGraphic}/>
                 {table}
             </div>
         </div>
@@ -38,7 +44,7 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
     useEffect(() => {
         let dataTemp = [];
 
-        if (visibleToGraphic)
+        /* if (visibleToGraphic)
             request('GetGraphic', 'POST', JSON.stringify({
                 TagName: tagName,
                 StartDate: date.start,// !== null ? new Date(date.start) : null,
@@ -64,13 +70,13 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                         setScale([dataGraphic.parameters.scaleMinEU, dataGraphic.parameters.scaleMaxEU]);
                         setProccess('confirmed');
                     }
-                });
-                //eslint-disable-next-line
-    }, [date]);
+                }); */
 
-    /* useEffect(() => {
-        setWidthGraphic(graphicContainer.current.clientWidth - 150);
-    }, [fullScreen]) */
+        setData([{ name: '01.01.2022', value: 4 }, { name: '02.01.2022', value: 6 }, { name: '03.01.2022', value: 1 },
+            { name: '04.01.2022', value: 3 }, { name: '05.01.2022', value: 4 }, { name: '06.01.2022', value: 3 },
+            { name: '07.01.2022', value: 6 }, { name: '08.01.2022', value: 9 }, { name: '09.01.2022', value: 5 }]);
+        //eslint-disable-next-line
+    }, [date]);
 
     switch (proccess) {
         case 'loading':

@@ -1,17 +1,20 @@
 import { ReferenceLine, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
-const Chart = ({ attributes, data, isScale, scale, width }) => {
-    const { color, nameType, unit } = { ...attributes };
+const Chart = ({ attributes, data, isScale, scale, size }) => {
+    const { color, nameType } = { ...attributes };
     const styleTooltip = {
-        color: "#000",
+        color: "#fff",
         borderRadius: "5px",
-        border: "1px solid rgb(241, 241, 241)",
+        background: '#2C2E33',
         boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.1), 0px 2px 5px rgba(0, 0, 0, 0.08), 0px 1px 6px rgba(0, 0, 0, 0.04)"
     };
+    const itemStyle = {
+        color: '#fff'
+    }
     const domain = isScale ? ['auto', 'auto'] : scale;
 
     return (
-        <LineChart data={data} syncId={nameType} width={width} height={300}>
+        <LineChart data={data} syncId={nameType} width={size.width} height={300}>
             <Line type="linear" dataKey="value" stroke={color} dot={false} strokeWidth={2} />
 
             <ReferenceLine /* y={limits.hihi} */ stroke="#ff0000" strokeWidth={2} strokeDasharray="3 3" />
@@ -23,7 +26,7 @@ const Chart = ({ attributes, data, isScale, scale, width }) => {
             <XAxis dataKey="name" tickMargin={15} minTickGap={15} />
             <YAxis dataKey="value" type='number' domain={domain} tickCount={10} tickMargin={15} width={80}
                 interval="preserveStart" label={{ value: unit, position: "left", angle: -90 }} />
-            <Tooltip contentStyle={styleTooltip} />
+            <Tooltip contentStyle={styleTooltip} itemStyle={itemStyle}/>
         </LineChart>
     )
 }
