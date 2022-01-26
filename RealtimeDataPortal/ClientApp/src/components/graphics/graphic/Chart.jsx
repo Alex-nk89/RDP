@@ -1,6 +1,6 @@
 import { ReferenceLine, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
-const Chart = ({ attributes, data, isScale }) => {
+const Chart = ({ attributes, data, isScale, width }) => {
     const { color, nameType } = { ...attributes };
     const { unit, scaleMinEU, scaleMaxEU, limitHi, limitHihi, limitLo, limitLolo } = { ...data.parameters };
 
@@ -16,7 +16,7 @@ const Chart = ({ attributes, data, isScale }) => {
     const domain = isScale ? ['auto', 'auto'] : [scaleMinEU, scaleMaxEU];
 
     return (
-        <LineChart data={data.history} syncId={nameType} width={800} height={350}>
+        <LineChart data={data.history} syncId={nameType} width={width} height={350}>
             <Line type="linear" dataKey="value" stroke={color} dot={false} strokeWidth={2} />
 
             <ReferenceLine y={limitHihi} stroke="#ff0000" strokeWidth={2} strokeDasharray="3 3" />
