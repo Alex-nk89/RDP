@@ -2,6 +2,7 @@ import { Table } from '@mantine/core';
 
 const TableForGraphic = ({ attributes, data }) => {
     const { calendar, round } = attributes;
+    const history = { ...data.history };
     const countRows = calendar === 'day' ? 8 : 10;
     let decadeFirst = 0;
     let decadeSecond = 0;
@@ -10,21 +11,21 @@ const TableForGraphic = ({ attributes, data }) => {
 
     for (let i = 0; i < countRows; i++) {
         tableData.push([
-            data[i]?.name,
-            data[i]?.value,
-            data[i + countRows]?.name,
-            data[i + countRows]?.value,
-            data[i + countRows * 2]?.name,
-            data[i + countRows * 2]?.value
+            history[i]?.name,
+            history[i]?.value,
+            history[i + countRows]?.name,
+            history[i + countRows]?.value,
+            history[i + countRows * 2]?.name,
+            history[i + countRows * 2]?.value
         ]);
 
-        decadeFirst += data[i]?.value;
-        decadeSecond += data[i + countRows]?.value;
-        decadeThird += data[i + countRows * 2]?.value
+        decadeFirst += history[i]?.value;
+        decadeSecond += history[i + countRows]?.value;
+        decadeThird += history[i + countRows * 2]?.value
     }
 
     if (data.length === 31) {
-        tableData.push(['', '', '', '', data[31]?.name, data[31]?.value]);
+        tableData.push(['', '', '', '', history[31]?.name, history[31]?.value]);
         decadeThird += data[31]?.value
     }
 

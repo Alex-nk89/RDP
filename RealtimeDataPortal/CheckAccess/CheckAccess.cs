@@ -52,10 +52,6 @@ namespace RealtimeDataPortal.CheckAccess
                 if (treesMenu.Count() >= 1)
                     return true;
 
-                //int[] idParents = rdp_base.TreesMenu.Where(tm => tm.Id == id).Select(tm => tm.ParentId)
-                //    .Distinct().ToArray();
-
-                //List<TreesMenu> parents = treesMenuWithAccesses.Where(tm => idParents.Contains(tm.Id)).ToList();
                 List<TreesMenu> parents = (from tm in rdp_base.TreesMenu
                                            join atc in rdp_base.AccessToComponent on tm.Id equals atc.IdComponent into accesses
                                            from access in accesses.DefaultIfEmpty()
