@@ -7,6 +7,7 @@ import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import ExternalPage from './components/external-page/ExternalPage';
 import Graphics from './components/graphics/Graphics';
+import TableRealtime from './components/tables/TableRealtime';
 //import Page_404 from './components/Page_404';
 import ErrorsPage from './components/errors-page/ErrorsPage';
 import Configurator from './components/configurator/Configurator';
@@ -42,6 +43,7 @@ const App = () => {
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Page/:id" component={ExternalPage} />
                     <Route exact path="/Graphics/:id" component={Graphics} />
+                    <Route exact path="/Table/:id" component={TableRealtime} />
                     <Route exact path="/Configurator/:operation/:id" render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />}/>
                     <Route exact path="/Error" component={ErrorsPage} />
                 </Container>

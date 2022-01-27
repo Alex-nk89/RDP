@@ -1,5 +1,5 @@
 import { Space, Tooltip, Button } from "@mantine/core";
-import { IoGridOutline, IoTrendingUpOutline, IoPrintOutline } from 'react-icons/io5';
+import { IoTrendingUpOutline, IoPrintOutline } from 'react-icons/io5'; //IoGridOutline
 import { BsTable } from 'react-icons/bs';
 
 import { Calendar } from '../Index'
@@ -33,13 +33,13 @@ const Settings = ({ calendar, setDate, isScale, setIsScale, isVisibleTable, setI
             </div>
 
             <div className='settings__additional'>
-                <Space w="xs" />
+                {/* <Space w="xs" />
 
                 <Tooltip label='Сменить вид'>
                     <Button {...settingsOff}>
                         <IoGridOutline size={16}/>
                     </Button>
-                </Tooltip>
+                </Tooltip> */}
 
                 <Space w="xs" />
 

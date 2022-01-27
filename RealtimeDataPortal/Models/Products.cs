@@ -5,6 +5,6 @@ namespace RealtimeDataPortal.Models
     public class Products
     {
         public int ProductId { get; set; }
-        public string NameProduct { get; set; } = string.Empty;
+        public string ProductName { get; set; } = string.Empty;
     }
 }

@@ -11,7 +11,7 @@ namespace RealtimeDataPortal.Models
         [NotMapped]
         public string Name { get; set; } = string.Empty;
 
-        public List<AttributesGraphics> GetAttributesForGraphic(int id, User user)
+        public List<Attributes> GetAttributesForGraphic(int id, User user)
         {
             CheckAccess.CheckAccess check = new CheckAccess.CheckAccess();
 
@@ -20,7 +20,7 @@ namespace RealtimeDataPortal.Models
 
             using (RDPContext rdp_base = new RDPContext())
             {
-                List<AttributesGraphics> attributes = (from trees in rdp_base.TreesMenu
+                List<Attributes> attributes = (from trees in rdp_base.TreesMenu
                     join graphics in rdp_base.Graphics on trees.ComponentId equals graphics.ComponentId into grp
                     from graphic in grp.DefaultIfEmpty()
                     join prd in rdp_base.Products on graphic.ProductId equals prd.ProductId into products
@@ -38,7 +38,7 @@ namespace RealtimeDataPortal.Models
                     join srvr in rdp_base.Server on tag.ServerId equals srvr.ServerId into servers
                     from server in servers.DefaultIfEmpty()
                     where trees.Type == "graphic" && trees.Id == id
-                    select new AttributesGraphics()
+                    select new Attributes()
                     {
                         ComponentId = trees.ComponentId,
                         Name = trees.Name,

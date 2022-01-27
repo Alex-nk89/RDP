@@ -28,6 +28,9 @@ namespace RealtimeDataPortal
         public virtual DbSet<Tags> Tags { get; set; } = null!;
         public virtual DbSet<TagsParameter> TagsParameter { get; set; } = null!;
         public virtual DbSet<TagsType> TagsType { get; set; } = null!;
+        public virtual DbSet<rt_Tables> rt_Tables { get; set; } = null!;
+        public virtual DbSet<rt_Sections> rt_Sections { get; set;} = null!;
+        public virtual DbSet<rt_SectionProduct> rt_SectionProduct { get; set;} = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -94,6 +97,21 @@ namespace RealtimeDataPortal
             modelBuilder.Entity<ProductParameterGroups>(entity =>
             {
                 entity.HasKey("ProductParameterGroupsId");
+            });
+
+            modelBuilder.Entity<rt_Tables>(entity =>
+            {
+                entity.HasKey("TableId");
+            });
+
+            modelBuilder.Entity<rt_Sections>(entity =>
+            {
+                entity.HasKey("SectionId");
+            });
+
+            modelBuilder.Entity<rt_SectionProduct>(entity =>
+            {
+                entity.HasKey("Id");
             });
         }
 

@@ -151,7 +151,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                List<AttributesGraphics> attributesGraphic = new Graphics().GetAttributesForGraphic(id, user);
+                List<Attributes> attributesGraphic = new Graphics().GetAttributesForGraphic(id, user);
 
                 return attributesGraphic;
             }
@@ -178,6 +178,30 @@ namespace RealtimeDataPortal.Controllers
                 var dataGraphics = new Query().GetGraphic(query, user);
 
                 return dataGraphics;
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При загрузке данных произошла ошибка. Попробуйте " +
+                    "перезапустить приложение." });
+            }
+        }
+
+        [HttpGet("GetTableRealtime")]
+        public Object GetTableRealtime(int id)
+        {
+            try
+            {
+                var tableRealtime = new rt_Tables().GetTableRealtime(id, user);
+
+                return tableRealtime;
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, new { Message = ex.Message });
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {

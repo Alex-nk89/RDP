@@ -33,7 +33,7 @@ const Page = ({ id, name, type, isConfigModeOn }) => {
             case 'table':
                 setLink({
                     icon: <IoGridOutline />,
-                    path: '/table'
+                    path: `/table/${id}`
                 });
                 break;
             case 'mnemoschema':

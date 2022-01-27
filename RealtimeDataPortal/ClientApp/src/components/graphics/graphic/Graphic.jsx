@@ -18,8 +18,12 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
         })
     );
 
+    const trackObserver = () => observer.current.observe(widthGraphicWrapper.current);
+
     useEffect(() => {
-        observer.current.observe(widthGraphicWrapper.current);
+        trackObserver();
+
+        return trackObserver();
     }, [widthGraphicWrapper, observer]);
 
     const table = isVisibleTable ? <TableForGraphic attributes={attributes} data={data} /> : null;

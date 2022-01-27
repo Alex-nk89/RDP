@@ -5,13 +5,13 @@ const Chart = ({ attributes, data, isScale, width }) => {
     const { unit, scaleMinEU, scaleMaxEU, limitHi, limitHihi, limitLo, limitLolo } = { ...data.parameters };
 
     const styleTooltip = {
-        color: "#fff",
+        color: "#F8F9FA",
         borderRadius: "5px",
         background: '#2C2E33',
         boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.1), 0px 2px 5px rgba(0, 0, 0, 0.08), 0px 1px 6px rgba(0, 0, 0, 0.04)"
     };
     const itemStyle = {
-        color: '#fff'
+        color: '#F8F9FA'
     }
     const domain = isScale ? ['auto', 'auto'] : [scaleMinEU, scaleMaxEU];
 

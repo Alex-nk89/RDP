@@ -1,11 +1,13 @@
 ﻿
 namespace RealtimeDataPortal.Models
 {
-    public class AttributesGraphics
+    public class Attributes
     {
+        public int Id { get; set; }
         public int ComponentId { get; set; }
         public string Name { get; set; } = null!;
         public int ProductId { get; set; }
+        public string ProductName { get; set; } = string.Empty!;
         public string Position { get; set; } = string.Empty!;
         public int Round { get; set; }
         public bool ShowLimit { get; set; } = false;
@@ -25,10 +27,6 @@ namespace RealtimeDataPortal.Models
         public string Label { get; set; } = string.Empty!;
         public string Color { get; set; } = string.Empty!;
         public string ServerConnection { get; set; } = string.Empty!;
-        //public int ServerId { get; set; }
-        //public string ServerName { get; set; } = string.Empty!;
-        //public string Database { get; set; } = string.Empty!;
-        //public string UserName { get; set; } = string.Empty!;
-        //public string Password { get; set; } = string.Empty!;
+        public string ServerName { get; set; } = string.Empty!;
     }
 }
