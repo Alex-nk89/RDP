@@ -1,5 +1,6 @@
 ﻿using RealtimeDataPortal.Models.Exceptions;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.OleDb;
 
 namespace RealtimeDataPortal.Models
 {
@@ -34,7 +35,7 @@ namespace RealtimeDataPortal.Models
 
             List<rt_Tables> tableRealtime = new List<rt_Tables>();
 
-            using (RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new())
             {
                 tableRealtime = (from tm in rdp_base.TreesMenu
                                  join trt in rdp_base.rt_Tables on tm.ComponentId equals trt.TableId into tables
@@ -77,12 +78,71 @@ namespace RealtimeDataPortal.Models
                                          Round = productParameter.Round,
                                          TagName = tag.TagName,
                                          TypeShortName = tagType.TypeShortName,
-                                         ServerName = server.ServerName
+                                         ServerName = server.ServerName,
+                                         ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
+                                            $"User Id={server.UserName};Password={server.Password}"
                                      }
-                                 }).ToList(); //.Distinct()
+                                 }).ToList();
             }
 
-            return tableRealtime;
+            List<string> serverList = (from server in tableRealtime
+                                    select server.Attributes.ServerName).Distinct().ToList();
+
+            // Получение значений для тегов
+            List<QueryForTable> listValues = new List<QueryForTable>();
+
+            Parallel.ForEach(serverList, (string server) => {
+                List<rt_Tables> valueOneServer = tableRealtime.Where(tr => tr.Attributes.ServerName == server).ToList();
+
+                // Список тегов
+                string tagNames = string.Empty;
+
+                foreach(var value in valueOneServer)
+                {
+                    tagNames += $"'{value.Attributes.TagName}',";
+                }
+
+                tagNames = tagNames.Remove(tagNames.Length - 1);
+
+                listValues.AddRange(GetValueForTags(tagNames, valueOneServer.First().Attributes.ServerConnection));
+            });
+
+                return tableRealtime;
+        }
+
+        public List<QueryForTable> GetValueForTags(string tagNames, string stringConnectionServer)
+        {
+            List<QueryForTable> listValues = new List<QueryForTable>();
+
+            using (OleDbConnection connection = new OleDbConnection(stringConnectionServer))
+            {
+                string sqlExpression = $"select [Runtime].[dbo].[Live].TagName, [Runtime].[dbo].[Live].Value, " +
+                            $"[Runtime].[dbo].[AnalogTag].MinEU, [Runtime].[dbo].[AnalogTag].MaxEU, " +
+                            $"[Runtime].[dbo].[EngineeringUnit].Unit " +
+                            $"from [Runtime].[dbo].[Live] " +
+                            $"join [Runtime].[dbo].[AnalogTag] " +
+                            $"on [Runtime].[dbo].[Live].TagName = [Runtime].[dbo].[AnalogTag].TagName " +
+                            $"join [Runtime].[dbo].[EngineeringUnit] " +
+                            $"on [Runtime].[dbo].[AnalogTag].EUKey = [Runtime].[dbo].[EngineeringUnit].EUKey " +
+                            $" where [Runtime].[dbo].[Live].TagName in ({tagNames})";
+
+                connection.Open();
+                OleDbCommand command = new OleDbCommand(sqlExpression, connection);
+                OleDbDataReader result = command.ExecuteReader();
+
+                while (result.Read())
+                {
+                    listValues.Add(new QueryForTable()
+                    {
+                        TagName = result["TagName"].ToString(),
+                        Unit = result["Unit"].ToString(),
+                        Value = (double?)result["Value"],
+                        Scale = $"{(double)result["MinEU"]}...{(double)result["MaxEU"]}"
+                    });
+                }
+            }
+
+            return listValues;
         }
     }
 }

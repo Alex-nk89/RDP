@@ -6,12 +6,14 @@ export const useFormateDate = () => {
 
         const differenceInTime = calendar === 'range' ? ((new Date(endDate)) - (new Date(startDate))) : 0;
 
+        let ss = date.getSeconds();
         let mm = date.getMinutes();
         let hh = date.getHours();
         let dd = date.getDate();
         let MM = date.getMonth() + 1;
         const yyyy = date.getFullYear();
 
+        if (ss < 10) ss = `0${ss}`;
         if (mm < 10) mm = `0${mm}`;
         if (hh < 10) hh = `0${hh}`;
         if (dd < 10) dd = `0${dd}`;
@@ -28,7 +30,7 @@ export const useFormateDate = () => {
             case 'month':
                 return `${dd}.${MM}.${yyyy}`;
             default:
-                return '';
+                return `${dd}.${MM}.${yyyy} ${hh}:${mm}:${ss}`;
         }
     }, []);
 

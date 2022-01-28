@@ -27,7 +27,7 @@ const SaveToExcel = () => {
         };
 
         const link = document.createElement("a");
-        link.download = "export.xls";
+        link.download = "table.xls";
         link.href = uri + base64(format(template, ctx))
         link.click();
     }

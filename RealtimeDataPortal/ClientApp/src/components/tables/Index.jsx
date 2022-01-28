@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRequest } from '../../hooks/useRequest';
+import { useFormateDate } from '../../hooks/useFormateDate';
 import AppPreloader from '../loader/appPreloader';
 import ErrorsPage from '../errors-page/ErrorsPage';
 import SaveToExcel from './save-to-excel/SaveToExcel';
@@ -11,7 +12,7 @@ import CellValue from './table/CellValue';
 import ProductRows from './table/ProductRows';
 
 export {
-    useState, useEffect, useCallback, useMemo, useParams, useRequest,
+    useState, useEffect, useCallback, useMemo, useParams, useRequest, useFormateDate,
     AppPreloader, ErrorsPage, SaveToExcel, TableWrapper, CellValue, ProductRows,
     Tooltip, ActionIcon, Notification, Table, Popover,
     IoShareSocial

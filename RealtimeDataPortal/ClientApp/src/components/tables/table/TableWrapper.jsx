@@ -1,4 +1,4 @@
-import { useMemo, Table, ProductRows } from '../Index';
+import { useMemo, ProductRows, useFormateDate } from '../Index';
 
 const TableWrapper = ({ data }) => {
 
@@ -6,6 +6,9 @@ const TableWrapper = ({ data }) => {
     let columnContent = ['productName'];
     let sections = new Set();
     let typeTag = new Set();
+
+    const { formateDate } = useFormateDate();
+    const dateUpdate = formateDate(new Date());
 
     const tableContent = useMemo(() => {
         // 1. Получаем все возможные столбцы в таблице.
@@ -78,7 +81,7 @@ const TableWrapper = ({ data }) => {
 
     return (
         <table id='table-rt'>
-            <caption>Данные получены: </caption>
+            <caption>Данные получены: {dateUpdate}</caption>
             {tableContent}
         </table>
     )
