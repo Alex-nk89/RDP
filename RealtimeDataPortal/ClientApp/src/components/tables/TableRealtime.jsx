@@ -10,7 +10,7 @@ const TableRealtime = () => {
     const tableRealtime = (
         <div className='info-block info-block__table'>
             <div className='header'>
-                <h5 className='title'>{tableData[0]?.attributes.name}</h5>
+                <h5 className='title'>{tableData[0]?.name}</h5>
                 <SaveToExcel />
             </div>
 
@@ -22,8 +22,6 @@ const TableRealtime = () => {
         const updateTable = setTimeout(() => {
             setUpdateTable(updateTable + 1);
         }, 57000);
-
-        console.log('update');
 
         request(`GetTableRealtime?id=${id}`)
             .then(tableData => {

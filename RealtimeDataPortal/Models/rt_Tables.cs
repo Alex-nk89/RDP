@@ -1,4 +1,5 @@
 ﻿using RealtimeDataPortal.Models.Exceptions;
+using RealtimeDataPortal.Models.OtherClasses;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.OleDb;
 
@@ -11,18 +12,8 @@ namespace RealtimeDataPortal.Models
         public bool ScaleVisible { get; set; }
         public bool UnitVisible { get; set; }
         public bool LimitVisible { get; set; }
-        //[NotMapped]
-        //public int SectionId { get; set; }
-        [NotMapped]
-        public string SectionName { get; set; } = string.Empty!;
-        [NotMapped]
-        public int Value { get; set; }
 
-        [NotMapped]
-        public int ProductId { get; set; }
-        public Attributes Attributes { get; set; } = new();
-
-        public List<rt_Tables> GetTableRealtime(int id, User user)
+        public List<Query_rtTable> GetTableRealtime(int id, User user)
         {
             // 1. Собираем данные для построения таблицы
             // 2. Получаем текущие значения для тегов из таблицы
@@ -33,7 +24,7 @@ namespace RealtimeDataPortal.Models
             if (!check.GetAccess(id, user))
                 throw new ForbiddenException("У Вас нет доступа к странице.");
 
-            List<rt_Tables> tableRealtime = new List<rt_Tables>();
+            List<Query_rtTable> tableRealtime = new List<Query_rtTable>();
 
             using (RDPContext rdp_base = new())
             {
@@ -59,60 +50,88 @@ namespace RealtimeDataPortal.Models
                                  join srvr in rdp_base.Server on tag.ServerId equals srvr.ServerId into servers
                                  from server in servers.DefaultIfEmpty()
                                  where tm.Id == id
-                                 select new rt_Tables()
+                                 select new Query_rtTable()
                                  {
-                                     SectionName = section.SectionName,
+                                     Id = tm.Id,
+                                     Name = tm.Name,
                                      PositionVisible = table.PositionVisible,
                                      UnitVisible = table.UnitVisible,
                                      ScaleVisible = table.ScaleVisible,
                                      LimitVisible = table.LimitVisible,
-                                     Value = 0,
-                                     Attributes = new Attributes()
-                                     {
-                                         Name = tm.Name,
-                                         ProductId = product.ProductId,
-                                         ProductName = product.ProductName,
-                                         NameParameter = productParameter.NameParameter,
-                                         ProductsParameterId = productParameter.ProductsParametersId,
-                                         Position = productParameter.Position,
-                                         Round = productParameter.Round,
-                                         TagName = tag.TagName,
-                                         TypeShortName = tagType.TypeShortName,
-                                         ServerName = server.ServerName,
-                                         ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
+                                     SectionName = section.SectionName,
+                                     ProductId = product.ProductId,
+                                     ProductName = product.ProductName,
+                                     NameParameter = productParameter.NameParameter,
+                                     ProductsParameterId = productParameter.ProductsParametersId,
+                                     Position = productParameter.Position,
+                                     Round = productParameter.Round,
+                                     TagName = tag.TagName,
+                                     Value = null,
+                                     Unit = null,
+                                     Scale = null,
+                                     Limits = null,
+                                     TypeShortName = tagType.TypeShortName,
+                                     ServerName = server.ServerName,
+                                     ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
                                             $"User Id={server.UserName};Password={server.Password}"
-                                     }
                                  }).ToList();
             }
 
             List<string> serverList = (from server in tableRealtime
-                                    select server.Attributes.ServerName).Distinct().ToList();
+                                    select server.ServerName).Distinct().ToList();
 
             // Получение значений для тегов
-            List<QueryForTable> listValues = new List<QueryForTable>();
+            List<QueryInServer_rtTable> listValues = new List<QueryInServer_rtTable>();
 
             Parallel.ForEach(serverList, (string server) => {
-                List<rt_Tables> valueOneServer = tableRealtime.Where(tr => tr.Attributes.ServerName == server).ToList();
+                List<Query_rtTable> valueOneServer = tableRealtime.Where(tr => tr.ServerName == server).ToList();
 
                 // Список тегов
                 string tagNames = string.Empty;
 
                 foreach(var value in valueOneServer)
                 {
-                    tagNames += $"'{value.Attributes.TagName}',";
+                    tagNames += $"'{value.TagName}',";
                 }
 
                 tagNames = tagNames.Remove(tagNames.Length - 1);
 
-                listValues.AddRange(GetValueForTags(tagNames, valueOneServer.First().Attributes.ServerConnection));
+                listValues.AddRange(GetValueForTags(tagNames, valueOneServer.First().ServerConnection));
             });
 
-                return tableRealtime;
+            tableRealtime = (from table in tableRealtime
+                             join values in listValues on table.TagName equals values.TagName into listValue
+                             from value in listValue.DefaultIfEmpty()
+                             select new Query_rtTable()
+                             {
+                                 Id = table.Id,
+                                 Name = table.Name,
+                                 PositionVisible = table.PositionVisible,
+                                 UnitVisible = table.UnitVisible,
+                                 ScaleVisible = table.ScaleVisible,
+                                 LimitVisible = table.LimitVisible,
+                                 SectionName = table.SectionName,
+                                 ProductId = table.ProductId,
+                                 ProductName = table.ProductName,
+                                 NameParameter = table.NameParameter,
+                                 ProductsParameterId = table.ProductsParameterId,
+                                 Position = table.Position,
+                                 Round = table.Round,
+                                 TagName = table.TagName,
+                                 Value = value.Value,
+                                 Unit = value.Unit,
+                                 Scale = value.Scale,
+                                 Limits = value.Limits,
+                                 TypeShortName = table.TypeShortName,
+                                 ServerName = table.ServerName,
+                             }).ToList();
+
+            return tableRealtime;
         }
 
-        public List<QueryForTable> GetValueForTags(string tagNames, string stringConnectionServer)
+        public List<QueryInServer_rtTable> GetValueForTags(string tagNames, string stringConnectionServer)
         {
-            List<QueryForTable> listValues = new List<QueryForTable>();
+            List<QueryInServer_rtTable> listValues = new List<QueryInServer_rtTable>();
 
             using (OleDbConnection connection = new OleDbConnection(stringConnectionServer))
             {
@@ -132,7 +151,7 @@ namespace RealtimeDataPortal.Models
 
                 while (result.Read())
                 {
-                    listValues.Add(new QueryForTable()
+                    listValues.Add(new QueryInServer_rtTable()
                     {
                         TagName = result["TagName"].ToString(),
                         Unit = result["Unit"].ToString(),

@@ -18,8 +18,8 @@ const CellValue = ({ parameter, round }) => {
                         onClick={togglePopover}>{parameter.value.toFixed(round).replace(/\./i, ",") ?? '#'}</button>
                 }>
                 <Notification className='info-block__table__tag-info' disallowClose>
-                    <span>Тег: {parameter.attributes.tagName}</span><br/>
-                    <span>Сервер: {parameter.attributes.serverName}</span>
+                    <span>Тег: {parameter.tagName}</span><br/>
+                    <span>Сервер: {parameter.serverName}</span>
                 </Notification>
             </Popover>
         </td>

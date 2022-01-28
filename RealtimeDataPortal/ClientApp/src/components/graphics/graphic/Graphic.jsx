@@ -7,7 +7,7 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
         position } = { ...attributes };
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
-    const [widthGraphic, setWidthGraphic] = useState(0);
+    const [widthGraphic, setWidthGraphic] = useState(700);
 
     const [data, setData] = useState([]);
     const widthGraphicWrapper = useRef();
@@ -15,6 +15,7 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
     const observer = useRef(
         new ResizeObserver(entries => {
             setWidthGraphic(entries[0].contentRect.width - 100);
+            console.log(entries);
         })
     );
 
@@ -42,7 +43,7 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
 
     useEffect(() => {
         if (visibleToGraphic)
-            /* request('GetGraphic', 'POST', JSON.stringify({
+            request('GetGraphic', 'POST', JSON.stringify({
                 TagName: tagName,
                 StartDate: date.start,
                 EndDate: date.end,
@@ -67,14 +68,14 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                         });
                         setProccess('confirmed');
                     }
-                }); */
-            setData({
-                history: [
-                    { name: '1', value: 4 }, { name: '2', value: 2 }, { name: '3', value: 3 }, { name: '4', value: 5 },
-                    { name: '5', value: 7 }, { name: '6', value: 2 }, { name: '7', value: 1 }, { name: '8', value: 4 },
-                ],
-                parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
-            })
+                });
+        /* setData({
+            history: [
+                { name: '1', value: 4 }, { name: '2', value: 2 }, { name: '3', value: 3 }, { name: '4', value: 5 },
+                { name: '5', value: 7 }, { name: '6', value: 2 }, { name: '7', value: 1 }, { name: '8', value: 4 },
+            ],
+            parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
+        }) */
         //eslint-disable-next-line
     }, [date]);
 
