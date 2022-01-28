@@ -76,10 +76,8 @@ const TableWrapper = ({ data }) => {
         //eslint-disable-next-line
     }, [data]);
 
-    //console.log(tableContent);
-
     return (
-        <table>
+        <table id='table-rt'>
             <caption>Данные получены: </caption>
             {tableContent}
         </table>
