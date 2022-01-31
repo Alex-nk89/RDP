@@ -1,10 +1,7 @@
-import { useEffect, useState, useRef } from 'react';
-import { TextInput, MultiSelect, Space, ActionIcon, Button } from '@mantine/core';
-import { useForm } from '@mantine/hooks';
-import { IoAdd } from 'react-icons/io5';
-
-import { useRequest } from '../..';
-import { useNotification } from '../..';
+import {
+    useEffect, useState, useRef, TextInput, Space, Button, MultiSelect, ActionIcon, useForm, IoAdd,
+    useRequest, useNotification
+} from '../../index';
 
 import './addChangeFolder.sass';
 
@@ -15,6 +12,7 @@ const AddChangeFolder = ({ componentInfo, type, updatingNavbar }) => {
     const [loadingForButton, setLoadingForButton] = useState(false);
     const [accesses, setAccesses] = useState([]);
     const [oldAccesses, setOldAccesses] = useState([]);
+    const nameRef = useRef(null);
 
     const form = useForm({
         initialValues: {
@@ -22,10 +20,10 @@ const AddChangeFolder = ({ componentInfo, type, updatingNavbar }) => {
             access: ''
         },
         validationRules: {
-            name: value => value.trim().length >= 3
+            name: value => value.trim().length >= 3 && value.trim().length <= 100
         },
         errorMessages: {
-            name: 'Наименование должно содержать минимум 3 символа',
+            name: 'Наименование должно содержать от 3 до 100 символов',
             access: ''
         }
     });
@@ -33,8 +31,6 @@ const AddChangeFolder = ({ componentInfo, type, updatingNavbar }) => {
     const attributesInputs = {
         required: true
     }
-
-    const nameRef = useRef(null);
 
     const addAccess = () => {
         if (form.values.access.trim().length === 0 || accesses.includes(form.values.access))
@@ -129,7 +125,7 @@ const AddChangeFolder = ({ componentInfo, type, updatingNavbar }) => {
         <>
             <h3 className="title">{title}</h3>
 
-            <div className="info-block info-block__add-change-folder">
+            <div className="info-block info-block__form">
                 <form onSubmit={form.onSubmit(values => submitForm(values))}>
 
                     <TextInput

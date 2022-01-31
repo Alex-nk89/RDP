@@ -22,7 +22,7 @@ export const useRequest = () => {
                         statusCode: response.status,
                         statusText: response.statusText,
                         message: data.message
-                    })
+                    });
 
                     throw new Error();
                 }

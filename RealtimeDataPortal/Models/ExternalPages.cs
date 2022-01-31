@@ -1,4 +1,5 @@
 ﻿using RealtimeDataPortal.Models.Exceptions;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealtimeDataPortal.Models
 {

@@ -35,79 +35,86 @@ namespace RealtimeDataPortal.Models
 
             List<rt_Tables> tableRealtime = new List<rt_Tables>();
 
-            using (RDPContext rdp_base = new())
+            try
             {
-                tableRealtime = (from tm in rdp_base.TreesMenu
-                                 join trt in rdp_base.rt_Tables on tm.ComponentId equals trt.TableId into tables
-                                 from table in tables.DefaultIfEmpty()
-                                 join strt in rdp_base.rt_Sections on table.TableId equals strt.TableId into sections
-                                 from section in sections.DefaultIfEmpty()
-                                 join sp in rdp_base.rt_SectionProduct on section.SectionId equals sp.SectionId into sectionProducts
-                                 from sectionProduct in sectionProducts.DefaultIfEmpty()
-                                 join prdt in rdp_base.Products on sectionProduct.ProductId equals prdt.ProductId into products
-                                 from product in products.DefaultIfEmpty()
-                                 join prprm in rdp_base.ProductsParameters on product.ProductId equals prprm.ProductId into productPrm
-                                 from productParameter in productPrm.DefaultIfEmpty()
-                                 join ppg in rdp_base.ProductParameterGroups on productParameter.ProductsParametersId equals ppg.ProductParameterId into parameterGroups
-                                 from parameterGroup in parameterGroups.DefaultIfEmpty()
-                                 join tgs in rdp_base.Tags on parameterGroup.TagId equals tgs.TagId into tags
-                                 from tag in tags.DefaultIfEmpty()
-                                 join tt in rdp_base.TagsType on tag.TagTypeId equals tt.TagTypeId into tagsType
-                                 from tagType in tagsType.DefaultIfEmpty()
-                                 join tp in rdp_base.TagsParameter on tag.TagParameterId equals tp.TagParameterId into tagsParameters
-                                 from tagParameter in tagsParameters.DefaultIfEmpty()
-                                 join srvr in rdp_base.Server on tag.ServerId equals srvr.ServerId into servers
-                                 from server in servers.DefaultIfEmpty()
-                                 where tm.Id == id
-                                 select new rt_Tables()
-                                 {
-                                     SectionName = section.SectionName,
-                                     PositionVisible = table.PositionVisible,
-                                     UnitVisible = table.UnitVisible,
-                                     ScaleVisible = table.ScaleVisible,
-                                     LimitVisible = table.LimitVisible,
-                                     Value = 0,
-                                     Attributes = new Attributes()
-                                     {
-                                         Name = tm.Name,
-                                         ProductId = product.ProductId,
-                                         ProductName = product.ProductName,
-                                         NameParameter = productParameter.NameParameter,
-                                         ProductsParameterId = productParameter.ProductsParametersId,
-                                         Position = productParameter.Position,
-                                         Round = productParameter.Round,
-                                         TagName = tag.TagName,
-                                         TypeShortName = tagType.TypeShortName,
-                                         ServerName = server.ServerName,
-                                         ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
-                                            $"User Id={server.UserName};Password={server.Password}"
-                                     }
-                                 }).ToList();
-            }
-
-            List<string> serverList = (from server in tableRealtime
-                                    select server.Attributes.ServerName).Distinct().ToList();
-
-            // Получение значений для тегов
-            List<QueryForTable> listValues = new List<QueryForTable>();
-
-            Parallel.ForEach(serverList, (string server) => {
-                List<rt_Tables> valueOneServer = tableRealtime.Where(tr => tr.Attributes.ServerName == server).ToList();
-
-                // Список тегов
-                string tagNames = string.Empty;
-
-                foreach(var value in valueOneServer)
+                using (RDPContext rdp_base = new())
                 {
-                    tagNames += $"'{value.Attributes.TagName}',";
+                    tableRealtime = (from tm in rdp_base.TreesMenu
+                                     join trt in rdp_base.rt_Tables on tm.ComponentId equals trt.TableId into tables
+                                     from table in tables.DefaultIfEmpty()
+                                     join strt in rdp_base.rt_Sections on table.TableId equals strt.TableId into sections
+                                     from section in sections.DefaultIfEmpty()
+                                     join sp in rdp_base.rt_SectionProduct on section.SectionId equals sp.SectionId into sectionProducts
+                                     from sectionProduct in sectionProducts.DefaultIfEmpty()
+                                     join prdt in rdp_base.Products on sectionProduct.ProductId equals prdt.ProductId into products
+                                     from product in products.DefaultIfEmpty()
+                                     join prprm in rdp_base.ProductsParameters on product.ProductId equals prprm.ProductId into productPrm
+                                     from productParameter in productPrm.DefaultIfEmpty()
+                                     join ppg in rdp_base.ProductParameterGroups on productParameter.ProductsParametersId equals ppg.ProductParameterId into parameterGroups
+                                     from parameterGroup in parameterGroups.DefaultIfEmpty()
+                                     join tgs in rdp_base.Tags on parameterGroup.TagId equals tgs.TagId into tags
+                                     from tag in tags.DefaultIfEmpty()
+                                     join tt in rdp_base.TagsType on tag.TagTypeId equals tt.TagTypeId into tagsType
+                                     from tagType in tagsType.DefaultIfEmpty()
+                                     join tp in rdp_base.TagsParameter on tag.TagParameterId equals tp.TagParameterId into tagsParameters
+                                     from tagParameter in tagsParameters.DefaultIfEmpty()
+                                     join srvr in rdp_base.Server on tag.ServerId equals srvr.ServerId into servers
+                                     from server in servers.DefaultIfEmpty()
+                                     where tm.Id == id
+                                     select new rt_Tables()
+                                     {
+                                         SectionName = section.SectionName,
+                                         PositionVisible = table.PositionVisible,
+                                         UnitVisible = table.UnitVisible,
+                                         ScaleVisible = table.ScaleVisible,
+                                         LimitVisible = table.LimitVisible,
+                                         Value = 0,
+                                         Attributes = new Attributes()
+                                         {
+                                             Name = tm.Name,
+                                             ProductId = product.ProductId,
+                                             ProductName = product.ProductName,
+                                             NameParameter = productParameter.NameParameter,
+                                             ProductsParameterId = productParameter.ProductsParametersId,
+                                             Position = productParameter.Position,
+                                             Round = productParameter.Round,
+                                             TagName = tag.TagName,
+                                             TypeShortName = tagType.TypeShortName,
+                                             ServerName = server.ServerName,
+                                             ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
+                                                $"User Id={server.UserName};Password={server.Password}"
+                                         }
+                                     }).ToList();
                 }
 
-                tagNames = tagNames.Remove(tagNames.Length - 1);
+                List<string> serverList = (from server in tableRealtime
+                                           select server.Attributes.ServerName).Distinct().ToList();
 
-                listValues.AddRange(GetValueForTags(tagNames, valueOneServer.First().Attributes.ServerConnection));
-            });
+                // Получение значений для тегов
+                List<QueryForTable> listValues = new List<QueryForTable>();
+
+                Parallel.ForEach(serverList, (string server) => {
+                    List<rt_Tables> valueOneServer = tableRealtime.Where(tr => tr.Attributes.ServerName == server).ToList();
+
+                    // Список тегов
+                    string tagNames = string.Empty;
+
+                    foreach (var value in valueOneServer)
+                    {
+                        tagNames += $"'{value.Attributes.TagName}',";
+                    }
+
+                    tagNames = tagNames.Remove(tagNames.Length - 1);
+
+                    listValues.AddRange(GetValueForTags(tagNames, valueOneServer.First().Attributes.ServerConnection));
+                });
 
                 return tableRealtime;
+            }
+            catch
+            {
+                throw new Exception();
+            }
         }
 
         public List<QueryForTable> GetValueForTags(string tagNames, string stringConnectionServer)

@@ -61,18 +61,18 @@ namespace RealtimeDataPortal.Controllers
         }
 
         [HttpGet("GetComponentInformation")]
-        public Object GetComponentInformation (int id)
+        public Object GetComponentInformation (int id, string operation)
         {
             try
             {
                 if (!user.isConfigurator)
                     throw new ForbiddenException("Нет доступа к конфигуратору");
 
-                return new TreesMenu().GetComponentInformation(id);
+                return new Configurator().GetComponentInformation(id, operation);
             }
             catch (ForbiddenException ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
+                return StatusCode(403, new { ex.Message });
             }
             catch
             {
@@ -81,70 +81,71 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
-        [HttpPost("AddChangeFolder")]
-        public Object AddChangeFolder(TreesMenu treesMenu)
-        {
-            AccessToComponent accessToComponent = new AccessToComponent();
-            (int id, string Name, int idParent, string type, int idComponent, string[] adGroups, string[] adGroupsOld) = treesMenu;
+        //[HttpPost("AddChangeFolder")]
+        //public Object AddChangeFolder(TreesMenu treesMenu)
+        //{
+        //    AccessToComponent accessToComponent = new AccessToComponent();
+        //    (int id, string Name, int idParent, string type, int idComponent, string[] adGroups, string[] adGroupsOld,
+        //        _) = treesMenu;
+        //
+        //    try
+        //    {
+        //        if (!user.isConfigurator)
+        //            throw new ForbiddenException("Нет доступа к конфигуратору. Изменения не были внесены");
+        //
+        //        id = treesMenu.AddNewComponent(treesMenu);
+        //
+        //        string[] addedAccesses =  adGroups.Except(adGroupsOld).ToArray();
+        //
+        //        foreach(var addedAccess in addedAccesses)
+        //        {
+        //            accessToComponent.AddAccessToComponent(id, 0, addedAccess);
+        //        }
+        //
+        //        string[] deletedAccesses = adGroupsOld.Except(adGroups).ToArray();
+        //
+        //        foreach(var deletedAccess in deletedAccesses)
+        //        {
+        //            accessToComponent.DeleteAccessToComponent(id, 0, deletedAccess);
+        //        }
+        //
+        //        return new { Message = "Изменения успешно внесены" };
+        //    }
+        //    catch (ForbiddenException ex)
+        //    {
+        //        return StatusCode(403, new { Message = ex.Message });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string error = ex.Message;
+        //
+        //        return StatusCode(500, new { Message = "Не удалось внести изменения. Попробуйте " +
+        //            "перезапустить приложение." });
+        //    }
+        //}
 
-            try
-            {
-                if (!user.isConfigurator)
-                    throw new ForbiddenException("Нет доступа к конфигуратору. Изменения не были внесены");
-
-                id = treesMenu.AddNewComponent(treesMenu);
-
-                string[] addedAccesses =  adGroups.Except(adGroupsOld).ToArray();
-
-                foreach(var addedAccess in addedAccesses)
-                {
-                    accessToComponent.AddAccessToComponent(id, 0, addedAccess);
-                }
-
-                string[] deletedAccesses = adGroupsOld.Except(adGroups).ToArray();
-
-                foreach(var deletedAccess in deletedAccesses)
-                {
-                    accessToComponent.DeleteAccessToComponent(id, 0, deletedAccess);
-                }
-
-                return new { Message = "Изменения успешно внесены" };
-            }
-            catch (ForbiddenException ex)
-            {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                string error = ex.Message;
-
-                return StatusCode(500, new { Message = "Не удалось внести изменения. Попробуйте " +
-                    "перезапустить приложение." });
-            }
-        }
-
-        [HttpGet("DeleteElement")]
-        public Object DeleteElement(int id)
-        {
-            try
-            {
-                if (!user.isConfigurator)
-                    throw new ForbiddenException("Нет доступа к конфигуратору. Изменения не были внесены");
-
-                new TreesMenu().DeleteElement(id);
-
-                return new { Message = "Компонент удален" };
-            }
-            catch (ForbiddenException ex)
-            {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = "При удалении произошла ошибка. Попробуйте " +
-                    "перезапустить приложение." });
-            }
-        }
+        //[HttpGet("DeleteElement")]
+        //public Object DeleteElement(int id)
+        //{
+        //    try
+        //    {
+        //        if (!user.isConfigurator)
+        //            throw new ForbiddenException("Нет доступа к конфигуратору. Изменения не были внесены");
+        //
+        //        new TreesMenu().DeleteElement(id);
+        //
+        //        return new { Message = "Компонент удален" };
+        //    }
+        //    catch (ForbiddenException ex)
+        //    {
+        //        return StatusCode(403, new { Message = ex.Message });
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, new { Message = "При удалении произошла ошибка. Попробуйте " +
+        //            "перезапустить приложение." });
+        //    }
+        //}
 
         [HttpGet("GetAttributesForGraphic")]
         public Object GetAttributesForGraphic(int id)
@@ -207,6 +208,49 @@ namespace RealtimeDataPortal.Controllers
             {
                 return StatusCode(500, new { Message = "При загрузке данных произошла ошибка. Попробуйте " +
                     "перезапустить приложение." });
+            }
+        }
+
+        [HttpPost("AddChangeElement")]
+        public Object AddChangeElement(Configurator configurator)
+        {
+            AccessToComponent accessToComponent = new();
+
+            (int id, _, _, string type, int idComponent, string[] adGroups, string[] adGroupsOld,
+                string? link) = configurator;
+        
+            try
+            {
+                if (type == "external-page")
+                    configurator.TreesMenu.ComponentId = configurator.AddChangeNewLink(configurator.ExternalPages);
+                
+                id = configurator.AddNewComponent(configurator.TreesMenu);
+                
+                string[] addedAccesses = adGroups.Except(adGroupsOld).ToArray();
+                
+                foreach (var addedAccess in addedAccesses)
+                {
+                    accessToComponent.AddAccessToComponent(id, 0, addedAccess);
+                }
+                
+                string[] deletedAccesses = adGroupsOld.Except(adGroups).ToArray();
+                
+                foreach (var deletedAccess in deletedAccesses)
+                {
+                    accessToComponent.DeleteAccessToComponent(id, 0, deletedAccess);
+                }
+        
+                return new { Message = "Изменения успешно внесены" };
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+        
+                return StatusCode(500, new
+                {
+                    Message = "Не удалось внести изменения. Попробуйте " +
+                    "перезапустить приложение."
+                });
             }
         }
     }

@@ -21,9 +21,11 @@ namespace RealtimeDataPortal.Models
         public string[]? ADGroups { get; set; }
         [NotMapped]
         public string[]? ADGroupsOld { get; set; }
+        [NotMapped]
+        public ExternalPages? ExternalPages { get; set; }
 
         public void Deconstruct(out int Id, out string Name, out int ParentId, out string Type, out int ComponentId,
-            out string[] ADGroups, out string[] ADGroupsOld)
+            out string[] ADGroups, out string[] ADGroupsOld, out string? Link)
         {
             Id = this.Id;
             Name = this.Name;
@@ -32,6 +34,7 @@ namespace RealtimeDataPortal.Models
             ComponentId = this.ComponentId;
             ADGroups = this.ADGroups ?? new string[] { };
             ADGroupsOld = this.ADGroupsOld ?? new string[] { };
+            Link = this.ExternalPages.Link ?? string.Empty;
         }
 
 
@@ -96,7 +99,7 @@ namespace RealtimeDataPortal.Models
             }
         }
 
-        public TreesMenu GetComponentInformation(int id)
+        public TreesMenu GetComponentInformation(int id, string operation)
         {
             using (RDPContext rdp_base = new RDPContext())
             {
@@ -107,6 +110,9 @@ namespace RealtimeDataPortal.Models
                     .Select(tm => tm.ADGroupToAccess).ToArray();
 
                 treesMenus.ADGroups = adGroups;
+
+                if (operation.Contains("external-page"))
+                    treesMenus.ExternalPages = rdp_base.ExternalPages.Where(ep => ep.Id == treesMenus.ComponentId).FirstOrDefault();
 
                 return treesMenus;
             }

@@ -27,7 +27,7 @@ export const useNotification = () => {
             }
         }
 
-        notification.showNotification({ message: message, ...attributes});
+        notification.showNotification({ message: message, ...attributes });
     }
 
     return { show };

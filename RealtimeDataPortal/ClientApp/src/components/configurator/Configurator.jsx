@@ -1,12 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
-
-import { useRequest } from "../../hooks/useRequest";
-import AppPreloader from "../loader/appPreloader";
-import ErrorsPage from '../errors-page/ErrorsPage';
-import { AddChangeFolder } from '.';
-
-
+import { useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, AddChangeFolder, AddChangeExternalPage } from './index';
 
 const Configurator = ({ updatingNavbar }) => {
     const { id, operation } = useParams();
@@ -19,13 +11,17 @@ const Configurator = ({ updatingNavbar }) => {
                 return <AddChangeFolder componentInfo={componentInfo} type="add" updatingNavbar={updatingNavbar} />;
             case 'change-folder':
                 return <AddChangeFolder componentInfo={componentInfo} type="change" updatingNavbar={updatingNavbar} />;
+            case 'add-external-page':
+                return <AddChangeExternalPage componentInfo={componentInfo} type="add" updatingNavbar={updatingNavbar} />;
+            case 'change-external-page':
+                return <AddChangeExternalPage componentInfo={componentInfo} type="change" updatingNavbar={updatingNavbar} />;
             default:
                 return null;
         }
     }
 
     useEffect(() => {
-        request(`GetComponentInformation?id=${id}`)
+        request(`GetComponentInformation?id=${id}&operation=${operation}`)
             .then(componentInfo => {
                 if (Object.keys(componentInfo).length !== 0) {
                     setComponentInfo(componentInfo);
@@ -37,7 +33,7 @@ const Configurator = ({ updatingNavbar }) => {
 
     switch (proccess) {
         case 'loading':
-            return <AppPreloader height />;
+            return <AppPreloader height='calc(100vh - 116px)' />;
         case 'confirmed':
             return form(componentInfo);
         case 'error':
