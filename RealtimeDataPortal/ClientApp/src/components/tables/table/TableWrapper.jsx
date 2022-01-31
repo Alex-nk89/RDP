@@ -38,9 +38,9 @@ const TableWrapper = ({ data }) => {
         }
 
         data.forEach(item => {
-            columnHeader.add(item.attributes.typeShortName);
+            columnHeader.add(item.typeShortName);
             sections.add(item.sectionName);
-            typeTag.add(item.attributes.typeShortName);
+            typeTag.add(item.typeShortName);
         });
 
         const thead = <thead>
@@ -55,7 +55,7 @@ const TableWrapper = ({ data }) => {
             const sectionData = data.filter(item => item.sectionName === section);
 
             let products = new Set(
-                sectionData.map(product => product.attributes.productId)
+                sectionData.map(product => product.productId)
             );
 
             const sectionName = <tr colSpan={columnHeader.size} className='section'>

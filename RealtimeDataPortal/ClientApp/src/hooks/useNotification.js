@@ -6,7 +6,7 @@ export const useNotification = () => {
     const show = (type, message) => {
         const attributes = setAttributes(type, message);
 
-        function setAttributes(type, message) {
+        function setAttributes(type) {
             switch (type) {
                 case 'success':
                     return {
