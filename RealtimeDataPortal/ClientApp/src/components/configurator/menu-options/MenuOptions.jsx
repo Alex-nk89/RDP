@@ -9,6 +9,7 @@ import { useNotification } from "..";
 import './menuOptions.sass';
 
 const MenuOptions = ({ type, id, updatingNavbar }) => {
+
     const { request, error } = useRequest();
     const { show } = useNotification();
     const modal = useModals();
@@ -23,10 +24,13 @@ const MenuOptions = ({ type, id, updatingNavbar }) => {
     const deleteElement = () => {
         request(`DeleteElement?id=${id}`)
             .then(result => {
-                if (Object.keys(result).length !== 0) show('success', result.message)
-                else show('error', error.message)
-            })
-            .then(updatingNavbar())
+                if (Object.keys(result).length !== 0)
+                    show('success', result.message);
+                else
+                    show('error', error.message);
+
+                updatingNavbar();
+            });
     }
 
     const openModal = () => modal.openConfirmModal({

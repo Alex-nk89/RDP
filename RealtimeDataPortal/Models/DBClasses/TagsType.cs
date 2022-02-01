@@ -9,5 +9,17 @@
         public int? WwResolution { get; set; }
         public string? Calendar { get; set; }
         public bool VisibleToGraphic { get; set; } = false;
+
+        public List<TagsType> GetTagsTypes ()
+        {
+            List<TagsType> tagsTypes = new();
+
+            using(RDPContext rdp_base = new())
+            {
+                tagsTypes = rdp_base.TagsType.ToList();
+
+                return tagsTypes;
+            }
+        }
     }
 }

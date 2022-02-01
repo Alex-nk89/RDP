@@ -6,7 +6,7 @@ import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 
 import './page.sass';
 
-const Page = ({ id, name, type, isConfigModeOn }) => {
+const Page = ({ id, name, type, isConfigModeOn, updatingNavbar }) => {
     const [link, setLink] = useState({
         icon: null,
         path: ''
@@ -14,7 +14,7 @@ const Page = ({ id, name, type, isConfigModeOn }) => {
 
     const activeLink = useLocation().pathname === link.path ? 'active-link' : null;
 
-    const menuConfig = isConfigModeOn ? <MenuOptions id={id} type={type}/> : null;
+    const menuConfig = isConfigModeOn ? <MenuOptions id={id} type={type} updatingNavbar={updatingNavbar}/> : null;
 
     useEffect(() => {
         switch (type) {

@@ -7,9 +7,10 @@ const AddChangeExternalPage = ({ componentInfo, type, updatingNavbar }) => {
 
     const { treesMenu, externalPages } = { ...componentInfo };
     const { show } = useNotification();
-    const { request, proccess, setProccess, error } = useRequest();
+    const { request, error } = useRequest();
     const title = type === 'add' ? 'Добавление страницы' : 'Редактирование страницы';
     const nameRef = useRef(null);
+    const accessRef = useRef(null);
 
     const [accesses, setAccesses] = useState([]);
     const [oldAccesses, setOldAccesses] = useState([]);
@@ -97,6 +98,16 @@ const AddChangeExternalPage = ({ componentInfo, type, updatingNavbar }) => {
                 updatingNavbar();
             });
     }
+
+    /* const onKeyDownEnter = () => {
+        document.addEventListener('keydown', (event) => {
+            if(event.key === 'Enter' && document.activeElement === accessRef.current) {
+                event.preventDefault();
+                addAccess();
+            }
+        })
+    } */
+
     useEffect(() => {
         if (Object.keys(error).length !== 0) show('error', error.message);
         //eslint-disable-next-line
@@ -106,6 +117,8 @@ const AddChangeExternalPage = ({ componentInfo, type, updatingNavbar }) => {
         form.resetErrors();
         setAccesses([]);
         setOldAccesses([]);
+
+        /* onKeyDownEnter(); */
 
         if (type === 'change') {
             form.setValues({ name: treesMenu.name, link: externalPages?.link, access: '' })
@@ -147,7 +160,8 @@ const AddChangeExternalPage = ({ componentInfo, type, updatingNavbar }) => {
                         {...form.getInputProps('access')}
                         label='Группы доступа'
                         placeholder='Введите группу из Active Directory'
-                        rightSection={addAccessIcon} />
+                        rightSection={addAccessIcon}
+                        ref={accessRef} />
 
                     {multiSelect}
 

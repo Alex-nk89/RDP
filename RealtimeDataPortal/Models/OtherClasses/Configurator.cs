@@ -30,7 +30,8 @@ namespace RealtimeDataPortal.Models
             {
                 Configurator componentInfo = new();
 
-                componentInfo.TreesMenu = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new();
+                componentInfo.TreesMenu = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? 
+                    throw new NotFoundException("Не удалось получить информацию о компоненте.");
 
                 string[] adGroups = rdp_base.AccessToComponent
                     .Where(atc => atc.IdComponent == id && atc.IdChildren == 0)

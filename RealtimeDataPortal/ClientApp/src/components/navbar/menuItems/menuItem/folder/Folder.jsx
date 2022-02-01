@@ -47,7 +47,7 @@ const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
                 <Folder id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} updatingNavbar={updatingNavbar} />
             </li> :
             <li key={id} >
-                <Page id={id} name={name} type={type} isConfigModeOn={isConfigModeOn} />
+                <Page id={id} name={name} type={type} isConfigModeOn={isConfigModeOn} updatingNavbar={updatingNavbar} />
             </li>);
 
     const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'} id={id} updatingNavbar={updatingNavbar} /> : null;

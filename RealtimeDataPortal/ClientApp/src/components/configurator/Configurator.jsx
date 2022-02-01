@@ -1,4 +1,4 @@
-import { useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, AddChangeFolder, AddChangeExternalPage } from './index';
+import { useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, AddChangeFolder, AddChangeExternalPage, Tag } from './index';
 
 const Configurator = ({ updatingNavbar }) => {
     const { id, operation } = useParams();
@@ -15,19 +15,25 @@ const Configurator = ({ updatingNavbar }) => {
                 return <AddChangeExternalPage componentInfo={componentInfo} type="add" updatingNavbar={updatingNavbar} />;
             case 'change-external-page':
                 return <AddChangeExternalPage componentInfo={componentInfo} type="change" updatingNavbar={updatingNavbar} />;
+            case 'change-tag':
+                return <Tag />;
             default:
                 return null;
         }
     }
 
     useEffect(() => {
-        request(`GetComponentInformation?id=${id}&operation=${operation}`)
-            .then(componentInfo => {
-                if (Object.keys(componentInfo).length !== 0) {
-                    setComponentInfo(componentInfo);
-                    setProccess('confirmed');
-                }
-            })
+        if (operation !== 'change-tag') {
+            request(`GetComponentInformation?id=${id}&operation=${operation}`)
+                .then(componentInfo => {
+                    if (Object.keys(componentInfo).length !== 0) {
+                        setComponentInfo(componentInfo);
+                        setProccess('confirmed');
+                    }
+                });
+        } else {
+            setProccess('confirmed');
+        }
         //eslint-disable-next-line
     }, [id, operation])
 
