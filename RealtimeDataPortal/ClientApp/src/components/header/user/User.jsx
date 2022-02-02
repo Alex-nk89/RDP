@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { Menu, Switch } from "@mantine/core";
-
 import { IoChevronDown, IoBuild, IoSettings } from "react-icons/io5";
 
+import { useNotification } from "../../configurator";
+
 const User = ({ user, isConfigModeOn, setIsConfigModeOn }) => {
+    const { show } = useNotification();
     const [openedMenu, setOpenedMenu] = useState(false);
 
     const openMenu = () => setOpenedMenu(true);
     const closeMenu = () => setOpenedMenu(false);
-    const changeConfigMode = () => setIsConfigModeOn(!isConfigModeOn);
+    const changeConfigMode = () => {
+        setIsConfigModeOn(!isConfigModeOn);
+        isConfigModeOn ? show('success', 'Режим конфигуратора выключен') : show('success', 'Режим конфигуратора включен');
+    }
 
     const userBlock = user?.isAdministrator || user?.isConfigurator ?
         <Menu

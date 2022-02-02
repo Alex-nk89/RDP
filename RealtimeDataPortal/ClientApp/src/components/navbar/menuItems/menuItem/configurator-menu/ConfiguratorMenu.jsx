@@ -16,35 +16,38 @@ const ConfiguratorMenu = ({ isConfigModeOn }) => {
                 <p onClick={changeOpenedConfigurator}>
                     <IoSettings />
                     <span>Конфигуратор</span>
-                    <IoChevronDown  className={`folder ${isOpenFolder}`} />
+                    <IoChevronDown className={`folder ${isOpenFolder}`} />
                 </p>
             </div>
 
             <Collapse in={openedConfigurator} transitionDuration={500}>
                 <ul>
                     <li>
-                        <div>
-                            <NavLink to='/Configurator/change-tag/0' activeClassName='page-with-configurator activeLink'>
-                                <IoCodeWorkingOutline />
-                                <span>Редактор тегов</span>
-                            </NavLink>
-                        </div>
+                        <NavLink
+                            to='/Configurator/change-tag/0'
+                            className='page-with-configurator'
+                            activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
+                            <IoCodeWorkingOutline />
+                            <span>Редактор тегов</span>
+                        </NavLink>
                     </li>
                     <li>
-                        <div>
-                            <NavLink to='/' activeClassName='page-with-configurator activeLink'>
-                                <IoTicket />
-                                <span>Редактор продуктов</span>
-                            </NavLink>
-                        </div>
+                        <NavLink
+                            to='/Configurator/change-product/0'
+                            className='page-with-configurator'
+                            activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
+                            <IoTicket />
+                            <span>Редактор продуктов</span>
+                        </NavLink>
                     </li>
                     <li>
-                        <div>
-                            <NavLink to='/' activeClassName='page-with-configurator activeLink'>
-                                <IoReader />
-                                <span>Инструкция</span>
-                            </NavLink>
-                        </div>
+                        <NavLink
+                            to='/Configurator/instruction/0'
+                            className='page-with-configurator'
+                            activeStyle={{ background: 'rgba(255, 255, 255, .2)' }} >
+                            <IoReader />
+                            <span>Инструкция</span>
+                        </NavLink>
                     </li>
                 </ul>
             </Collapse>

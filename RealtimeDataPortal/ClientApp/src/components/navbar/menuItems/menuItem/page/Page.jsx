@@ -14,13 +14,13 @@ const Page = ({ id, name, type, isConfigModeOn, updatingNavbar }) => {
 
     const activeLink = useLocation().pathname === link.path ? 'active-link' : null;
 
-    const menuConfig = isConfigModeOn ? <MenuOptions id={id} type={type} updatingNavbar={updatingNavbar}/> : null;
+    const menuConfig = isConfigModeOn ? <MenuOptions id={id} type={type} updatingNavbar={updatingNavbar} /> : null;
 
     useEffect(() => {
         switch (type) {
             case 'external-page':
                 setLink({
-                    icon: <IoReaderOutline/>,
+                    icon: <IoReaderOutline />,
                     path: `/page/${id}`
                 });
                 break;

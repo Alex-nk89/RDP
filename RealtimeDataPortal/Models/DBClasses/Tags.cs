@@ -10,5 +10,16 @@ namespace RealtimeDataPortal.Models
         public int TagTypeId { get; set; }
         public int TagParameterId { get; set; }
         public int ServerId { get; set; }
+
+        public bool AddChangeTag (Tags tag)
+        {
+            using(RDPContext rdp_base = new())
+            {
+                rdp_base.Tags.Update(tag);
+                rdp_base.SaveChanges();
+
+                return true;
+            }
+        }
     }
 }

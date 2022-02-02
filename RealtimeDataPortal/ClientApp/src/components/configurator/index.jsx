@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import { useNotification } from "../../hooks/useNotification";
 import { useForm } from '@mantine/hooks';
-import { TextInput, Space, Button, MultiSelect, ActionIcon, Tabs, Select } from '@mantine/core';
+import { TextInput, Space, Button, MultiSelect, ActionIcon, Tabs, Select, Loader } from '@mantine/core';
 
 import { IoAdd } from 'react-icons/io5';
 
@@ -23,5 +23,5 @@ const attributesInputs = {
 export { useEffect, useState, useParams, useRequest, useNotification, useRef,
     AddChangeFolder, AppPreloader, ErrorsPage, AddChangeExternalPage, Tag, AddChangeTag,
     attributesInputs,
-    TextInput, Space, Button, useForm, MultiSelect, ActionIcon, Tabs, Select,
+    TextInput, Space, Button, useForm, MultiSelect, ActionIcon, Tabs, Select, Loader,
     IoAdd };

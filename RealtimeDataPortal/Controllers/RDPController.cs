@@ -179,6 +179,19 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
+        [HttpPost("AddChangeTag")]
+        public Object AddChangeTag(Tags tag)
+        {
+            try
+            {
+                return new Tags().AddChangeTag(tag);
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При сохранении данных произошла ошибка." });
+            }
+        }
+
         [HttpGet("GetAttributesForGraphic")]
         public Object GetAttributesForGraphic(int id)
         {
