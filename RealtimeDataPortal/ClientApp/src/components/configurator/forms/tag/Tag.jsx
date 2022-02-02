@@ -1,4 +1,4 @@
-import { useState, useEffect, useRequest, Tabs, AddChangeTag, AppPreloader, ErrorsPage } from '../../index';
+import { useState, useEffect, useRequest, Tabs, AddChangeTag, AppPreloader, ErrorsPage, DeleteElements } from '../../index';
 import './tag.sass';
 
 const Tag = () => {
@@ -20,7 +20,7 @@ const Tag = () => {
                     </Tabs.Tab>
 
                     <Tabs.Tab label='Удалить'>
-
+                        <DeleteElements typeElements='tag' />
                     </Tabs.Tab>
                 </Tabs>
             </div>

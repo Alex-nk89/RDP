@@ -74,7 +74,7 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
 
         request('AddChangeTag', 'POST', tag)
             .then(result => {
-                if (Object.keys(result).length > 0) {
+                if (result) {
                     show('success', 'Тег сохранен');
                     form.reset();
                 }
@@ -102,7 +102,11 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
 
             request(`GetTags?name=${name}`)
                 .then(result => {
-                    setTagsList(result);
+                    if (Object.keys(result).length > 0)
+                        setTagsList(result);
+                    else
+                        form.setErrors({ tagName: 'Поиск не дал результатов' });
+
                     setLoadingTagList(false);
                 })
         } else

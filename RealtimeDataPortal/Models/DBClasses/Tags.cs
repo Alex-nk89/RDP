@@ -21,5 +21,23 @@ namespace RealtimeDataPortal.Models
                 return true;
             }
         }
+
+        public bool DeleteTags (int[] id)
+        {
+            using(RDPContext rdp_base = new())
+            {
+                List<Tags> tags = new();
+
+                foreach(int tag in id)
+                {
+                    tags.Add(new Tags() { TagId = tag });
+                }
+
+                rdp_base.Tags.RemoveRange(tags);
+                rdp_base.SaveChanges();
+
+                return true;
+            }
+        }
     }
 }

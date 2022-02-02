@@ -1,4 +1,5 @@
 import { useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, AddChangeFolder, AddChangeExternalPage, Tag } from './index';
+import './configurator.sass';
 
 const Configurator = ({ updatingNavbar }) => {
     const { id, operation } = useParams();

@@ -192,6 +192,19 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
+        [HttpPost("DeleteTags")]
+        public Object DeleteTags (int[] id)
+        {
+            try
+            {
+                return new Tags().DeleteTags(id);
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При удалении данных произошла ошибка." });
+            }
+        }
+
         [HttpGet("GetAttributesForGraphic")]
         public Object GetAttributesForGraphic(int id)
         {

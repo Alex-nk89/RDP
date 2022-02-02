@@ -31,7 +31,7 @@ namespace RealtimeDataPortal.Models.OtherClasses
                         TagParameterId = tag.TagParameterId,
                         ServerId = server.ServerId,
                         ServerName = server.ServerName
-                    }).Distinct().AsNoTracking().ToList();
+                    }).Distinct().Take(50).AsNoTracking().ToList();
 
                 return tags;
             }
