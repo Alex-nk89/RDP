@@ -1,4 +1,7 @@
-import { useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, AddChangeFolder, AddChangeExternalPage, Tag } from './index';
+import {
+    useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, AddChangeFolder, AddChangeExternalPage, Tag,
+    Product
+} from './index';
 import './configurator.sass';
 
 const Configurator = ({ updatingNavbar }) => {
@@ -18,13 +21,15 @@ const Configurator = ({ updatingNavbar }) => {
                 return <AddChangeExternalPage componentInfo={componentInfo} type="change" updatingNavbar={updatingNavbar} />;
             case 'change-tag':
                 return <Tag />;
+            case 'change-product':
+                return <Product />;
             default:
                 return null;
         }
     }
 
     useEffect(() => {
-        if (operation !== 'change-tag') {
+        if (operation !== 'change-tag' && operation !== 'change-product') {
             request(`GetComponentInformation?id=${id}&operation=${operation}`)
                 .then(componentInfo => {
                     if (Object.keys(componentInfo).length !== 0) {

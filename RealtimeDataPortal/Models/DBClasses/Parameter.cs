@@ -2,11 +2,11 @@
 
 namespace RealtimeDataPortal.Models
 {
-    public class ProductsParameters
+    public class Parameter
     {
-        public int ProductsParametersId { get; set; }
+        public int ParameterId { get; set; }
         public int ProductId { get; set; }
-        public string NameParameter { get; set; } = string.Empty!;
+        public int ParameterTypeId { get; set; }
         public string Position { get; set; } = string.Empty!;
         public int Round { get; set; }
         public bool ShowLimit { get; set; }

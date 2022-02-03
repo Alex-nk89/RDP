@@ -37,16 +37,16 @@ namespace RealtimeDataPortal.Models
                      from sectionProduct in sectionProducts.DefaultIfEmpty()
                      join prdt in rdp_base.Products on sectionProduct.ProductId equals prdt.ProductId into products
                      from product in products.DefaultIfEmpty()
-                     join prprm in rdp_base.ProductsParameters on product.ProductId equals prprm.ProductId into productPrm
-                     from productParameter in productPrm.DefaultIfEmpty()
-                     join ppg in rdp_base.ProductParameterGroups on productParameter.ProductsParametersId equals ppg.ProductParameterId into parameterGroups
-                     from parameterGroup in parameterGroups.DefaultIfEmpty()
-                     join tgs in rdp_base.Tags on parameterGroup.TagId equals tgs.TagId into tags
+                     join param in rdp_base.Parameter on product.ProductId equals param.ProductId into parameters
+                     from parameter in parameters.DefaultIfEmpty()
+                     join pt in rdp_base.ParameterTag on parameter.ParameterId equals pt.ParameterId into parameterTags
+                     from parameterTag in parameterTags.DefaultIfEmpty()
+                     join tgs in rdp_base.Tag on parameterTag.TagId equals tgs.TagId into tags
                      from tag in tags.DefaultIfEmpty()
                      join tt in rdp_base.TagsType on tag.TagTypeId equals tt.TagTypeId into tagsType
                      from tagType in tagsType.DefaultIfEmpty()
-                     join tp in rdp_base.TagsParameter on tag.TagParameterId equals tp.TagParameterId into tagsParameters
-                     from tagParameter in tagsParameters.DefaultIfEmpty()
+                     join ptype in rdp_base.ParameterType on parameter.ParameterTypeId equals ptype.ParameterTypeId into parameterTypes
+                     from parameterType in parameterTypes.DefaultIfEmpty()
                      join srvr in rdp_base.Server on tag.ServerId equals srvr.ServerId into servers
                      from server in servers.DefaultIfEmpty()
                      where tm.Id == id
@@ -61,10 +61,10 @@ namespace RealtimeDataPortal.Models
                          SectionName = section.SectionName,
                          ProductId = product.ProductId,
                          ProductName = product.ProductName,
-                         NameParameter = productParameter.NameParameter,
-                         ProductsParameterId = productParameter.ProductsParametersId,
-                         Position = productParameter.Position,
-                         Round = productParameter.Round,
+                         NameParameter = parameterType.ParameterTypeName,
+                         ProductsParameterId = parameter.ParameterId,
+                         Position = parameter.Position,
+                         Round = parameter.Round,
                          TagName = tag.TagName,
                          Value = null,
                          Unit = null,

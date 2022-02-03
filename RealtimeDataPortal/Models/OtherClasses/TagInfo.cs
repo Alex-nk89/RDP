@@ -7,7 +7,6 @@ namespace RealtimeDataPortal.Models.OtherClasses
         public int TagId { get; set; }
         public string TagName { get; set; } = string.Empty;
         public int TagTypeId { get; set; }
-        public int TagParameterId { get; set; }
         public int ServerId { get; set; }
         public string ServerName { get; set; } = String.Empty;
 
@@ -15,20 +14,19 @@ namespace RealtimeDataPortal.Models.OtherClasses
         {
             using (RDPContext rdp_base = new())
             {
-                List<TagInfo> tags = (from tag in rdp_base.Tags
+                List<TagInfo> tags = (from tag in rdp_base.Tag
                     join srv in rdp_base.Server on tag.ServerId equals srv.ServerId into servers
                     from server in servers.DefaultIfEmpty()
-                    join ppg in rdp_base.ProductParameterGroups on tag.TagId equals ppg.TagId into productParameterGroups
-                    from productParameterGroup in productParameterGroups.DefaultIfEmpty()
-                    join pp in rdp_base.ProductsParameters on productParameterGroup.ProductParameterId equals pp.ProductsParametersId into productParameters
-                    from productParameter in productParameters.DefaultIfEmpty()
-                    where EF.Functions.Like(tag.TagName, $"%{name}%") || EF.Functions.Like(productParameter.Position, $"%{name}%")
+                    join pt in rdp_base.ParameterTag on tag.TagId equals pt.TagId into parameterTags
+                    from parameterTag in parameterTags.DefaultIfEmpty()
+                    join param in rdp_base.Parameter on parameterTag.ParameterId equals param.ParameterId into parameters
+                    from parameter in parameters.DefaultIfEmpty()
+                    where EF.Functions.Like(tag.TagName, $"%{name}%") || EF.Functions.Like(parameter.Position, $"%{name}%")
                     select new TagInfo()
                     {
                         TagId = tag.TagId,
                         TagName = tag.TagName,
                         TagTypeId = tag.TagTypeId,
-                        TagParameterId = tag.TagParameterId,
                         ServerId = server.ServerId,
                         ServerName = server.ServerName
                     }).Distinct().Take(50).AsNoTracking().ToList();

@@ -13,7 +13,6 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
     const [loadingSubmit, setLoadingSubmit] = useState(false);
 
     const typesList = tagAttributes.types.map(item => ({ label: `${item.type} - ${item.typeShortName}`, value: item.tagTypeId.toString() }));
-    const parametersList = tagAttributes.parameters.map(item => ({ label: `${item.label} - ${item.tagParameterName}`, value: item.tagParameterId.toString() }));
     const serversList = tagAttributes.servers.map(item => ({ label: `${item.serverName}`, value: item.serverId.toString() }));
 
     const visibleListTags = tagsList.length > 0 ? true : false;
@@ -25,19 +24,16 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
             tagId: '',
             tagName: '',
             tagTypeId: '',
-            tagParameterId: '',
             serverId: ''
         },
         validationRules: {
             tagName: value => value.trim().length >= 3 && !/[а-яА-Я]/i.test(value),
             tagTypeId: value => value.trim().length > 0,
-            tagParameterId: value => value.trim().length > 0,
             serverId: value => value.trim().length > 0
         },
         errorMessages: {
             tagName: 'Наименование должно содержать от 5 символов не содержать символов кириллицы',
             tagTypeId: 'Необходимо выбрать тип тега',
-            tagParameterId: 'Необходимо выбрать параметр',
             serverId: 'Необходимо выбрать сервер'
         }
     });
@@ -48,13 +44,12 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
 
     const selectTag = (event) => {
         const selectedTag = tagsList.find(tag => Number(tag.tagId) === Number(event.target.id));
-        const { tagId, tagName, tagTypeId, tagParameterId, serverId } = selectedTag;
+        const { tagId, tagName, tagTypeId, serverId } = selectedTag;
 
         form.setValues(() => ({
             tagId: tagId.toString(),
             tagName,
             tagTypeId: tagTypeId.toString(),
-            tagParameterId: tagParameterId.toString(),
             serverId: serverId.toString()
         }));
 
@@ -68,7 +63,6 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
             tagId: Number(values.tagId),
             tagName: values.tagName,
             tagTypeId: Number(values.tagTypeId),
-            tagParameterId: Number(values.tagParameterId),
             serverId: Number(values.serverId)
         });
 
@@ -152,15 +146,6 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
                     label='Тип'
                     placeholder='Выберите тип тега'
                     data={typesList} />
-
-                <Space h="md" />
-
-                <Select
-                    {...attributesInputs}
-                    {...form.getInputProps('tagParameterId')}
-                    label='Параметер'
-                    placeholder='Выберите параметер тега'
-                    data={parametersList} />
 
                 <Space h="md" />
 

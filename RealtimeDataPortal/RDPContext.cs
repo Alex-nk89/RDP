@@ -22,11 +22,11 @@ namespace RealtimeDataPortal
         public virtual DbSet<AccessToComponent> AccessToComponent { get; set; } = null!;
         public virtual DbSet<Graphics> Graphics { get; set; } = null!;
         public virtual DbSet<Products> Products { get; set; } = null!;
-        public virtual DbSet<ProductsParameters> ProductsParameters { get; set; } = null!;
-        public virtual DbSet<ProductParameterGroups> ProductParameterGroups { get; set; } = null!;
+        public virtual DbSet<Parameter> Parameter { get; set; } = null!;
+        public virtual DbSet<ParameterTag> ParameterTag { get; set; } = null!;
         public virtual DbSet<Server> Server { get; set; } = null!;
-        public virtual DbSet<Tags> Tags { get; set; } = null!;
-        public virtual DbSet<TagsParameter> TagsParameter { get; set; } = null!;
+        public virtual DbSet<Tag> Tag { get; set; } = null!;
+        public virtual DbSet<ParameterType> ParameterType { get; set; } = null!;
         public virtual DbSet<TagsType> TagsType { get; set; } = null!;
         public virtual DbSet<rt_Tables> rt_Tables { get; set; } = null!;
         public virtual DbSet<rt_Sections> rt_Sections { get; set;} = null!;
@@ -69,9 +69,9 @@ namespace RealtimeDataPortal
                 entity.HasKey("ProductId");
             });
 
-            modelBuilder.Entity<ProductsParameters>(entity =>
+            modelBuilder.Entity<Parameter>(entity =>
             {
-                entity.HasKey("ProductsParametersId");
+                entity.HasKey("ParameterId");
             });
 
             modelBuilder.Entity<Server>(entity =>
@@ -79,14 +79,14 @@ namespace RealtimeDataPortal
                 entity.HasKey("ServerId");
             });
 
-            modelBuilder.Entity<Tags>(entity =>
+            modelBuilder.Entity<Tag>(entity =>
             {
                 entity.HasKey("TagId");
             });
 
-            modelBuilder.Entity<TagsParameter>(entity =>
+            modelBuilder.Entity<ParameterType>(entity =>
             {
-                entity.HasKey("TagParameterId");
+                entity.HasKey("ParameterTypeId");
             });
 
             modelBuilder.Entity<TagsType>(entity =>
@@ -94,9 +94,9 @@ namespace RealtimeDataPortal
                 entity.HasKey("TagTypeId");
             });
 
-            modelBuilder.Entity<ProductParameterGroups>(entity =>
+            modelBuilder.Entity<ParameterTag>(entity =>
             {
-                entity.HasKey("ProductParameterGroupsId");
+                entity.HasKey("ParameterTagId");
             });
 
             modelBuilder.Entity<rt_Tables>(entity =>

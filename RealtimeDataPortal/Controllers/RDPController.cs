@@ -169,7 +169,6 @@ namespace RealtimeDataPortal.Controllers
                 return new
                 {
                     Types = new TagsType().GetTagsTypes(),
-                    Parameters = new TagsParameter().GetTagsParameter(),
                     Servers = new Server().GetServers()
                 };
             }
@@ -180,11 +179,11 @@ namespace RealtimeDataPortal.Controllers
         }
 
         [HttpPost("AddChangeTag")]
-        public Object AddChangeTag(Tags tag)
+        public Object AddChangeTag(Tag tag)
         {
             try
             {
-                return new Tags().AddChangeTag(tag);
+                return new Tag().AddChangeTag(tag);
             }
             catch
             {
@@ -197,7 +196,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                return new Tags().DeleteTags(id);
+                return new Tag().DeleteTags(id);
             }
             catch
             {
