@@ -3,7 +3,7 @@ import './tag.sass';
 
 const Tag = () => {
     const { request, error, proccess, setProccess } = useRequest();
-    const [tagAttributes, setTagAttributes] = useState({});/*  */
+    const [tagAttributes, setTagAttributes] = useState({});
 
     const tabs = (
         <>

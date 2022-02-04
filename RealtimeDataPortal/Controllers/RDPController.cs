@@ -204,6 +204,32 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
+        [HttpGet("GetParameterTypes")]
+        public Object GetParameterTypes()
+        {
+            try
+            {
+                return new ParameterType().GetParameterTypes();
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При удалении данных произошла ошибка." });
+            }
+        }
+
+        [HttpPost("AddChangeProduct")]
+        public Object AddChangeProduct (List<QueryProduct> queryProduct)
+        {
+            try
+            {
+                return new QueryProduct().AddChangeProduct(queryProduct);
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При сохранении данных произошла ошибка." });
+            }
+        }
+
         [HttpGet("GetAttributesForGraphic")]
         public Object GetAttributesForGraphic(int id)
         {

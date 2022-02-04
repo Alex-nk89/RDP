@@ -32,7 +32,7 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
             serverId: value => value.trim().length > 0
         },
         errorMessages: {
-            tagName: 'Наименование должно содержать от 5 символов не содержать символов кириллицы',
+            tagName: 'Наименование должно содержать от 5 символов и не содержать символов кириллицы',
             tagTypeId: 'Необходимо выбрать тип тега',
             serverId: 'Необходимо выбрать сервер'
         }

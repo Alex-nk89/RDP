@@ -1,83 +1,110 @@
 import {
     Divider, InputWrapper, Space, Group, ActionIcon, IoAdd, IoRemove, settingsAddRemoveIcon, TextInput,
-    attributesInputs, NumberInput, Checkbox
+    attributesInputs, NumberInput, Checkbox, ParameterTag, Select
 } from '../../index';
 
-const Parameter = ({ number, parameter, enterData }) => {
-
-    const divider = number > 0 ? <Divider variant="dotted" size="md" /> : null;
+const Parameter = ({ number, parameter, enterParameter, parameterTypes }) => {
+    const typesList = parameterTypes.map(item =>
+        ({ label: `${item.label} - ${item.parameterTypeName}`, value: item.parameterTypeId.toString() }));
 
     const addTag = () => {
-        enterData(number, { ...parameter, tags: [...parameter.tags, { id: 0, idTag: '', tagName: '' }] });
+        enterParameter(--number, { ...parameter, tags: [...parameter.tags, { tagId: 0, tag: { value: '', error: '' } }] });
     };
 
     const removeTag = () => {
         if (parameter.tags.length > 1) {
             parameter.tags.pop();
-            enterData(number, { ...parameter, tags: [...parameter.tags] });
+            enterParameter(--number, { ...parameter, tags: [...parameter.tags] });
         }
     };
 
-    const positionEntry = event => {
-        enterData(--number, { ...parameter, position: { value: event.target.value, error: '' } });
-}
+    const positionEntry = event => enterParameter(--number, { ...parameter, position: { value: event.target.value, error: '' } });
 
-return (
-    <>
-        {divider}
+    const limitsEntry = event => enterParameter(--number, { ...parameter, showLimits: event.target.checked });
 
-        <Space h='sm' />
+    const parameterEntry = value => enterParameter(--number, { ...parameter, parameterTypeId: { value, error: ''}});
 
-        <InputWrapper label={`Параметер №${++number}`}>
-            <fieldset>
+    const enterTag = (num, tag) => {
+        parameter.tags[num] = { ...tag };
+        enterParameter(--number, { ...parameter, tags: [...parameter.tags] });
+    };
 
-                <InputWrapper label='Количество тегов'>
-                    <Group>
-                        <ActionIcon color='red' {...settingsAddRemoveIcon} onClick={removeTag}>
-                            <IoRemove />
-                        </ActionIcon>
-                        <span>{parameter.tags.length}</span>
-                        <ActionIcon color='blue' {...settingsAddRemoveIcon} onClick={addTag}>
-                            <IoAdd />
-                        </ActionIcon>
-                    </Group>
-                </InputWrapper>
+    const tagList = parameter.tags.map((tag, index) =>
+        <ParameterTag key={index} number={index} tag={tag} enterTag={enterTag} />);
 
-                <Space h='xs' />
+    return (
+        <>
+            <Space h='sm' />
 
-                <TextInput
-                    {...attributesInputs}
-                    {...parameter.position}
-                    label='Позиция'
-                    placeholder='Введите позицию'
-                    onChange={positionEntry}
-                />
+            <Divider variant="dotted" size="md" />
 
-                <Space h='xs' />
+            <Space h='sm' />
 
-                <NumberInput
-                    {...attributesInputs}
-                    {...parameter.round}
-                    label="Округление"
-                    placeholder="Количество знаков после запятой"
-                    type="number"
-                    min={0}
-                    max={5}
-                />
+            <InputWrapper label={`Параметер №${++number}`}>
+                <fieldset>
+                    <Space h='xs' />
 
-                <Space h='xs' />
+                    <TextInput
+                        {...attributesInputs}
+                        {...parameter.position}
+                        label='Позиция'
+                        placeholder='Введите позицию'
+                        onChange={positionEntry}
+                    />
 
-                <Checkbox
-                    label='Отображение лимитов'
-                    checked={parameter.showLimits}
-                />
-            </fieldset>
-        </InputWrapper>
+                    <Space h='xs' />
 
-        <Space h='sm' />
+                    <Select
+                        {...attributesInputs} 
+                        {...parameter.parameterTypesId}
+                        label='Тип параметра'
+                        placeholder='Выберите тип параметра'
+                        data={typesList}
+                        onChange={parameterEntry}
+                        defaultValue='1'
+                    />
 
-    </>
-);
+                    <Space h='xs' />
+
+                    <NumberInput
+                        {...attributesInputs}
+                        {...parameter.round}
+                        label="Округление"
+                        placeholder="Количество знаков после запятой"
+                        min={0}
+                        max={5}
+                    />
+
+                    <Space h='xs' />
+
+                    <Checkbox
+                        label='Отображение лимитов'
+                        checked={parameter.showLimits}
+                        onChange={limitsEntry}
+                    />
+
+                    <Space h='xs' />
+
+                    <InputWrapper label='Количество тегов'>
+                        <Group>
+                            <ActionIcon color='red' {...settingsAddRemoveIcon} onClick={removeTag}>
+                                <IoRemove />
+                            </ActionIcon>
+                            <span>{parameter.tags.length}</span>
+                            <ActionIcon color='blue' {...settingsAddRemoveIcon} onClick={addTag}>
+                                <IoAdd />
+                            </ActionIcon>
+                        </Group>
+                    </InputWrapper>
+
+                    {tagList}
+                </fieldset>
+            </InputWrapper>
+
+            <Space h='sm' />
+
+        </>
+    );
 };
 
 export default Parameter;
