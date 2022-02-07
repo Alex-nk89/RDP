@@ -204,16 +204,22 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
-        [HttpGet("GetParameterTypes")]
-        public Object GetParameterTypes()
+        [HttpGet("GetAttributesForProducts")]
+        public Object GetAttributesForProducts()
         {
             try
             {
-                return new ParameterType().GetParameterTypes();
+                List<ParameterType> parameterTypes = new ParameterType().GetParameterTypes();
+                int maxParameterId = new Parameter().GetMaxParameterId();
+
+                return new
+                {
+                    parameterTypes, maxParameterId
+                };
             }
             catch
             {
-                return StatusCode(500, new { Message = "При удалении данных произошла ошибка." });
+                return StatusCode(500, new { Message = "При получении данных произошла ошибка." });
             }
         }
 
@@ -227,6 +233,19 @@ namespace RealtimeDataPortal.Controllers
             catch
             {
                 return StatusCode(500, new { Message = "При сохранении данных произошла ошибка." });
+            }
+        }
+
+        [HttpGet("GetListProducts")]
+        public Object GetListProducts(string name)
+        {
+            try
+            {
+                return new QueryProduct().GetListProducts(name);
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При попытке получить данные с сервера произошла ошибка." });
             }
         }
 

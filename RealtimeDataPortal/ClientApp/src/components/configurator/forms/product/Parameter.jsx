@@ -1,9 +1,9 @@
 import {
-    Divider, InputWrapper, Space, Group, ActionIcon, IoAdd, IoRemove, settingsAddRemoveIcon, TextInput,
-    attributesInputs, NumberInput, Checkbox, ParameterTag, Select
+    attributesInputs, settingsAddRemoveIcon, Divider, InputWrapper, Space, Group, ActionIcon, TextInput,
+    NumberInput, Checkbox, ParameterTag, Select, IoAdd, IoRemove, IoClose,
 } from '../../index';
 
-const Parameter = ({ number, parameter, enterParameter, parameterTypes }) => {
+const Parameter = ({ number, parameter, enterParameter, parameterTypes, removeParameter }) => {
     const typesList = parameterTypes.map(item =>
         ({ label: `${item.label} - ${item.parameterTypeName}`, value: item.parameterTypeId.toString() }));
 
@@ -22,12 +22,16 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes }) => {
 
     const limitsEntry = event => enterParameter(--number, { ...parameter, showLimits: event.target.checked });
 
-    const parameterEntry = value => enterParameter(--number, { ...parameter, parameterTypeId: { value, error: ''}});
+    const parameterEntry = value => enterParameter(--number, { ...parameter, parameterTypeId: { value, error: '' } });
 
     const enterTag = (num, tag) => {
         parameter.tags[num] = { ...tag };
         enterParameter(--number, { ...parameter, tags: [...parameter.tags] });
     };
+
+    const removeCurrentParameter = () => {
+        removeParameter(--number);
+    }
 
     const tagList = parameter.tags.map((tag, index) =>
         <ParameterTag key={index} number={index} tag={tag} enterTag={enterTag} />);
@@ -40,8 +44,19 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes }) => {
 
             <Space h='sm' />
 
-            <InputWrapper label={`Параметер №${++number}`}>
+            <div className='info-block__form__fieldset'>
+                <div className='info-block__form__fieldset__title'>
+                    <h6>{`Параметер №${++number}`}</h6>
+
+                    <ActionIcon onClick={removeCurrentParameter}>
+                        <IoClose />
+                    </ActionIcon>
+                </div>
+
+
                 <fieldset>
+
+
                     <Space h='xs' />
 
                     <TextInput
@@ -55,13 +70,12 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes }) => {
                     <Space h='xs' />
 
                     <Select
-                        {...attributesInputs} 
-                        {...parameter.parameterTypesId}
+                        {...attributesInputs}
+                        {...parameter.parameterTypeId}
                         label='Тип параметра'
                         placeholder='Выберите тип параметра'
                         data={typesList}
                         onChange={parameterEntry}
-                        defaultValue='1'
                     />
 
                     <Space h='xs' />
@@ -99,7 +113,7 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes }) => {
 
                     {tagList}
                 </fieldset>
-            </InputWrapper>
+            </div>
 
             <Space h='sm' />
 

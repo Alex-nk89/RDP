@@ -9,7 +9,7 @@ import {
 } from '@mantine/core';
 import { useModals } from '@mantine/modals';
 
-import { IoAdd, IoRemove } from 'react-icons/io5';
+import { IoAdd, IoRemove, IoClose } from 'react-icons/io5';
 
 import { useRequest } from "../../hooks/useRequest";
 import AddChangeFolder from "./forms/folder/AddChangeFolder";
@@ -42,5 +42,5 @@ export {
     attributesInputs, settingsAddRemoveIcon,
     TextInput, Space, Button, useForm, MultiSelect, ActionIcon, Tabs, Select, Loader, Checkbox, useModals, Text, Group,
     InputWrapper, Divider, NumberInput,
-    IoAdd, IoRemove
+    IoAdd, IoRemove, IoClose
 };

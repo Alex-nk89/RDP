@@ -10,5 +10,13 @@ namespace RealtimeDataPortal.Models
         public string Position { get; set; } = string.Empty!;
         public int Round { get; set; }
         public bool ShowLimit { get; set; }
+
+        public int GetMaxParameterId()
+        {
+            using (RDPContext rdp_base = new())
+            {
+                return rdp_base.Parameter.Max(p => p.ParameterId);
+            }
+        }
     }
 }

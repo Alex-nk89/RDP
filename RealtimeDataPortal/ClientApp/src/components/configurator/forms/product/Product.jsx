@@ -3,13 +3,13 @@ import './product.sass';
 
 const Product = () => {
     const { request, error, proccess, setProccess } = useRequest();
-    const [parameterTypes, setParametersTypes] = useState({});
+    const [attributesForProducts, setAttributesForProducts] = useState({});
 
     useEffect(() => {
-        request('GetParameterTypes')
+        request('GetAttributesForProducts')
             .then(result => {
                 if (Object.keys(result).length > 0) {
-                    setParametersTypes(result);
+                    setAttributesForProducts(result);
                     setProccess('confirmed');
                 }
             });
@@ -24,11 +24,11 @@ const Product = () => {
             <div className='add-change-product'>
                 <Tabs variant='pills' orientation='vertical'>
                     <Tabs.Tab label='Создать' >
-                        <AddChangeProduct operation='add' parameterTypes={parameterTypes}/>
+                        <AddChangeProduct operation='add' attributesForProducts={attributesForProducts} />
                     </Tabs.Tab>
 
                     <Tabs.Tab label='Редактировать'>
-                        <AddChangeProduct operation='change' parameterTypes={parameterTypes}/>
+                        <AddChangeProduct operation='change' attributesForProducts={attributesForProducts} />
                     </Tabs.Tab>
 
                     <Tabs.Tab label='Удалить'>
