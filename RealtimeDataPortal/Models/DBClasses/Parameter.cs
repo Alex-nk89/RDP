@@ -11,11 +11,28 @@ namespace RealtimeDataPortal.Models
         public int Round { get; set; }
         public bool ShowLimit { get; set; }
 
-        public int GetMaxParameterId()
+        public int GetMaxParameterId(RDPContext rdp_base)
         {
-            using (RDPContext rdp_base = new())
+            return rdp_base.Parameter.Max(p => p.ParameterId);
+        }
+
+        public int AddParameter(Parameter addingParameter)
+        {
+            using(RDPContext rdp_base = new())
             {
-                return rdp_base.Parameter.Max(p => p.ParameterId);
+                rdp_base.Parameter.Update(addingParameter);                
+                rdp_base.SaveChanges();
+
+                return addingParameter.ParameterId;
+            }
+        }
+
+        public void RemoveParameter(List<Parameter> deletingParameters)
+        {
+            using(RDPContext rdp_base = new())
+            {
+                rdp_base.Parameter.RemoveRange(deletingParameters);
+                rdp_base.SaveChanges();
             }
         }
     }

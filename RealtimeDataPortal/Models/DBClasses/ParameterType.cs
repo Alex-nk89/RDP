@@ -7,16 +7,9 @@
         public string Label { get; set; } = string.Empty;
         public string Color { get; set; } = string.Empty;
 
-        public List<ParameterType> GetParameterTypes()
+        public List<ParameterType> GetParameterTypes(RDPContext rdp_base)
         {
-            List<ParameterType> parameterTypes = new();
-
-            using (RDPContext rdp_base = new())
-            {
-                parameterTypes = rdp_base.ParameterType.ToList();
-
-                return parameterTypes;
-            }
+            return rdp_base.ParameterType.ToList();
         }
     }
 }

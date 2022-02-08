@@ -12,7 +12,7 @@ namespace RealtimeDataPortal.Models
             using(RDPContext rdp_base = new())
             {
                 rdp_base.Products.Update(product);
-                //rdp_base.SaveChanges();
+                rdp_base.SaveChanges();
 
                 return product.ProductId;
             }

@@ -183,7 +183,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                return new Tag().AddChangeTag(tag);
+                return new { success = new Tag().AddChangeTag(tag) };
             }
             catch
             {
@@ -209,13 +209,19 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                List<ParameterType> parameterTypes = new ParameterType().GetParameterTypes();
-                int maxParameterId = new Parameter().GetMaxParameterId();
-
-                return new
+                using(RDPContext rdp_base = new())
                 {
-                    parameterTypes, maxParameterId
-                };
+                    List<ParameterType> parameterTypes = new ParameterType().GetParameterTypes(rdp_base);
+                    int maxParameterId = new Parameter().GetMaxParameterId(rdp_base);
+                    int maxParameterTagId = new ParameterTag().GetMaxParameterTagId(rdp_base);
+
+                    return new
+                    {
+                        parameterTypes,
+                        maxParameterId,
+                        maxParameterTagId
+                    };
+                }
             }
             catch
             {
@@ -228,7 +234,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                return new QueryProduct().AddChangeProduct(queryProduct);
+                return new { success = new QueryProduct().AddChangeProduct(queryProduct) };
             }
             catch
             {

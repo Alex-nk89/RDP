@@ -68,14 +68,13 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
 
         request('AddChangeTag', 'POST', tag)
             .then(result => {
-                if (result) {
+                if (Object.keys(result).length > 0) {
                     show('success', 'Тег сохранен');
                     form.reset();
                 }
-            })
-            .finally(
-                setLoadingSubmit(false)
-            );
+
+                setLoadingSubmit(false);
+            });
     };
 
     useEffect(() => {

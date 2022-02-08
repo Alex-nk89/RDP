@@ -5,6 +5,8 @@ import {
 } from '../../index';
 
 let productList = [];
+let productId = 0;
+let initialParameters = [];
 
 const AddChangeProduct = ({ operation, attributesForProducts }) => {
     const productNameRef = useRef(null);
@@ -15,7 +17,6 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
     const parameter = {
         parameterId: maxParameterId + 1,
         parameterTypeId: { value: '1', error: '' },
-        parameterTagId: 0,
         tags: [{
             tagId: 0,
             tag: { value: '', error: '' }
@@ -29,9 +30,7 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
 
     const [productName, setProductName] = useState({ value: '', error: '' });
     const [productListFound, setProductListFound] = useState([]);
-    const [productId, setProductId] = useState(0);
     const [parameters, setParameters] = useState([parameter]);
-    const [initialParameters, setInitialParameters] = useState([]);
 
     const [loadingProductList, setLoadingProductList] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -84,34 +83,34 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
     };
 
     const selectProduct = (event) => {
-        const productId = event.target.dataset.productid;
-        const selectedProduct = productList.filter(product => Number(product.productId) === Number(productId));
+        const selectedProductId = event.target.dataset.productid;
+        const selectedProduct = productList.filter(product => Number(product.productId) === Number(selectedProductId));
 
         setProductName({ value: event.target.textContent, error: '' });
-        setProductId(productId);
+        productId = selectedProductId;
 
         const parametersId = Array.from(new Set(
             selectedProduct.map(({ parameterId }) => parameterId)
         ));
 
-        setParameters(
-            parametersId.map(parameterId => {
-                const currentParameter = selectedProduct.filter(product => Number(product.parameterId) === Number(parameterId));
+        initialParameters = parametersId.map(parameterId => {
+            const currentParameter = selectedProduct.filter(product => Number(product.parameterId) === Number(parameterId));
 
-                return {
-                    parameterId: Number(parameterId),
-                    parameterTypeId: { value: currentParameter[0].parameterTypeId.toString(), error: '' },
-                    parameterTagId: currentParameter[0].parameterTagId,
-                    position: { value: currentParameter[0].position, error: '' },
-                    round: { value: currentParameter[0].round, error: ''} ,
-                    showLimits: currentParameter[0].showLimit,
-                    tags: currentParameter.map(({ tagId, tagName }) => ({
-                        tagId: Number(tagId),
-                        tag: { value: tagName, error: '' }
-                    }))
-                }
-            })
-        );
+            return {
+                parameterId: Number(parameterId),
+                parameterTypeId: { value: currentParameter[0].parameterTypeId.toString(), error: '' },
+                parameterTagId: currentParameter[0].parameterTagId,
+                position: { value: currentParameter[0].position, error: '' },
+                round: { value: currentParameter[0].round, error: '' },
+                showLimits: currentParameter[0].showLimits,
+                tags: currentParameter.map(({ tagId, tagName }) => ({
+                    tagId: Number(tagId),
+                    tag: { value: tagName, error: '' }
+                }))
+            }
+        });
+
+        setParameters(initialParameters);
     };
 
     const addParameter = () => {
@@ -134,8 +133,8 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
     const checkForm = () => {
         let verified = true;
 
-        if (productName.value.trim().length < 5 || /[а-яА-Я]/i.test(productName.value)) {
-            setProductName({ ...productName, error: 'Наименование должно содержать от 5 символов и не содержать символов кириллицы' })
+        if (productName.value.trim().length < 5) {
+            setProductName({ ...productName, error: 'Наименование должно содержать от 5 символов' })
             verified = false;
         }
 
@@ -161,27 +160,29 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
             const sentData = parameters.flatMap(parameter =>
                 parameter.tags.map(tag => {
                     return {
-                        productId,
+                        productId: operation === 'add' ? 0 : productId,
                         productName: productName.value,
                         parameterId: Number(parameter.parameterId),
                         parameterTypeId: Number(parameter.parameterTypeId.value),
                         position: parameter.position.value,
                         round: Number(parameter.round.value),
                         showLimits: Boolean(parameter.showLimits),
-                        parameterTagId: Number(parameter.parameterTagId),
                         tagId: Number(tag.tagId)
                     };
                 }));
 
             request('AddChangeProduct', 'POST', JSON.stringify(sentData))
                 .then(result => {
-                    if (result) {
+                    if (Object.keys(result).length > 0) {
                         show('success', 'Продукт сохранен.');
-                        setLoadingSubmit(false);
                     }
-                });
 
-            console.log(sentData);
+                    setLoadingSubmit(false);
+                });
+            
+            setParameters([parameter]);
+            setProductName({ value: '', error: '' })
+
         }
     };
 
@@ -202,6 +203,7 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
         document.addEventListener("click", closeList);
 
         return () => document.removeEventListener("click", closeList);
+        //eslint-disable-next-line
     }, []);
 
     return (

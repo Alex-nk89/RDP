@@ -11,9 +11,9 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes, removePa
         enterParameter(--number, { ...parameter, tags: [...parameter.tags, { tagId: 0, tag: { value: '', error: '' } }] });
     };
 
-    const removeTag = () => {
+    const removeTag = (index) => {
         if (parameter.tags.length > 1) {
-            parameter.tags.pop();
+            isNaN(index) ? parameter.tags.pop() : parameter.tags.splice(index, 1);
             enterParameter(--number, { ...parameter, tags: [...parameter.tags] });
         }
     };
@@ -23,6 +23,8 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes, removePa
     const limitsEntry = event => enterParameter(--number, { ...parameter, showLimits: event.target.checked });
 
     const parameterEntry = value => enterParameter(--number, { ...parameter, parameterTypeId: { value, error: '' } });
+
+    const roundEntry = value => enterParameter(--number, { ...parameter, round: { value, error: '' } });
 
     const enterTag = (num, tag) => {
         parameter.tags[num] = { ...tag };
@@ -34,7 +36,7 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes, removePa
     }
 
     const tagList = parameter.tags.map((tag, index) =>
-        <ParameterTag key={index} number={index} tag={tag} enterTag={enterTag} />);
+        <ParameterTag key={index} number={index} tag={tag} enterTag={enterTag} removeTag={removeTag} />);
 
     return (
         <>
@@ -87,6 +89,7 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes, removePa
                         placeholder="Количество знаков после запятой"
                         min={0}
                         max={5}
+                        onChange={roundEntry}
                     />
 
                     <Space h='xs' />

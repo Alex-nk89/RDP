@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, useRequest, TextInput, Space, Loader, attributesInputs } from '../../index';
+import { useState, useEffect, useRef, useRequest, TextInput, Space, Loader, attributesInputs, ActionIcon,IoClose } from '../../index';
 
-const ParameterTag = ({ number, tag, enterTag }) => {
+const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
     const tagNameRef = useRef(null);
     const { request } = useRequest();
 
@@ -31,7 +31,7 @@ const ParameterTag = ({ number, tag, enterTag }) => {
                 })
         } else {
             setTagsList([]);
-            enterTag(--number, { ...tag, tag: { value: tagName, error: '' } });
+            enterTag(--number, { tagId: 0, tag: { value: tagName, error: '' } });
         }
     };
 
@@ -47,25 +47,41 @@ const ParameterTag = ({ number, tag, enterTag }) => {
         closeList();
     };
 
+    const removeCurrentTag = () => {
+        removeTag(--number);
+    };
+
     useEffect(() => {
         document.addEventListener("click", closeList);
 
         return () => document.removeEventListener("click", closeList);
+        //eslint-disable-next-line
     }, []);
 
     return (
         <>
             <Space h='xs' />
 
-            <TextInput
-                {...attributesInputs}
-                {...tag.tag}
-                onChange={tagSearch}
-                label={`Тег №${++number}`}
-                placeholder='Выберите тег'
-                ref={tagNameRef}
-                rightSection={loaderTagList}
-            />
+            <div className='info-block__form__fieldset__tag-block'>
+                <h6>{`Тег №${++number}`}</h6>
+
+                <div>
+                    <TextInput
+                        {...attributesInputs}
+                        {...tag.tag}
+                        onChange={tagSearch}
+                        placeholder='Выберите тег'
+                        ref={tagNameRef}
+                        rightSection={loaderTagList}
+                    />
+
+                    <ActionIcon onClick={removeCurrentTag}>
+                        <IoClose />
+                    </ActionIcon>
+                </div>
+
+
+            </div>
 
             <div className="info-block__form__search-result" open={visibleListTags}>
                 {tagsList.map(tag =>
