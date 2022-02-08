@@ -255,6 +255,32 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
+        [HttpGet("GetListProductsForDelete")]
+        public Object GetListProductsForDelete(string name)
+        {
+            try
+            {
+                return new Products().GetListProducts(name).ToList();
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При попытке получить данные с сервера произошла ошибка." });
+            }
+        }
+
+        [HttpPost("DeleteProducts")]
+        public Object DeleteProducts(int[] id)
+        {
+            try
+            {
+                return new { success = new Products().DeleteProducts(id) };
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При удалении данных произошла ошибка." });
+            }
+        }
+
         [HttpGet("GetAttributesForGraphic")]
         public Object GetAttributesForGraphic(int id)
         {

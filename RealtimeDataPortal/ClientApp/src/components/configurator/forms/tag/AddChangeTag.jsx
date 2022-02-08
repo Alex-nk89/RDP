@@ -97,8 +97,10 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
                 .then(result => {
                     if (Object.keys(result).length > 0)
                         setTagsList(result);
-                    else
+                    else {
                         form.setErrors({ tagName: 'Поиск не дал результатов' });
+                        setTagsList([]);
+                    }
 
                     setLoadingTagList(false);
                 })

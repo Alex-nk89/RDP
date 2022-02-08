@@ -1,4 +1,4 @@
-import { useState, useEffect, useRequest, Tabs, AddChangeProduct, AppPreloader, ErrorsPage } from '../../index';
+import { useState, useEffect, useRequest, Tabs, AddChangeProduct, AppPreloader, ErrorsPage, DeleteElements } from '../../index';
 import './product.sass';
 
 const Product = () => {
@@ -32,7 +32,7 @@ const Product = () => {
                     </Tabs.Tab>
 
                     <Tabs.Tab label='Удалить'>
-                        {/* <DeleteElements typeElements='tag' /> */}
+                        <DeleteElements typeElements='product' />
                     </Tabs.Tab>
                 </Tabs>
             </div>

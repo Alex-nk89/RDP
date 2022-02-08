@@ -15,7 +15,9 @@ const DeleteElements = ({ typeElements }) => {
     const loaderElementsList = loadingElementsList ? <Loader size={16} /> : null;
     const loaderSubmitForm = loadingSubmit ? <Loader size={16} /> : null;
 
-    const methods = typeElements === 'tag' ? { find: 'GetTags', delete: 'DeleteTags' } : null;
+    const methods = typeElements === 'tag' ?
+        { find: 'GetTags', delete: 'DeleteTags' } :
+        { find: 'GetListProductsForDelete', delete: 'DeleteProducts' };
 
     const form = useForm({
         initialValues: {
@@ -106,9 +108,12 @@ const DeleteElements = ({ typeElements }) => {
                 .then(result => {
                     if (Object.keys(result).length > 0) {
                         setListElements(result.map(item => {
+                            console.log(item)
                             switch (typeElements) {
                                 case 'tag':
                                     return { id: item.tagId, name: `${item.tagName} (${item.serverName})`, isChecked: false };
+                                case 'product':
+                                    return { id: item.productId, name: `${item.productName}`, isChecked: false };
                                 default:
                                     return null;
                             }
