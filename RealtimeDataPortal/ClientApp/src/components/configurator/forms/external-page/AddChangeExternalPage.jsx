@@ -111,7 +111,7 @@ const AddChangeExternalPage = ({ componentInfo, type, updatingNavbar }) => {
     useEffect(() => {
         if (Object.keys(error).length !== 0) show('error', error.message);
         //eslint-disable-next-line
-    }, [error])
+    }, [error]);
 
     useEffect(() => {
         form.resetErrors();

@@ -6,7 +6,7 @@ namespace RealtimeDataPortal.Models
     public class ExternalPages
     {
         public int Id { get; set; }
-        public string Link { get; set; } = null!;
+        public string Link { get; set; } = string.Empty;
 
         public Object GetLink(int id, User user)
         {
