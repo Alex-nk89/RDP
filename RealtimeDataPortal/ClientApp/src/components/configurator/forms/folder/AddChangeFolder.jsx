@@ -6,7 +6,12 @@ import {
 import './addChangeFolder.sass';
 
 const AddChangeFolder = ({ componentInfo, type, updatingNavbar }) => {
-    const { request, error } = useRequest();
+
+    return (
+        <h5>Добавление папки</h5>
+    )
+}
+    /* const { request, error } = useRequest();
     const { show } = useNotification();
     const [title, setTitle] = useState(null);
     const [loadingForButton, setLoadingForButton] = useState(false);
@@ -155,6 +160,6 @@ const AddChangeFolder = ({ componentInfo, type, updatingNavbar }) => {
             </div>
         </>
     )
-}
+} */
 
 export default AddChangeFolder;

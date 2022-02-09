@@ -14,7 +14,6 @@ import Configurator from './components/configurator/Configurator';
 import AppPreloader from './components/loader/appPreloader';
 import { useRequest } from './hooks/useRequest';
 
-import "./style/_fonts.sass";
 import "./css/bootstrap-reboot.min.css";
 
 const App = () => {

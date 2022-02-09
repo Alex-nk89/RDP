@@ -30,6 +30,10 @@ namespace RealtimeDataPortal.Models
             {
                 Configurator componentInfo = new();
 
+                if(id == 0) {
+                    return componentInfo;
+                }
+
                 componentInfo.TreesMenu = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? 
                     throw new NotFoundException("Не удалось получить информацию о компоненте.");
 
