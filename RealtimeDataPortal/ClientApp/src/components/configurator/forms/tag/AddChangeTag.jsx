@@ -6,7 +6,6 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
     const nameRef = useRef(null);
     const { request, error } = useRequest();
     const { show } = useNotification();
-    //console.log(document.activeElement, nameRef.current, document.activeElement === nameRef.current);
 
     const [tagsList, setTagsList] = useState([]);
     const [loadingTagList, setLoadingTagList] = useState(false);

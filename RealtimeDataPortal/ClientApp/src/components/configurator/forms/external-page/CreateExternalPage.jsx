@@ -3,8 +3,8 @@ import {
     attributesInputs
 } from '../../index';
 
-const AddChangeFolder = ({ action, form, nameRef, submitForm, addAccessIcon, multiSelect, loadingForButton }) => {
-    const title = action === 'add' ? 'Добавить папку' : 'Редактировать папку';
+const AddChangeExternalPage = ({ action, form, nameRef, submitForm, addAccessIcon, multiSelect, loadingForButton }) => {
+    const title = action === 'add' ? 'Добавление страницы' : 'Редактирование страницы'
 
     return (
         <>
@@ -15,19 +15,26 @@ const AddChangeFolder = ({ action, form, nameRef, submitForm, addAccessIcon, mul
                     <TextInput
                         {...attributesInputs}
                         {...form.getInputProps('name')}
-                        label='Наименование папки'
-                        placeholder='Введите наименование папки'
+                        label='Наименование страницы'
+                        placeholder='Введите наименование страниицы'
                         ref={nameRef} />
 
                     <Space h="md" />
 
                     <TextInput
+                        {...attributesInputs}
+                        {...form.getInputProps('link')}
+                        label='Ссылка на страницу'
+                        placeholder='Введите ссылку на страницу' />
+
+                    <Space h="md" />
+
+                    <TextInput
                         {...form.getInputProps('access')}
-                        autoComplete='off'
                         label='Группы доступа'
                         placeholder='Введите группу из Active Directory'
                         rightSection={addAccessIcon}
-                    />
+                        /* ref={accessRef} */ />
 
                     {multiSelect}
 
@@ -37,7 +44,7 @@ const AddChangeFolder = ({ action, form, nameRef, submitForm, addAccessIcon, mul
                 </form>
             </div>
         </>
-    )
+    );
 };
 
-export default AddChangeFolder;
+export default AddChangeExternalPage;

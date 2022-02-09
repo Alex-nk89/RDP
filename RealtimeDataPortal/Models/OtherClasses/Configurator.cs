@@ -5,6 +5,7 @@ namespace RealtimeDataPortal.Models
     {
         public TreesMenu TreesMenu { get; set; } = new();
         public ExternalPages ExternalPages { get; set; } = new();
+        public Graphics Graphics { get; set; } = new();
 
 
         public string? ADGroupToAccess { get; set; }
@@ -30,11 +31,12 @@ namespace RealtimeDataPortal.Models
             {
                 Configurator componentInfo = new();
 
-                if(id == 0) {
+                if (id == 0)
+                {
                     return componentInfo;
                 }
 
-                componentInfo.TreesMenu = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? 
+                componentInfo.TreesMenu = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ??
                     throw new NotFoundException("Не удалось получить информацию о компоненте.");
 
                 string[] adGroups = rdp_base.AccessToComponent
@@ -43,9 +45,22 @@ namespace RealtimeDataPortal.Models
 
                 componentInfo.ADGroups = adGroups;
 
-                if (operation.Contains("external-page"))
+                if (operation.Contains("externalPage"))
                     componentInfo.ExternalPages = rdp_base.ExternalPages
                         .Where(ep => ep.Id == componentInfo.TreesMenu.ComponentId).FirstOrDefault() ?? new();
+                else if (operation.Contains("graphic"))
+                {
+                    componentInfo.Graphics = (from graphic in rdp_base.Graphics
+                                              join product in rdp_base.Products
+                                                on graphic.ProductId equals product.ProductId into products
+                                              from product in products.DefaultIfEmpty()
+                                              select new Graphics()
+                                              {
+                                                  ComponentId = graphic.ComponentId,
+                                                  ProductId = graphic.ProductId,
+                                                  Name = product.ProductName
+                                              }).FirstOrDefault() ?? new();
+                }
 
                 return componentInfo;
             }
@@ -64,12 +79,23 @@ namespace RealtimeDataPortal.Models
 
         public int AddChangeNewLink(ExternalPages externalPages)
         {
-            using(RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new RDPContext())
             {
                 rdp_base.ExternalPages.Update(externalPages);
                 rdp_base.SaveChanges();
 
                 return externalPages.Id;
+            }
+        }
+
+        public int AddChangeGraphic(Graphics graphic)
+        {
+            using (RDPContext rdp_base = new RDPContext())
+            {
+                rdp_base.Graphics.Update(graphic);
+                rdp_base.SaveChanges();
+
+                return graphic.ComponentId;
             }
         }
 

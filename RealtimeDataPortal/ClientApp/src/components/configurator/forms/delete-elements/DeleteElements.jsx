@@ -108,7 +108,6 @@ const DeleteElements = ({ typeElements }) => {
                 .then(result => {
                     if (Object.keys(result).length > 0) {
                         setListElements(result.map(item => {
-                            console.log(item)
                             switch (typeElements) {
                                 case 'tag':
                                     return { id: item.tagId, name: `${item.tagName} (${item.serverName})`, isChecked: false };

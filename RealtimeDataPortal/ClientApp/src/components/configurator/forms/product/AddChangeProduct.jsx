@@ -26,8 +26,6 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
         showLimits: false
     };
 
-    //
-
     const [productName, setProductName] = useState({ value: '', error: '' });
     const [productListFound, setProductListFound] = useState([]);
     const [parameters, setParameters] = useState([parameter]);

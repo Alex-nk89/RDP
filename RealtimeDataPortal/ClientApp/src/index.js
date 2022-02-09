@@ -16,9 +16,7 @@ const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
-	<MantineProvider theme={{
-		fontFamily: 'Roboto'
-	}}>
+	<MantineProvider>
 		<NotificationsProvider>
 			<ModalsProvider>
 				<BrowserRouter basename={baseUrl}>

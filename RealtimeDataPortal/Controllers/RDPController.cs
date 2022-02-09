@@ -20,8 +20,11 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(401, new { Message = "Не удалось получить данные о пользователе. Попробуйте " +
-                    "перезапустить приложение." });
+                return StatusCode(401, new
+                {
+                    Message = "Не удалось получить данные о пользователе. Попробуйте " +
+                    "перезапустить приложение."
+                });
             }
         }
 
@@ -37,7 +40,7 @@ namespace RealtimeDataPortal.Controllers
         }
 
         [HttpGet("GetLink")]
-        public Object GetLink (int id)
+        public Object GetLink(int id)
         {
             try
             {
@@ -46,23 +49,26 @@ namespace RealtimeDataPortal.Controllers
 
                 return link;
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return StatusCode(404, new { Message = ex.Message });
             }
-            catch(ForbiddenException ex)
+            catch (ForbiddenException ex)
             {
                 return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
-                return StatusCode(500, new { Message = "Не удалось получить данные о странице. Попробуйте " +
-                    "перезапустить приложение." });
+                return StatusCode(500, new
+                {
+                    Message = "Не удалось получить данные о странице. Попробуйте " +
+                    "перезапустить приложение."
+                });
             }
         }
 
         [HttpGet("GetComponentInformation")]
-        public Object GetComponentInformation (int id, string operation)
+        public Object GetComponentInformation(int id, string operation)
         {
             try
             {
@@ -81,8 +87,11 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "Не удалось получить данные о компоненте. Попробуйте " +
-                    "перезапустить приложение." });
+                return StatusCode(500, new
+                {
+                    Message = "Не удалось получить данные о компоненте. Попробуйте " +
+                    "перезапустить приложение."
+                });
             }
         }
 
@@ -95,8 +104,14 @@ namespace RealtimeDataPortal.Controllers
 
             try
             {
-                if (type == "external-page")
+                if (type == "externalPage")
+                {
                     configurator.TreesMenu.ComponentId = configurator.AddChangeNewLink(configurator.ExternalPages);
+                }
+                else if (type == "graphic")
+                {
+                    configurator.TreesMenu.ComponentId = configurator.AddChangeGraphic(configurator.Graphics);
+                }
 
                 id = configurator.AddNewComponent(configurator.TreesMenu);
 
@@ -120,8 +135,11 @@ namespace RealtimeDataPortal.Controllers
             {
                 string error = ex.Message;
 
-                return StatusCode(500, new { Message = "Не удалось внести изменения. Попробуйте " +
-                    "перезапустить приложение." });
+                return StatusCode(500, new
+                {
+                    Message = "Не удалось внести изменения. Попробуйте " +
+                    "перезапустить приложение."
+                });
             }
         }
 
@@ -132,9 +150,9 @@ namespace RealtimeDataPortal.Controllers
             {
                 if (!user.isConfigurator)
                     throw new ForbiddenException("Нет доступа к конфигуратору. Изменения не были внесены");
-        
+
                 new Configurator().DeleteElement(id);
-        
+
                 return new { Message = "Компонент удален" };
             }
             catch (ForbiddenException ex)
@@ -143,8 +161,11 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При удалении произошла ошибка. Попробуйте " +
-                    "перезапустить приложение." });
+                return StatusCode(500, new
+                {
+                    Message = "При удалении произошла ошибка. Попробуйте " +
+                    "перезапустить приложение."
+                });
             }
         }
 
@@ -192,7 +213,7 @@ namespace RealtimeDataPortal.Controllers
         }
 
         [HttpPost("DeleteTags")]
-        public Object DeleteTags (int[] id)
+        public Object DeleteTags(int[] id)
         {
             try
             {
@@ -209,7 +230,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                using(RDPContext rdp_base = new())
+                using (RDPContext rdp_base = new())
                 {
                     List<ParameterType> parameterTypes = new ParameterType().GetParameterTypes(rdp_base);
                     int maxParameterId = new Parameter().GetMaxParameterId(rdp_base);
@@ -230,7 +251,7 @@ namespace RealtimeDataPortal.Controllers
         }
 
         [HttpPost("AddChangeProduct")]
-        public Object AddChangeProduct (List<QueryProduct> queryProduct)
+        public Object AddChangeProduct(List<QueryProduct> queryProduct)
         {
             try
             {
@@ -290,7 +311,7 @@ namespace RealtimeDataPortal.Controllers
 
                 return attributesGraphic;
             }
-            catch(NotFoundException ex)
+            catch (NotFoundException ex)
             {
                 return StatusCode(404, new { Message = ex.Message });
             }
@@ -300,13 +321,16 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При загрузке данных произошла ошибка. Попробуйте " +
-                    "перезапустить приложение." });
+                return StatusCode(500, new
+                {
+                    Message = "При загрузке данных произошла ошибка. Попробуйте " +
+                    "перезапустить приложение."
+                });
             }
         }
 
         [HttpPost("GetGraphic")]
-        public Object GetGraphic (Query query)
+        public Object GetGraphic(Query query)
         {
             try
             {
@@ -316,8 +340,11 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При загрузке данных произошла ошибка. Попробуйте " +
-                    "перезапустить приложение." });
+                return StatusCode(500, new
+                {
+                    Message = "При загрузке данных произошла ошибка. Попробуйте " +
+                    "перезапустить приложение."
+                });
             }
         }
 
@@ -340,8 +367,11 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При загрузке данных произошла ошибка. Попробуйте " +
-                    "перезапустить приложение." });
+                return StatusCode(500, new
+                {
+                    Message = "При загрузке данных произошла ошибка. Попробуйте " +
+                    "перезапустить приложение."
+                });
             }
         }
 

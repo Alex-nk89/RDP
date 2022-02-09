@@ -50,7 +50,7 @@ const MenuOptions = ({ type, id, updatingNavbar }) => {
         <Menu.Item key={1} icon={<IoFolder />} component={Link} to={`/Configurator/add-folder/${id}`}>
             Новая папка
         </Menu.Item>,
-        <Menu.Item key={2} icon={<IoReader />} component={Link} to={`/Configurator/add-external-page/${id}`}>
+        <Menu.Item key={2} icon={<IoReader />} component={Link} to={`/Configurator/add-externalPage/${id}`}>
             Внешняя страница
         </Menu.Item>,
         <Menu.Item key={3} icon={<IoTrendingUp />} component={Link} to={`/Configurator/add-graphic/${id}`}>

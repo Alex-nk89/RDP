@@ -1,6 +1,6 @@
 import {
-    useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, AddChangeFolder, AddChangeExternalPage, Tag,
-    Product
+    useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, Tag,
+    Product, AddChangeElement
 } from './index';
 import './configurator.sass';
 
@@ -11,20 +11,12 @@ const Configurator = ({ updatingNavbar }) => {
 
     function form(componentInfo) {
         switch (operation) {
-            case 'add-folder':
-                return <AddChangeFolder componentInfo={componentInfo} type="add" updatingNavbar={updatingNavbar} />;
-            case 'change-folder':
-                return <AddChangeFolder componentInfo={componentInfo} type="change" updatingNavbar={updatingNavbar} />;
-            case 'add-external-page':
-                return <AddChangeExternalPage componentInfo={componentInfo} type="add" updatingNavbar={updatingNavbar} />;
-            case 'change-external-page':
-                return <AddChangeExternalPage componentInfo={componentInfo} type="change" updatingNavbar={updatingNavbar} />;
             case 'change-tag':
                 return <Tag />;
             case 'change-product':
                 return <Product />;
             default:
-                return null;
+                return <AddChangeElement operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;
         }
     }
 

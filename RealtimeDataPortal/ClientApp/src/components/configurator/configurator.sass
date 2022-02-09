@@ -1,5 +1,13 @@
+@import '../../style/_mixins'
+
 .info-block
+    &__input
+        border: none
+    &__rightSection
+        display: none
     &__form
+        position: relative
+        @include search-result
         &__list-elements-to-remove
             margin: 0
             padding: 1em

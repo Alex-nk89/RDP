@@ -18,7 +18,7 @@ const Page = ({ id, name, type, isConfigModeOn, updatingNavbar }) => {
 
     useEffect(() => {
         switch (type) {
-            case 'external-page':
+            case 'externalPage':
                 setLink({
                     icon: <IoReaderOutline />,
                     path: `/page/${id}`
