@@ -21,6 +21,7 @@ const Configurator = ({ updatingNavbar }) => {
     }
 
     useEffect(() => {
+
         if (operation !== 'change-tag' && operation !== 'change-product') {
             request(`GetComponentInformation?id=${id}&operation=${operation}`)
                 .then(componentInfo => {
@@ -32,8 +33,9 @@ const Configurator = ({ updatingNavbar }) => {
         } else {
             setProccess('confirmed');
         }
+        
         //eslint-disable-next-line
-    }, [id, operation])
+    }, [id, operation]);
 
     switch (proccess) {
         case 'loading':

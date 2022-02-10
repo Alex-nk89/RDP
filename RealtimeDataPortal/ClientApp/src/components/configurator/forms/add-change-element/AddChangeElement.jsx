@@ -89,8 +89,6 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
             AdGroupsOld: oldAccesses
         };
 
-        console.log(component)
-
         setLoadingForButton(true);
 
         request('AddChangeElement', 'POST', JSON.stringify(component))
@@ -110,6 +108,7 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
     };
 
     useEffect(() => {
+
         form.reset();
         setAccesses([]);
         setOldAccesses([]);
@@ -132,7 +131,7 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
 
         nameRef.current.focus();
         //eslint-disable-next-line
-    }, [componentInfo, operation]);
+    }, []); //componentInfo, operation
 
     useEffect(() => {
         if (Object.keys(error).length !== 0) show('error', error.message);

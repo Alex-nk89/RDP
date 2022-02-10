@@ -103,7 +103,11 @@ namespace RealtimeDataPortal.Models
         {
             using (RDPContext rdp_base = new RDPContext())
             {
-                TreesMenu removedElement = new TreesMenu() { Id = id };
+                TreesMenu removedElement = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new();
+
+
+
+
                 rdp_base.TreesMenu.Remove(removedElement);
 
                 List<AccessToComponent> accessToComponent = rdp_base.AccessToComponent
