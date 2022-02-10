@@ -101,6 +101,7 @@ namespace RealtimeDataPortal.Controllers
             AccessToComponent accessToComponent = new();
 
             (int id, _, _, string type, _, string[] adGroups, string[] adGroupsOld, _) = configurator;
+            int? idChildren = type == "folder" ? 0 : null;
 
             try
             {
@@ -119,14 +120,14 @@ namespace RealtimeDataPortal.Controllers
 
                 foreach (var addedAccess in addedAccesses)
                 {
-                    accessToComponent.AddAccessToComponent(id, 0, addedAccess);
+                    accessToComponent.AddAccessToComponent(id, idChildren, addedAccess);
                 }
 
                 string[] deletedAccesses = adGroupsOld.Except(adGroups).ToArray();
 
                 foreach (var deletedAccess in deletedAccesses)
                 {
-                    accessToComponent.DeleteAccessToComponent(id, 0, deletedAccess);
+                    accessToComponent.DeleteAccessToComponent(id, idChildren, deletedAccess);
                 }
 
                 return new { Message = "Изменения успешно внесены" };

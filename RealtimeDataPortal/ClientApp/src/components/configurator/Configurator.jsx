@@ -9,17 +9,6 @@ const Configurator = ({ updatingNavbar }) => {
     const { request, proccess, setProccess, error } = useRequest();
     const [componentInfo, setComponentInfo] = useState({});
 
-    function form(componentInfo) {
-        switch (operation) {
-            case 'change-tag':
-                return <Tag />;
-            case 'change-product':
-                return <Product />;
-            default:
-                return <AddChangeElement operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;
-        }
-    }
-
     useEffect(() => {
 
         if (operation !== 'change-tag' && operation !== 'change-product') {
@@ -36,6 +25,23 @@ const Configurator = ({ updatingNavbar }) => {
         
         //eslint-disable-next-line
     }, [id, operation]);
+
+    function form(componentInfo) {
+
+        switch (operation) {
+            case 'change-tag':
+                return <Tag />;
+            case 'change-product':
+                return <Product />;
+            default:
+                if(Object.keys(componentInfo).length > 0) {
+                    return <AddChangeElement operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;
+                } else {
+                    return null;
+                }
+                
+        }
+    }
 
     switch (proccess) {
         case 'loading':

@@ -30,6 +30,7 @@ namespace RealtimeDataPortal.Models
             using (RDPContext rdp_base = new RDPContext())
             {
                 Configurator componentInfo = new();
+                int? idChildren = operation.Contains("folder") ? 0 : null;
 
                 if (id == 0)
                 {
@@ -40,7 +41,7 @@ namespace RealtimeDataPortal.Models
                     throw new NotFoundException("Не удалось получить информацию о компоненте.");
 
                 string[] adGroups = rdp_base.AccessToComponent
-                    .Where(atc => atc.IdComponent == id && atc.IdChildren == 0)
+                    .Where(atc => atc.IdComponent == id && atc.IdChildren == idChildren)
                     .Select(tm => tm.ADGroupToAccess).ToArray();
 
                 componentInfo.ADGroups = adGroups;
@@ -105,8 +106,27 @@ namespace RealtimeDataPortal.Models
             {
                 TreesMenu removedElement = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new();
 
+                if(removedElement.Type == "externalPage")
+                {
+                    ExternalPages removingExternalPage = rdp_base.ExternalPages
+                        .Where(p => p.Id == removedElement.ComponentId).FirstOrDefault() ?? new();
 
+                    if(removingExternalPage.Id != 0)
+                    {
+                        rdp_base.ExternalPages.Remove(removingExternalPage);
+                    }
+                }
 
+                if(removedElement.Type == "graphic")
+                {
+                    Graphics graphic = rdp_base.Graphics
+                        .Where(g => g.ComponentId == removedElement.ComponentId).FirstOrDefault() ?? new();
+
+                    if(graphic.ComponentId != 0)
+                    {
+                        rdp_base.Graphics.Remove(graphic);
+                    }
+                }
 
                 rdp_base.TreesMenu.Remove(removedElement);
 

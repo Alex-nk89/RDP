@@ -7,7 +7,7 @@ import {
 
 const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
 
-    const { treesMenu, externalPages, graphics } = { ...componentInfo };
+    const { treesMenu, externalPages, graphics, adGroups } = { ...componentInfo };
     const [accesses, setAccesses] = useState([]);
     const [oldAccesses, setOldAccesses] = useState([]);
     const [loadingForButton, setLoadingForButton] = useState(false);
@@ -77,10 +77,10 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
                 Type: type,
                 ComponentId: treesMenu.componentId
             },
-            ExternalPages: { 
+            ExternalPages: {
                 Id: action === 'add' ? 0 : externalPages.id,
                 Link: form.getInputProps('link').value
-             },
+            },
             Graphics: {
                 ComponentId: action === 'add' ? 0 : graphics.componentId,
                 productId: form.getInputProps('productId').value
@@ -115,18 +115,16 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
 
         if (action === 'change') {
             form.setValues(currentValues => ({
-                ...currentValues, 
-                name: treesMenu.name, 
-                access: '', 
+                ...currentValues,
+                name: treesMenu.name,
+                access: '',
                 link: externalPages.link,
-                productId: graphics.componentId, 
+                productId: graphics.componentId,
                 product: graphics.name
-            }))
+            }));
 
-            if (componentInfo.adGroups[0]) {
-                setAccesses(componentInfo.adGroups);
-                setOldAccesses(componentInfo.adGroups);
-            }
+            setAccesses(adGroups);
+            setOldAccesses(adGroups);
         }
 
         nameRef.current.focus();
