@@ -31,3 +31,13 @@
             cursor: pointer
             &:hover
                 background-color: rgb(241, 243, 245)
+
+@mixin scrollbar
+    &::-webkit-scrollbar
+        width: 8px
+    &::-webkit-scrollbar-track
+        background: #fff
+    &::-webkit-scrollbar-thumb
+        background-color: #DEE2E6
+        border-radius: 8px
+    

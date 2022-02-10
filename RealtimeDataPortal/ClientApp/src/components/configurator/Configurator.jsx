@@ -1,6 +1,6 @@
 import {
     useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, Tag,
-    Product, AddChangeElement
+    Product, AddChangeElement, InstructionForConfigurator
 } from './index';
 import './configurator.sass';
 
@@ -33,6 +33,8 @@ const Configurator = ({ updatingNavbar }) => {
                 return <Tag />;
             case 'change-product':
                 return <Product />;
+            case 'instruction':
+                return <InstructionForConfigurator />
             default:
                 if(Object.keys(componentInfo).length > 0) {
                     return <AddChangeElement operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;

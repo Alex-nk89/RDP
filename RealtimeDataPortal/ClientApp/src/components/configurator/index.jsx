@@ -14,7 +14,6 @@ import { IoAdd, IoRemove, IoClose } from 'react-icons/io5';
 import { useRequest } from "../../hooks/useRequest";
 import ErrorsPage from '../errors-page/ErrorsPage';
 import AppPreloader from "../loader/appPreloader";
-//import AddChangeExternalPage from './forms/external-page/AddChangeExternalPage';
 import Tag from './forms/tag/Tag';
 import AddChangeTag from './forms/tag/AddChangeTag';
 import DeleteElements from './forms/delete-elements/DeleteElements';
@@ -26,6 +25,7 @@ import AddChangeElement from './forms/add-change-element/AddChangeElement';
 import AddChangeFolder from './forms/folder/AddChangeFolder';
 import AddChangeExternalPage from './forms/external-page/CreateExternalPage';
 import AddChangeGraphic from './forms/graphic/AddChangeGraphic';
+import InstructionForConfigurator from './instruction-for-configurator/InstructionForConfigurator';
 
 const attributesInputs = {
     required: true,
@@ -40,7 +40,7 @@ const settingsAddRemoveIcon = {
 export {
     useEffect, useState, useParams, useRequest, useNotification, useRef,
     AddChangeFolder, AppPreloader, ErrorsPage, AddChangeExternalPage, Tag, AddChangeTag, DeleteElements, Product, AddChangeProduct,
-    Parameter, ParameterTag, AddChangeElement, AddChangeGraphic,
+    Parameter, ParameterTag, AddChangeElement, AddChangeGraphic, InstructionForConfigurator,
     attributesInputs, settingsAddRemoveIcon,
     TextInput, Space, Button, useForm, MultiSelect, ActionIcon, Tabs, Select, Loader, Checkbox, useModals, Text, Group,
     InputWrapper, Divider, NumberInput,
