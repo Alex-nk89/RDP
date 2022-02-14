@@ -1,4 +1,6 @@
 ﻿
+using RealtimeDataPortal.Models.OtherClasses;
+
 namespace RealtimeDataPortal.Models
 {
     public class Configurator
@@ -6,6 +8,10 @@ namespace RealtimeDataPortal.Models
         public TreesMenu TreesMenu { get; set; } = new();
         public ExternalPages ExternalPages { get; set; } = new();
         public Graphics Graphics { get; set; } = new();
+        public rt_Tables Table { get; set; } = new();
+        public List<rt_Sections> TableSections { get; set; } = new();
+        public List<rt_SectionProduct> SectionProducts { get; set; } = new();
+        public int maxSectionId { get; set; }
 
 
         public string? ADGroupToAccess { get; set; }
@@ -55,12 +61,35 @@ namespace RealtimeDataPortal.Models
                                               join product in rdp_base.Products
                                                 on graphic.ProductId equals product.ProductId into products
                                               from product in products.DefaultIfEmpty()
+                                              where graphic.ComponentId == componentInfo.TreesMenu.ComponentId
                                               select new Graphics()
                                               {
                                                   ComponentId = graphic.ComponentId,
                                                   ProductId = graphic.ProductId,
                                                   Name = product.ProductName
                                               }).FirstOrDefault() ?? new();
+                }
+                else if(operation.Contains("table"))
+                {
+                    componentInfo.Table = rdp_base.rt_Tables.Where(t => t.TableId == componentInfo.TreesMenu.ComponentId).FirstOrDefault() ?? new();
+                    componentInfo.TableSections = rdp_base.rt_Sections.Where(s => s.TableId == componentInfo.Table.TableId).ToList();
+
+                    int[] sectionsIds = componentInfo.TableSections.Select(s => s.SectionId).Distinct().ToArray();
+
+                    componentInfo.SectionProducts = (from sectionProducts in rdp_base.rt_SectionProduct
+                                                     join product in rdp_base.Products
+                                                        on sectionProducts.ProductId equals product.ProductId into products
+                                                     from product in products.DefaultIfEmpty()
+                                                     where sectionsIds.Contains(sectionProducts.SectionId)
+                                                     select new rt_SectionProduct()
+                                                     {
+                                                         Id = sectionProducts.Id,
+                                                         SectionId = sectionProducts.SectionId,
+                                                         ProductId = sectionProducts.ProductId,
+                                                         ProductName = product.ProductName,
+                                                     }).ToList();
+
+                    componentInfo.maxSectionId = rdp_base.rt_Sections.Select(s => s.SectionId).Max();
                 }
 
                 return componentInfo;

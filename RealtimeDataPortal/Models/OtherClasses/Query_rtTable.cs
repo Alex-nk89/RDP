@@ -8,6 +8,7 @@
         public bool UnitVisible { get; set; } = false;
         public bool ScaleVisible { get; set; } = false;
         public bool LimitVisible { get; set; } = false;
+        public int SectionId { get; set; }
         public string SectionName { get; set; } = string.Empty;
         public int ProductId { get; set; }
         public string ProductName { get; set; } = string.Empty;

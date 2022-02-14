@@ -38,6 +38,8 @@
         overflow: scroll
         overflow-x: hidden
         @include scrollbar
+        &::-webkit-scrollbar
+            width: 5px
         &::-webkit-scrollbar-track
             background: $main-color
         &::-webkit-scrollbar-thumb

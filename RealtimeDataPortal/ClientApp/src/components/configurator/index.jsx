@@ -25,7 +25,10 @@ import AddChangeElement from './forms/add-change-element/AddChangeElement';
 import AddChangeFolder from './forms/folder/AddChangeFolder';
 import AddChangeExternalPage from './forms/external-page/CreateExternalPage';
 import AddChangeGraphic from './forms/graphic/AddChangeGraphic';
+import AddChangeTableRT from './forms/table-rt/AddChangeTableRT';
 import InstructionForConfigurator from './instruction-for-configurator/InstructionForConfigurator';
+import Section from './forms/table-rt/Section';
+import SectionProducts from './forms/table-rt/SectionProducts';
 
 const attributesInputs = {
     required: true,
@@ -40,7 +43,7 @@ const settingsAddRemoveIcon = {
 export {
     useEffect, useState, useParams, useRequest, useNotification, useRef,
     AddChangeFolder, AppPreloader, ErrorsPage, AddChangeExternalPage, Tag, AddChangeTag, DeleteElements, Product, AddChangeProduct,
-    Parameter, ParameterTag, AddChangeElement, AddChangeGraphic, InstructionForConfigurator,
+    Parameter, ParameterTag, AddChangeElement, AddChangeGraphic, AddChangeTableRT, InstructionForConfigurator, Section, SectionProducts,
     attributesInputs, settingsAddRemoveIcon,
     TextInput, Space, Button, useForm, MultiSelect, ActionIcon, Tabs, Select, Loader, Checkbox, useModals, Text, Group,
     InputWrapper, Divider, NumberInput,

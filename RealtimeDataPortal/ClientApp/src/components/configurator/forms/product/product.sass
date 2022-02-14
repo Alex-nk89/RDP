@@ -12,20 +12,9 @@
             position: relative
             @include search-result
             &__fieldset
-                &__title
-                    display: flex
-                    align-items: center
-                    h6
-                        display: block
-                        margin-bottom: 0
-                        flex-grow: 1
+                @include fieldset-title
                 &__tag-block
-                    & > div
-                        display: flex
-                        align-items: center
-                        & > div
-                            flex-grow: 1
-                            margin-right: .5rem
+                    @include fieldset-block
             fieldset
                 padding-left: 2rem 
     .mantine-11178a2

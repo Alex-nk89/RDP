@@ -163,5 +163,16 @@ namespace RealtimeDataPortal.Models
 
             return listValues;
         }
+
+        public int AddChangeRTTable (rt_Tables rt_Tables)
+        {
+            using(RDPContext rdp_base = new())
+            {
+                rdp_base.rt_Tables.Update(rt_Tables);
+                rdp_base.SaveChanges();
+
+                return rt_Tables.TableId;
+            }
+        }
     }
 }

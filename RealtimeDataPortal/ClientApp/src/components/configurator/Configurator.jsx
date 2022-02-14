@@ -1,6 +1,6 @@
 import {
     useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, Tag,
-    Product, AddChangeElement, InstructionForConfigurator
+    Product, AddChangeElement, InstructionForConfigurator, AddChangeTableRT
 } from './index';
 import './configurator.sass';
 
@@ -22,26 +22,30 @@ const Configurator = ({ updatingNavbar }) => {
         } else {
             setProccess('confirmed');
         }
-        
+
         //eslint-disable-next-line
     }, [id, operation]);
 
     function form(componentInfo) {
 
         switch (operation) {
+            case 'add-table':
+                return <AddChangeTableRT operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;
+            case 'change-table':
+                return <AddChangeTableRT operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;
             case 'change-tag':
                 return <Tag />;
             case 'change-product':
                 return <Product />;
             case 'instruction':
-                return <InstructionForConfigurator />
+                return <InstructionForConfigurator />;
             default:
-                if(Object.keys(componentInfo).length > 0) {
+                if (Object.keys(componentInfo).length > 0) {
                     return <AddChangeElement operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;
                 } else {
                     return null;
                 }
-                
+
         }
     }
 

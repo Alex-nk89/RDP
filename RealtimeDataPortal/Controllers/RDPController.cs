@@ -113,6 +113,12 @@ namespace RealtimeDataPortal.Controllers
                 {
                     configurator.TreesMenu.ComponentId = configurator.AddChangeGraphic(configurator.Graphics);
                 }
+                else if (type == "table")
+                {
+                    configurator.TreesMenu.ComponentId = new rt_Tables().AddChangeRTTable(configurator.Table);
+                    new rt_Sections().AddChangeSections(configurator.TableSections);
+                    new rt_SectionProduct().AddChangeSectionProducts(configurator.SectionProducts);
+                }
 
                 id = configurator.AddNewComponent(configurator.TreesMenu);
 

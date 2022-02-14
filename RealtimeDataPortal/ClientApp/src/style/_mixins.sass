@@ -40,4 +40,21 @@
     &::-webkit-scrollbar-thumb
         background-color: #DEE2E6
         border-radius: 8px
+
+@mixin fieldset-title
+    &__title
+        display: flex
+        align-items: center
+        h6
+            display: block
+            margin-bottom: 0
+            flex-grow: 1
+
+@mixin fieldset-block
+    & > div 
+        display: flex
+        align-items: center
+        & > div
+            flex-grow: 1
+            margin-right: .5rem
     
