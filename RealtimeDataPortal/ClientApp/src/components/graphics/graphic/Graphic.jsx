@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { useResizeObserver } from '@mantine/hooks';
 
 import { AppPreloader, ErrorsPage, useRequest, Chart, TableForGraphic, useFormateDate } from '../Index';
 
@@ -7,36 +8,20 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
         position } = { ...attributes };
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
-    const [widthGraphic, setWidthGraphic] = useState(700);
 
     const [data, setData] = useState([]);
-    const widthGraphicWrapper = useRef();
-
-    const observer = useRef(
-        new ResizeObserver(entries => {
-            setWidthGraphic(entries[0].contentRect.width - 100);
-            console.log(entries);
-        })
-    );
-
-    const trackObserver = () => observer.current.observe(widthGraphicWrapper.current);
-
-    useEffect(() => {
-        trackObserver();
-
-        return trackObserver();
-    }, [widthGraphicWrapper, observer]);
+    const [widthGraphic, widthGraphicWrapper] = useResizeObserver();
 
     const table = isVisibleTable ? <TableForGraphic attributes={attributes} data={data} /> : null;
 
     const graphic =
-        <div className='info-block' ref={widthGraphicWrapper} >
+        <div className='info-block' ref={widthGraphic} >
             <div className='header'>
                 <h5 className='title'>{nameParameter}, поз. {position}</h5>
             </div>
 
             <div id={`${tagName}`} className='graphic'>
-                <Chart attributes={attributes} data={data} isScale={isScale} width={widthGraphic} />
+                <Chart attributes={attributes} data={data} isScale={isScale} width={widthGraphicWrapper.width - 60} />
                 {table}
             </div>
         </div>
