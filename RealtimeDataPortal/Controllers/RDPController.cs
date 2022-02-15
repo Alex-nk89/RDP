@@ -98,6 +98,10 @@ namespace RealtimeDataPortal.Controllers
         [HttpPost("AddChangeElement")]
         public Object AddChangeElement(Configurator configurator)
         {
+            // Добавлениие/редактирование элементов таких как графики, таблицы РВ, папки и т.д.
+            // Для всех элементов происходит добавление из дерева, добавление доступов
+            // Для каждого типа элемента происходит добавление данныз в зависимые таблицы
+
             AccessToComponent accessToComponent = new();
 
             (int id, _, _, string type, _, string[] adGroups, string[] adGroupsOld, _) = configurator;
@@ -116,8 +120,7 @@ namespace RealtimeDataPortal.Controllers
                 else if (type == "table")
                 {
                     configurator.TreesMenu.ComponentId = new rt_Tables().AddChangeRTTable(configurator.Table);
-                    new rt_Sections().AddChangeSections(configurator.TableSections);
-                    new rt_SectionProduct().AddChangeSectionProducts(configurator.SectionProducts);
+                    new rt_Sections().AddChangeSections(configurator.TableSections, configurator.Table.TableId, configurator.SectionProducts);
                 }
 
                 id = configurator.AddNewComponent(configurator.TreesMenu);
@@ -153,6 +156,10 @@ namespace RealtimeDataPortal.Controllers
         [HttpGet("DeleteElement")]
         public Object DeleteElement(int id)
         {
+            // Удаление элементов таких как графики, таблицы РВ и тд.
+            // Каждый элемент удаляется из дерева меню, удаляются доступы
+            // Для каждого типа удаляются данные из зависимых таблиц
+
             try
             {
                 if (!user.isConfigurator)

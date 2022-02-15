@@ -157,6 +157,11 @@ namespace RealtimeDataPortal.Models
                     }
                 }
 
+                if(removedElement.Type == "table")
+                {
+                    new rt_Sections().AddChangeSections(new(), removedElement.ComponentId, new());
+                }
+
                 rdp_base.TreesMenu.Remove(removedElement);
 
                 List<AccessToComponent> accessToComponent = rdp_base.AccessToComponent
