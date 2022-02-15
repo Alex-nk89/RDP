@@ -69,7 +69,7 @@ namespace RealtimeDataPortal.Models
                                                   Name = product.ProductName
                                               }).FirstOrDefault() ?? new();
                 }
-                else if(operation.Contains("table"))
+                else if (operation.Contains("table"))
                 {
                     componentInfo.Table = rdp_base.rt_Tables.Where(t => t.TableId == componentInfo.TreesMenu.ComponentId).FirstOrDefault() ?? new();
                     componentInfo.TableSections = rdp_base.rt_Sections.Where(s => s.TableId == componentInfo.Table.TableId).ToList();
@@ -135,30 +135,38 @@ namespace RealtimeDataPortal.Models
             {
                 TreesMenu removedElement = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new();
 
-                if(removedElement.Type == "externalPage")
+                if (removedElement.Type == "externalPage")
                 {
                     ExternalPages removingExternalPage = rdp_base.ExternalPages
                         .Where(p => p.Id == removedElement.ComponentId).FirstOrDefault() ?? new();
 
-                    if(removingExternalPage.Id != 0)
+                    if (removingExternalPage.Id != 0)
                     {
                         rdp_base.ExternalPages.Remove(removingExternalPage);
                     }
                 }
 
-                if(removedElement.Type == "graphic")
+                if (removedElement.Type == "graphic")
                 {
                     Graphics graphic = rdp_base.Graphics
                         .Where(g => g.ComponentId == removedElement.ComponentId).FirstOrDefault() ?? new();
 
-                    if(graphic.ComponentId != 0)
+                    if (graphic.ComponentId != 0)
                     {
                         rdp_base.Graphics.Remove(graphic);
                     }
                 }
 
-                if(removedElement.Type == "table")
+                if (removedElement.Type == "table")
                 {
+                    rt_Tables table = rdp_base.rt_Tables
+                        .Where(table => table.TableId == removedElement.ComponentId).FirstOrDefault() ?? new();
+
+                    if (table.TableId != 0)
+                    {
+                        rdp_base.rt_Tables.Remove(table);
+                    }
+
                     new rt_Sections().AddChangeSections(new(), removedElement.ComponentId, new());
                 }
 
