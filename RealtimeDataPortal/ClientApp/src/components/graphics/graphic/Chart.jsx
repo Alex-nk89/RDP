@@ -14,9 +14,10 @@ const Chart = ({ attributes, data, isScale, width }) => {
         color: '#F8F9FA'
     }
     const domain = isScale ? ['auto', 'auto'] : [scaleMinEU, scaleMaxEU];
+    const widthGraphic = width === -60 ? 700 : width;
 
     return (
-        <LineChart data={data.history} syncId={nameType} width={width} height={350}>
+        <LineChart data={data.history} syncId={nameType} width={widthGraphic} height={350}>
             <Line type="linear" dataKey="value" stroke={color} dot={false} strokeWidth={2} />
 
             <ReferenceLine y={limitHihi} stroke="#ff0000" strokeWidth={2} strokeDasharray="3 3" />

@@ -13,7 +13,7 @@ namespace RealtimeDataPortal.Models
 
         public int GetMaxParameterId(RDPContext rdp_base)
         {
-            return rdp_base.Parameter.Max(p => p.ParameterId);
+            return rdp_base.Parameter.Max(p => (int?)p.ParameterId) ?? 0;
         }
 
         public int AddParameter(Parameter addingParameter)

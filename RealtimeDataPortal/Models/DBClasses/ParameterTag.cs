@@ -26,7 +26,7 @@
 
         public int GetMaxParameterTagId(RDPContext rdp_base)
         {
-            return rdp_base.ParameterTag.Max(pt => pt.ParameterTagId);
+            return rdp_base.ParameterTag.Max(pt => (int?)pt.ParameterTagId) ?? 0;
         }
     }
 }
