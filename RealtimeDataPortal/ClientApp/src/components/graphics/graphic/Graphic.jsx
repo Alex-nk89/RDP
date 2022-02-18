@@ -38,29 +38,28 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                 ServerConnection: serverConnection
             }))
                 .then(dataGraphic => {
-                    if (Object.keys(dataGraphic).length !== 0) {
-                        setData({
-                            history: dataGraphic.history.map(item => {
-                                const startDate = dataGraphic.history[0].dateTime;
-                                const endDate = dataGraphic.history[dataGraphic.history.length - 1].dateTime;
+                    setData({
+                        history: dataGraphic.history.map(item => {
+                            const startDate = dataGraphic.history[0].dateTime;
+                            const endDate = dataGraphic.history[dataGraphic.history.length - 1].dateTime;
 
-                                return {
-                                    name: formateDate(item.dateTime, calendar, startDate, endDate),
-                                    value: item.value
-                                }
-                            }),
-                            parameters: dataGraphic.parameters
-                        });
-                        setProccess('confirmed');
-                    }
-                });
-            /* setData({
-                history: [
-                    { name: '1', value: 4 }, { name: '2', value: 2 }, { name: '3', value: 3 }, { name: '4', value: 5 },
-                    { name: '5', value: 7 }, { name: '6', value: 2 }, { name: '7', value: 1 }, { name: '8', value: 4 },
-                ],
-                parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
-            }) */
+                            return {
+                                name: formateDate(item.dateTime, calendar, startDate, endDate),
+                                value: item.value
+                            }
+                        }),
+                        parameters: dataGraphic.parameters
+                    });
+                    setProccess('confirmed');
+                })
+                .catch(error => { });
+        /* setData({
+            history: [
+                { name: '1', value: 4 }, { name: '2', value: 2 }, { name: '3', value: 3 }, { name: '4', value: 5 },
+                { name: '5', value: 7 }, { name: '6', value: 2 }, { name: '7', value: 1 }, { name: '8', value: 4 },
+            ],
+            parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
+        }) */
 
         //eslint-disable-next-line
     }, [date]);

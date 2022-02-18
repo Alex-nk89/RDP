@@ -10,7 +10,7 @@ import './menuOptions.sass';
 
 const MenuOptions = ({ type, id, updatingNavbar }) => {
 
-    const { request, error } = useRequest();
+    const { request } = useRequest();
     const { show } = useNotification();
     const modal = useModals();
     const configButton = <div><IoOptionsOutline /></div>
@@ -24,13 +24,10 @@ const MenuOptions = ({ type, id, updatingNavbar }) => {
     const deleteElement = () => {
         request(`DeleteElement?id=${id}`)
             .then(result => {
-                if (Object.keys(result).length !== 0)
-                    show('success', result.message);
-                else
-                    show('error', error.message);
-
+                show('success', result.message);
                 updatingNavbar();
-            });
+            })
+            .catch(error => show('error', error));
     }
 
     const openModal = () => modal.openConfirmModal({

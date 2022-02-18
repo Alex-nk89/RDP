@@ -3,6 +3,7 @@ import { IoFolder, IoChevronDown } from 'react-icons/io5';
 import { Collapse, Loader } from '@mantine/core';
 
 import { useRequest } from '../../../../../hooks/useRequest';
+import { useNotification } from '../../../../../hooks/useNotification';
 import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 
 import './folder.sass';
@@ -10,6 +11,7 @@ import Page from '../page/Page';
 
 const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
     const { request, proccess, setProccess } = useRequest();
+    const { show } = useNotification();
     const [items, setItems] = useState([]);
     const [folderState, setFolderState] = useState(false);
     const [thereIsItem, setThereIsItem] = useState(false);
@@ -23,8 +25,13 @@ const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
                 .then(menuItems => {
                     setItems(menuItems);
                     setThereIsItem(true);
-                    setProccess('confirmed');
-                });
+
+                    if(Object.keys(menuItems).length === 0) {
+                        show('warning', 'Папка пуста');
+                    }
+                })
+                .catch(error => show('error', error))
+                .finally(() => setProccess('confirmed'));
         } else {
             setThereIsItem(false);
 

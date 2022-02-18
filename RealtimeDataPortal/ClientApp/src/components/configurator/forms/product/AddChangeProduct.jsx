@@ -10,7 +10,7 @@ let initialParameters = [];
 
 const AddChangeProduct = ({ operation, attributesForProducts }) => {
     const productNameRef = useRef(null);
-    const { request, error } = useRequest();
+    const { request } = useRequest();
     const { show } = useNotification();
     const { parameterTypes, maxParameterId } = attributesForProducts;
 
@@ -72,9 +72,9 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                         setProductName({ value: nameProduct, error: 'Поиск не дал результатов' });
                         setProductListFound([]);
                     }
-
-                    setLoadingProductList(false);
                 })
+                .catch(error => show('error', error))
+                .finally(() => setLoadingProductList(false));
         } else {
             setProductListFound([]);
         }
@@ -170,17 +170,12 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                 }));
 
             request('AddChangeProduct', 'POST', JSON.stringify(sentData))
-                .then(result => {
-                    if (Object.keys(result).length > 0) {
-                        show('success', 'Продукт сохранен.');
-                    }
-
-                    setLoadingSubmit(false);
-                });
+                .then(result => show('success', 'Продукт сохранен'))
+                .catch(error => show('error', error))
+                .finally(() => setLoadingSubmit(false));
             
             setParameters([parameter]);
             setProductName({ value: '', error: '' })
-
         }
     };
 
@@ -191,11 +186,6 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
         setParameters([parameter]);
         //eslint-disable-next-line
     }, [operation]);
-
-    useEffect(() => {
-        if (Object.keys(error).length !== 0) show('error', error.message);
-        //eslint-disable-next-line
-    }, [error]);
 
     useEffect(() => {
         document.addEventListener("click", closeList);

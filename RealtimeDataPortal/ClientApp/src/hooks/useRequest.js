@@ -24,14 +24,15 @@ export const useRequest = () => {
                         message: data.message
                     });
 
-                    throw new Error();
+                    throw new Error(data.message);
                 }
 
                 return data;
-            } catch {
+            } catch (error) {
                 setProccess('error');
-                return {};
+                throw error.message;
             }
+            //eslint-disable-next-line
         }, []);
 
     return { proccess, setProccess, error, request };

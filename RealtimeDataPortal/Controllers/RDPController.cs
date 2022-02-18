@@ -31,12 +31,21 @@ namespace RealtimeDataPortal.Controllers
         [HttpPost("GetMenu")]
         public Object GetMenu(TreesMenu treesMenu)
         {
-            TreesMenu menuList = new TreesMenu();
+            try
+            {
+                TreesMenu menuList = new TreesMenu();
 
-            if (!treesMenu.isFullView)
-                treesMenu.isFullView = user.isFullView || user.isConfigurator || user.isAdministrator;
+                if (!treesMenu.isFullView)
+                    treesMenu.isFullView = user.IsFullView || user.IsConfigurator || user.IsAdministrator;
 
-            return menuList.GetMenu(treesMenu.ParentId, user.Groups, treesMenu.isFullView);
+                return menuList.GetMenu(treesMenu.ParentId, user.Groups, treesMenu.isFullView);
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При загрузке меню произошла ошибка. Попробуйте " +
+                    "перезапустить приложение." });
+            }
+
         }
 
         [HttpGet("GetLink")]
@@ -72,7 +81,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.isConfigurator)
+                if (!user.IsConfigurator)
                     throw new ForbiddenException("Нет доступа к конфигуратору");
 
                 return new Configurator().GetComponentInformation(id, operation);
@@ -162,7 +171,7 @@ namespace RealtimeDataPortal.Controllers
 
             try
             {
-                if (!user.isConfigurator)
+                if (!user.IsConfigurator)
                     throw new ForbiddenException("Нет доступа к конфигуратору. Изменения не были внесены");
 
                 new Configurator().DeleteElement(id);

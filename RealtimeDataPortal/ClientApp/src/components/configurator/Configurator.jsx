@@ -14,11 +14,10 @@ const Configurator = ({ updatingNavbar }) => {
         if (operation !== 'change-tag' && operation !== 'change-product') {
             request(`GetComponentInformation?id=${id}&operation=${operation}`)
                 .then(componentInfo => {
-                    if (Object.keys(componentInfo).length !== 0) {
-                        setComponentInfo(componentInfo);
-                        setProccess('confirmed');
-                    }
-                });
+                    setComponentInfo(componentInfo);
+                    setProccess('confirmed');
+                })
+                .catch(error => { });
         } else {
             setProccess('confirmed');
         }

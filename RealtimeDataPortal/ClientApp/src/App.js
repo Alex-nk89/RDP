@@ -5,7 +5,6 @@ import { Container } from '@mantine/core';
 import Header from './components/header/Header';
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
-import ExternalPage from './components/external-page/ExternalPage';
 import Graphics from './components/graphics/Graphics';
 import TableRealtime from './components/tables/TableRealtime';
 //import Page_404 from './components/Page_404';
@@ -17,7 +16,7 @@ import { useRequest } from './hooks/useRequest';
 import "./css/bootstrap-reboot.min.css";
 
 const App = () => {
-    const { request, proccess, setProccess, error } = useRequest();
+    const { request, proccess, error, setProccess } = useRequest();
     const [openedNavbar, setOpenNavbar] = useState(true);
     const [user, setUser] = useState({});
     const [isConfigModeOn, setIsConfigModeOn] = useState(false);
@@ -28,7 +27,7 @@ const App = () => {
     const app =
         <>
             <nav>
-                <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar} updatingNavbar={updatingNavbar}/>
+                <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar} updatingNavbar={updatingNavbar} />
             </nav>
 
             <main className={`${openedNavbar ? 'navbarOpen' : ''}`}>
@@ -40,10 +39,9 @@ const App = () => {
                     setIsConfigModeOn={setIsConfigModeOn} />
                 <Container size='md' className='container'>
                     <Route exact path='/' component={Home} />
-                    <Route exact path="/Page/:id" component={ExternalPage} />
                     <Route exact path="/Graphics/:id" component={Graphics} />
                     <Route exact path="/Table/:id" component={TableRealtime} />
-                    <Route exact path="/Configurator/:operation/:id" render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />}/>
+                    <Route exact path="/Configurator/:operation/:id" render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />} />
                     <Route exact path="/Error" component={ErrorsPage} />
                 </Container>
             </main>
@@ -53,11 +51,10 @@ const App = () => {
     useEffect(() => {
         request('GetUser')
             .then((user) => {
-                if (Object.keys(user).length !== 0) {
-                    setUser(user);
-                    setProccess('confirmed');
-                }
-            });
+                setUser(user);
+                setProccess('confirmed');
+            })
+            .catch(error => {});
         //eslint-disable-next-line
     }, [])
 

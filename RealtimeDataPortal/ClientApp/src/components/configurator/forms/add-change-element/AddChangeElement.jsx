@@ -13,7 +13,7 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
     const [loadingForButton, setLoadingForButton] = useState(false);
 
     const nameRef = useRef(null);
-    const { request, error } = useRequest();
+    const { request } = useRequest();
     const { show } = useNotification();
     const [action, type] = operation.split('-');
 
@@ -93,18 +93,17 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
 
         request('AddChangeElement', 'POST', JSON.stringify(component))
             .then(result => {
-                if (Object.keys(result).length !== 0) {
-                    show('success', result.message);
+                show('success', result.message);
 
-                    if (action === 'add') {
-                        form.reset();
-                        setAccesses([]);
-                    }
+                if(action === 'add') {
+                    form.reset();
+                    setAccesses([]);
                 }
 
-                setLoadingForButton(false);
                 updatingNavbar();
-            });
+            })
+            .catch(error => show('error', error))
+            .finally(() => setLoadingForButton(false));
     };
 
     useEffect(() => {
@@ -129,12 +128,7 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
 
         nameRef.current.focus();
         //eslint-disable-next-line
-    }, []); //componentInfo, operation
-
-    useEffect(() => {
-        if (Object.keys(error).length !== 0) show('error', error.message);
-        //eslint-disable-next-line
-    }, [error]);
+    }, []);
 
     const attributes = {
         action, form, nameRef: nameRef, submitForm, addAccessIcon, multiSelect, loadingForButton

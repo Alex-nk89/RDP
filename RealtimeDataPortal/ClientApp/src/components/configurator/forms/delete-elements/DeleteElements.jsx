@@ -4,7 +4,7 @@ import {
 } from '../../index';
 
 const DeleteElements = ({ typeElements }) => {
-    const { request, error } = useRequest();
+    const { request } = useRequest();
     const { show } = useNotification();
     const modals = useModals();
 
@@ -64,15 +64,12 @@ const DeleteElements = ({ typeElements }) => {
     const deleteElements = deletingElements => {
         request(methods.delete, 'POST', JSON.stringify(deletingElements))
             .then(result => {
-                if (result) {
-                    show('success', 'Элементы удалены.');
-                    form.reset();
-                    setListElements([]);
-                }
+                show('success', 'Элементы удалены.');
+                form.reset();
+                setListElements([]);
             })
-            .finally(
-                setLoadingSubmit(false)
-            );
+            .catch(error => show('error', error))
+            .finally(() => setLoadingSubmit(false));
     };
 
     const confirmModal = deletingElements => modals.openConfirmModal({
@@ -92,11 +89,6 @@ const DeleteElements = ({ typeElements }) => {
 
         confirmModal(delitingElements);
     };
-
-    useEffect(() => {
-        if (Object.keys(error).length !== 0) show('error', error.message);
-        //eslint-disable-next-line
-    }, [error]);
 
     useEffect(() => {
         const name = form.values.name;
@@ -121,9 +113,9 @@ const DeleteElements = ({ typeElements }) => {
                         setListElements([]);
                         form.setErrors({ name: 'Поиск не дал результатов' });
                     }
-
-                    setLoadingElementsList(false);
-                });
+                })
+                .catch(error => show('error', error))
+                .finally(() => setLoadingElementsList(false));
         } else setListElements([]);
 
         //eslint-disable-next-line

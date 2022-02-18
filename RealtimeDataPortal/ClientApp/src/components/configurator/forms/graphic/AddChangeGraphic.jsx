@@ -5,9 +5,9 @@ import {
 } from '../../index';
 
 const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, multiSelect, loadingForButton }) => {
-    const title = action === 'add-graphic' ? 'Добавление графика' : 'Реадктирование графика';
+    const title = action === 'add' ? 'Добавление графика' : 'Редактирование графика';
     const productRef = useRef(null);
-    const { request, error } = useRequest();
+    const { request } = useRequest();
     const { show } = useNotification();
 
     const [productListFound, setProductListFound] = useState([]);
@@ -53,18 +53,13 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
                         form.setErrors({ product: 'Поиск не дал результатов' });
                         setProductListFound([]);
                     }
-
-                    setLoadingListProducts(false);
                 })
+                .catch(error => show('error', error))
+                .finally(() => setLoadingListProducts(false));
         }
 
         //eslint-disable-next-line
     }, [form.getInputProps('product').value]);
-
-    useEffect(() => {
-        if (Object.keys(error).length !== 0) show('error', error.message);
-        //eslint-disable-next-line
-    }, [error]);
 
     useEffect(() => {
         document.addEventListener("click", closeList);

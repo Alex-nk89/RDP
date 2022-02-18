@@ -10,19 +10,22 @@ const Page = ({ id, name, type, isConfigModeOn, updatingNavbar }) => {
 
     switch (type) {
         case 'externalPage':
-            link = { icon: <IoReaderOutline />, path: `/page/${id}`, target: '_blank' };
+            //eslint-disable-next-line
+            link = <a href={`http:\\\\asodu-web\\RDP_Container\\Home?id=${id}`} target='_blank'>
+                <IoReaderOutline /><span>{name}</span>
+            </a>
             break;
         case 'graphic':
-            link = { icon: <IoTrendingUpOutline />, path: `/graphics/${id}`, target: '_self' };
+            link = <NavLink to={`/graphics/${id}`}><IoTrendingUpOutline /><span>{name}</span></NavLink>
             break;
         case 'table':
-            link = { icon: <IoGridOutline />, path: `/table/${id}`, target: '_self' };
+            link = <NavLink to={`/table/${id}`}><IoGridOutline /><span>{name}</span></NavLink>
             break;
         case 'mnemoschema':
-            link = { icon: <IoLayersOutline />, path: '/mnemoschema', target: '_self' };
+            link = <NavLink to='/mnemoschema'><IoLayersOutline /><span>{name}</span></NavLink>
             break;
         default:
-            link = { icon: null, path: '' };
+            link = null
             break;
     };
 
@@ -32,10 +35,7 @@ const Page = ({ id, name, type, isConfigModeOn, updatingNavbar }) => {
 
     return (
         <div className={`page-with-configurator ${activeLink}`}>
-            <NavLink to={link.path} target={link.target}>
-                {link.icon}
-                <span>{name}</span>
-            </NavLink>
+            {link}
             {menuConfig}
         </div>
 

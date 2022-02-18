@@ -83,11 +83,6 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
     }, []);
 
     useEffect(() => {
-        if (Object.keys(error).length !== 0) show('error', error.message);
-        //eslint-disable-next-line
-    }, [error]);
-
-    useEffect(() => {
         const name = form.getInputProps('tagName').value;
         if (name.length > 2 && operation === 'change' && document.activeElement === nameRef.current) {
             setLoadingTagList(true);
@@ -100,9 +95,9 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
                         form.setErrors({ tagName: 'Поиск не дал результатов' });
                         setTagsList([]);
                     }
-
-                    setLoadingTagList(false);
                 })
+                .catch(error => show('error', error))
+                .finally(() => setLoadingTagList(false));
         } else
             setTagsList([]);
 

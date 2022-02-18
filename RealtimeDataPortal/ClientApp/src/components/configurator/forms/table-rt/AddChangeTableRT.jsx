@@ -190,18 +190,17 @@ const AddChangeTableRT = ({ operation, componentInfo, updatingNavbar }) => {
 
             request('AddChangeElement', 'POST', JSON.stringify(component))
                 .then(result => {
-                    if (Object.keys(result).length !== 0) {
-                        show('success', result.message);
+                    show('success', result.message);
 
-                        if (isAddOperation) {
-                            resetForm();
-                            setAccesses([]);
-                        }
+                    if (isAddOperation) {
+                        resetForm();
+                        setAccesses([]);
                     }
 
-                    setFetchingData(false);
                     updatingNavbar();
-                });
+                })
+                .catch(error => show('error', error))
+                .finally(() => setFetchingData(false));
         }
     };
 

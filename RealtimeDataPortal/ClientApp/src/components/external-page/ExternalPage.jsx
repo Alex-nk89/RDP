@@ -15,15 +15,14 @@ const ExternalPage = () => {
     useEffect(() => {
         request(`GetLink?id=${id}`)
             .then(externalPage => {
-                if(Object.keys(externalPage).length !== 0) {
-                    setExternalPage(externalPage);
-                    setProccess('confirmed');
-                }
-            });
-            //eslint-disable-next-line
+                setExternalPage(externalPage);
+                setProccess('confirmed');
+            })
+            .catch(() => { });
+        //eslint-disable-next-line
     }, [id])
 
-    const page = 
+    const page =
         <>
             <h3 className="title">{externalPage?.name}</h3>
 
@@ -33,13 +32,13 @@ const ExternalPage = () => {
         </>
 
 
-    switch(proccess) {
+    switch (proccess) {
         case 'loading':
-            return <AppPreloader height='calc(100vh - 122px)'/>;
+            return <AppPreloader height='calc(100vh - 122px)' />;
         case 'confirmed':
             return page;
         case 'error':
-            return <ErrorsPage {...error} height='calc(100vh - 116px)'/>;
+            return <ErrorsPage {...error} height='calc(100vh - 116px)' />;
         default:
             return null;
     }

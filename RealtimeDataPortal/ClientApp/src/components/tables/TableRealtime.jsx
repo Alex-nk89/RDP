@@ -25,11 +25,10 @@ const TableRealtime = () => {
 
         request(`GetTableRealtime?id=${id}`)
             .then(tableData => {
-                if (Object.keys(tableData).length !== 0) {
-                    setTableData(tableData);
-                    setProccess('confirmed');
-                }
+                setTableData(tableData);
+                setProccess('confirmed');
             })
+            .catch(error => {});
 
         return () => clearTimeout(updateTable);
         //eslint-disable-next-line

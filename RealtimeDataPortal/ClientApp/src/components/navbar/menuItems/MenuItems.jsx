@@ -2,12 +2,14 @@ import { useState, useEffect, useMemo } from 'react';
 import { Skeleton } from '@mantine/core';
 
 import { useRequest } from '../../../hooks/useRequest';
+import { useNotification } from '../../../hooks/useNotification';
 import Folder from './menuItem/folder/Folder';
 import Page from './menuItem/page/Page';
 
 const MenuItems = ({ isConfigModeOn, updateNavbar, updatingNavbar }) => {
     
     const { request, proccess, setProccess } = useRequest();
+    const { show } = useNotification();
     const [items, setItems] = useState([]);
 
 
@@ -39,7 +41,8 @@ const MenuItems = ({ isConfigModeOn, updateNavbar, updatingNavbar }) => {
             .then(menuItems => {
                 setItems(menuItems);
             })
-            .then(() => setProccess('confirmed'));
+            .catch(error => show('error', error))
+            .finally(() => setProccess('confirmed'));
         //eslint-disable-next-line
     }, [updateNavbar]);
 

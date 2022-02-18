@@ -89,7 +89,7 @@ namespace RealtimeDataPortal.Models
                                                          ProductName = product.ProductName,
                                                      }).ToList();
 
-                    componentInfo.maxSectionId = rdp_base.rt_Sections.Select(s => s.SectionId).Max();
+                    componentInfo.maxSectionId = rdp_base.rt_Sections.Select(s => (int?)s.SectionId).Max() ?? 0;
                 }
 
                 return componentInfo;
