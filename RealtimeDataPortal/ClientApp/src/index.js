@@ -38,3 +38,6 @@ serviceWorkerRegistration.unregister();
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+// настройка для json при публикации приложения
+//"homepage": "http://asodu-web.nknh.ru/RealtimeDataportal/",

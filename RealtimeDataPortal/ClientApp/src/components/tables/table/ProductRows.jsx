@@ -18,7 +18,7 @@ const ProductRows = ({ products, data, name, columnContent, type, index }) => {
             let row = Array.from(columnContent).map((name, indexCol) => {
                 const rowSpan = indexParam === 0 && indexCol === 0 ? parameters.size : null;
                 const parameterName = parameterData[0][name];
-                const cell = indexCol === 0 ? <a href={`/graphic/${productId}`}>{parameterName}</a> : parameterName;
+                const cell = indexCol === 0 ? <a href={`/graphics/${productId}`}>{parameterName}</a> : parameterName;
 
                 return indexParam > 0 && indexCol === 0 ? null :
                     <td key={indexCol} rowSpan={rowSpan}>{cell}</td>;

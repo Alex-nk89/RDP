@@ -5,7 +5,7 @@ import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 
 import './page.sass';
 
-const Page = ({ id, name, type, isConfigModeOn, updatingNavbar }) => {
+const Page = ({ id, name, componentId, type, isConfigModeOn, updatingNavbar }) => {
     let link;
 
     switch (type) {
@@ -16,7 +16,7 @@ const Page = ({ id, name, type, isConfigModeOn, updatingNavbar }) => {
             </a>
             break;
         case 'graphic':
-            link = <NavLink to={`/graphics/${id}`}><IoTrendingUpOutline /><span>{name}</span></NavLink>
+            link = <NavLink to={`/graphics/${componentId}`}><IoTrendingUpOutline /><span>{name}</span></NavLink>
             break;
         case 'table':
             link = <NavLink to={`/table/${id}`}><IoGridOutline /><span>{name}</span></NavLink>
