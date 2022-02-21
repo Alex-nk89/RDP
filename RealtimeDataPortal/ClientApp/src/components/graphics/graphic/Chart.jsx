@@ -14,11 +14,10 @@ const Chart = ({ attributes, data, isScale, width }) => {
         color: '#F8F9FA'
     }
     const domain = isScale ? ['auto', 'auto'] : [scaleMinEU, scaleMaxEU];
-    const widthGraphic = width === -60 ? 700 : width;
 
     return (
-        <LineChart data={data.history} syncId={nameType} width={widthGraphic} height={350}>
-            <Line type="linear" dataKey="value" stroke={color} dot={false} strokeWidth={2} />
+        <LineChart data={data.history} syncId={nameType} width={width} height={350}>
+            <Line type="linear" dataKey="value" stroke={color} dot={false} strokeWidth={2} isAnimationActive={false} />
 
             <ReferenceLine y={limitHihi} stroke="#ff0000" strokeWidth={2} strokeDasharray="3 3" />
             <ReferenceLine y={limitHi} stroke="#ffc700" strokeWidth={2} strokeDasharray="3 3" />
@@ -27,8 +26,8 @@ const Chart = ({ attributes, data, isScale, width }) => {
 
             <CartesianGrid strokeDasharray="1 1" />
             <XAxis dataKey="name" tickMargin={15} minTickGap={15} />
-            <YAxis dataKey="value" type='number' domain={domain} tickCount={10} tickMargin={15} width={80}
-                interval="preserveStart" label={{ value: unit, position: "left", angle: -90 }} />
+            <YAxis dataKey="value" type='number' domain={domain} tickCount={10} tickMargin={10} width={80}
+                interval="preserveStart" label={{ value: unit, position: 'left', angle: -90, offset: -5 }} />
             <Tooltip contentStyle={styleTooltip} itemStyle={itemStyle} />
         </LineChart>
     )

@@ -12,11 +12,12 @@
         background: $main-color
         color: #fff
 .tab-content
-    display: none
-    height: 100%
+    overflow: hidden
+    height: 0
     background: transparent
     &_visible
         display: block
+        height: 100%
     .header
         box-shadow: none
         padding: 1rem 2rem

@@ -29,7 +29,8 @@ const Graphics = () => {
             isScale={isScale}
             setIsScale={setIsScale}
             isVisibleTable={isVisibleTable}
-            setIsVisibleTable={setIsVisibleTable} />) : null;
+            setIsVisibleTable={setIsVisibleTable}
+            />) : null;
 
     const graphic = Object.keys(attributesGraphic).length === 0 ? null : <>
         {tabsContent}
@@ -45,7 +46,6 @@ const Graphics = () => {
             });
         //eslint-disable-next-line
     }, [id]);
-
 
     switch (proccess) {
         case 'loading':

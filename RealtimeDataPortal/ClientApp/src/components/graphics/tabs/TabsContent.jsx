@@ -11,7 +11,7 @@ const TabContent = ({ attributesGraphic, tabName, activeTab, index, tabsNames, s
 
     const parameter = attributesGraphic.filter(item => item.typeName === tabName);
 
-    const graphic = parameter.map(item =>
+    const graphic = parameter.map(item => 
         <Graphic key={item.tagId} attributes={item} index={index} date={date} isScale={isScale} isVisibleTable={isVisibleTable}/>);
 
     return (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useResizeObserver } from '@mantine/hooks';
 
-import { AppPreloader, ErrorsPage, useRequest, Chart, TableForGraphic, useFormateDate } from '../Index';
+import { useRequest, Chart, TableForGraphic, useFormateDate } from '../Index';
 
 const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
     const { round, nameParameter, calendar, serverConnection, tagName, wwResolution, visibleToGraphic,
@@ -10,23 +10,14 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
     const { formateDate } = useFormateDate();
 
     const [data, setData] = useState([]);
-    const [widthGraphic, widthGraphicWrapper] = useResizeObserver();
+    const [graphicRef, widthGraphic] = useResizeObserver();
+    const [width, setWidth] = useState(0);
 
     const table = isVisibleTable ? <TableForGraphic attributes={attributes} data={data} /> : null;
 
-    const graphic =
-        <div className='info-block' ref={widthGraphic} >
-            <div className='header'>
-                <h5 className='title'>{nameParameter}, поз. {position}</h5>
-            </div>
-
-            <div id={`${tagName}`} className='graphic'>
-                <Chart attributes={attributes} data={data} isScale={isScale} width={widthGraphicWrapper.width - 60} />
-                {table}
-            </div>
-        </div>
-
     useEffect(() => {
+        setWidth(graphicRef.current.offsetWidth);
+
         if (visibleToGraphic)
             request('GetGraphic', 'POST', JSON.stringify({
                 TagName: tagName,
@@ -64,16 +55,22 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
         //eslint-disable-next-line
     }, [date]);
 
-    switch (proccess) {
-        case 'loading':
-            return <AppPreloader height='100px' />;
-        case 'error':
-            return <ErrorsPage {...error} height='400px' />;
-        case 'confirmed':
-            return graphic;
-        default:
-            return graphic;
-    }
+    useEffect(() => {
+        setWidth(Math.floor(widthGraphic.width / 100) * 100);
+    }, [widthGraphic.width]);
+
+    return (
+        <div className='info-block' ref={graphicRef}>
+            <div className='header'>
+                <h5 className='title'>{nameParameter}, поз. {position}</h5>
+            </div>
+
+            <div id={`${tagName}`} className='graphic'>
+                <Chart attributes={attributes} data={data} isScale={isScale} width={width - 60} />
+                {table}
+            </div>
+        </div>
+    );
 }
 
 export default Graphic
