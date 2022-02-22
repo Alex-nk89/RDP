@@ -3,7 +3,15 @@ import { Table } from '@mantine/core';
 const TableForGraphic = ({ attributes, data }) => {
     const { calendar, round } = attributes;
     const history = { ...data.history };
-    const countRows = calendar === 'day' ? 8 : 10;
+    //console.log(Object.keys(history).length)
+    let countRows;
+
+    if (calendar === 'month') {
+        countRows = 10;
+    } else {
+        countRows = data.history ? Math.ceil(data.history.length / 3) : 0;
+    }
+
     let decadeFirst = 0;
     let decadeSecond = 0;
     let decadeThird = 0;
@@ -19,9 +27,9 @@ const TableForGraphic = ({ attributes, data }) => {
             history[i + countRows * 2]?.value
         ]);
 
-        decadeFirst += history[i]?.value;
-        decadeSecond += history[i + countRows]?.value;
-        decadeThird += history[i + countRows * 2]?.value
+        decadeFirst += isNaN(history[i]?.value) ? 0 : history[i]?.value;
+        decadeSecond += isNaN(history[i + countRows]?.value) ? 0 : history[i + countRows]?.value;
+        decadeThird += isNaN(history[i + countRows * 2]?.value) ? 0 : history[i + countRows * 2]?.value;
     }
 
     if (data.length === 31) {
@@ -60,7 +68,7 @@ const TableForGraphic = ({ attributes, data }) => {
             return null;
         default:
             return (
-                <Table striped>
+                <Table striped className='table-rt'>
                     {thead}
                     {tbody}
                     {tfoot}

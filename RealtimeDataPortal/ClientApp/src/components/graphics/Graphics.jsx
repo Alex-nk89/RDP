@@ -37,6 +37,10 @@ const Graphics = () => {
     </>;
 
     useEffect(() => {
+        setActiveTab(0);
+        setIsScale(false);
+        setIsVisibleTable(true);
+
         request(`GetAttributesForGraphic?id=${id}`)
             .then(attributesGraphic => {
                 if (Object.keys(attributesGraphic).length !== 0) {

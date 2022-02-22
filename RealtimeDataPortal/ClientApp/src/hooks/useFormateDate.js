@@ -6,6 +6,10 @@ export const useFormateDate = () => {
 
         const differenceInTime = calendar === 'range' ? ((new Date(endDate)) - (new Date(startDate))) : 0;
 
+        if(calendar === 'month') {
+            date.setDate(date.getDate() - 1);
+        }
+
         let ss = date.getSeconds();
         let mm = date.getMinutes();
         let hh = date.getHours();

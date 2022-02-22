@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useResizeObserver } from '@mantine/hooks';
 
-import { useRequest, Chart, TableForGraphic, useFormateDate } from '../Index';
+import { AppPreloader, ErrorsPage, useRequest, Chart, TableForGraphic, useFormateDate } from '../Index';
 
 const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
+    console.log('render');
     const { round, nameParameter, calendar, serverConnection, tagName, wwResolution, visibleToGraphic,
         position } = { ...attributes };
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
 
     const [data, setData] = useState([]);
-    const [graphicRef, widthGraphic] = useResizeObserver();
-    const [width, setWidth] = useState(0);
+    //const [graphicRef, widthGraphic] = useResizeObserver();
+    //const [width, setWidth] = useState(700);
 
-    const table = isVisibleTable ? <TableForGraphic attributes={attributes} data={data} /> : null;
+    //const table = (isVisibleTable && proccess === 'confirmed' && calendar !== 'range') ?
+    //    <TableForGraphic attributes={attributes} data={data} /> : null;
 
     useEffect(() => {
-        setWidth(graphicRef.current.offsetWidth);
+        //setWidth(graphicRef.current.offsetWidth);
 
         if (visibleToGraphic)
             request('GetGraphic', 'POST', JSON.stringify({
@@ -29,7 +31,7 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                 ServerConnection: serverConnection
             }))
                 .then(dataGraphic => {
-                    setData({
+                    /* setData({
                         history: dataGraphic.history.map(item => {
                             const startDate = dataGraphic.history[0].dateTime;
                             const endDate = dataGraphic.history[dataGraphic.history.length - 1].dateTime;
@@ -40,26 +42,26 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                             }
                         }),
                         parameters: dataGraphic.parameters
-                    });
+                    }); */
                     setProccess('confirmed');
                 })
                 .catch(error => { });
-        /* setData({
-            history: [
-                { name: '1', value: 4 }, { name: '2', value: 2 }, { name: '3', value: 3 }, { name: '4', value: 5 },
-                { name: '5', value: 7 }, { name: '6', value: 2 }, { name: '7', value: 1 }, { name: '8', value: 4 },
-            ],
-            parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
-        }) */
+        //setData({
+        //    history: [
+        //        { name: '1', value: 4 }, { name: '2', value: 2 }, { name: '3', value: 3 }, { name: '4', value: 5 },
+        //        { name: '5', value: 7 }, { name: '6', value: 2 }, { name: '7', value: 1 }, { name: '8', value: 4 },
+        //    ],
+        //    parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
+        //})
 
         //eslint-disable-next-line
     }, [date]);
 
-    useEffect(() => {
+    /* useEffect(() => {
         setWidth(Math.floor(widthGraphic.width / 100) * 100);
-    }, [widthGraphic.width]);
+    }, [widthGraphic.width]); */
 
-    return (
+    /* return (
         <div className='info-block' ref={graphicRef}>
             <div className='header'>
                 <h5 className='title'>{nameParameter}, поз. {position}</h5>
@@ -70,7 +72,13 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                 {table}
             </div>
         </div>
-    );
+    ); */
+    switch(proccess){
+        case 'loading':
+            return <AppPreloader />;
+        default:
+            return null;
+    }
 }
 
 export default Graphic

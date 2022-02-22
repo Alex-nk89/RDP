@@ -54,7 +54,7 @@ namespace RealtimeDataPortal.Models
                     end = start.AddDays(1);
                 }
 
-                start = start.AddHours(1).AddMinutes(10);
+                start = start.AddMinutes(10); //.AddHours(1)
                 end = end.AddMinutes(10);
             }
             
@@ -65,10 +65,10 @@ namespace RealtimeDataPortal.Models
                 if (startDate == null || endDate == null)
                 {
                     start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                    end = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1);
+                    end = start.AddDays(1).AddMonths(1);
                 }
 
-                start = start.AddHours(3);
+                start = start.AddDays(1).AddHours(3);
                 end = end.AddHours(3);
             }
 
@@ -131,12 +131,14 @@ namespace RealtimeDataPortal.Models
                 if ((end.Subtract(start).TotalMilliseconds / wwResolution) > 480)
                         wwResolution = (int)Math.Round(end.Subtract(start).TotalMilliseconds / 480);
 
+                string sign = calendar == "month" ? "<" : "<=";
+
                 // Дата в запросе форматируется под старые сервера
                 string sqlExpression = $"select v_History.DateTime, v_History.Value " +
                         $"from [Runtime].[dbo].[v_History] " +
                         $"where v_History.TagName = '{tagName}' " +
                         $"and v_History.DateTime >= '{start.ToString("yyyy-MM-dd HH:mm")}' " + 
-                        $"and v_History.DateTime <= '{end.ToString("yyyy-MM-dd HH:mm")}' " +
+                        $"and v_History.DateTime {sign} '{end.ToString("yyyy-MM-dd HH:mm")}' " +
                         $"and v_History.wwRetrievalMode = 'cyclic' " +
                         $"and v_History.wwResolution = '{wwResolution}'";
 

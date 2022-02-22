@@ -2,7 +2,7 @@
 const HeaderGraphics = ({ name }) => {
 
     return (
-        <h3 className='title'>{name}</h3>
+        <h4 className='title'>{name}</h4>
     )
 }
 

@@ -1,7 +1,7 @@
 import { ReferenceLine, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 const Chart = ({ attributes, data, isScale, width }) => {
-    const { color, nameType } = { ...attributes };
+    const { color, typeName } = { ...attributes };
     const { unit, scaleMinEU, scaleMaxEU, limitHi, limitHihi, limitLo, limitLolo } = { ...data.parameters };
 
     const styleTooltip = {
@@ -16,7 +16,7 @@ const Chart = ({ attributes, data, isScale, width }) => {
     const domain = isScale ? ['auto', 'auto'] : [scaleMinEU, scaleMaxEU];
 
     return (
-        <LineChart data={data.history} syncId={nameType} width={width} height={350}>
+        <LineChart data={data.history} syncId={typeName} width={width} height={350}>
             <Line type="linear" dataKey="value" stroke={color} dot={false} strokeWidth={2} isAnimationActive={false} />
 
             <ReferenceLine y={limitHihi} stroke="#ff0000" strokeWidth={2} strokeDasharray="3 3" />

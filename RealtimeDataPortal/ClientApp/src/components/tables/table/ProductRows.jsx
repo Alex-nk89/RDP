@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { CellValue } from '../Index';
 
 const ProductRows = ({ products, data, name, columnContent, type, index }) => {
@@ -18,7 +19,7 @@ const ProductRows = ({ products, data, name, columnContent, type, index }) => {
             let row = Array.from(columnContent).map((name, indexCol) => {
                 const rowSpan = indexParam === 0 && indexCol === 0 ? parameters.size : null;
                 const parameterName = parameterData[0][name];
-                const cell = indexCol === 0 ? <a href={`/graphics/${productId}`}>{parameterName}</a> : parameterName;
+                const cell = indexCol === 0 ? <Link to={`/graphics/${productId}`}>{parameterName}</Link> : parameterName;
 
                 return indexParam > 0 && indexCol === 0 ? null :
                     <td key={indexCol} rowSpan={rowSpan}>{cell}</td>;
