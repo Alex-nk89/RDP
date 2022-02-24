@@ -11,8 +11,8 @@ const TabContent = ({ attributesGraphic, tabName, activeTab, index, tabsNames, s
 
     const parameter = attributesGraphic.filter(item => item.typeName === tabName);
 
-    const graphic = parameter.map(item => 
-        <Graphic key={item.tagId} attributes={item} index={index} date={date} isScale={isScale} isVisibleTable={isVisibleTable}/>);
+    const graphic = parameter.map(item =>
+        <Graphic key={item.tagId} attributes={item} index={index} date={date} isScale={isScale} isVisibleTable={isVisibleTable} />);
 
     return (
         <div className={`tab-content ${activeTab === index ? 'tab-content_visible' : null}`}>

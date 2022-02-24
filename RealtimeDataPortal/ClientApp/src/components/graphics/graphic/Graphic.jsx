@@ -1,27 +1,47 @@
-import { useState, useEffect } from 'react';
 import { useResizeObserver } from '@mantine/hooks';
 
-import { AppPreloader, ErrorsPage, useRequest, Chart, TableForGraphic, useFormateDate } from '../Index';
+import {
+    useState, useEffect, useMemo, useRef,
+    LoadingOverlay,
+    AppPreloader, ErrorsPage, useRequest, Chart, TableForGraphic, useFormateDate
+} from '../Index';
 
 const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
-    console.log('render');
     const { round, nameParameter, calendar, serverConnection, tagName, wwResolution, visibleToGraphic,
         position } = { ...attributes };
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
+    const graphicRef = useRef();
 
     const [data, setData] = useState([]);
-    //const [graphicRef, widthGraphic] = useResizeObserver();
-    //const [width, setWidth] = useState(700);
+    const [widthGraphic, setWidthGraphic] = useState(800);
 
-    //const table = (isVisibleTable && proccess === 'confirmed' && calendar !== 'range') ?
-    //    <TableForGraphic attributes={attributes} data={data} /> : null;
+    const chart = useMemo(() => <Chart attributes={attributes} data={data} isScale={isScale} width={widthGraphic} />,
+        //<ApexChart data={data} attributes={attributes} isScale={isScale} />
+        //eslint-disable-next-line
+        [data, isScale]);
+
+    const table = useMemo(() => <TableForGraphic attributes={attributes} data={data} />,
+        //eslint-disable-next-line
+        [data]);
+
+    const graphic = (
+        <div className='info-block' ref={graphicRef}>
+            <div className='header'>
+                <h5 className='title'>{nameParameter}, поз. {position}</h5>
+            </div>
+
+            <div id={`${tagName}`} className='graphic'>
+                <LoadingOverlay visible={proccess === 'loading'} />
+                {chart}
+                {(isVisibleTable && proccess === 'confirmed' && calendar !== 'range') ? table : null}
+            </div>
+        </div>
+    );
 
     useEffect(() => {
-        //setWidth(graphicRef.current.offsetWidth);
-
         if (visibleToGraphic)
-            request('GetGraphic', 'POST', JSON.stringify({
+            /* request('GetGraphic', 'POST', JSON.stringify({
                 TagName: tagName,
                 StartDate: date.start,
                 EndDate: date.end,
@@ -31,7 +51,7 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                 ServerConnection: serverConnection
             }))
                 .then(dataGraphic => {
-                    /* setData({
+                    setData({
                         history: dataGraphic.history.map(item => {
                             const startDate = dataGraphic.history[0].dateTime;
                             const endDate = dataGraphic.history[dataGraphic.history.length - 1].dateTime;
@@ -42,40 +62,52 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                             }
                         }),
                         parameters: dataGraphic.parameters
-                    }); */
+                    });
                     setProccess('confirmed');
                 })
-                .catch(error => { });
-        //setData({
-        //    history: [
-        //        { name: '1', value: 4 }, { name: '2', value: 2 }, { name: '3', value: 3 }, { name: '4', value: 5 },
-        //        { name: '5', value: 7 }, { name: '6', value: 2 }, { name: '7', value: 1 }, { name: '8', value: 4 },
-        //    ],
-        //    parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
-        //})
+                .then(() => setWidthGraphic(graphicRef.current.offsetWidth))
+                .catch(error => { }); */
+            setData({
+                history: [
+                    { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 },
+                    { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 },
+                    { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 },
+                    { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 },
+                    { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 },
+                    { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 },
+                    { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 },
+                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+                ],
+                parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
+            });
+        /* setData({
+            history: [
+                { dateTime: '01.01.2022 10:00:00', value: 4 },
+                { dateTime: '01.01.2022 11:00:00', value: 2 },
+                { dateTime: '01.01.2022 12:00:00', value: 3 },
+                { dateTime: '01.01.2022 13:00:00', value: 5 },
+                { dateTime: '01.01.2022 14:00:00', value: 7 },
+                { dateTime: '01.01.2022 15:00:00', value: 2 },
+                { dateTime: '01.01.2022 16:00:00', value: 1 },
+                { dateTime: '01.01.2022 17:00:00', value: 4 }
+            ]
+        }); */
+        setProccess('confirmed');
 
         //eslint-disable-next-line
     }, [date]);
 
-    /* useEffect(() => {
-        setWidth(Math.floor(widthGraphic.width / 100) * 100);
-    }, [widthGraphic.width]); */
-
-    /* return (
-        <div className='info-block' ref={graphicRef}>
-            <div className='header'>
-                <h5 className='title'>{nameParameter}, поз. {position}</h5>
-            </div>
-
-            <div id={`${tagName}`} className='graphic'>
-                <Chart attributes={attributes} data={data} isScale={isScale} width={width - 60} />
-                {table}
-            </div>
-        </div>
-    ); */
-    switch(proccess){
+    switch (proccess) {
         case 'loading':
-            return <AppPreloader />;
+            return date.start ? graphic : <AppPreloader height='100px' />;
+        case 'error':
+            return <ErrorsPage {...error} height='400px' />;
+        case 'confirmed':
+            return graphic;
         default:
             return null;
     }

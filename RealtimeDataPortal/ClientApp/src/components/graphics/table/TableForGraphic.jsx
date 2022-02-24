@@ -3,7 +3,6 @@ import { Table } from '@mantine/core';
 const TableForGraphic = ({ attributes, data }) => {
     const { calendar, round } = attributes;
     const history = { ...data.history };
-    //console.log(Object.keys(history).length)
     let countRows;
 
     if (calendar === 'month') {
@@ -21,8 +20,10 @@ const TableForGraphic = ({ attributes, data }) => {
         tableData.push([
             history[i]?.name,
             history[i]?.value,
+            '',
             history[i + countRows]?.name,
             history[i + countRows]?.value,
+            '',
             history[i + countRows * 2]?.name,
             history[i + countRows * 2]?.value
         ]);
@@ -40,8 +41,8 @@ const TableForGraphic = ({ attributes, data }) => {
     const tfoot = calendar === 'month' ?
         <tfoot>
             <tr>
-                <th></th><th>{decadeFirst.toFixed(round)}</th>
-                <th></th><th>{decadeSecond.toFixed(round)}</th>
+                <th></th><th>{decadeFirst.toFixed(round)}</th><th></th>
+                <th></th><th>{decadeSecond.toFixed(round)}</th><th></th>
                 <th></th><th>{decadeThird.toFixed(round)}</th>
             </tr>
         </tfoot> : null;
@@ -49,8 +50,8 @@ const TableForGraphic = ({ attributes, data }) => {
     const thead =
         <thead>
             <tr>
-                <th>Время</th><th>Значение</th>
-                <th>Время</th><th>Значение</th>
+                <th>Время</th><th>Значение</th><th></th>
+                <th>Время</th><th>Значение</th><th></th>
                 <th>Время</th><th>Значение</th>
             </tr>
         </thead>
