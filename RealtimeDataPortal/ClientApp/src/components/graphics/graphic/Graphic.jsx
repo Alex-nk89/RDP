@@ -1,5 +1,3 @@
-import { useResizeObserver } from '@mantine/hooks';
-
 import {
     useState, useEffect, useMemo, useRef,
     LoadingOverlay,
@@ -8,15 +6,14 @@ import {
 
 const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
     const { round, nameParameter, calendar, serverConnection, tagName, wwResolution, visibleToGraphic,
-        position } = { ...attributes };
+        position, isDateOffset } = { ...attributes };
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
     const graphicRef = useRef();
 
     const [data, setData] = useState([]);
-    const [widthGraphic, setWidthGraphic] = useState(800);
 
-    const chart = useMemo(() => <Chart attributes={attributes} data={data} isScale={isScale} width={widthGraphic} />,
+    const chart = useMemo(() => <Chart attributes={attributes} data={data} isScale={isScale} width={900} />,
         //<ApexChart data={data} attributes={attributes} isScale={isScale} />
         //eslint-disable-next-line
         [data, isScale]);
@@ -41,49 +38,50 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
 
     useEffect(() => {
         if (visibleToGraphic)
-            /* request('GetGraphic', 'POST', JSON.stringify({
+            request('GetGraphic', 'POST', JSON.stringify({
                 TagName: tagName,
                 StartDate: date.start,
                 EndDate: date.end,
                 Round: round,
                 WwResolution: wwResolution,
                 Calendar: calendar,
-                ServerConnection: serverConnection
+                ServerConnection: serverConnection,
+                IsDateOffset: isDateOffset
             }))
                 .then(dataGraphic => {
                     setData({
-                        history: dataGraphic.history.map(item => {
+                        history: dataGraphic.history.map((item, index) => {
                             const startDate = dataGraphic.history[0].dateTime;
                             const endDate = dataGraphic.history[dataGraphic.history.length - 1].dateTime;
 
                             return {
-                                name: formateDate(item.dateTime, calendar, startDate, endDate),
+                                name: formateDate(item.dateTime, calendar, index, dataGraphic.history.length, startDate, endDate),
                                 value: item.value
                             }
                         }),
                         parameters: dataGraphic.parameters
                     });
+
                     setProccess('confirmed');
                 })
-                .then(() => setWidthGraphic(graphicRef.current.offsetWidth))
-                .catch(error => { }); */
-            setData({
-                history: [
-                    { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 },
-                    { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 },
-                    { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 },
-                    { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 },
-                    { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 },
-                    { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 },
-                    { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 },
-                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-                    { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-                ],
-                parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
-            });
+                .catch(error => { });
+        /* setData({
+            history: [
+                { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 },
+                { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 },
+                { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 },
+                { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 },
+                { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 },
+                { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 },
+                { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 },
+                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
+            ],
+            parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
+        }); */
         /* setData({
             history: [
                 { dateTime: '01.01.2022 10:00:00', value: 4 },
@@ -96,7 +94,7 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                 { dateTime: '01.01.2022 17:00:00', value: 4 }
             ]
         }); */
-        setProccess('confirmed');
+        //setProccess('confirmed');
 
         //eslint-disable-next-line
     }, [date]);

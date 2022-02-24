@@ -4,7 +4,7 @@ import {
 
 const AddChangeTag = ({ operation, tagAttributes }) => {
     const nameRef = useRef(null);
-    const { request, error } = useRequest();
+    const { request } = useRequest();
     const { show } = useNotification();
 
     const [tagsList, setTagsList] = useState([]);

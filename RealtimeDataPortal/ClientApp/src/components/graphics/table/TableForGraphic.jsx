@@ -33,9 +33,9 @@ const TableForGraphic = ({ attributes, data }) => {
         decadeThird += isNaN(history[i + countRows * 2]?.value) ? 0 : history[i + countRows * 2]?.value;
     }
 
-    if (data.length === 31) {
-        tableData.push(['', '', '', '', history[31]?.name, history[31]?.value]);
-        decadeThird += data[31]?.value
+    if (data.history.length === 31) {
+        tableData.push(['', '', '', '', '', '', history[30]?.name, history[30]?.value]);
+        decadeThird += history[30]?.value
     }
 
     const tfoot = calendar === 'month' ?

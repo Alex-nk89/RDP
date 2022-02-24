@@ -36,7 +36,7 @@ const TableRealtime = () => {
 
     switch (proccess) {
         case 'loading':
-            return <AppPreloader height='calc(100vh - 116px)' />;
+            return updateTable === 0 ? <AppPreloader height='calc(100vh - 116px)' /> : tableRealtime;
         case 'error':
             return <ErrorsPage {...error} height='calc(100vh - 116px)' />;
         case 'confirmed':

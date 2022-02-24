@@ -28,5 +28,6 @@ namespace RealtimeDataPortal.Models
         public string Color { get; set; } = string.Empty!;
         public string ServerConnection { get; set; } = string.Empty!;
         public string ServerName { get; set; } = string.Empty!;
+        public bool IsDateOffset { get; set; } = false;
     }
 }

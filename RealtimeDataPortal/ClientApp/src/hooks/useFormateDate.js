@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 
 export const useFormateDate = () => {
-    const formateDate = useCallback((date, calendar, startDate, endDate) => {
+    const formateDate = useCallback((date, calendar, index, length, startDate, endDate) => {
         date = new Date(date);
 
         const differenceInTime = calendar === 'range' ? ((new Date(endDate)) - (new Date(startDate))) : 0;
@@ -29,7 +29,10 @@ export const useFormateDate = () => {
                     return `${hh}:${mm}`;
                 else
                     return `${dd}.${MM}.${yyyy} ${hh}:${mm}`;
-            case 'day':
+            case 'day': 
+                if(length > 25 && index % 2 === 0) {
+                    return `${hh}:30`;
+                }
                 return `${hh}:00`;
             case 'month':
                 return `${dd}.${MM}.${yyyy}`;

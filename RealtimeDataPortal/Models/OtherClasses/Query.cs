@@ -11,9 +11,11 @@ namespace RealtimeDataPortal.Models
         public string? ServerConnection { get; set; }
         public int? WwResolution { get; set; }
         public int Round { get; set; }
+        public bool isDateOffset { get; set; } = true;
 
         public void Deconstruct(out string? startDate, out string? endDate, out string calendar, 
-            out string? serverConnection, out string tagName, out int? wwResolution, out int round)
+            out string? serverConnection, out string tagName, out int? wwResolution, out int round,
+            out bool isDateOffset)
         {
             tagName = this.TagName;
             startDate = this.StartDate;
@@ -22,14 +24,15 @@ namespace RealtimeDataPortal.Models
             serverConnection = this.ServerConnection;
             wwResolution = this.WwResolution;
             round = this.Round;
+            isDateOffset = this.isDateOffset;
         }
 
         public Object GetGraphic(Query query, User user)
         {
             (string? startDate, string? endDate, string calendar, string? serverConnection, string tagName, int? wwResolution,
-                int round) = query;
+                int round, isDateOffset) = query;
 
-            List<History> history = new List<History>();
+            List<History> history = new();
 
             DateTime start = startDate is not null ? DateTime.Parse(startDate) : DateTime.Now;
             DateTime end = endDate is not null ? DateTime.Parse(endDate) : DateTime.Now;
@@ -46,6 +49,7 @@ namespace RealtimeDataPortal.Models
 
             // Для часовых и получасовых за полный текущий день
             // Смещение на 10 минут, так как запись значений в БД происходит с опозданием
+            // (смещение определяется по признаку isDateOffset)
             if (calendar == "day")
             {
                 if(startDate is null || endDate is null)
@@ -54,8 +58,11 @@ namespace RealtimeDataPortal.Models
                     end = start.AddDays(1);
                 }
 
-                start = start.AddMinutes(10); //.AddHours(1)
-                end = end.AddMinutes(10);
+                if(isDateOffset) {
+                    start = start.AddMinutes(10);
+                    end = end.AddMinutes(10);
+                }
+                
             }
             
             // Для суточных добавляем день (так данные от сегодня фактически показывают данные за вчера)
@@ -65,10 +72,10 @@ namespace RealtimeDataPortal.Models
                 if (startDate == null || endDate == null)
                 {
                     start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                    end = start.AddDays(1).AddMonths(1);
+                    end = start.AddMonths(1);
                 }
 
-                start = start.AddDays(1).AddHours(3);
+                start = start.AddHours(3);
                 end = end.AddHours(3);
             }
 
@@ -131,14 +138,12 @@ namespace RealtimeDataPortal.Models
                 if ((end.Subtract(start).TotalMilliseconds / wwResolution) > 480)
                         wwResolution = (int)Math.Round(end.Subtract(start).TotalMilliseconds / 480);
 
-                string sign = calendar == "month" ? "<" : "<=";
-
                 // Дата в запросе форматируется под старые сервера
                 string sqlExpression = $"select v_History.DateTime, v_History.Value " +
                         $"from [Runtime].[dbo].[v_History] " +
                         $"where v_History.TagName = '{tagName}' " +
-                        $"and v_History.DateTime >= '{start.ToString("yyyy-MM-dd HH:mm")}' " + 
-                        $"and v_History.DateTime {sign} '{end.ToString("yyyy-MM-dd HH:mm")}' " +
+                        $"and v_History.DateTime > '{start.ToString("yyyy-MM-dd HH:mm")}' " + 
+                        $"and v_History.DateTime <= '{end.ToString("yyyy-MM-dd HH:mm")}' " +
                         $"and v_History.wwRetrievalMode = 'cyclic' " +
                         $"and v_History.wwResolution = '{wwResolution}'";
 

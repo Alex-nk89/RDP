@@ -55,7 +55,8 @@ namespace RealtimeDataPortal.Models
                                                    VisibleToGraphic = tagsType.VisibleToGraphic,
                                                    Color = parameterType.Color,
                                                    ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
-                                                       $";User Id={server.UserName};Password={server.Password}"
+                                                       $";User Id={server.UserName};Password={server.Password}",
+                                                   IsDateOffset = server.IsDateOffset
                                                }).ToList();
 
                 if (attributes.Count == 0) throw new NotFoundException("Страница не найдена.");

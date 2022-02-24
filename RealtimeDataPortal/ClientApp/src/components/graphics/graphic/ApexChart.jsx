@@ -4,10 +4,6 @@ const ApexChart = ({ data, attributes, isScale }) => {
   console.log(attributes)
 
   const { color, calendar, tagName } = { ...attributes };
-  const scale = {
-    min: isScale ? 0 : 0,
-    max: isScale ? 10 : 100
-  }
 
   const series = [{
     name: 'Значение',

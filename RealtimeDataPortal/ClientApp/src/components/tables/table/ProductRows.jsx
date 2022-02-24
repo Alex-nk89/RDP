@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { CellValue } from '../Index';
 
 const ProductRows = ({ products, data, name, columnContent, type, index }) => {
-    const painted = index % 2 === 0 ? 'painted' : '';
+    console.log(index);
+    //const painted = index % 2 === 0 ? 'painted' : '';
 
     const product = Array.from(products).map((product, index) => {
+        const painted = index % 2 === 0 ? 'painted' : '';
         const productData = data.filter(item => item.productId === product);
 
         let parameters = new Set(
