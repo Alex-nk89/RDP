@@ -2,9 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { CellValue } from '../Index';
 
-const ProductRows = ({ products, data, name, columnContent, type, index }) => {
-    console.log(index);
-    //const painted = index % 2 === 0 ? 'painted' : '';
+const ProductRows = ({ products, data, name, columnContent, type, user }) => {
 
     const product = Array.from(products).map((product, index) => {
         const painted = index % 2 === 0 ? 'painted' : '';
@@ -32,7 +30,8 @@ const ProductRows = ({ products, data, name, columnContent, type, index }) => {
                 const round = parameter?.round;
 
                 row.push(parameter ?
-                    <CellValue key={`${indexParam}-${index}`} parameter={parameter} round={round} /> : <td key={`${indexParam}-${index}`}></td>);
+                    <CellValue key={`${indexParam}-${index}`} parameter={parameter} round={round} user={user} /> :
+                    <td key={`${indexParam}-${index}`}></td>);
             });
 
             return <tr key={indexParam} className={painted}>{row}</tr>;

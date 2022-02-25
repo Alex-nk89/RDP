@@ -1,7 +1,7 @@
 import { useEffect, useState, useParams, useRequest, AppPreloader, ErrorsPage, SaveToExcel, TableWrapper } from './Index';
 import './table.sass';
 
-const TableRealtime = () => {
+const TableRealtime = ({ user }) => {
     const { id } = useParams();
     const { request, proccess, setProccess, error } = useRequest();
     const [tableData, setTableData] = useState([]);
@@ -14,7 +14,7 @@ const TableRealtime = () => {
                 <SaveToExcel />
             </div>
 
-            <TableWrapper data={tableData} />
+            <TableWrapper data={tableData} user={user}/>
         </div>
     )
 

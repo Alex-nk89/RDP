@@ -15,6 +15,7 @@ import { useRequest } from './hooks/useRequest';
 
 import "./css/bootstrap-reboot.min.css";
 
+
 const App = () => {
     const { request, proccess, error, setProccess } = useRequest();
     const [openedNavbar, setOpenNavbar] = useState(true);
@@ -40,8 +41,9 @@ const App = () => {
                 <Container size='md' className='container'>
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Graphics/:id" component={Graphics} />
-                    <Route exact path="/Table/:id" component={TableRealtime} />
-                    <Route exact path="/Configurator/:operation/:id" render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />} />
+                    <Route exact path="/Table/:id" render={props => <TableRealtime user={user} {...props} />} />
+                    <Route exact path="/Configurator/:operation/:id"
+                        render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />} />
                     <Route exact path="/Error" component={ErrorsPage} />
                 </Container>
             </main>
@@ -54,7 +56,7 @@ const App = () => {
                 setUser(user);
                 setProccess('confirmed');
             })
-            .catch(error => {});
+            .catch(error => { });
         //eslint-disable-next-line
     }, [])
 
