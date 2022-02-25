@@ -66,10 +66,10 @@ namespace RealtimeDataPortal.Models
                          Position = parameter.Position,
                          Round = parameter.Round,
                          TagName = tag.TagName,
-                         Value = null,
-                         Unit = null,
-                         Scale = null,
-                         Limits = null,
+                         //Value = null,
+                         //Unit = null,
+                         //Scale = null,
+                         //Limits = null,
                          TypeShortName = tagType.TypeShortName,
                          ServerName = server.ServerName,
                          ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
@@ -86,45 +86,46 @@ namespace RealtimeDataPortal.Models
             Parallel.ForEach(serverList, (string server) => {
                 List<Query_rtTable> valueOneServer = tableRealtime.Where(tr => tr.ServerName == server).ToList();
 
-            // Список тегов
-            string tagNames = string.Empty;
+                // Список тегов
+                string tagNames = string.Empty;
 
-            foreach(var value in valueOneServer)
-            {
-                tagNames += $"'{value.TagName}',";
-            }
+                foreach(var value in valueOneServer)
+                {
+                    tagNames += $"'{value.TagName}',";
+                }
 
-            tagNames = tagNames.Remove(tagNames.Length - 1);
+                tagNames = tagNames.Remove(tagNames.Length - 1);
 
-            listValues.AddRange(GetValueForTags(tagNames, valueOneServer.First().ServerConnection));
-        });
+                listValues.AddRange(GetValueForTags(tagNames, valueOneServer.First().ServerConnection));
+            });
 
-        tableRealtime = (from table in tableRealtime
-                         join values in listValues on table.TagName equals values.TagName into listValue
-                         from value in listValue.DefaultIfEmpty()
-                         select new Query_rtTable()
-                         {
-                             Id = table.Id,
-                             Name = table.Name,
-                             PositionVisible = table.PositionVisible,
-                             UnitVisible = table.UnitVisible,
-                             ScaleVisible = table.ScaleVisible,
-                             LimitVisible = table.LimitVisible,
-                             SectionName = table.SectionName,
-                             ProductId = table.ProductId,
-                             ProductName = table.ProductName,
-                             NameParameter = table.NameParameter,
-                             ProductsParameterId = table.ProductsParameterId,
-                             Position = table.Position,
-                             Round = table.Round,
-                             TagName = table.TagName,
-                             Value = value.Value,
-                             Unit = value.Unit,
-                             Scale = value.Scale,
-                             Limits = value.Limits,
-                             TypeShortName = table.TypeShortName,
-                             ServerName = table.ServerName,
-                         }).ToList();
+            tableRealtime = (from table in tableRealtime
+                             join values in listValues 
+                                on table.TagName equals values.TagName into listValue
+                             from value in listValue.DefaultIfEmpty()
+                             select new Query_rtTable()
+                             {
+                                 Id = table.Id,
+                                 Name = table.Name,
+                                 PositionVisible = table.PositionVisible,
+                                 UnitVisible = table.UnitVisible,
+                                 ScaleVisible = table.ScaleVisible,
+                                 LimitVisible = table.LimitVisible,
+                                 SectionName = table.SectionName,
+                                 ProductId = table.ProductId,
+                                 ProductName = table.ProductName,
+                                 NameParameter = table.NameParameter,
+                                 ProductsParameterId = table.ProductsParameterId,
+                                 Position = table.Position,
+                                 Round = table.Round,
+                                 TagName = table.TagName,
+                                 Value = value?.Value ?? null,
+                                 Unit = value?.Unit ?? null,
+                                 Scale = value?.Scale ?? null,
+                                 Limits = value?.Limits ?? null,
+                                 TypeShortName = table.TypeShortName,
+                                 ServerName = table.ServerName,
+                             }).ToList();
 
         return tableRealtime;
      }

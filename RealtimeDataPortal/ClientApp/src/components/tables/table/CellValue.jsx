@@ -15,7 +15,7 @@ const CellValue = ({ parameter, round, user }) => {
                 target={
                     <button
                         className='info-block__table__tag-info-button'
-                        onClick={togglePopover}>{parameter.value.toFixed(round).replace(/\./i, ",") ?? '#'}</button>
+                        onClick={togglePopover}>{parameter.value?.toFixed(round).replace(/\./i, ",") ?? '#'}</button>
                 }>
 
                 {(user.isAdministrator || user.isConfigurator || user.isFullView) ?
