@@ -66,10 +66,6 @@ namespace RealtimeDataPortal.Models
                          Position = parameter.Position,
                          Round = parameter.Round,
                          TagName = tag.TagName,
-                         //Value = null,
-                         //Unit = null,
-                         //Scale = null,
-                         //Limits = null,
                          TypeShortName = tagType.TypeShortName,
                          ServerName = server.ServerName,
                          ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +

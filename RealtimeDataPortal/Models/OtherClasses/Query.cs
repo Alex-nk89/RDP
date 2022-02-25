@@ -46,6 +46,11 @@ namespace RealtimeDataPortal.Models
             double? limitHihi = null;
             double? limitLo = null;
             double? limitLolo = null;
+            // Описание лимитов
+            string descrLimitHi = string.Empty;
+            string descrLimitHihi = string.Empty;
+            string descrLimitLo = string.Empty;
+            string descrLimitLolo = string.Empty;
 
             // Для часовых и получасовых за полный текущий день
             // Смещение на 10 минут, так как запись значений в БД происходит с опозданием
@@ -90,7 +95,7 @@ namespace RealtimeDataPortal.Models
             {
                 try
                 {
-                    string sqlExpression = $"select at.TagName, eu.Unit, at.MaxEU, at.MinEU, lm.Value, lmn.Name " +
+                    string sqlExpression = $"select at.TagName, eu.Unit, at.MaxEU, at.MinEU, lm.Value, lmn.Name, lm.Description " +
                         $"from [Runtime].[dbo].[AnalogTag] as at " +
                         $"left join [Runtime].[dbo].[EngineeringUnit] as eu " +
                         $"on at.EUKey = eu.EUKey " +
@@ -114,15 +119,19 @@ namespace RealtimeDataPortal.Models
                         {
                             case "HiHi":
                                 limitHihi = (double)result["Value"];
+                                descrLimitHihi = result["Description"].ToString() ?? string.Empty;
                                 break;
                             case "Hi":
                                 limitHi = (double)result["Value"];
+                                descrLimitHi = result["Description"].ToString() ?? string.Empty;
                                 break;
                             case "Lo":
                                 limitLo = (double)result["Value"];
+                                descrLimitLo = result["Description"].ToString() ?? string.Empty;
                                 break;
                             case "LoLo":
                                 limitLolo = (double)result["Value"];
+                                descrLimitLo = result["Description"].ToString() ?? string.Empty;
                                 break;
                         };
                     }
@@ -161,7 +170,12 @@ namespace RealtimeDataPortal.Models
                 }
             }
 
-            return new { History = history, Parameters = new { unit, scaleMaxEU, scaleMinEU, limitHi, limitHihi, limitLo, limitLolo } };
+            return new { History = history, 
+                Parameters = new { unit, scaleMaxEU, scaleMinEU,
+                LimitHi = new { limitHi, descrLimitHi },
+                LimitHihi = new { limitHihi, descrLimitHihi },
+                LimitLo = new { limitLo, descrLimitLo },
+                LimitLolo = new { limitLolo, descrLimitLolo }}};
         } 
     }
 }

@@ -2,9 +2,12 @@ import { ReferenceLine, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } 
 
 const Chart = ({ attributes, data, isScale, width }) => {
     const { color, typeName } = { ...attributes };
-    const { unit, scaleMinEU, scaleMaxEU, limitHi, limitHihi, limitLo, limitLolo } = { ...data.parameters };
+    const { unit, scaleMinEU, scaleMaxEU, limitHi: { limitHi, descrLimitHi },
+        limitHihi: { limitHihi, descrLimitHihi }, limitLo: { limitLo, descrLimitLo },
+        limitLolo: { limitLolo, descrLimitLolo } } = { ...data.parameters };
 
     const styleTooltip = {
+        padding: '.5rem',
         color: "#F8F9FA",
         borderRadius: "5px",
         background: '#2C2E33',
@@ -14,6 +17,21 @@ const Chart = ({ attributes, data, isScale, width }) => {
         color: '#F8F9FA'
     }
     const domain = isScale ? ['auto', 'auto'] : [scaleMinEU, scaleMaxEU];
+
+    const renderTooltip = (values) => {
+        const value = data.history.find(item => item.name === values.label)?.value;
+
+        return (
+            <div style={{ ...styleTooltip }}>
+                <span>Время: {values.label}</span><br />
+                <span>Значение: {value}</span><br />
+                {limitHihi ? <><span>{`${descrLimitHihi}: ${limitHihi}`}</span><br /></> : null}
+                {limitHi ? <><span>{`${descrLimitHi}: ${limitHi}`}</span><br /></> : null}
+                {limitLo ? <><span>{`${descrLimitLo}: ${limitLo}`}</span><br /></> : null}
+                {limitLolo ? <><span>{`${descrLimitLolo}: ${limitLolo}`}</span></> : null}
+            </div>
+        );
+    };
 
     return (
         <LineChart data={data.history} syncId={typeName} width={width} height={350}>
@@ -28,7 +46,7 @@ const Chart = ({ attributes, data, isScale, width }) => {
             <XAxis dataKey="name" tickMargin={15} minTickGap={15} />
             <YAxis dataKey="value" type='number' domain={domain} tickCount={10} tickMargin={10} width={80}
                 interval="preserveStart" label={{ value: unit, position: 'left', angle: -90, offset: -5 }} />
-            <Tooltip contentStyle={styleTooltip} itemStyle={itemStyle} />
+            <Tooltip contentStyle={styleTooltip} itemStyle={itemStyle} content={renderTooltip} />
         </LineChart>
     )
 }

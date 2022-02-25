@@ -52,6 +52,7 @@ namespace RealtimeDataPortal.Models
                         ComponentId= tm.ComponentId,
                         isFullView = true
                     })
+                    .OrderBy(tm => tm.Name)
                     .Distinct();
 
                 if (!isFullView)
