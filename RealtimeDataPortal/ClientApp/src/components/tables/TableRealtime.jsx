@@ -25,7 +25,6 @@ const TableRealtime = ({ user }) => {
 
         request(`GetTableRealtime?id=${id}`)
             .then(tableData => {
-                console.log(tableData);
                 setTableData(tableData);
                 setProccess('confirmed');
             })
