@@ -10,6 +10,7 @@ import TableRealtime from './components/tables/TableRealtime';
 //import Page_404 from './components/Page_404';
 import ErrorsPage from './components/errors-page/ErrorsPage';
 import Configurator from './components/configurator/Configurator';
+import { Administrstor } from './components/administrator/Administrator';
 import AppPreloader from './components/loader/appPreloader';
 import { useRequest } from './hooks/useRequest';
 
@@ -21,6 +22,7 @@ const App = () => {
     const [openedNavbar, setOpenNavbar] = useState(true);
     const [user, setUser] = useState({});
     const [isConfigModeOn, setIsConfigModeOn] = useState(false);
+    const [isAdminModeOn, setIsAdminModeOn] = useState(false);
     const [updateNavbar, setUpdateNavbar] = useState(false);
 
     const updatingNavbar = () => setUpdateNavbar(!updateNavbar);
@@ -28,7 +30,13 @@ const App = () => {
     const app =
         <>
             <nav>
-                <Navbar openedNavbar={openedNavbar} isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar} updatingNavbar={updatingNavbar} />
+                <Navbar
+                    openedNavbar={openedNavbar}
+                    isConfigModeOn={isConfigModeOn}
+                    isAdminModeOn={isAdminModeOn}
+                    updateNavbar={updateNavbar}
+                    updatingNavbar={updatingNavbar}
+                />
             </nav>
 
             <main className={`${openedNavbar ? 'navbarOpen' : ''}`}>
@@ -37,13 +45,16 @@ const App = () => {
                     openedNavbar={openedNavbar}
                     user={user}
                     isConfigModeOn={isConfigModeOn}
-                    setIsConfigModeOn={setIsConfigModeOn} />
+                    setIsConfigModeOn={setIsConfigModeOn}
+                    isAdminModeOn={isAdminModeOn}
+                    setIsAdminModeOn={setIsAdminModeOn} />
                 <Container size='md' className='container'>
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Graphics/:id" component={Graphics} />
                     <Route exact path="/Table/:id" render={props => <TableRealtime user={user} {...props} />} />
                     <Route exact path="/Configurator/:operation/:id"
                         render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />} />
+                    <Route exact path="/Administrator/:operation" component={Administrstor} />
                     <Route exact path="/Error" component={ErrorsPage} />
                 </Container>
             </main>

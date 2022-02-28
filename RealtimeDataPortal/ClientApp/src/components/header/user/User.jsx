@@ -4,15 +4,21 @@ import { IoChevronDown, IoBuild, IoSettings } from "react-icons/io5";
 
 import { useNotification } from "../../configurator";
 
-const User = ({ user, isConfigModeOn, setIsConfigModeOn }) => {
+const User = ({ user, isConfigModeOn, setIsConfigModeOn, isAdminModeOn, setIsAdminModeOn }) => {
     const { show } = useNotification();
     const [openedMenu, setOpenedMenu] = useState(false);
 
     const openMenu = () => setOpenedMenu(true);
     const closeMenu = () => setOpenedMenu(false);
+
     const changeConfigMode = () => {
         setIsConfigModeOn(!isConfigModeOn);
         isConfigModeOn ? show('success', 'Режим конфигуратора выключен') : show('success', 'Режим конфигуратора включен');
+    };
+
+    const changeAdminMode = () => {
+        setIsAdminModeOn(!isAdminModeOn);
+        isAdminModeOn ? show('success', 'Режим администрирования выключен') : show('success', 'Режим администрирования включен');
     }
 
     const userBlock = user?.isAdministrator || user?.isConfigurator ?
@@ -27,7 +33,13 @@ const User = ({ user, isConfigModeOn, setIsConfigModeOn }) => {
             opened={openedMenu}
             onOpen={openMenu}
             onClose={closeMenu}>
-            {user?.isAdministrator ? <Menu.Item icon={<IoBuild />}>Администрирование</Menu.Item> : null}
+            {user?.isAdministrator ?
+                <Menu.Item icon={<IoBuild />}>
+                    <label>
+                        Администрирование
+                        <Switch size='xs' checked={isAdminModeOn} onChange={changeAdminMode} />
+                    </label>
+                </Menu.Item> : null}
             {user?.isConfigurator ?
                 <Menu.Item icon={<IoSettings />}>
                     <label>

@@ -6,7 +6,7 @@ import User from "./user/User";
 
 import "./header.sass";
 
-const Header = ({ user, openedNavbar, setOpenNavbar, isConfigModeOn, setIsConfigModeOn }) => {
+const Header = ({ user, openedNavbar, setOpenNavbar, isConfigModeOn, setIsConfigModeOn, isAdminModeOn, setIsAdminModeOn }) => {
 
     const search =
         <ActionIcon>
@@ -16,9 +16,15 @@ const Header = ({ user, openedNavbar, setOpenNavbar, isConfigModeOn, setIsConfig
     const openNavbar = () => setOpenNavbar(!openedNavbar);
 
     const userBlock = useMemo(() => {
-        return <User user={user} isConfigModeOn={isConfigModeOn} setIsConfigModeOn={setIsConfigModeOn} />;
+        return <User
+            user={user}
+            isConfigModeOn={isConfigModeOn}
+            setIsConfigModeOn={setIsConfigModeOn}
+            isAdminModeOn={isAdminModeOn}
+            setIsAdminModeOn={setIsAdminModeOn}
+        />;
         //eslint-disable-next-line
-    }, [isConfigModeOn]);
+    }, [isConfigModeOn, isAdminModeOn]);
 
     return (
         <header>
