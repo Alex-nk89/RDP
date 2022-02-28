@@ -11,16 +11,15 @@ namespace RealtimeDataPortal.Models
         public bool IsConfigurator { get; set; } = false;
         public bool IsAdministrator { get; set; } = false;
 
-        public User()
+        public User(string userName)
         {
-            GetUser();
+            GetUser(userName);
         }
 
-        public void GetUser()
+        public void GetUser(string userName)
         {
-
             PrincipalContext ADContextGeneral = new PrincipalContext(ContextType.Domain);
-            UserPrincipal user = UserPrincipal.FindByIdentity(ADContextGeneral, /*HttpContext.User.Identity.Name*/ "NagaytsevAE");
+            UserPrincipal user = UserPrincipal.FindByIdentity(ADContextGeneral, userName);
             PrincipalSearchResult<Principal> userGroups = user.GetAuthorizationGroups();
 
             Name = /* "Нагайцев Александр Евгеньевич"; */user.DisplayName;

@@ -294,12 +294,13 @@ const AddChangeTableRT = ({ operation, componentInfo, updatingNavbar }) => {
                     <Space h="md" />
 
                     <Checkbox
+                        style={{ display: 'none'}}
                         label='Отображать норму ТР'
                         checked={limitVisible}
                         onChange={entryLimitVisible}
                     />
 
-                    <Space h="md" />
+                    {/* <Space h="md" /> */}
 
                     <Button type='submit' loading={fetchingData}>Сохранить</Button>
                 </form>

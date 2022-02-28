@@ -71,6 +71,8 @@ namespace RealtimeDataPortal.Models
                          ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
                                 $"User Id={server.UserName};Password={server.Password}"
                      }).ToList();
+
+                     if (tableRealtime.Count == 0) throw new NotFoundException("Страница не найдена.");
             }
 
             List<string> serverList = (from server in tableRealtime

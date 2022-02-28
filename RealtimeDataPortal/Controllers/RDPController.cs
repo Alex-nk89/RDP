@@ -9,7 +9,8 @@ namespace RealtimeDataPortal.Controllers
     [Route("[controller]")]
     public class RDPController : ControllerBase
     {
-        static User user = new User();
+        static string userName = new HttpContextAccessor().HttpContext.User.Identity.Name;
+        static User user = new User(userName);
 
         [HttpGet("GetUser")]
         public Object GetUser()

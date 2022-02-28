@@ -49,7 +49,6 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                 IsDateOffset: isDateOffset
             }))
                 .then(dataGraphic => {
-                    console.log(dataGraphic)
                     setData({
                         history: dataGraphic.history.map((item, index) => {
                             const startDate = dataGraphic.history[0].dateTime;
