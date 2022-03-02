@@ -15,7 +15,7 @@ export const ChangeParameterType = ({ operation }) => {
     const parameterTypeNameRef = useRef();
 
     const [listParameterTypes, setListParameterTypes] = useState([]);
-    const [savindData, setSavingData] = useState(false);
+    const [savingData, setSavingData] = useState(false);
     const [searchingData, setSearchingData] = useState(false);
 
     const visibleListParameterTypes = listParameterTypes.length > 0;
@@ -158,7 +158,7 @@ export const ChangeParameterType = ({ operation }) => {
 
                 <Space h="md" />
 
-                <Button type='submit' loading={savindData}>
+                <Button type='submit' loading={savingData}>
                     Сохранить
                 </Button>
             </form>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RealtimeDataPortal.Exceptions;
 using RealtimeDataPortal.Models;
 using RealtimeDataPortal.Models.Exceptions;
 using RealtimeDataPortal.Models.OtherClasses;
@@ -9,6 +10,8 @@ namespace RealtimeDataPortal.Controllers
     [Route("[controller]")]
     public class RDPController : ControllerBase
     {
+        static readonly ListMessagesError listMessagesError = new();
+
         static string userName = new HttpContextAccessor().HttpContext.User.Identity.Name;
         static User user = new User(userName);
 
@@ -415,7 +418,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При попытке получить данные с сервера произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.GetList });
             }
         }
 
@@ -425,7 +428,7 @@ namespace RealtimeDataPortal.Controllers
             try
             {
                 if (!user.IsAdministrator)
-                    throw new ForbiddenException("Нет доступа к изменению данныхю");
+                    throw new ForbiddenException("Нет доступа к изменению данных.");
 
                 new ParameterType().EditParameterType(parameter);
                 return new { Success = "Данные сохранены." };
@@ -459,6 +462,63 @@ namespace RealtimeDataPortal.Controllers
             catch
             {
                 return StatusCode(500, new { Message = "При удалении данных произошла ошибка." });
+            }
+        }
+
+        [HttpGet("GetListServers")]
+        public Object GetListServers(string name)
+        {
+            try
+            {
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
+                var listServers = new Server().GetListServers(name);
+                return listServers;
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.GetList });
+            }
+        }
+
+        [HttpPost("EditServer")]
+        public Object EditServer(Server server)
+        {
+            try
+            {
+                new Server().EditServer(server);
+                return new { Success = listMessagesError.Saved };
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+            }
+        }
+
+        [HttpPost("DeleteServers")]
+        public Object DeleteServers(int[] ids)
+        {
+            try
+            {
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
+                new Server().DeleteServers(ids);
+
+                return new { Success = listMessagesError.Deleted };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
             }
         }
 

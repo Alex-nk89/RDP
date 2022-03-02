@@ -25,7 +25,8 @@ const DeleteElements = ({ typeElements }) => {
 
     const methods = typeElements === 'tag' ? { find: 'GetTags', delete: 'DeleteTags' } :
         typeElements === 'product' ? { find: 'GetListProductsForDelete', delete: 'DeleteProducts' } :
-            typeElements === 'parameter-type' ? { find: 'GetListParameterTypes', delete: 'DeleteParameterTypes' } : null;
+            typeElements === 'parameter-type' ? { find: 'GetListParameterTypes', delete: 'DeleteParameterTypes' } :
+                typeElements === 'servers' ? { find: 'GetListServers', delete: 'DeleteServers' } : null;
 
     const form = useForm({
         initialValues: {
@@ -117,6 +118,8 @@ const DeleteElements = ({ typeElements }) => {
                                     return { id: item.productId, name: `${item.productName}`, isChecked: false };
                                 case 'parameter-type':
                                     return { id: item.parameterTypeId, name: item.parameterTypeName, isChecked: false };
+                                case 'servers':
+                                    return { id: item.serverId, name: `${item.serverName} (${item.database})`, isChecked: false };
                                 default:
                                     return null;
                             }

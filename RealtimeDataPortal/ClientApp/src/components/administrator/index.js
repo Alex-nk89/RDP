@@ -10,6 +10,7 @@ import { useNotification } from '../../hooks/useNotification';
 
 import ErrorsPage from '../errors-page/ErrorsPage';
 import { ChangeParameterType } from './change-parameter-type/ChangeParameterType';
+import { EditServer } from './edit-server/EditServer';
 import DeleteElements from '../delete-elements/DeleteElements';
 
 const attributesInputs = {
@@ -24,6 +25,6 @@ export {
     IoSearch,
     Tabs, TextInput, Space, ColorInput, Loader, Select, Button,
     useRequest, useNotification,
-    ErrorsPage, ChangeParameterType, DeleteElements,
+    ErrorsPage, ChangeParameterType, EditServer, DeleteElements,
     attributesInputs
 };

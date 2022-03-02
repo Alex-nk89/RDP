@@ -1,7 +1,7 @@
 import {
     useParams,
     Tabs,
-    ErrorsPage, ChangeParameterType, DeleteElements
+    ErrorsPage, ChangeParameterType, EditServer, DeleteElements
 } from './index';
 
 import './administrator.sass';
@@ -11,8 +11,11 @@ export const Administrstor = () => {
     let title = '';
 
     switch (operation) {
-        case 'change-parameter-type':
+        case 'parameter-type':
             title = 'Редактор типа параметров';
+            break;
+        case 'servers':
+            title = 'Редактор серверов';
             break;
         default:
             break;
@@ -22,6 +25,8 @@ export const Administrstor = () => {
         switch (operation) {
             case 'parameter-type':
                 return <ChangeParameterType {...props} />;
+            case 'servers':
+                return <EditServer {...props} />;
             default:
                 return <ErrorsPage statusCode={404} statusText='Page not found' message='Страница не найдена' />;
         }
