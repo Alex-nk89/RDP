@@ -16,7 +16,7 @@ import ErrorsPage from '../errors-page/ErrorsPage';
 import AppPreloader from "../loader/appPreloader";
 import Tag from './forms/tag/Tag';
 import AddChangeTag from './forms/tag/AddChangeTag';
-import DeleteElements from './forms/delete-elements/DeleteElements';
+import DeleteElements from '../delete-elements/DeleteElements';
 import Product from './forms/product/Product';
 import AddChangeProduct from './forms/product/AddChangeProduct';
 import Parameter from './forms/product/Parameter';

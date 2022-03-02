@@ -1,11 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import { useForm } from '@mantine/hooks';
+import { IoSearch } from 'react-icons/io5';
+
+import { Tabs, TextInput, Space, ColorInput, Loader, Select, Button } from '@mantine/core';
+
+import { useRequest } from '../../hooks/useRequest';
+import { useNotification } from '../../hooks/useNotification';
 
 import ErrorsPage from '../errors-page/ErrorsPage';
 import { ChangeParameterType } from './change-parameter-type/ChangeParameterType';
+import DeleteElements from '../delete-elements/DeleteElements';
+
+const attributesInputs = {
+    required: true,
+    autoComplete: 'off'
+};
 
 export {
-    useState, useEffect,
+    useState, useEffect, useRef,
     useParams,
-    ErrorsPage, ChangeParameterType
+    useForm,
+    IoSearch,
+    Tabs, TextInput, Space, ColorInput, Loader, Select, Button,
+    useRequest, useNotification,
+    ErrorsPage, ChangeParameterType, DeleteElements,
+    attributesInputs
 };

@@ -1,7 +1,16 @@
-import {
-    useEffect, useState, useForm, useRequest, attributesInputs, TextInput, Loader, Checkbox, Button, Space, useModals, Text,
-    useNotification
-} from '../../index';
+import { useState } from 'react';
+import { useForm } from '@mantine/hooks';
+import { useModals } from '@mantine/modals';
+import { TextInput, Loader, Checkbox, Button, Space, Text } from '@mantine/core';
+import { IoSearch } from 'react-icons/io5';
+
+import { useRequest } from '../../hooks/useRequest';
+import { useNotification } from '../../hooks/useNotification';
+
+const attributesInputs = {
+    required: true,
+    autoComplete: 'off'
+};
 
 const DeleteElements = ({ typeElements }) => {
     const { request } = useRequest();
@@ -9,15 +18,14 @@ const DeleteElements = ({ typeElements }) => {
     const modals = useModals();
 
     const [listElements, setListElements] = useState([]);
-    const [loadingElementsList, setLoadingElementsList] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const [searchingData, setSearchingData] = useState(false);
 
-    const loaderElementsList = loadingElementsList ? <Loader size={16} /> : null;
     const loaderSubmitForm = loadingSubmit ? <Loader size={16} /> : null;
 
-    const methods = typeElements === 'tag' ?
-        { find: 'GetTags', delete: 'DeleteTags' } :
-        { find: 'GetListProductsForDelete', delete: 'DeleteProducts' };
+    const methods = typeElements === 'tag' ? { find: 'GetTags', delete: 'DeleteTags' } :
+        typeElements === 'product' ? { find: 'GetListProductsForDelete', delete: 'DeleteProducts' } :
+            typeElements === 'parameter-type' ? { find: 'GetListParameterTypes', delete: 'DeleteParameterTypes' } : null;
 
     const form = useForm({
         initialValues: {
@@ -62,6 +70,8 @@ const DeleteElements = ({ typeElements }) => {
     };
 
     const deleteElements = deletingElements => {
+        setLoadingSubmit(true);
+
         request(methods.delete, 'POST', JSON.stringify(deletingElements))
             .then(result => {
                 show('success', 'Элементы удалены.');
@@ -90,11 +100,11 @@ const DeleteElements = ({ typeElements }) => {
         confirmModal(delitingElements);
     };
 
-    useEffect(() => {
+    const searchElements = () => {
         const name = form.values.name;
 
-        if (name.length > 2) {
-            setLoadingElementsList(true);
+        if (name.length > 0) {
+            setSearchingData(true);
 
             request(`${methods.find}?name=${name}`)
                 .then(result => {
@@ -105,6 +115,8 @@ const DeleteElements = ({ typeElements }) => {
                                     return { id: item.tagId, name: `${item.tagName} (${item.serverName})`, isChecked: false };
                                 case 'product':
                                     return { id: item.productId, name: `${item.productName}`, isChecked: false };
+                                case 'parameter-type':
+                                    return { id: item.parameterTypeId, name: item.parameterTypeName, isChecked: false };
                                 default:
                                     return null;
                             }
@@ -115,11 +127,12 @@ const DeleteElements = ({ typeElements }) => {
                     }
                 })
                 .catch(error => show('error', error))
-                .finally(() => setLoadingElementsList(false));
-        } else setListElements([]);
+                .finally(() => setSearchingData(false));
+        }
+    };
 
-        //eslint-disable-next-line
-    }, [form.values.name]);
+    const searchButton = !searchingData ?
+        <IoSearch size={18} onClick={searchElements} /> : <Loader size={18} />;
 
     return (
         <div className="info-block info-block__form">
@@ -129,7 +142,7 @@ const DeleteElements = ({ typeElements }) => {
                     {...form.getInputProps('name')}
                     label='Наименование'
                     placeholder='Введите наименование'
-                    rightSection={loaderElementsList}
+                    rightSection={searchButton}
                     autoFocus />
 
                 {list}

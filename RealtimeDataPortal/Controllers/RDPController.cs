@@ -399,5 +399,68 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
+        [HttpGet("GetListParameterTypes")]
+        public Object GetListParameterTypes(string name)
+        {
+            try
+            {
+                if(!user.IsAdministrator)
+                    throw new ForbiddenException("Нет доступа для получения данных");
+
+                return new ParameterType().GetListParameterTypes(name);
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При попытке получить данные с сервера произошла ошибка." });
+            }
+        }
+
+        [HttpPost("EditParameterType")]
+        public Object EditParameterType (ParameterType parameter)
+        {
+            try
+            {
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException("Нет доступа к изменению данныхю");
+
+                new ParameterType().EditParameterType(parameter);
+                return new { Success = "Данные сохранены." };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При сохранении данных произошла ошибка." });
+            }
+        }
+
+        [HttpPost("DeleteParameterTypes")]
+        public Object DeleteParameterTypes (int[] ids)
+        {
+            try
+            {
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException("Нет доступа к удалению данных.");
+
+                new ParameterType().DeleteParameterTypes(ids);
+
+                return new { Success = "Данные удалены." };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = "При удалении данных произошла ошибка." });
+            }
+        }
+
     }
 }

@@ -25,7 +25,7 @@ const AdministratorMenu = ({ isAdminModeOn }) => {
                 <ul>
                     <li>
                         <NavLink
-                            to='/Administrator/change-parameter-type'
+                            to='/Administrator/parameter-type'
                             className='page-with-configurator'
                             activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
                             <IoBuild />
