@@ -23,10 +23,20 @@ const DeleteElements = ({ typeElements }) => {
 
     const loaderSubmitForm = loadingSubmit ? <Loader size={16} /> : null;
 
-    const methods = typeElements === 'tag' ? { find: 'GetTags', delete: 'DeleteTags' } :
-        typeElements === 'product' ? { find: 'GetListProductsForDelete', delete: 'DeleteProducts' } :
-            typeElements === 'parameter-type' ? { find: 'GetListParameterTypes', delete: 'DeleteParameterTypes' } :
-                typeElements === 'servers' ? { find: 'GetListServers', delete: 'DeleteServers' } : null;
+    const methods = function () {
+        switch (typeElements) {
+            case 'tag':
+                return { find: 'GetTags', delete: 'DeleteTags' };
+            case 'product':
+                return { find: 'GetListProductsForDelete', delete: 'DeleteProducts' };
+            case 'parameter-type':
+                return { find: 'GetListParameterTypes', delete: 'DeleteParameterTypes' };
+            case 'servers':
+                return { find: 'GetListServers', delete: 'DeleteServers' };
+            default:
+                return null;
+        }
+    }();
 
     const form = useForm({
         initialValues: {
@@ -117,7 +127,7 @@ const DeleteElements = ({ typeElements }) => {
                                 case 'product':
                                     return { id: item.productId, name: `${item.productName}`, isChecked: false };
                                 case 'parameter-type':
-                                    return { id: item.parameterTypeId, name: item.parameterTypeName, isChecked: false };
+                                    return { id: item.parameterTypeId, name: `${item.label} - ${item.parameterTypeName}`, isChecked: false };
                                 case 'servers':
                                     return { id: item.serverId, name: `${item.serverName} (${item.database})`, isChecked: false };
                                 default:
