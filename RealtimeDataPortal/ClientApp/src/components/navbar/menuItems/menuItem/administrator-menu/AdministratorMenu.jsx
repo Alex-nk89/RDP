@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Collapse } from '@mantine/core';
-import { IoSettings, IoChevronDown, IoBuild, IoServer } from 'react-icons/io5';
+import { IoSettings, IoChevronDown, IoBuild, IoServer, IoCodeWorking } from 'react-icons/io5';
 
 const AdministratorMenu = ({ isAdminModeOn }) => {
     const [openedAdministrator, setOpenedAdministrator] = useState(false);
@@ -39,6 +39,15 @@ const AdministratorMenu = ({ isAdminModeOn }) => {
                             activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
                             <IoServer />
                             <span>Редактор серверов</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to='/Administrator/type-tags'
+                            className='page-with-configurator'
+                            activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
+                            <IoCodeWorking />
+                            <span>Редактор типов тега</span>
                         </NavLink>
                     </li>
                 </ul>

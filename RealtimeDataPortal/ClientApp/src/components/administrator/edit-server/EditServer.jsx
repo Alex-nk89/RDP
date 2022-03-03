@@ -2,7 +2,7 @@ import {
     useState, useEffect, useRef,
     useForm,
     IoSearch,
-    TextInput, Space, Button, Loader,
+    TextInput, Space, Button, Loader, Checkbox,
     useRequest, useNotification,
     attributesInputs
 } from '../index';
@@ -22,7 +22,8 @@ export const EditServer = ({ operation }) => {
             serverName: '',
             database: '',
             userName: '',
-            password: ''
+            password: '',
+            isDateOffset: false
         },
         validationRules: {
             serverName: value => value.trim().length > 0 && !/[а-яА-Я]/i.test(value),
@@ -70,17 +71,18 @@ export const EditServer = ({ operation }) => {
             serverName: choiseServer.serverName,
             database: choiseServer.database,
             userName: choiseServer.userName,
-            password: choiseServer.password
+            password: choiseServer.password,
+            isDateOffset: choiseServer.isDateOffset
         });
     };
 
     const submitForm = (values) => {
-        const { serverId, serverName, database, userName, password } = values;
+        const { serverId, serverName, database, userName, password, isDateOffset } = values;
 
         setSavingData(true);
 
         request('EditServer', 'POST',
-            JSON.stringify({ serverId, serverName, database, userName, password }))
+            JSON.stringify({ serverId, serverName, database, userName, password, isDateOffset }))
             .then(result => {
                 form.reset();
                 show('success', result.success);
@@ -157,6 +159,13 @@ export const EditServer = ({ operation }) => {
                     {...form.getInputProps('password')}
                     label='Пароль'
                     placeholder='Введите пароль'
+                />
+
+                <Space h="md" />
+
+                <Checkbox
+                    {...form.getInputProps('isDateOffset', { type: 'checkbox' })}
+                    label='Смещение даты'
                 />
 
                 <Space h="md" />
