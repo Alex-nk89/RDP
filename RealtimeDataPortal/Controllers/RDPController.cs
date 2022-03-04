@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿global using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using RealtimeDataPortal.Exceptions;
 using RealtimeDataPortal.Models;
 using RealtimeDataPortal.Models.Exceptions;
@@ -46,8 +47,10 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При загрузке меню произошла ошибка. Попробуйте " +
-                    "перезапустить приложение." });
+                return StatusCode(500, new
+                {
+                    Message = listMessagesError.NotGetData
+                });
             }
 
         }
@@ -74,8 +77,7 @@ namespace RealtimeDataPortal.Controllers
             {
                 return StatusCode(500, new
                 {
-                    Message = "Не удалось получить данные о странице. Попробуйте " +
-                    "перезапустить приложение."
+                    Message = listMessagesError.NotGetData
                 });
             }
         }
@@ -86,7 +88,7 @@ namespace RealtimeDataPortal.Controllers
             try
             {
                 if (!user.IsConfigurator)
-                    throw new ForbiddenException("Нет доступа к конфигуратору");
+                    throw new ForbiddenException(listMessagesError.NotAccess);
 
                 return new Configurator().GetComponentInformation(id, operation);
             }
@@ -102,8 +104,7 @@ namespace RealtimeDataPortal.Controllers
             {
                 return StatusCode(500, new
                 {
-                    Message = "Не удалось получить данные о компоненте. Попробуйте " +
-                    "перезапустить приложение."
+                    Message = listMessagesError.NotGetData
                 });
             }
         }
@@ -152,7 +153,7 @@ namespace RealtimeDataPortal.Controllers
                     accessToComponent.DeleteAccessToComponent(id, idChildren, deletedAccess);
                 }
 
-                return new { Message = "Изменения успешно внесены" };
+                return new { Message = listMessagesError.Saved };
             }
             catch (Exception ex)
             {
@@ -160,8 +161,7 @@ namespace RealtimeDataPortal.Controllers
 
                 return StatusCode(500, new
                 {
-                    Message = "Не удалось внести изменения. Попробуйте " +
-                    "перезапустить приложение."
+                    Message = listMessagesError.NotSaved
                 });
             }
         }
@@ -176,11 +176,11 @@ namespace RealtimeDataPortal.Controllers
             try
             {
                 if (!user.IsConfigurator)
-                    throw new ForbiddenException("Нет доступа к конфигуратору. Изменения не были внесены");
+                    throw new ForbiddenException(listMessagesError.NotAccess);
 
                 new Configurator().DeleteElement(id);
 
-                return new { Message = "Компонент удален" };
+                return new { Message = listMessagesError.Deleted };
             }
             catch (ForbiddenException ex)
             {
@@ -190,8 +190,7 @@ namespace RealtimeDataPortal.Controllers
             {
                 return StatusCode(500, new
                 {
-                    Message = "При удалении произошла ошибка. Попробуйте " +
-                    "перезапустить приложение."
+                    Message = listMessagesError.NotDeleted
                 });
             }
         }
@@ -205,7 +204,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При попытке получить данные с сервера произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
             }
         }
 
@@ -216,13 +215,13 @@ namespace RealtimeDataPortal.Controllers
             {
                 return new
                 {
-                    Types = new TagsType().GetTagsTypes(),
+                    Types = new TagsType().GetListTypesTag(null),
                     Servers = new Server().GetServers()
                 };
             }
             catch
             {
-                return StatusCode(500, new { Message = "При попытке получить данные с сервера произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
             }
         }
 
@@ -235,7 +234,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При сохранении данных произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotSaved });
             }
         }
 
@@ -248,7 +247,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При удалении данных произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
             }
         }
 
@@ -273,7 +272,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При получении данных произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
             }
         }
 
@@ -286,7 +285,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При сохранении данных произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotSaved });
             }
         }
 
@@ -299,7 +298,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При попытке получить данные с сервера произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
             }
         }
 
@@ -312,7 +311,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При попытке получить данные с сервера произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
             }
         }
 
@@ -325,7 +324,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При удалении данных произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
             }
         }
 
@@ -350,8 +349,7 @@ namespace RealtimeDataPortal.Controllers
             {
                 return StatusCode(500, new
                 {
-                    Message = "При загрузке данных произошла ошибка. Попробуйте " +
-                    "перезапустить приложение."
+                    Message = listMessagesError.NotGetData
                 });
             }
         }
@@ -369,8 +367,7 @@ namespace RealtimeDataPortal.Controllers
             {
                 return StatusCode(500, new
                 {
-                    Message = "При загрузке данных произошла ошибка. Попробуйте " +
-                    "перезапустить приложение."
+                    Message = listMessagesError.NotGetData
                 });
             }
         }
@@ -396,8 +393,7 @@ namespace RealtimeDataPortal.Controllers
             {
                 return StatusCode(500, new
                 {
-                    Message = "При загрузке данных произошла ошибка. Попробуйте " +
-                    "перезапустить приложение."
+                    Message = listMessagesError.NotGetData
                 });
             }
         }
@@ -407,8 +403,8 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if(!user.IsAdministrator)
-                    throw new ForbiddenException("Нет доступа для получения данных");
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
 
                 return new ParameterType().GetListParameterTypes(name);
             }
@@ -418,20 +414,20 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = listMessagesError.GetList });
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
             }
         }
 
         [HttpPost("EditParameterType")]
-        public Object EditParameterType (ParameterType parameter)
+        public Object EditParameterType(ParameterType parameter)
         {
             try
             {
                 if (!user.IsAdministrator)
-                    throw new ForbiddenException("Нет доступа к изменению данных.");
+                    throw new ForbiddenException(listMessagesError.NotAccess);
 
                 new ParameterType().EditParameterType(parameter);
-                return new { Success = "Данные сохранены." };
+                return new { Success = listMessagesError.Saved };
             }
             catch (ForbiddenException ex)
             {
@@ -439,21 +435,21 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При сохранении данных произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotSaved });
             }
         }
 
         [HttpPost("DeleteParameterTypes")]
-        public Object DeleteParameterTypes (int[] ids)
+        public Object DeleteParameterTypes(int[] ids)
         {
             try
             {
                 if (!user.IsAdministrator)
-                    throw new ForbiddenException("Нет доступа к удалению данных.");
+                    throw new ForbiddenException(listMessagesError.NotAccess);
 
                 new ParameterType().DeleteParameterTypes(ids);
 
-                return new { Success = "Данные удалены." };
+                return new { Success = listMessagesError.Deleted };
             }
             catch (ForbiddenException ex)
             {
@@ -461,7 +457,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = "При удалении данных произошла ошибка." });
+                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
             }
         }
 
@@ -482,7 +478,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = listMessagesError.GetList });
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
             }
         }
 
@@ -511,6 +507,111 @@ namespace RealtimeDataPortal.Controllers
                 new Server().DeleteServers(ids);
 
                 return new { Success = listMessagesError.Deleted };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+            }
+        }
+
+        [HttpGet("GetListTypesTag")]
+        public Object GetListTypesTag(string name)
+        {
+            try
+            {
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
+                var listTypesTag = new TagsType().GetListTypesTag(name);
+                return listTypesTag;
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+            }
+        }
+
+        [HttpPost("EditTypeTag")]
+        public Object EditTypeTag(TagsType tagType)
+        {
+            try
+            {
+                if (!user.IsAdministrator)
+                    throw new Exception(listMessagesError.NotAccess);
+
+                new TagsType().EditTypeTag(tagType);
+                return new { Success = listMessagesError.Saved };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+            }
+        }
+
+        [HttpPost("DeleteTypesTag")]
+        public Object DeleteTypesTag(int[] ids)
+        {
+            try
+            {
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
+                new TagsType().DeleteTypeTag(ids);
+                return new { Success = listMessagesError.Deleted };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+            }
+        }
+
+        [HttpGet("GetAccessProfiles")]
+        public Object GetAccessProfiles()
+        {
+            try
+            {
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
+                var accessProfiles = new AccessProfiles().GetAccessProfiles();
+                return accessProfiles;
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+            }
+        }
+
+        [HttpPost("EditAccessProfiles")]
+        public Object EditAccessProfiles(List<AccessProfiles> accessProfiles)
+        {
+            try
+            {
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
+                new AccessProfiles().EditAccessProfiles(accessProfiles);
+                return new { Success = listMessagesError.Saved };
             }
             catch (ForbiddenException ex)
             {

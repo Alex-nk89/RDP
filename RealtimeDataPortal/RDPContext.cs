@@ -16,7 +16,7 @@ namespace RealtimeDataPortal
         
         }
 
-        public virtual DbSet<Access> Access { get; set; } = null!;
+        public virtual DbSet<AccessProfiles> AccessProfiles { get; set; } = null!;
         public virtual DbSet<TreesMenu> TreesMenu { get; set; } = null!;
         public virtual DbSet<ExternalPages> ExternalPages { get; set; } = null!;
         public virtual DbSet<AccessToComponent> AccessToComponent { get; set; } = null!;
@@ -40,7 +40,7 @@ namespace RealtimeDataPortal
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Access>(entity =>
+            modelBuilder.Entity<AccessProfiles>(entity =>
             {
                 entity.HasKey("Id");
             });

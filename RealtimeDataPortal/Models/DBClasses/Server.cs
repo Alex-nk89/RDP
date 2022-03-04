@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace RealtimeDataPortal.Models
+﻿namespace RealtimeDataPortal.Models
 {
     public class Server
     {

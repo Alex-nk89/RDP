@@ -1,7 +1,7 @@
 import {
     useParams,
     Tabs,
-    ErrorsPage, ChangeParameterType, EditServer, DeleteElements, EditTypeTag
+    ErrorsPage, ChangeParameterType, EditServer, DeleteElements, EditTypeTag, AccessProfiles
 } from './index';
 
 import './administrator.sass';
@@ -20,6 +20,9 @@ export const Administrstor = () => {
         case 'type-tags':
             title = 'Редактор типов тега';
             break;
+        case 'user-roles':
+            title = 'Редактор ролей пользователя';
+            break;
         default:
             break;
     }
@@ -36,6 +39,10 @@ export const Administrstor = () => {
                 return <ErrorsPage statusCode={404} statusText='Page not found' message='Страница не найдена' />;
         }
     };
+
+    if(operation === 'access-profiles') {
+        return <AccessProfiles/>
+    }
 
     return (
         <>

@@ -32,8 +32,8 @@ namespace RealtimeDataPortal.Models
             //    }
             //}          
 
-            Access access = new Access();
-            var accessList = access.GetAccess();
+            AccessProfiles access = new AccessProfiles();
+            var accessList = access.GetAccessProfiles();
 
             if (Groups.Contains(accessList.Where(al => al.Function == "fullView").Select(al => al.ADGroup).First()))
             {

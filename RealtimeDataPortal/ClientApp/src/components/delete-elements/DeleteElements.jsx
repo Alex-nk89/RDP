@@ -33,6 +33,8 @@ const DeleteElements = ({ typeElements }) => {
                 return { find: 'GetListParameterTypes', delete: 'DeleteParameterTypes' };
             case 'servers':
                 return { find: 'GetListServers', delete: 'DeleteServers' };
+            case 'type-tags':
+                return { find: 'GetListTypesTag', delete: 'DeleteTypesTag' };
             default:
                 return null;
         }
@@ -85,7 +87,7 @@ const DeleteElements = ({ typeElements }) => {
 
         request(methods.delete, 'POST', JSON.stringify(deletingElements))
             .then(result => {
-                show('success', 'Элементы удалены.');
+                show('success', result.success);
                 form.reset();
                 setListElements([]);
             })
@@ -130,6 +132,8 @@ const DeleteElements = ({ typeElements }) => {
                                     return { id: item.parameterTypeId, name: `${item.label} - ${item.parameterTypeName}`, isChecked: false };
                                 case 'servers':
                                     return { id: item.serverId, name: `${item.serverName} (${item.database})`, isChecked: false };
+                                case 'type-tags':
+                                    return { id: item.tagTypeId, name: `${item.type} - ${item.typeName} (${item.typeShortName})`, isChecked: false };
                                 default:
                                     return null;
                             }
