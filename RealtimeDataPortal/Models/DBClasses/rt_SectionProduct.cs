@@ -16,16 +16,6 @@ namespace RealtimeDataPortal.Models
         {
             using (RDPContext rdp_base = new())
             {
-                //var deletingSectionProducts = initialSectionProducts
-                //    .Where(product =>
-                //        initialSectionProducts
-                //            .Where(product => product.SectionId == sectionId)
-                //            .Select(product => product.Id)
-                //        .Except(sectionProducts.Select(product => product.Id))
-                //        .Contains(product.ProductId))
-                //    .Where(product => product.SectionId == sectionId)
-                //    .ToList();
-
                 int[] initialSectionProductsIds = initialSectionProducts
                     .Where(product => product.SectionId == sectionId)
                     .Select(product => product.Id).ToArray();
@@ -64,7 +54,7 @@ namespace RealtimeDataPortal.Models
             using (RDPContext rdp_base = new())
             {
                 rdp_base.rt_SectionProduct.RemoveRange(sectionProducts);
-                //rdp_base.SaveChanges();
+                rdp_base.SaveChanges();
             }
         }
     }

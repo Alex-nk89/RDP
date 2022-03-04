@@ -216,7 +216,7 @@ namespace RealtimeDataPortal.Controllers
                 return new
                 {
                     Types = new TagsType().GetListTypesTag(null),
-                    Servers = new Server().GetServers()
+                    Servers = new Server().GetListServers(null)
                 };
             }
             catch
@@ -258,7 +258,7 @@ namespace RealtimeDataPortal.Controllers
             {
                 using (RDPContext rdp_base = new())
                 {
-                    List<ParameterType> parameterTypes = new ParameterType().GetParameterTypes(rdp_base);
+                    List<ParameterType> parameterTypes = new ParameterType().GetListParameterTypes(null);
                     int maxParameterId = new Parameter().GetMaxParameterId(rdp_base);
                     int maxParameterTagId = new ParameterTag().GetMaxParameterTagId(rdp_base);
 

@@ -9,35 +9,36 @@ namespace RealtimeDataPortal.Models
         public string Label { get; set; } = string.Empty;
         public string Color { get; set; } = string.Empty;
 
-        public List<ParameterType> GetParameterTypes(RDPContext rdp_base)
-        {
-            return rdp_base.ParameterType.ToList();
-        }
+        //public List<ParameterType> GetParameterTypes(RDPContext rdp_base)
+        //{
+        //    return rdp_base.ParameterType.ToList();
+        //}
 
-        public List<ParameterType> GetListParameterTypes(string name)
+        public List<ParameterType> GetListParameterTypes(string? name)
         {
             using (RDPContext rdp_base = new())
             {
-                var listParameterTypes = rdp_base.ParameterType
-                    .Where(type => EF.Functions.Like(type.ParameterTypeName, $"%{name}%") 
-                        || EF.Functions.Like(type.Label, $"%{name}%"))
-                    .AsNoTracking()
-                    .ToList();
+                IQueryable<ParameterType> listParameterType = rdp_base.ParameterType;
 
-                return listParameterTypes;
+                if (name is not null)
+                    listParameterType = listParameterType
+                        .Where(type => EF.Functions.Like(type.ParameterTypeName, $"%{name}%")
+                            || EF.Functions.Like(type.Label, $"%{name}%"));
+
+                return listParameterType.AsNoTracking().ToList();
             }
         }
 
         public void EditParameterType(ParameterType parameterType)
         {
-            using(RDPContext rdp_base = new())
+            using (RDPContext rdp_base = new())
             {
                 rdp_base.ParameterType.Update(parameterType);
                 rdp_base.SaveChanges();
             }
         }
 
-        public void DeleteParameterTypes (int[] ids)
+        public void DeleteParameterTypes(int[] ids)
         {
             using RDPContext rdp_base = new();
 

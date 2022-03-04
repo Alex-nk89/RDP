@@ -9,29 +9,18 @@
         public string Password { get; set; } = string.Empty;
         public bool IsDateOffset { get; set; } = true;
 
-        public List<Server> GetServers()
+        public List<Server> GetListServers(string? name)
         {
-            List<Server> servers = new();
-
             using (RDPContext rdp_base = new())
             {
-                servers = rdp_base.Server.ToList();
+                IQueryable<Server> listServers = rdp_base.Server;
 
-                return servers;
+                if (name is not null)
+                    listServers = listServers
+                        .Where(server => EF.Functions.Like(server.ServerName, $"%{name}%"));
+
+                return listServers.AsNoTracking().ToList();
             }
-        }
-
-        public List<Server> GetListServers(string name)
-        {
-            using RDPContext rdp_base = new();
-
-            var listServers = rdp_base.Server
-                .Where(server => EF.Functions.Like(server.ServerName, $"%{name}%"))
-                .AsNoTracking()
-                .ToList();
-
-            return listServers;
-            
         }
 
         public void EditServer(Server server)
@@ -45,7 +34,7 @@
 
         public void DeleteServers(int[] ids)
         {
-            using(RDPContext rdp_base = new())
+            using (RDPContext rdp_base = new())
             {
                 var deletingServes = rdp_base.Server
                     .Where(server => ids.Contains(server.ServerId))
