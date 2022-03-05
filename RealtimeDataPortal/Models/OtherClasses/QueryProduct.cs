@@ -82,12 +82,12 @@ namespace RealtimeDataPortal.Models.OtherClasses
                             .Where(iv => iv.TagId == tagId).First().ParameterTagId;
 
                         List<ParameterTag> removingParameterTag = new()
+                        {
+                            new ParameterTag()
                             {
-                                new ParameterTag()
-                                {
-                                    ParameterTagId = parameterTagId
-                                }
-                            };
+                                ParameterTagId = parameterTagId
+                            }
+                        };
 
                         parameterTag.RemoveParameterTag(removingParameterTag);
                     }
@@ -122,31 +122,35 @@ namespace RealtimeDataPortal.Models.OtherClasses
 
         public List<QueryProduct> GetListProducts(string name, int? productId = null)
         {
-            using(RDPContext rdp_base = new())
+            using (RDPContext rdp_base = new())
             {
                 List<QueryProduct> listProducts = (from product in rdp_base.Set<Products>()
-                                   join parameter in rdp_base.Set<Parameter>()
-                                        on product.ProductId equals parameter.ProductId into parameters
-                                   from parameter in parameters.DefaultIfEmpty()
-                                   join parameterTag in rdp_base.Set<ParameterTag>()
-                                        on parameter.ParameterId equals parameterTag.ParameterId into parameterTags
-                                   from parameterTag in parameterTags.DefaultIfEmpty()
-                                   join tag in rdp_base.Set<Tag>()
-                                        on parameterTag.TagId equals tag.TagId into tags
-                                   from tag in tags.DefaultIfEmpty()
-                                   where productId == null ? EF.Functions.Like(product.ProductName, $"%{name}%") : product.ProductId == productId
-                                   select new QueryProduct() { 
-                                       ProductId = product.ProductId, 
-                                       ProductName = product.ProductName, 
-                                       ParameterId = parameter.ParameterId, 
-                                       ParameterTypeId = parameter.ParameterTypeId,
-                                       Position = parameter.Position,
-                                       Round = parameter.Round,
-                                       ShowLimits = parameter.ShowLimit,
-                                       ParameterTagId = parameterTag.ParameterTagId,
-                                       TagId = parameterTag.TagId,
-                                       TagName = tag.TagName
-                                   }).AsNoTracking().ToList();
+                                                   join parameter in rdp_base.Set<Parameter>()
+                                                        on product.ProductId equals parameter.ProductId into parameters
+                                                   from parameter in parameters.DefaultIfEmpty()
+                                                   join parameterTag in rdp_base.Set<ParameterTag>()
+                                                        on parameter.ParameterId equals parameterTag.ParameterId into parameterTags
+                                                   from parameterTag in parameterTags.DefaultIfEmpty()
+                                                   join tag in rdp_base.Set<Tag>()
+                                                        on parameterTag.TagId equals tag.TagId into tags
+                                                   from tag in tags.DefaultIfEmpty()
+                                                   where productId == null ?
+                                                        EF.Functions.Like(product.ProductName, $"%{name}%")
+                                                        || EF.Functions.Like(parameter.Position, $"%{name}%") :
+                                                        product.ProductId == productId
+                                                   select new QueryProduct()
+                                                   {
+                                                       ProductId = product.ProductId,
+                                                       ProductName = product.ProductName,
+                                                       ParameterId = parameter.ParameterId,
+                                                       ParameterTypeId = parameter.ParameterTypeId,
+                                                       Position = parameter.Position,
+                                                       Round = parameter.Round,
+                                                       ShowLimits = parameter.ShowLimit,
+                                                       ParameterTagId = parameterTag.ParameterTagId,
+                                                       TagId = parameterTag.TagId,
+                                                       TagName = tag.TagName
+                                                   }).AsNoTracking().ToList();
 
                 return listProducts;
             }
