@@ -123,6 +123,9 @@ namespace RealtimeDataPortal.Controllers
 
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 if (type == "externalPage")
                 {
                     configurator.TreesMenu.ComponentId = configurator.AddChangeNewLink(configurator.ExternalPages);
@@ -154,6 +157,10 @@ namespace RealtimeDataPortal.Controllers
                 }
 
                 return new { Message = listMessagesError.Saved };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch (Exception ex)
             {
@@ -200,7 +207,14 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 return new TagInfo().GetTags(name);
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -213,11 +227,18 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 return new
                 {
                     Types = new TagsType().GetListTypesTag(null),
                     Servers = new Server().GetListServers(null)
                 };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -230,7 +251,14 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 return new { success = new Tag().AddChangeTag(tag) };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -243,7 +271,14 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 return new Tag().DeleteTags(id);
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -256,6 +291,9 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 using (RDPContext rdp_base = new())
                 {
                     List<ParameterType> parameterTypes = new ParameterType().GetListParameterTypes(null);
@@ -270,6 +308,10 @@ namespace RealtimeDataPortal.Controllers
                     };
                 }
             }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
+            }
             catch
             {
                 return StatusCode(500, new { Message = listMessagesError.NotGetData });
@@ -281,7 +323,14 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 return new { success = new QueryProduct().AddChangeProduct(queryProduct) };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -294,7 +343,14 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 return new QueryProduct().GetListProducts(name);
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -307,7 +363,14 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 return new Products().GetListProducts(name).ToList();
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -320,7 +383,14 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
                 return new { success = new Products().DeleteProducts(id) };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
             }
             catch
             {
@@ -487,8 +557,15 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
+                if (!user.IsAdministrator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+                    
                 new Server().EditServer(server);
                 return new { Success = listMessagesError.Saved };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
             }
             catch
             {
