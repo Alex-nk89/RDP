@@ -20,7 +20,6 @@ namespace RealtimeDataPortal
         public virtual DbSet<TreesMenu> TreesMenu { get; set; } = null!;
         public virtual DbSet<ExternalPages> ExternalPages { get; set; } = null!;
         public virtual DbSet<AccessToComponent> AccessToComponent { get; set; } = null!;
-        public virtual DbSet<Graphics> Graphics { get; set; } = null!;
         public virtual DbSet<Products> Products { get; set; } = null!;
         public virtual DbSet<Parameter> Parameter { get; set; } = null!;
         public virtual DbSet<ParameterTag> ParameterTag { get; set; } = null!;
@@ -58,11 +57,6 @@ namespace RealtimeDataPortal
             modelBuilder.Entity<AccessToComponent>(entity =>
             {
                 entity.HasKey("Id");
-            });
-
-            modelBuilder.Entity<Graphics>(entity =>
-            {
-                entity.HasKey("ComponentId");
             });
 
             modelBuilder.Entity<Products>(entity =>

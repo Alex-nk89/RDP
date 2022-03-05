@@ -57,18 +57,18 @@ namespace RealtimeDataPortal.Models
                         .Where(ep => ep.Id == componentInfo.TreesMenu.ComponentId).FirstOrDefault() ?? new();
                 else if (operation.Contains("graphic"))
                 {
-                    componentInfo.Graphics = (from graphic in rdp_base.Graphics
+                    componentInfo.Graphics = (from treesMenu in rdp_base.TreesMenu
                                               join product in rdp_base.Products
-                                                on graphic.ProductId equals product.ProductId into products
+                                                on treesMenu.ComponentId equals product.ProductId into products
                                               from product in products.DefaultIfEmpty()
                                               join parameter in rdp_base.Parameter
                                                 on product.ProductId equals parameter.ProductId into parameters
                                               from parameter in parameters.DefaultIfEmpty()
-                                              where graphic.ComponentId == componentInfo.TreesMenu.ComponentId
+                                              where treesMenu.ComponentId == componentInfo.TreesMenu.ComponentId
                                               select new Graphics()
                                               {
-                                                  ComponentId = graphic.ComponentId,
-                                                  ProductId = graphic.ProductId,
+                                                  ComponentId = treesMenu.ComponentId,
+                                                  ProductId = product.ProductId,
                                                   Name = product.ProductName,
                                                   Position = parameter.Position
                                               }).FirstOrDefault() ?? new();
@@ -104,7 +104,7 @@ namespace RealtimeDataPortal.Models
 
                     foreach(var sectionProduct in sectionProducts)
                     {
-                        componentInfo.SectionProducts.Add(sectionProduct.FirstOrDefault());
+                        componentInfo.SectionProducts.Add(sectionProduct.First());
                     }
 
                     componentInfo.maxSectionId = rdp_base.rt_Sections.Select(s => (int?)s.SectionId).Max() ?? 0;
@@ -136,17 +136,6 @@ namespace RealtimeDataPortal.Models
             }
         }
 
-        public int AddChangeGraphic(Graphics graphic)
-        {
-            using (RDPContext rdp_base = new RDPContext())
-            {
-                rdp_base.Graphics.Update(graphic);
-                rdp_base.SaveChanges();
-
-                return graphic.ComponentId;
-            }
-        }
-
         public void DeleteElement(int id)
         {
             using (RDPContext rdp_base = new RDPContext())
@@ -161,17 +150,6 @@ namespace RealtimeDataPortal.Models
                     if (removingExternalPage.Id != 0)
                     {
                         rdp_base.ExternalPages.Remove(removingExternalPage);
-                    }
-                }
-
-                if (removedElement.Type == "graphic")
-                {
-                    Graphics graphic = rdp_base.Graphics
-                        .Where(g => g.ComponentId == removedElement.ComponentId).FirstOrDefault() ?? new();
-
-                    if (graphic.ComponentId != 0)
-                    {
-                        rdp_base.Graphics.Remove(graphic);
                     }
                 }
 

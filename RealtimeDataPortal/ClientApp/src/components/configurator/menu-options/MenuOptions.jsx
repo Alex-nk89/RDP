@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { IoOptionsOutline, IoPencil, IoTrashBin, IoFolder, IoReader, IoTrendingUp, IoGrid } from "react-icons/io5";
 import { Menu, Divider, Text } from "@mantine/core";
 import { useModals } from "@mantine/modals";
@@ -13,6 +13,8 @@ const MenuOptions = ({ type, id, updatingNavbar }) => {
     const { request } = useRequest();
     const { show } = useNotification();
     const modal = useModals();
+    const { pathname } = useLocation();
+
     const configButton = <div><IoOptionsOutline /></div>
 
     const menuAttributes = {
@@ -26,6 +28,13 @@ const MenuOptions = ({ type, id, updatingNavbar }) => {
             .then(result => {
                 show('success', result.message);
                 updatingNavbar();
+
+                // Для избежания ситуации когда пользователь просматривая, например, график удаляет его
+                // и продолжает его смотреть происходит перенаправление на главную страницу
+                if(pathname.includes(type)) {
+                    window.location.href='/';
+                }
+                
             })
             .catch(error => show('error', error));
     }

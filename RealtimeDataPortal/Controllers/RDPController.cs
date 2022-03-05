@@ -132,7 +132,7 @@ namespace RealtimeDataPortal.Controllers
                 }
                 else if (type == "graphic")
                 {
-                    configurator.TreesMenu.ComponentId = configurator.AddChangeGraphic(configurator.Graphics);
+                    configurator.TreesMenu.ComponentId = configurator.Graphics.ProductId;
                 }
                 else if (type == "table")
                 {
