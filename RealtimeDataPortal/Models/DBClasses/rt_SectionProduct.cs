@@ -10,6 +10,8 @@ namespace RealtimeDataPortal.Models
         public int ProductId { get; set; }
         [NotMapped]
         public string ProductName { get; set; } = String.Empty;
+        [NotMapped]
+        public string Position { get; set; } = String.Empty;
 
         public void AddChangeSectionProducts(int sectionId, List<rt_SectionProduct> sectionProducts,
             List<rt_SectionProduct> initialSectionProducts)

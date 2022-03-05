@@ -33,7 +33,8 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
                         const filteredProductList = productListFoundIds.map(productId => {
                             return {
                                 productId: productId,
-                                productName: productsList.find(item => item.productId === productId).productName
+                                productName: productsList.find(item => item.productId === productId).productName,
+                                position: productsList.find(item => item.productId === productId).position
                             }
                         });
 
@@ -53,9 +54,9 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
 
     const selectProduct = (event) => {
         const selectedProductId = event.target.dataset.productid;
-        const { productId, productName } = productsList.find(product => Number(product.productId) === Number(selectedProductId));
+        const { productId, productName, position } = productsList.find(product => Number(product.productId) === Number(selectedProductId));
 
-        enterProduct(--number, { ...product, productId: Number(productId), productName: { value: productName, error: '' } });
+        enterProduct(--number, { ...product, productId: Number(productId), productName: { value: `${productName} (${position})`, error: '' } });
     };
 
     const closeList = () => {
@@ -93,14 +94,14 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
             </div>
 
             <div className="info-block__form__search-result" open={visibleListTags}>
-                {productsList.map(({ productId, productName }) =>
+                {productsList.map(({ productId, productName, position }) =>
                     <p
                         key={productId}
                         data-productid={productId}
                         className="info-block__form__search-result__item"
                         onClick={selectProduct}
                     >
-                        {`${productName}`}
+                        {`${productName} (${position})`}
                     </p>)}
             </div>
         </>

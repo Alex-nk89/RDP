@@ -43,7 +43,8 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
                         const filteredProductList = productListFoundIds.map(productId => {
                             return {
                                 productId: productId,
-                                productName: result.find(item => item.productId === productId).productName
+                                productName: result.find(item => item.productId === productId).productName,
+                                position: result.find(item => item.productId === productId).position
                             }
                         });
 
@@ -94,14 +95,14 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
                     />
 
                     <div className="info-block__form__search-result" open={visibleProductList}>
-                        {productListFound.map(({ productId, productName }) =>
+                        {productListFound.map(({ productId, productName, position }) =>
                             <p
                                 key={productId}
                                 data-productid={productId}
                                 className="info-block__form__search-result__item"
                                 onClick={selectProduct}
                             >
-                                {productName}
+                                {productName} ({position})
                             </p>)}
                     </div>
 

@@ -59,7 +59,7 @@ const AddChangeTableRT = ({ operation, componentInfo, updatingNavbar }) => {
                     ({
                         id: product.id,
                         productId: product.productId,
-                        productName: { value: product.productName, error: '' }
+                        productName: { value: `${product.productName} (${product.position})`, error: '' }
                     }))
                 };
             })

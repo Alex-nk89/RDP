@@ -14,7 +14,6 @@ export const AccessProfiles = () => {
     const [fetchingAccessProfiles, setFetchingAccessProfiles] = useState('loading');
     const [accessProfiles, setAccessProfiles] = useState([]);
     const [savingAccessProfiles, setSavingAccessProfiles] = useState(false);
-    const [updateForm, setUpdateForm] = useState(true);
 
     const form = useForm({
         initialValues: {
@@ -53,7 +52,6 @@ export const AccessProfiles = () => {
         ))
             .then(result => {
                 window.location.reload();
-                //setUpdateForm(!updateForm);
                 show('success', result.success);
             })
             .catch(error => show('error', error))
@@ -117,7 +115,7 @@ export const AccessProfiles = () => {
             })
             .catch(() => setFetchingAccessProfiles('error'));
         //eslint-disable-next-line
-    }, [updateForm]);
+    }, []);
 
     switch (fetchingAccessProfiles) {
         case 'loading':

@@ -10,6 +10,8 @@ namespace RealtimeDataPortal.Models
         public int ProductId { get; set; }
         [NotMapped]
         public string Name { get; set; } = string.Empty;
+        [NotMapped]
+        public string Position { get; set; } = string.Empty;
 
         public List<Attributes> GetAttributesForGraphic(int id, User user)
         {

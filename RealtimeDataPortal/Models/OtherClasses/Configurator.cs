@@ -61,12 +61,16 @@ namespace RealtimeDataPortal.Models
                                               join product in rdp_base.Products
                                                 on graphic.ProductId equals product.ProductId into products
                                               from product in products.DefaultIfEmpty()
+                                              join parameter in rdp_base.Parameter
+                                                on product.ProductId equals parameter.ProductId into parameters
+                                              from parameter in parameters.DefaultIfEmpty()
                                               where graphic.ComponentId == componentInfo.TreesMenu.ComponentId
                                               select new Graphics()
                                               {
                                                   ComponentId = graphic.ComponentId,
                                                   ProductId = graphic.ProductId,
-                                                  Name = product.ProductName
+                                                  Name = product.ProductName,
+                                                  Position = parameter.Position
                                               }).FirstOrDefault() ?? new();
                 }
                 else if (operation.Contains("table"))
@@ -76,18 +80,32 @@ namespace RealtimeDataPortal.Models
 
                     int[] sectionsIds = componentInfo.TableSections.Select(s => s.SectionId).Distinct().ToArray();
 
-                    componentInfo.SectionProducts = (from sectionProducts in rdp_base.rt_SectionProduct
-                                                     join product in rdp_base.Products
-                                                        on sectionProducts.ProductId equals product.ProductId into products
-                                                     from product in products.DefaultIfEmpty()
-                                                     where sectionsIds.Contains(sectionProducts.SectionId)
-                                                     select new rt_SectionProduct()
-                                                     {
-                                                         Id = sectionProducts.Id,
-                                                         SectionId = sectionProducts.SectionId,
-                                                         ProductId = sectionProducts.ProductId,
-                                                         ProductName = product.ProductName,
-                                                     }).ToList();
+                    // Так как есть необходимость выводить в названии продукта наименование позиции из первого параметра
+                    // выполняется дополнительная операция группировку по продукту и далее из каждой группы берет 
+                    // первая запись
+                    var sectionProducts = (from sectionProduct in rdp_base.rt_SectionProduct
+                                           join product in rdp_base.Products
+                                              on sectionProduct.ProductId equals product.ProductId into products
+                                           from product in products.DefaultIfEmpty()
+                                           join parameter in rdp_base.Parameter
+                                              on product.ProductId equals parameter.ProductId into parameters
+                                           from parameter in parameters.DefaultIfEmpty()
+                                           where sectionsIds.Contains(sectionProduct.SectionId)
+                                           select new rt_SectionProduct()
+                                           {
+                                               Id = sectionProduct.Id,
+                                               SectionId = sectionProduct.SectionId,
+                                               ProductId = sectionProduct.ProductId,
+                                               ProductName = product.ProductName,
+                                               Position = parameter.Position
+                                           })
+                                           .ToList()
+                                           .GroupBy(p => p.ProductId);
+
+                    foreach(var sectionProduct in sectionProducts)
+                    {
+                        componentInfo.SectionProducts.Add(sectionProduct.FirstOrDefault());
+                    }
 
                     componentInfo.maxSectionId = rdp_base.rt_Sections.Select(s => (int?)s.SectionId).Max() ?? 0;
                 }

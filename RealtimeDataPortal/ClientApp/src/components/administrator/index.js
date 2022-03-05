@@ -14,7 +14,7 @@ import { ChangeParameterType } from './change-parameter-type/ChangeParameterType
 import { EditServer } from './edit-server/EditServer';
 import { EditTypeTag } from './edit-type-tag/EditTypeTag';
 import DeleteElements from '../delete-elements/DeleteElements';
-import { AccessProfiles } from './user-roles/AccessProfiles';
+import { AccessProfiles } from './access-profiles/AccessProfiles';
 
 const attributesInputs = {
     required: true,

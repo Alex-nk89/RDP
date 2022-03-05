@@ -1,7 +1,7 @@
 import {
     useState, useEffect, useRef, useRequest, useNotification, Parameter, attributesInputs, settingsAddRemoveIcon,
     TextInput, Space, InputWrapper, Group, ActionIcon, Button, Loader,
-    IoRemove, IoAdd
+    IoRemove, IoAdd, IoSearch
 } from '../../index';
 
 let productList = [];
@@ -30,27 +30,23 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
     const [productListFound, setProductListFound] = useState([]);
     const [parameters, setParameters] = useState([parameter]);
 
-    const [loadingProductList, setLoadingProductList] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
-    const loaderProductList = loadingProductList ? <Loader size={16} /> : null;
+    const [searchingProduct, setSearchingProduct] = useState(false);
     const loaderSubmitForm = loadingSubmit ? <Loader size={16} /> : null;
 
     const visibleProductList = productListFound.length > 0 ? true : false;
+
+    const entryProductName = (event) => setProductName({ value: event.target.value, error: '' });
 
     const closeList = () => {
         setProductListFound([]);
     };
 
-    function searchProduct(event) {
-        const nameProduct = event.target.value;
+    const getListProducts = () => {
+        if (productName.value.length > 0) {
+            setSearchingProduct(true);
 
-        setProductName({ value: nameProduct, error: '' });
-
-
-        if (nameProduct.length > 3 && operation === 'change') {
-            setLoadingProductList(true);
-
-            request(`GetListProducts?name=${nameProduct}`)
+            request(`GetListProducts?name=${productName.value}`)
                 .then(result => {
                     if (Object.keys(result).length > 0) {
                         productList = result;
@@ -62,19 +58,20 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                         const filteredProductList = productListFoundIds.map(productId => {
                             return {
                                 productId: productId,
-                                productName: result.find(item => item.productId === productId).productName
+                                productName: result.find(item => item.productId === productId).productName,
+                                position: result.find(item => item.productId === productId).position
                             }
                         });
 
                         setProductListFound(filteredProductList);
 
                     } else {
-                        setProductName({ value: nameProduct, error: 'Поиск не дал результатов' });
+                        setProductName({ ...productName, error: 'Поиск не дал результатов' });
                         setProductListFound([]);
                     }
                 })
                 .catch(error => show('error', error))
-                .finally(() => setLoadingProductList(false));
+                .finally(() => setSearchingProduct(false));
         } else {
             setProductListFound([]);
         }
@@ -82,9 +79,10 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
 
     const selectProduct = (event) => {
         const selectedProductId = event.target.dataset.productid;
+        const selectedProductName = event.target.dataset.productname;
         const selectedProduct = productList.filter(product => Number(product.productId) === Number(selectedProductId));
 
-        setProductName({ value: event.target.textContent, error: '' });
+        setProductName({ value: selectedProductName, error: '' });
         productId = selectedProductId;
 
         const parametersId = Array.from(new Set(
@@ -173,11 +171,15 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                 .then(result => show('success', 'Продукт сохранен'))
                 .catch(error => show('error', error))
                 .finally(() => setLoadingSubmit(false));
-            
+
             setParameters([parameter]);
             setProductName({ value: '', error: '' })
         }
     };
+
+    const searchButton = operation === 'change' ?
+        searchingProduct ? <Loader size={18} /> : <IoSearch size={18} onClick={getListProducts} />
+        : null;
 
     useEffect(() => {
         productNameRef.current.focus();
@@ -200,20 +202,22 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                 <TextInput
                     {...attributesInputs}
                     {...productName}
+                    onChange={entryProductName}
                     label='Наименование'
                     placeholder='Введите наименование'
                     ref={productNameRef}
-                    rightSection={loaderProductList}
-                    onChange={searchProduct} />
+                    rightSection={searchButton}
+                />
 
                 <div className="info-block__form__search-result" open={visibleProductList}>
-                    {productListFound.map(({ productId, productName }) =>
+                    {productListFound.map(({ productId, productName, position }) =>
                         <p
                             key={productId}
                             data-productid={productId}
+                            data-productname={productName}
                             className="info-block__form__search-result__item"
                             onClick={selectProduct}>
-                            {productName}
+                            {productName} ({position})
                         </p>)}
                 </div>
 

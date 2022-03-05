@@ -95,7 +95,7 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
             .then(result => {
                 show('success', result.message);
 
-                if(action === 'add') {
+                if (action === 'add') {
                     form.reset();
                     setAccesses([]);
                 }
@@ -119,7 +119,7 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
                 access: '',
                 link: externalPages.link,
                 productId: graphics.componentId,
-                product: graphics.name
+                product: `${graphics.name} (${graphics.position})`
             }));
 
             setAccesses(adGroups);
