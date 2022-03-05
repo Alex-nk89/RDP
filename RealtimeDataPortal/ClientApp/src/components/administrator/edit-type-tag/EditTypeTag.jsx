@@ -48,9 +48,10 @@ export const EditTypeTag = ({ operation }) => {
 
     const getListTypeTags = () => {
         const typeName = form.getInputProps('typeName').value;
-        setSearchingData(true);
 
         if (typeName.length > 0) {
+            setSearchingData(true);
+
             request(`GetListTypesTag?name=${typeName}`)
                 .then(listTypesTag => {
 
@@ -63,7 +64,11 @@ export const EditTypeTag = ({ operation }) => {
                 })
                 .catch(error => show('error', error))
                 .finally(() => setSearchingData(false));
+        }else {
+            form.setErrors({ typeName: 'Введите минимум один символ' });
         }
+
+        typeNameRef.current.focus();
     };
 
     const selectTypeTag = (event) => {

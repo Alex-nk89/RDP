@@ -73,8 +73,11 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                 .catch(error => show('error', error))
                 .finally(() => setSearchingProduct(false));
         } else {
+            setProductName({ ...productName, error: 'ВВедите минимум 3 символа'})
             setProductListFound([]);
         }
+
+        productNameRef.current.focus();
     };
 
     const selectProduct = (event) => {

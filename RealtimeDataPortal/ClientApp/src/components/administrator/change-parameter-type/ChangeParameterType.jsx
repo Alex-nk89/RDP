@@ -56,10 +56,11 @@ export const ChangeParameterType = ({ operation }) => {
 
     const searchParameterTypes = () => {
         const parameterTypeName = form.getInputProps('parameterTypeName').value;
-        setSearchingData(true);
+        
 
         if (parameterTypeName.length > 0 && operation === 'change') {
             form.resetErrors();
+            setSearchingData(true);
 
             request(`GetListParameterTypes?name=${parameterTypeName}`)
                 .then(listParameterTypes => {
@@ -78,6 +79,8 @@ export const ChangeParameterType = ({ operation }) => {
         } else {
             form.setErrors({ parameterTypeName: 'Введите минимум один символ' });
         }
+
+        parameterTypeNameRef.current.focus();
     };
 
     const searchButton = operation === 'add' ? null :

@@ -82,7 +82,7 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
     const getListTags = () => {
         const name = form.getInputProps('tagName').value;
 
-        if (name.length > 0) {
+        if (name.length >= 3) {
             setLoadingTagList(true);
 
             request(`GetTags?name=${name}`)
@@ -97,8 +97,11 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
                 .catch(error => show('error', error))
                 .finally(() => setLoadingTagList(false));
         } else {
+            form.setErrors({ tagName: 'Введите минимум 3 символа'});
             setTagsList([]);
         }
+
+        nameRef.current.focus();
     };
 
     const searchButton = operation === 'change' ?

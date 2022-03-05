@@ -41,9 +41,10 @@ export const EditServer = ({ operation }) => {
 
     const getListServers = () => {
         const serverName = form.getInputProps('serverName').value;
-        setSearchingData(true);
 
         if (serverName.length > 0) {
+            setSearchingData(true);
+
             request(`GetListServers?name=${serverName}`)
                 .then(listServers => {
 
@@ -55,7 +56,11 @@ export const EditServer = ({ operation }) => {
                 })
                 .catch(error => show('error', error))
                 .finally(() => setSearchingData(false));
+        } else {
+            form.setErrors({ serverName: 'Введите минимум один символ' });
         }
+
+        serverNameRef.current.focus();
     };
 
     const searchButton = operation === 'change' ?
