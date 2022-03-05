@@ -14,7 +14,6 @@ const Configurator = ({ updatingNavbar }) => {
         if (operation !== 'change-tag' && operation !== 'change-product') {
             request(`GetComponentInformation?id=${id}&operation=${operation}`)
                 .then(componentInfo => {
-                    console.log(componentInfo);
                     setComponentInfo(componentInfo);
                     setProccess('confirmed');
                 })

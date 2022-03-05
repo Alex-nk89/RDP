@@ -1,5 +1,9 @@
 import {
-    useState, useEffect, useRef, useForm, useRequest, useNotification, TextInput, Space, attributesInputs, Select, Loader, Button
+    useState, useEffect, useRef,
+    useForm,
+    TextInput, Space, attributesInputs, Select, Loader, Button,
+    useRequest, useNotification,
+    IoSearch
 } from '../../index';
 
 const AddChangeTag = ({ operation, tagAttributes }) => {
@@ -15,7 +19,6 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
     const serversList = tagAttributes.servers.map(item => ({ label: `${item.serverName}`, value: item.serverId.toString() }));
 
     const visibleListTags = tagsList.length > 0 ? true : false;
-    const loaderTagList = loadingTagList ? <Loader size={16} /> : null;
     const loaderSubmitForm = loadingSubmit ? <Loader size={16} /> : null;
 
     const form = useForm({
@@ -76,15 +79,10 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
             });
     };
 
-    useEffect(() => {
-        document.addEventListener("click", closeList);
-
-        return () => document.removeEventListener("click", closeList);
-    }, []);
-
-    useEffect(() => {
+    const getListTags = () => {
         const name = form.getInputProps('tagName').value;
-        if (name.length > 2 && operation === 'change' && document.activeElement === nameRef.current) {
+
+        if (name.length > 0) {
             setLoadingTagList(true);
 
             request(`GetTags?name=${name}`)
@@ -98,11 +96,20 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
                 })
                 .catch(error => show('error', error))
                 .finally(() => setLoadingTagList(false));
-        } else
+        } else {
             setTagsList([]);
+        }
+    };
 
-        //eslint-disable-next-line
-    }, [form.getInputProps('tagName').value]);
+    const searchButton = operation === 'change' ?
+        loadingTagList ? <Loader size={18} /> : <IoSearch size={18} onClick={getListTags} />
+        : null;
+
+    useEffect(() => {
+        document.addEventListener("click", closeList);
+
+        return () => document.removeEventListener("click", closeList);
+    }, []);
 
     useEffect(() => {
         nameRef.current.focus();
@@ -120,7 +127,7 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
                     label='Наименование'
                     placeholder='Введите наименование тега'
                     ref={nameRef}
-                    rightSection={loaderTagList} />
+                    rightSection={searchButton} />
 
                 <div className="info-block__form__search-result" open={visibleListTags}>
                     {tagsList.map(tag =>
