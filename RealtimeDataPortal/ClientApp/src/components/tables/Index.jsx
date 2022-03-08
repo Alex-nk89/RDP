@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { useRequest } from '../../hooks/useRequest';
 import { useFormateDate } from '../../hooks/useFormateDate';
 import AppPreloader from '../loader/appPreloader';
@@ -12,7 +13,10 @@ import CellValue from './table/CellValue';
 import ProductRows from './table/ProductRows';
 
 export {
-    useState, useEffect, useCallback, useMemo, useParams, useRequest, useFormateDate,
+    useState, useEffect, useCallback, useMemo,
+    useParams,
+    useSelector,
+    useRequest, useFormateDate,
     AppPreloader, ErrorsPage, SaveToExcel, TableWrapper, CellValue, ProductRows,
     Tooltip, ActionIcon, Notification, Table, Popover,
     IoShareSocial

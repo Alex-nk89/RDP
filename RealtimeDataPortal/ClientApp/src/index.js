@@ -1,7 +1,10 @@
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+
 import App from './App';
+import store from './store';
 
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from '@mantine/notifications';
@@ -17,17 +20,19 @@ const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
-	<MantineProvider>
-		<NotificationsProvider>
-			<ModalsProvider>
-				<BrowserRouter basename={baseUrl}>
-					<StrictMode>
-						<App />
-					</StrictMode>
-				</BrowserRouter>
-			</ModalsProvider>
-		</NotificationsProvider>
-	</MantineProvider>,
+	<Provider store={store}>
+		<MantineProvider>
+			<NotificationsProvider>
+				<ModalsProvider>
+					<BrowserRouter basename={baseUrl}>
+						<StrictMode>
+							<App />
+						</StrictMode>
+					</BrowserRouter>
+				</ModalsProvider>
+			</NotificationsProvider>
+		</MantineProvider>
+	</Provider>,
 	rootElement);
 
 // If you want your app to work offline and load faster, you can change

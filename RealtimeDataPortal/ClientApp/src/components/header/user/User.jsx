@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Menu, Switch } from "@mantine/core";
 import { IoChevronDown, IoBuild, IoSettings } from "react-icons/io5";
 
 import { useNotification } from "../../configurator";
 
-const User = ({ user, isConfigModeOn, setIsConfigModeOn, isAdminModeOn, setIsAdminModeOn }) => {
+const User = ({ isConfigModeOn, setIsConfigModeOn, isAdminModeOn, setIsAdminModeOn }) => {
+    const { user } = useSelector(state => state);
     const { show } = useNotification();
     const [openedMenu, setOpenedMenu] = useState(false);
 

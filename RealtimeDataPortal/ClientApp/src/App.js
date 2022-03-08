@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Route } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container } from '@mantine/core';
 
 import Header from './components/header/Header';
@@ -14,16 +15,20 @@ import { Administrstor } from './components/administrator/Administrator';
 import AppPreloader from './components/loader/appPreloader';
 import { useRequest } from './hooks/useRequest';
 
+import { userInitialize, userFetching, userFetchingError } from './actions';
+
 import "./css/bootstrap-reboot.min.css";
 
 
 const App = () => {
-    const { request, proccess, error, setProccess } = useRequest();
+    const { request, error } = useRequest();
     const [openedNavbar, setOpenNavbar] = useState(true);
-    const [user, setUser] = useState({});
     const [isConfigModeOn, setIsConfigModeOn] = useState(false);
     const [isAdminModeOn, setIsAdminModeOn] = useState(false);
     const [updateNavbar, setUpdateNavbar] = useState(false);
+
+    const dispatch = useDispatch();
+    const { userFetchingStatus } = useSelector(state => state);
 
     const updatingNavbar = () => setUpdateNavbar(!updateNavbar);
 
@@ -43,7 +48,6 @@ const App = () => {
                 <Header
                     setOpenNavbar={setOpenNavbar}
                     openedNavbar={openedNavbar}
-                    user={user}
                     isConfigModeOn={isConfigModeOn}
                     setIsConfigModeOn={setIsConfigModeOn}
                     isAdminModeOn={isAdminModeOn}
@@ -51,7 +55,7 @@ const App = () => {
                 <Container size='md' className='container'>
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Graphics/:id" component={Graphics} />
-                    <Route exact path="/Table/:id" render={props => <TableRealtime user={user} {...props} />} />
+                    <Route exact path="/Table/:id" component={TableRealtime} />
                     <Route exact path="/Configurator/:operation/:id"
                         render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />} />
                     <Route exact path="/Administrator/:operation" component={Administrstor} />
@@ -62,16 +66,18 @@ const App = () => {
 
 
     useEffect(() => {
+        dispatch(userFetching());
+
         request('GetUser')
             .then((user) => {
-                setUser(user);
-                setProccess('confirmed');
+                dispatch(userInitialize(user));
+                //setProccess('confirmed');
             })
-            .catch(error => { });
+            .catch(() => dispatch(userFetchingError()));
         //eslint-disable-next-line
     }, [])
 
-    switch (proccess) {
+    switch (userFetchingStatus) {
         case 'loading':
             return <main><AppPreloader /></main>
         case 'confirmed':

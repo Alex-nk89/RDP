@@ -1,6 +1,6 @@
 import { useMemo, ProductRows, useFormateDate } from '../Index';
 
-const TableWrapper = ({ data, user }) => {
+const TableWrapper = ({ data }) => {
 
     let columnHeader = new Set(['Наименование']);
     let columnContent = ['productName'];
@@ -64,15 +64,15 @@ const TableWrapper = ({ data, user }) => {
                     <td key={index}></td>)}
             </tr>
 
-            return <ProductRows 
-                key={index} 
+            return <ProductRows
+                key={index}
                 index={index}
-                products={products} 
-                data={sectionData} 
-                name={sectionName} 
-                columnContent={columnContent} 
+                products={products}
+                data={sectionData}
+                name={sectionName}
+                columnContent={columnContent}
                 type={typeTag}
-                user={user} />
+            />
         });
 
         return <>{thead}

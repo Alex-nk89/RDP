@@ -1,7 +1,7 @@
 import { useEffect, useState, useParams, useRequest, AppPreloader, ErrorsPage, SaveToExcel, TableWrapper } from './Index';
 import './table.sass';
 
-const TableRealtime = ({ user }) => {
+const TableRealtime = () => {
     const { id } = useParams();
     const { request, proccess, setProccess, error } = useRequest();
     const [tableData, setTableData] = useState([]);
@@ -14,7 +14,7 @@ const TableRealtime = ({ user }) => {
                 <SaveToExcel />
             </div>
 
-            <TableWrapper data={tableData} user={user}/>
+            <TableWrapper data={tableData} />
         </div>
     )
 
@@ -28,7 +28,7 @@ const TableRealtime = ({ user }) => {
                 setTableData(tableData);
                 setProccess('confirmed');
             })
-            .catch(error => {});
+            .catch(error => { });
 
         return () => clearTimeout(updateTable);
         //eslint-disable-next-line

@@ -6,7 +6,7 @@ import User from "./user/User";
 
 import "./header.sass";
 
-const Header = ({ user, openedNavbar, setOpenNavbar, isConfigModeOn, setIsConfigModeOn, isAdminModeOn, setIsAdminModeOn }) => {
+const Header = ({ openedNavbar, setOpenNavbar, isConfigModeOn, setIsConfigModeOn, isAdminModeOn, setIsAdminModeOn }) => {
 
     const search =
         <ActionIcon>
@@ -17,7 +17,6 @@ const Header = ({ user, openedNavbar, setOpenNavbar, isConfigModeOn, setIsConfig
 
     const userBlock = useMemo(() => {
         return <User
-            user={user}
             isConfigModeOn={isConfigModeOn}
             setIsConfigModeOn={setIsConfigModeOn}
             isAdminModeOn={isAdminModeOn}
