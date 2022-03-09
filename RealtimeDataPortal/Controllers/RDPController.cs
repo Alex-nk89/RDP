@@ -13,14 +13,22 @@ namespace RealtimeDataPortal.Controllers
     {
         static readonly ListMessagesError listMessagesError = new();
 
-        static string userName = new HttpContextAccessor().HttpContext.User.Identity.Name;
-        static User user = new User(userName);
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public RDPController(IHttpContextAccessor httpContextAccessor)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
+        
+        static User user;
 
         [HttpGet("GetUser")]
         public Object GetUser()
         {
             try
             {
+                string? userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+                user = new User(userName);
                 return user;
             }
             catch

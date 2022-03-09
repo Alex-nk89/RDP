@@ -1,10 +1,14 @@
 
+using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.AspNetCore.Server.IISIntegration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication(IISDefaults.AuthenticationScheme);
 
 var app = builder.Build();
 
@@ -17,6 +21,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseAuthentication();
 
 app.UseRouting();
 
