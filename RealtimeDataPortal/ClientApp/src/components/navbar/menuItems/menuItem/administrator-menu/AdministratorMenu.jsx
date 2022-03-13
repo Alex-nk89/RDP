@@ -1,17 +1,19 @@
 
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Collapse } from '@mantine/core';
 import { IoSettings, IoChevronDown, IoBuild, IoServer, IoCodeWorking, IoPerson } from 'react-icons/io5';
 
-const AdministratorMenu = ({ isAdminModeOn }) => {
+const AdministratorMenu = () => {
+    const { adminMode } = useSelector(state => state.navbar);
     const [openedAdministrator, setOpenedAdministrator] = useState(false);
 
     const changeOpenedAdministrator = () => setOpenedAdministrator(!openedAdministrator);
 
     const isOpenFolder = openedAdministrator ? 'folder_open' : null;
 
-    const administrator = !isAdminModeOn ? null : (
+    const administrator = !adminMode ? null : (
         <div className='folder'>
             <div className='folder-with-configurator'>
                 <p onClick={changeOpenedAdministrator}>

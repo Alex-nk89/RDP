@@ -1,5 +1,5 @@
 import {
-    useState, useEffect, useRef, useRequest, useNotification,
+    useState, useEffect, useRef, useRequest, useNotification, useDispatch, useSelector,
     TextInput, Space, ActionIcon, MultiSelect, Checkbox, Button, InputWrapper, Group, Divider,
     attributesInputs, settingsAddRemoveIcon,
     IoAdd, IoRemove,
@@ -7,7 +7,9 @@ import {
 } from '../../index';
 import './tableRt.sass';
 
-const AddChangeTableRT = ({ operation, componentInfo, updatingNavbar }) => {
+import { updateNavbar } from '../../../../actions';
+
+const AddChangeTableRT = () => {
     // Компонент для добавления/редактирования таблиц реального времени
     // Начальные данные инициализируются в зависимости от типа операции:
     //  - добавление - начальные данные пусты
@@ -17,6 +19,8 @@ const AddChangeTableRT = ({ operation, componentInfo, updatingNavbar }) => {
     // При отправке данных необходимо передать 'побочные' данные ...componentInfo, так как метод сохранения общий
     //   для других форм (например, графиков, папок и т.д.)
 
+    const { operation, componentInfo } = useSelector(state => state.configurator);
+    const dispatch = useDispatch();
     const isAddOperation = operation === 'add-table' ? true : false;
     const title = isAddOperation ? 'Добавление таблицы реального времени' : 'Редактирование таблицы реального времени';
     const { table, tableSections, sectionProducts, treesMenu, maxSectionId, adGroups } = componentInfo;
@@ -197,7 +201,7 @@ const AddChangeTableRT = ({ operation, componentInfo, updatingNavbar }) => {
                         setAccesses([]);
                     }
 
-                    updatingNavbar();
+                    dispatch(updateNavbar());
                 })
                 .catch(error => show('error', error))
                 .finally(() => setFetchingData(false));
@@ -294,7 +298,7 @@ const AddChangeTableRT = ({ operation, componentInfo, updatingNavbar }) => {
                     <Space h="md" />
 
                     <Checkbox
-                        style={{ display: 'none'}}
+                        style={{ display: 'none' }}
                         label='Отображать норму ТР'
                         checked={limitVisible}
                         onChange={entryLimitVisible}

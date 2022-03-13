@@ -1,26 +1,29 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Menu, Switch } from "@mantine/core";
 import { IoChevronDown, IoBuild, IoSettings } from "react-icons/io5";
 
 import { useNotification } from "../../configurator";
+import { toogleConfigMode, toogleAdminMode } from '../../../actions';
 
-const User = ({ isConfigModeOn, setIsConfigModeOn, isAdminModeOn, setIsAdminModeOn }) => {
-    const { user } = useSelector(state => state);
+const User = () => {
+    const { user } = useSelector(state => state.user);
+    const { configMode, adminMode } = useSelector(state => state.navbar);
     const { show } = useNotification();
+    const dispatch = useDispatch();
     const [openedMenu, setOpenedMenu] = useState(false);
 
     const openMenu = () => setOpenedMenu(true);
     const closeMenu = () => setOpenedMenu(false);
 
     const changeConfigMode = () => {
-        setIsConfigModeOn(!isConfigModeOn);
-        isConfigModeOn ? show('success', 'Режим конфигуратора выключен') : show('success', 'Режим конфигуратора включен');
+        dispatch(toogleConfigMode());
+        configMode ? show('success', 'Режим конфигуратора выключен') : show('success', 'Режим конфигуратора включен');
     };
 
     const changeAdminMode = () => {
-        setIsAdminModeOn(!isAdminModeOn);
-        isAdminModeOn ? show('success', 'Режим администрирования выключен') : show('success', 'Режим администрирования включен');
+        dispatch(toogleAdminMode());
+        adminMode ? show('success', 'Режим администрирования выключен') : show('success', 'Режим администрирования включен');
     }
 
     const userBlock = user?.isAdministrator || user?.isConfigurator ?
@@ -39,14 +42,14 @@ const User = ({ isConfigModeOn, setIsConfigModeOn, isAdminModeOn, setIsAdminMode
                 <Menu.Item icon={<IoBuild />}>
                     <label>
                         Администрирование
-                        <Switch size='xs' checked={isAdminModeOn} onChange={changeAdminMode} />
+                        <Switch size='xs' checked={adminMode} onChange={changeAdminMode} />
                     </label>
                 </Menu.Item> : null}
             {user?.isConfigurator ?
                 <Menu.Item icon={<IoSettings />}>
                     <label>
                         Конфигурирование
-                        <Switch size="xs" checked={isConfigModeOn} onChange={changeConfigMode} />
+                        <Switch size="xs" checked={configMode} onChange={changeConfigMode} />
                     </label>
 
                 </Menu.Item> : null}

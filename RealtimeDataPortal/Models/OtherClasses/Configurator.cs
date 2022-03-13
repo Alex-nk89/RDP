@@ -55,7 +55,7 @@ namespace RealtimeDataPortal.Models
                 if (operation.Contains("externalPage"))
                     componentInfo.ExternalPages = rdp_base.ExternalPages
                         .Where(ep => ep.Id == componentInfo.TreesMenu.ComponentId).FirstOrDefault() ?? new();
-                else if (operation.Contains("graphic"))
+                else if (operation == "change-graphic")
                 {
                     componentInfo.Graphics = (from treesMenu in rdp_base.TreesMenu
                                               join product in rdp_base.Products
@@ -71,7 +71,7 @@ namespace RealtimeDataPortal.Models
                                                   ProductId = product.ProductId,
                                                   Name = product.ProductName,
                                                   Position = parameter.Position
-                                              }).FirstOrDefault() ?? new();
+                                              }).First() ?? new();
                 }
                 else if (operation.Contains("table"))
                 {

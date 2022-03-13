@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { IoStatsChart } from "react-icons/io5";
 
 import Main from "./menuItems/menuItem/main/Main";
@@ -9,19 +10,20 @@ import AdministratorMenu from "./menuItems/menuItem/administrator-menu/Administr
 
 import "../navbar/navbar.sass";
 
-const Navbar = ({ openedNavbar, isConfigModeOn, isAdminModeOn, updateNavbar, updatingNavbar }) => {
+const Navbar = () => {
+    const isOpenNavbar = useSelector(state => state.navbar.isOpenNavbar);
 
     return (
-        <div className={openedNavbar ? "side-navbar" : "side-navbar side-navbar-close"}>
+        <div className={isOpenNavbar ? "side-navbar" : "side-navbar side-navbar-close"}>
             <NavLink exact to="/" className="side-navbar-header">
                 <IoStatsChart />
                 Realtime Data Portal
             </NavLink>
             <div className="side-navbar-items">
-                <Main isConfigModeOn={isConfigModeOn} />
-                <ConfiguratorMenu isConfigModeOn={isConfigModeOn} />
-                <AdministratorMenu isAdminModeOn={isAdminModeOn} />
-                <MenuItems isConfigModeOn={isConfigModeOn} updateNavbar={updateNavbar} updatingNavbar={updatingNavbar} />
+                <Main />
+                <ConfiguratorMenu />
+                <AdministratorMenu />
+                <MenuItems />
             </div>
         </div>
     )

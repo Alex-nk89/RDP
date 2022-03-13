@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { useNotification } from "../../hooks/useNotification";
 import { useForm } from '@mantine/hooks';
@@ -41,7 +43,8 @@ const settingsAddRemoveIcon = {
 };
 
 export {
-    useEffect, useState, useParams, useRequest, useNotification, useRef,
+    useEffect, useState, useParams, useRequest, useNotification, useRef, 
+    useSelector, useDispatch, createSelector,
     AddChangeFolder, AppPreloader, ErrorsPage, AddChangeExternalPage, Tag, AddChangeTag, DeleteElements, Product, AddChangeProduct,
     Parameter, ParameterTag, AddChangeElement, AddChangeGraphic, AddChangeTableRT, InstructionForConfigurator, Section, SectionProducts,
     attributesInputs, settingsAddRemoveIcon,

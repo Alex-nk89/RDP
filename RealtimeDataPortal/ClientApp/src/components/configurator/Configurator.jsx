@@ -1,58 +1,64 @@
 import {
-    useState, useEffect, useParams, useRequest, AppPreloader, ErrorsPage, Tag,
+    useEffect, useParams, useRequest, useDispatch, useSelector, AppPreloader, ErrorsPage, Tag,
     Product, AddChangeElement, InstructionForConfigurator, AddChangeTableRT
 } from './index';
 import './configurator.sass';
 
-const Configurator = ({ updatingNavbar }) => {
+import { fetchingComponentInfo, operationInitialize, initializeComponentInfo } from '../../actions';
+
+const Configurator = () => {
     const { id, operation } = useParams();
-    const { request, proccess, setProccess, error } = useRequest();
-    const [componentInfo, setComponentInfo] = useState({});
+    const dispatch = useDispatch();
+    const { statusFetchingComponentInfo, componentInfo } = useSelector(state => state.configurator);
+    const { request, error } = useRequest();
 
     useEffect(() => {
+        dispatch(operationInitialize(operation));
 
         if (operation !== 'change-tag' && operation !== 'change-product') {
+            dispatch(fetchingComponentInfo());
+
             request(`GetComponentInformation?id=${id}&operation=${operation}`)
-                .then(componentInfo => {
-                    setComponentInfo(componentInfo);
-                    setProccess('confirmed');
-                })
-                .catch(error => { });
-        } else {
-            setProccess('confirmed');
+                .then(componentInfo => dispatch(initializeComponentInfo(componentInfo)))
+                .catch(() => { })
         }
 
         //eslint-disable-next-line
     }, [id, operation]);
 
-    function form(componentInfo) {
-
-        switch (operation) {
-            case 'add-table':
-                return <AddChangeTableRT operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;
-            case 'change-table':
-                return <AddChangeTableRT operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;
-            case 'change-tag':
-                return <Tag />;
-            case 'change-product':
-                return <Product />;
-            case 'instruction':
-                return <InstructionForConfigurator />;
-            default:
-                if (Object.keys(componentInfo).length > 0) {
-                    return <AddChangeElement operation={operation} componentInfo={componentInfo} updatingNavbar={updatingNavbar} />;
-                } else {
-                    return null;
-                }
-
+    const form = function () {
+        if (operation === 'change-tag') {
+            return <Tag />;
         }
-    }
 
-    switch (proccess) {
+        if (operation === 'change-product') {
+            return <Product />;
+        }
+
+        if (Object.keys(componentInfo).length > 0) {
+            if (['add-table', 'change-table'].includes(operation)) {
+                return <AddChangeTableRT />;
+            }
+
+            if (operation === 'instruction') {
+                return <InstructionForConfigurator />;
+            }
+
+            if (['add-folder', 'change-folder', 'add-externalPage', 'change-externalPage', 'add-graphic', 'change-graphic'].includes(operation)) {
+                return <AddChangeElement />;
+            }
+
+            return null;
+        }
+
+        return null;
+    }();
+
+    switch (statusFetchingComponentInfo) {
         case 'loading':
             return <AppPreloader height='calc(100vh - 116px)' />;
-        case 'confirmed':
-            return form(componentInfo);
+        case 'idle':
+            return form;
         case 'error':
             return <ErrorsPage {...error} />;
         default:

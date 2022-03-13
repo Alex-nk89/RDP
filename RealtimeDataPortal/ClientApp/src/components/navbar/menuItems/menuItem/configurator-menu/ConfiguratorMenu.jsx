@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Collapse } from '@mantine/core';
 import { IoSettings, IoChevronDown, IoCodeWorkingOutline, IoTicket, IoReader } from 'react-icons/io5';
 
-const ConfiguratorMenu = ({ isConfigModeOn }) => {
+const ConfiguratorMenu = () => {
+    const { configMode } = useSelector(state => state.navbar);
     const [openedConfigurator, setOpenedConfigurator] = useState(false);
 
     const changeOpenedConfigurator = () => setOpenedConfigurator(!openedConfigurator);
 
     const isOpenFolder = openedConfigurator ? 'folder_open' : null;
 
-    const configurator = !isConfigModeOn ? null : (
+    const configurator = !configMode ? null : (
         <div className='folder'>
             <div className='folder-with-configurator'>
                 <p onClick={changeOpenedConfigurator}>

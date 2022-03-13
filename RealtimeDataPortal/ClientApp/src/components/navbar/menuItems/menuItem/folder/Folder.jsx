@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { IoFolder, IoChevronDown } from 'react-icons/io5';
+import { useSelector } from 'react-redux';
 import { Collapse, Loader } from '@mantine/core';
 
 import { useRequest } from '../../../../../hooks/useRequest';
@@ -9,9 +10,10 @@ import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 import './folder.sass';
 import Page from '../page/Page';
 
-const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
+const Folder = ({ id, name, isFullView }) => {
     const { request, proccess, setProccess } = useRequest();
     const { show } = useNotification();
+    const configMode = useSelector(state => state.navbar.configMode);
     const [items, setItems] = useState([]);
     const [folderState, setFolderState] = useState(false);
     const [thereIsItem, setThereIsItem] = useState(false);
@@ -26,7 +28,7 @@ const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
                     setItems(menuItems);
                     setThereIsItem(true);
 
-                    if(Object.keys(menuItems).length === 0) {
+                    if (Object.keys(menuItems).length === 0) {
                         show('warning', 'Папка пуста');
                     }
                 })
@@ -51,15 +53,15 @@ const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
     const menuItems = items.map(({ id, name, isFullView, type, componentId }) =>
         type === 'folder' ?
             <li key={id}>
-                <Folder id={id} name={name} isFullView={isFullView} isConfigModeOn={isConfigModeOn} updatingNavbar={updatingNavbar} />
+                <Folder id={id} name={name} isFullView={isFullView} />
             </li> :
             <li key={id} >
-                <Page id={id} name={name} componentId={componentId} type={type} isConfigModeOn={isConfigModeOn} updatingNavbar={updatingNavbar} />
+                <Page id={id} name={name} componentId={componentId} type={type} />
             </li>);
 
-    const menuConfig = isConfigModeOn ? <MenuOptions type={'folder'} id={id} updatingNavbar={updatingNavbar} /> : null;
+    const menuConfig = configMode ? <MenuOptions type={'folder'} id={id} /> : null;
 
-    const loader = proccess === 'loading' ? <Loader size={16} sx={(theme) => ({ stroke: theme.colors.gray[0]})}/> : null;
+    const loader = proccess === 'loading' ? <Loader size={16} sx={(theme) => ({ stroke: theme.colors.gray[0] })} /> : null;
 
     return (
         <div className='folder'>
@@ -68,7 +70,7 @@ const Folder = ({ id, name, isFullView, isConfigModeOn, updatingNavbar }) => {
                     <IoFolder />
                     <span>{name}</span>
                     {loader}
-                    {isConfigModeOn ? null : <IoChevronDown className={`folder ${isOpenFolder}`} />}
+                    {configMode ? null : <IoChevronDown className={`folder ${isOpenFolder}`} />}
                 </p>
                 {menuConfig}
             </div>

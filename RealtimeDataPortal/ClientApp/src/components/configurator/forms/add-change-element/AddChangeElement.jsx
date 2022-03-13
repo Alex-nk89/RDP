@@ -1,13 +1,17 @@
 import {
     useState, useEffect, useRef, useForm, useRequest, useNotification,
+    useDispatch, useSelector,
     AddChangeGraphic, AddChangeFolder, AddChangeExternalPage,
     Space, ActionIcon, MultiSelect,
     IoAdd
 } from '../../index';
 
-const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
+import { updateNavbar } from '../../../../actions';
 
+const AddChangeElement = () => {
+    const { componentInfo, operation } = useSelector(state => state.configurator);
     const { treesMenu, externalPages, graphics, adGroups } = { ...componentInfo };
+
     const [accesses, setAccesses] = useState([]);
     const [oldAccesses, setOldAccesses] = useState([]);
     const [loadingForButton, setLoadingForButton] = useState(false);
@@ -15,6 +19,7 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
     const nameRef = useRef(null);
     const { request } = useRequest();
     const { show } = useNotification();
+    const dispatch = useDispatch();
     const [action, type] = operation.split('-');
 
     const form = useForm({
@@ -100,7 +105,7 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
                     setAccesses([]);
                 }
 
-                updatingNavbar();
+                dispatch(updateNavbar());
             })
             .catch(error => show('error', error))
             .finally(() => setLoadingForButton(false));
@@ -126,7 +131,7 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
             setOldAccesses(adGroups);
         }
 
-        nameRef.current.focus();
+        nameRef.current?.focus();
         //eslint-disable-next-line
     }, []);
 
@@ -141,7 +146,8 @@ const AddChangeElement = ({ operation, componentInfo, updatingNavbar }) => {
             return <AddChangeGraphic {...attributes} />;
         case 'externalPage':
             return <AddChangeExternalPage {...attributes} />;
-        default: return null;
+        default:
+            return null;
     }
 }
 

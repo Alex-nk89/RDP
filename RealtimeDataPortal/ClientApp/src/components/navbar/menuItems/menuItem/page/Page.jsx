@@ -1,11 +1,13 @@
 import { NavLink, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { IoReaderOutline, IoGridOutline, IoLayersOutline, IoTrendingUpOutline } from 'react-icons/io5';
 
 import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 
 import './page.sass';
 
-const Page = ({ id, name, componentId, type, isConfigModeOn, updatingNavbar }) => {
+const Page = ({ id, name, componentId, type }) => {
+    const { configMode } = useSelector(state => state.navbar);
     let link;
 
     switch (type) {
@@ -31,7 +33,7 @@ const Page = ({ id, name, componentId, type, isConfigModeOn, updatingNavbar }) =
 
     const activeLink = useLocation().pathname === link.path ? 'active-link' : null;
 
-    const menuConfig = isConfigModeOn ? <MenuOptions id={id} type={type} updatingNavbar={updatingNavbar} /> : null;
+    const menuConfig = configMode ? <MenuOptions id={id} type={type} /> : null;
 
     return (
         <div className={`page-with-configurator ${activeLink}`}>

@@ -1,15 +1,17 @@
 import { Link, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { IoOptionsOutline, IoPencil, IoTrashBin, IoFolder, IoReader, IoTrendingUp, IoGrid } from "react-icons/io5";
 import { Menu, Divider, Text } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 
 import { useRequest } from "..";
 import { useNotification } from "..";
+import { updateNavbar } from "../../../actions";
 
 import './menuOptions.sass';
 
-const MenuOptions = ({ type, id, updatingNavbar }) => {
-
+const MenuOptions = ({ type, id }) => {
+    const dispatch = useDispatch();
     const { request } = useRequest();
     const { show } = useNotification();
     const modal = useModals();
@@ -27,14 +29,14 @@ const MenuOptions = ({ type, id, updatingNavbar }) => {
         request(`DeleteElement?id=${id}`)
             .then(result => {
                 show('success', result.message);
-                updatingNavbar();
+                dispatch(updateNavbar());
 
                 // Для избежания ситуации когда пользователь просматривая, например, график удаляет его
                 // и продолжает его смотреть происходит перенаправление на главную страницу
-                if(pathname.includes(type)) {
-                    window.location.href='/';
+                if (pathname.includes(type)) {
+                    window.location.href = '/';
                 }
-                
+
             })
             .catch(error => show('error', error));
     }

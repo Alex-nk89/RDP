@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { Skeleton } from '@mantine/core';
 
 import { useRequest } from '../../../hooks/useRequest';
@@ -6,31 +7,28 @@ import { useNotification } from '../../../hooks/useNotification';
 import Folder from './menuItem/folder/Folder';
 import Page from './menuItem/page/Page';
 
-const MenuItems = ({ isConfigModeOn, updateNavbar, updatingNavbar }) => {
-    
+const MenuItems = () => {
+
     const { request, proccess, setProccess } = useRequest();
     const { show } = useNotification();
+    const { configMode, updateNavbar } = useSelector(state => state.navbar);
     const [items, setItems] = useState([]);
-
 
     const menuItems = items.map(({ id, name, componentId, isFullView, type }) =>
         type === 'folder' ?
-            <Folder 
-                key={id} 
-                id={id} 
-                name={name} 
-                isFullView={isFullView} 
-                isConfigModeOn={isConfigModeOn} 
-                updateNavbar={updateNavbar}
-                updatingNavbar={updatingNavbar}/> :
-            <Page 
-                key={id} 
-                id={id} 
-                name={name} 
+            <Folder
+                key={id}
+                id={id}
+                name={name}
+                isFullView={isFullView}
+            /> :
+            <Page
+                key={id}
+                id={id}
+                name={name}
                 componentId={componentId}
-                type={type} 
-                isConfigModeOn={isConfigModeOn} 
-                updatingNavbar={updatingNavbar}/>);
+                type={type}
+            />);
 
     const menu = (proccess, menuItems) => {
         switch (proccess) {
@@ -56,7 +54,7 @@ const MenuItems = ({ isConfigModeOn, updateNavbar, updatingNavbar }) => {
     const itemsBlock = useMemo(() => {
         return menu(proccess, menuItems);
         //eslint-disable-next-line
-    }, [proccess, isConfigModeOn, items])
+    }, [proccess, configMode, items])
 
 
     return (

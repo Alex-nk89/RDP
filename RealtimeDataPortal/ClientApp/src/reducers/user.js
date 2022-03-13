@@ -3,7 +3,7 @@ const initialState = {
     userFetchingStatus: 'idle'
 };
 
-const reducer = (state = initialState, action) => {
+const user = (state = initialState, action) => {
     switch (action.type) {
         case 'USER_INITIALIZE':
             return {
@@ -26,4 +26,4 @@ const reducer = (state = initialState, action) => {
     }
 };
 
-export default reducer;
+export default user;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container } from '@mantine/core';
@@ -19,45 +19,27 @@ import { userInitialize, userFetching, userFetchingError } from './actions';
 
 import "./css/bootstrap-reboot.min.css";
 
-
 const App = () => {
     const { request, error } = useRequest();
-    const [openedNavbar, setOpenNavbar] = useState(true);
-    const [isConfigModeOn, setIsConfigModeOn] = useState(false);
-    const [isAdminModeOn, setIsAdminModeOn] = useState(false);
-    const [updateNavbar, setUpdateNavbar] = useState(false);
 
     const dispatch = useDispatch();
-    const { userFetchingStatus } = useSelector(state => state);
-
-    const updatingNavbar = () => setUpdateNavbar(!updateNavbar);
+    const { userFetchingStatus } = useSelector(state => state.user);
+    const { isOpenNavbar } = useSelector(state => state.navbar);
 
     const app =
         <>
             <nav>
-                <Navbar
-                    openedNavbar={openedNavbar}
-                    isConfigModeOn={isConfigModeOn}
-                    isAdminModeOn={isAdminModeOn}
-                    updateNavbar={updateNavbar}
-                    updatingNavbar={updatingNavbar}
-                />
+                <Navbar />
             </nav>
 
-            <main className={`${openedNavbar ? 'navbarOpen' : ''}`}>
-                <Header
-                    setOpenNavbar={setOpenNavbar}
-                    openedNavbar={openedNavbar}
-                    isConfigModeOn={isConfigModeOn}
-                    setIsConfigModeOn={setIsConfigModeOn}
-                    isAdminModeOn={isAdminModeOn}
-                    setIsAdminModeOn={setIsAdminModeOn} />
+            <main className={`${isOpenNavbar ? 'navbarOpen' : ''}`}>
+                <Header />
+
                 <Container size='md' className='container'>
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Graphics/:id" component={Graphics} />
                     <Route exact path="/Table/:id" component={TableRealtime} />
-                    <Route exact path="/Configurator/:operation/:id"
-                        render={props => <Configurator updatingNavbar={updatingNavbar} {...props} />} />
+                    <Route exact path="/Configurator/:operation/:id" component={Configurator} />
                     <Route exact path="/Administrator/:operation" component={Administrstor} />
                     <Route exact path="/Error" component={ErrorsPage} />
                 </Container>
