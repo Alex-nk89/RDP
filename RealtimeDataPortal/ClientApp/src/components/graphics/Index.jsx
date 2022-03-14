@@ -1,5 +1,10 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
-import { LoadingOverlay } from '@mantine/core';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { createSelector } from 'reselect';
+import { LoadingOverlay, Space, Tooltip, Button, Tabs } from '@mantine/core';
+import { IoTrendingUpOutline, IoPrintOutline } from 'react-icons/io5';
+import { BsTable } from 'react-icons/bs';
 
 import TabsHeader from "./tabs/Tabs";
 import ErrorsPage from '../errors-page/ErrorsPage';
@@ -20,8 +25,11 @@ import { useFormateDate } from '../../hooks/useFormateDate';
 import { useRequest } from '../../hooks/useRequest';
 
 export {
-    useState, useEffect, useMemo, useRef,
+    useState, useEffect, useCallback, useMemo, useRef,
+    useParams,
+    useSelector, useDispatch, createSelector,
     TabsHeader, ErrorsPage, AppPreloader, HeaderGraphics, TabContent, Graphic, Settings, Calendar,
     MonthCalendar, DayCalendar, RangeCalendar, useFormateDate, useRequest, Chart, ApexChart, TableForGraphic,
-    LoadingOverlay
+    LoadingOverlay, Space, Tooltip, Button, Tabs,
+    IoTrendingUpOutline, IoPrintOutline, BsTable
 };

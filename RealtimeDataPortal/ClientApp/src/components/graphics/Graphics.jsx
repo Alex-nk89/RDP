@@ -1,57 +1,36 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import {
+    useEffect,
+    useParams,
+    useSelector, useDispatch,
+    ErrorsPage, AppPreloader, TabContent,
+    useRequest
+} from './Index';
 
-import { ErrorsPage, AppPreloader, TabContent, useRequest} from './Index';
-
+import { initialStateGraphics, getAttributesForGraphic } from '../../actions';
 import './graphics.sass';
 
 const Graphics = () => {
-    const { request, error, proccess, setProccess } = useRequest();
+    const { request, error } = useRequest();
     const { id } = useParams();
-    const [attributesGraphic, setAttributesGraphic] = useState({});
-    const [activeTab, setActiveTab] = useState(0);
-
-    const [isScale, setIsScale] = useState(false);
-    const [isVisibleTable, setIsVisibleTable] = useState(true);
-
-    const tabsNames = Object.keys(attributesGraphic).length === 0 ? [] :
-        [...new Set(attributesGraphic.map(item => item.typeName))];
+    const dispatch = useDispatch();
+    const { statusFetchingGraphic, attributesGraphic, tabsNames } = useSelector(state => state.graphics);
 
     const tabsContent = tabsNames.length > 0 ? tabsNames.map((item, index) =>
-        <TabContent 
-            key={index} 
-            attributesGraphic={attributesGraphic} 
-            tabName={item} 
-            activeTab={activeTab} 
-            setActiveTab={setActiveTab}
-            index={index}
-            tabsNames={tabsNames}
-            isScale={isScale}
-            setIsScale={setIsScale}
-            isVisibleTable={isVisibleTable}
-            setIsVisibleTable={setIsVisibleTable}
-            />) : null;
+        <TabContent key={index} index={index} />) : null;
 
     const graphic = Object.keys(attributesGraphic).length === 0 ? null : <>
         {tabsContent}
     </>;
 
     useEffect(() => {
-        setActiveTab(0);
-        setIsScale(false);
-        setIsVisibleTable(true);
+        dispatch(initialStateGraphics());
 
         request(`GetAttributesForGraphic?id=${id}`)
-            .then(attributesGraphic => {
-                if (Object.keys(attributesGraphic).length !== 0) {
-                    setAttributesGraphic(attributesGraphic);
-                    setProccess('confirmed');
-                }
-            });
+            .then(attributesGraphic => dispatch(getAttributesForGraphic(attributesGraphic)));
         //eslint-disable-next-line
     }, [id]);
 
-    switch (proccess) {
+    switch (statusFetchingGraphic) {
         case 'loading':
             return <AppPreloader height='calc(100vh - 116px)' />;
         case 'confirmed':

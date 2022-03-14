@@ -1,10 +1,15 @@
-import { Space, Tooltip, Button } from "@mantine/core";
-import { IoTrendingUpOutline, IoPrintOutline } from 'react-icons/io5'; //IoGridOutline
-import { BsTable } from 'react-icons/bs';
+import {
+    useSelector, useDispatch,
+    Calendar,
+    Space, Tooltip, Button,
+    IoTrendingUpOutline, IoPrintOutline, BsTable
+} from '../Index';
+import { toogleIsScale, toogleIsVisibleTable } from '../../../actions';
 
-import { Calendar } from '../Index'
+const Settings = ({ calendar, setDate }) => {
+    const dispatch = useDispatch();
+    const { isScale, isVisibleTable } = useSelector(state => state.graphics);
 
-const Settings = ({ calendar, setDate, isScale, setIsScale, isVisibleTable, setIsVisibleTable }) => {
     const settingsOn = {
         compact: true,
         variant: 'filled',
@@ -21,15 +26,15 @@ const Settings = ({ calendar, setDate, isScale, setIsScale, isVisibleTable, setI
     const settingsScaleToggle = isScale ? settingsOn : settingsOff;
     const settingsTableToggle = isVisibleTable ? settingsOn : settingsOff;
 
-    const toggleScale = () => setIsScale(!isScale);
-    const toggleVisibleTable = () => setIsVisibleTable(!isVisibleTable);
+    const toggleScale = () => dispatch(toogleIsScale());
+    const toggleVisibleTable = () => dispatch(toogleIsVisibleTable());
 
     const toPrint = () => window.print();
 
     return (
         <div className="settings">
             <div className='settings__calendar'>
-                <Calendar calendar={calendar} setDate={setDate}/>
+                <Calendar calendar={calendar} setDate={setDate} />
             </div>
 
             <div className='settings__additional'>
@@ -45,7 +50,7 @@ const Settings = ({ calendar, setDate, isScale, setIsScale, isVisibleTable, setI
 
                 <Tooltip label='Масштабировать' onClick={toggleScale}>
                     <Button {...settingsScaleToggle}>
-                        <IoTrendingUpOutline size={16} color={isScale ? 'white' : null}/>
+                        <IoTrendingUpOutline size={16} color={isScale ? 'white' : null} />
                     </Button>
                 </Tooltip>
 
@@ -53,7 +58,7 @@ const Settings = ({ calendar, setDate, isScale, setIsScale, isVisibleTable, setI
 
                 <Tooltip label='Скрыть таблицы' onClick={toggleVisibleTable}>
                     <Button {...settingsTableToggle}>
-                        <BsTable size={16} color={isVisibleTable ? 'white' : null}/>
+                        <BsTable size={16} color={isVisibleTable ? 'white' : null} />
                     </Button>
                 </Tooltip>
 

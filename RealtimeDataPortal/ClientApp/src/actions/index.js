@@ -59,4 +59,42 @@ export const initializeComponentInfo = (componentInfo) => {
         type: 'INITIALIZE_COMPONENT_INFO',
         payload: componentInfo
     }
-}
+};
+
+export const initialStateGraphics = () => {
+    return {
+        type: 'INITIAL_STATE_GRAPHICS'
+    }
+};
+
+export const getAttributesForGraphic = (attributesGraphic) => {
+    return {
+        type: 'FETCHED_ATTRIBUTES_GRAPHIC',
+        payload: attributesGraphic
+    }
+};
+
+export const fetchedAttributesGraphicError = () => {
+    return {
+        type: 'FETCHED_ATTRIBUTES_GRAPHIC_ERROR'
+    }
+};
+
+export const toogleIsScale = () => {
+    return {
+        type: 'TOOGLE_IS_SCALE'
+    }
+};
+
+export const toogleIsVisibleTable = () => {
+    return {
+        type: 'TOOGLE_IS_VISIBLE_TABLE'
+    }
+};
+
+export const setActiveTab = (activeTab) => {
+    return {
+        type: 'SET_ACTIVE_TAB',
+        payload: activeTab
+    }
+};

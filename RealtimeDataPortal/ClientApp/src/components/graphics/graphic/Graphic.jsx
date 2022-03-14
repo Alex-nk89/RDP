@@ -1,12 +1,16 @@
 import {
     useState, useEffect, useMemo, useRef,
+    useSelector,
     LoadingOverlay,
     AppPreloader, ErrorsPage, useRequest, Chart, TableForGraphic, useFormateDate
 } from '../Index';
 
-const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
+const Graphic = ({ attributes, date }) => {
+    const { isScale, isVisibleTable } = useSelector(state => state.graphics);
+
     const { round, nameParameter, calendar, serverConnection, tagName, wwResolution, visibleToGraphic,
         position, isDateOffset } = { ...attributes };
+        
     const { request, proccess, setProccess, error } = useRequest();
     const { formateDate } = useFormateDate();
     const graphicRef = useRef();
@@ -65,36 +69,6 @@ const Graphic = ({ attributes, date, isScale, isVisibleTable }) => {
                     setProccess('confirmed');
                 })
                 .catch(error => { });
-        /* setData({
-            history: [
-                { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 }, { name: '01.01.2022 10:00:00', value: 4 },
-                { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 }, { name: '01.01.2022 11:00:00', value: 2 },
-                { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 }, { name: '01.01.2022 12:00:00', value: 3 },
-                { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 }, { name: '01.01.2022 13:00:00', value: 5 },
-                { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 }, { name: '01.01.2022 14:00:00', value: 7 },
-                { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 }, { name: '01.01.2022 15:00:00', value: 2 },
-                { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 }, { name: '01.01.2022 16:00:00', value: 1 },
-                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-                { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 }, { name: '01.01.2022 17:00:00', value: 4 },
-            ],
-            parameters: { unit: 'кг', scaleMinEU: -20, scaleMaxEU: 20 }
-        }); */
-        /* setData({
-            history: [
-                { dateTime: '01.01.2022 10:00:00', value: 4 },
-                { dateTime: '01.01.2022 11:00:00', value: 2 },
-                { dateTime: '01.01.2022 12:00:00', value: 3 },
-                { dateTime: '01.01.2022 13:00:00', value: 5 },
-                { dateTime: '01.01.2022 14:00:00', value: 7 },
-                { dateTime: '01.01.2022 15:00:00', value: 2 },
-                { dateTime: '01.01.2022 16:00:00', value: 1 },
-                { dateTime: '01.01.2022 17:00:00', value: 4 }
-            ]
-        }); */
-        //setProccess('confirmed');
 
         //eslint-disable-next-line
     }, [date]);
