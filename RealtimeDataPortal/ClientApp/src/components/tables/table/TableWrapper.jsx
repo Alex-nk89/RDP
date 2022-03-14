@@ -58,11 +58,14 @@ const TableWrapper = ({ data }) => {
                 sectionData.map(product => product.productId)
             );
 
-            const sectionName = <tr colSpan={columnHeader.size} className='section'>
-                {Array.from(columnHeader).map((item, index) => index === 0 ?
-                    <td key={index}>{section}</td> :
-                    <td key={index}></td>)}
-            </tr>
+            const isVisibleSectionHeader = !(Array.from(sections).length === 1 && Array.from(sections)[0].length === 0);
+
+            const sectionName = isVisibleSectionHeader ? (
+                <tr colSpan={columnHeader.size} className='section'>
+                    {Array.from(columnHeader).map((item, index) => index === 0 ?
+                        <td key={index}>{section}</td> :
+                        <td key={index}></td>)}
+                </tr>) : (null);
 
             return <ProductRows
                 key={index}

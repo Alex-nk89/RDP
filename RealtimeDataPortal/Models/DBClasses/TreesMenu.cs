@@ -52,7 +52,6 @@ namespace RealtimeDataPortal.Models
                         ComponentId= tm.ComponentId,
                         isFullView = true
                     })
-                    .OrderBy(tm => tm.Name)
                     .Distinct();
 
                 if (!isFullView)
@@ -69,7 +68,8 @@ namespace RealtimeDataPortal.Models
                                       Type = tm.Type,
                                       ComponentId = tm.ComponentId,
                                       isFullView = menuItem.IdChildren == 0 ? true : false
-                                  }).Distinct();
+                                  })
+                                  .Distinct();
                 }
 
                 List<TreesMenu> treesMenu = treesMenus.ToList();

@@ -132,8 +132,8 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
     const checkForm = () => {
         let verified = true;
 
-        if (productName.value.trim().length < 5) {
-            setProductName({ ...productName, error: 'Наименование должно содержать от 5 символов' })
+        if (productName.value.trim().length < 4) {
+            setProductName({ ...productName, error: 'Наименование должно содержать от 4 символов' })
             verified = false;
         }
 
