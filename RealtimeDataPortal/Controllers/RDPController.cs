@@ -28,7 +28,7 @@ namespace RealtimeDataPortal.Controllers
             try
             {
                 string? userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-                user = new User(userName);
+                user = new User("NagaytsevAE");
                 return user;
             }
             catch

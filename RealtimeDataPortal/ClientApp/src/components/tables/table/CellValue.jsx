@@ -2,7 +2,7 @@ import { useState, useSelector, Notification, Popover } from '../Index';
 import '../table.sass';
 
 const CellValue = ({ parameter, round }) => {
-    const { user } = useSelector(state => state);
+    const { user } = useSelector(state => state.user);
     const [openedPopover, setOpenedPopover] = useState(false);
 
     const togglePopover = () => setOpenedPopover(!openedPopover);
