@@ -28,32 +28,42 @@ namespace RealtimeDataPortal.Models
 
             using (RDPContext rdp_base = new())
             {
-                tableRealtime = (from tm in rdp_base.TreesMenu
-                     join trt in rdp_base.rt_Tables on tm.ComponentId equals trt.TableId into tables
+                tableRealtime = (from treesMenu in rdp_base.TreesMenu
+                     join table in rdp_base.rt_Tables 
+                        on treesMenu.ComponentId equals table.TableId into tables
                      from table in tables.DefaultIfEmpty()
-                     join strt in rdp_base.rt_Sections on table.TableId equals strt.TableId into sections
+                     join section in rdp_base.rt_Sections 
+                        on table.TableId equals section.TableId into sections
                      from section in sections.DefaultIfEmpty()
-                     join sp in rdp_base.rt_SectionProduct on section.SectionId equals sp.SectionId into sectionProducts
+                     join sectionProduct in rdp_base.rt_SectionProduct 
+                        on section.SectionId equals sectionProduct.SectionId into sectionProducts
                      from sectionProduct in sectionProducts.DefaultIfEmpty()
-                     join prdt in rdp_base.Products on sectionProduct.ProductId equals prdt.ProductId into products
+                     join product in rdp_base.Products 
+                        on sectionProduct.ProductId equals product.ProductId into products
                      from product in products.DefaultIfEmpty()
-                     join param in rdp_base.Parameter on product.ProductId equals param.ProductId into parameters
+                     join parameter in rdp_base.Parameter 
+                        on product.ProductId equals parameter.ProductId into parameters
                      from parameter in parameters.DefaultIfEmpty()
-                     join pt in rdp_base.ParameterTag on parameter.ParameterId equals pt.ParameterId into parameterTags
+                     join parameterTag in rdp_base.ParameterTag 
+                        on parameter.ParameterId equals parameterTag.ParameterId into parameterTags
                      from parameterTag in parameterTags.DefaultIfEmpty()
-                     join tgs in rdp_base.Tag on parameterTag.TagId equals tgs.TagId into tags
+                     join tag in rdp_base.Tag 
+                        on parameterTag.TagId equals tag.TagId into tags
                      from tag in tags.DefaultIfEmpty()
-                     join tt in rdp_base.TagsType on tag.TagTypeId equals tt.TagTypeId into tagsType
+                     join tagsType in rdp_base.TagsType 
+                        on tag.TagTypeId equals tagsType.TagTypeId into tagsType
                      from tagType in tagsType.DefaultIfEmpty()
-                     join ptype in rdp_base.ParameterType on parameter.ParameterTypeId equals ptype.ParameterTypeId into parameterTypes
+                     join parameterType in rdp_base.ParameterType 
+                        on parameter.ParameterTypeId equals parameterType.ParameterTypeId into parameterTypes
                      from parameterType in parameterTypes.DefaultIfEmpty()
-                     join srvr in rdp_base.Server on tag.ServerId equals srvr.ServerId into servers
+                     join server in rdp_base.Server 
+                        on tag.ServerId equals server.ServerId into servers
                      from server in servers.DefaultIfEmpty()
-                     where tm.Id == id
+                     where treesMenu.Id == id
                      select new Query_rtTable()
                      {
-                         Id = tm.Id,
-                         Name = tm.Name,
+                         Id = treesMenu.Id,
+                         Name = treesMenu.Name,
                          PositionVisible = table.PositionVisible,
                          UnitVisible = table.UnitVisible,
                          ScaleVisible = table.ScaleVisible,
@@ -94,7 +104,7 @@ namespace RealtimeDataPortal.Models
 
                 tagNames = tagNames.Remove(tagNames.Length - 1);
 
-                listValues.AddRange(GetValueForTags(tagNames, valueOneServer.First().ServerConnection));
+                listValues.AddRange(GetValueForTags(tagNames, valueOneServer.First().ServerConnection, tableRealtime.First().LimitVisible));
             });
 
             tableRealtime = (from table in tableRealtime
@@ -128,20 +138,26 @@ namespace RealtimeDataPortal.Models
         return tableRealtime;
      }
 
-    public List<QueryInServer_rtTable> GetValueForTags(string tagNames, string stringConnectionServer)
+    public List<QueryInServer_rtTable> GetValueForTags(string tagNames, string stringConnectionServer, bool isLimitVisible)
         {
             List<QueryInServer_rtTable> listValues = new List<QueryInServer_rtTable>();
 
             using (OleDbConnection connection = new OleDbConnection(stringConnectionServer))
             {
+                string selectLimit = isLimitVisible ?
+                    ",\n [Runtime].[dbo].[Limit].LimitNameKey, [Runtime].[dbo].[Limit].Value as LimitValue " : " ";
+
+                string joinLimit = isLimitVisible ? "\n left join [Runtime].[dbo].[Limit] " +
+                    "\n on [Runtime].[dbo].[Live].TagName = [Runtime].[dbo].[Limit].TagName " : "";
+
                 string sqlExpression = $"select [Runtime].[dbo].[Live].TagName, [Runtime].[dbo].[Live].Value, " +
                             $"[Runtime].[dbo].[AnalogTag].MinEU, [Runtime].[dbo].[AnalogTag].MaxEU, " +
-                            $"[Runtime].[dbo].[EngineeringUnit].Unit " +
+                            $"[Runtime].[dbo].[EngineeringUnit].Unit{selectLimit}" +
                             $"from [Runtime].[dbo].[Live] " +
                             $"join [Runtime].[dbo].[AnalogTag] " +
                             $"on [Runtime].[dbo].[Live].TagName = [Runtime].[dbo].[AnalogTag].TagName " +
                             $"join [Runtime].[dbo].[EngineeringUnit] " +
-                            $"on [Runtime].[dbo].[AnalogTag].EUKey = [Runtime].[dbo].[EngineeringUnit].EUKey " +
+                            $"on [Runtime].[dbo].[AnalogTag].EUKey = [Runtime].[dbo].[EngineeringUnit].EUKey {joinLimit}" +
                             $" where [Runtime].[dbo].[Live].TagName in ({tagNames})";
 
                 connection.Open();
@@ -155,9 +171,46 @@ namespace RealtimeDataPortal.Models
                         TagName = result["TagName"].ToString(),
                         Unit = result["Unit"].ToString(),
                         Value = (double?)result["Value"],
-                        Scale = $"{(double)result["MinEU"]}...{(double)result["MaxEU"]}"
+                        Scale = $"{(double)result["MinEU"]}...{(double)result["MaxEU"]}",
+                        LimitType = isLimitVisible ? result["LimitNameKey"].ToString() : null,
+                        LimitValue = isLimitVisible ? result["LimitValue"].ToString() : null
                     });
                 }
+            }
+
+            if (!isLimitVisible)
+                return listValues;
+
+            var listValueWithLimits = listValues.GroupBy(value => value.TagName);
+            listValues = new List<QueryInServer_rtTable>();
+
+            foreach(var value in listValueWithLimits)
+            {
+                string limits = string.Empty;
+                string? Lolo = value.Where(value => value.LimitType == "1").Select(value => value.LimitValue).FirstOrDefault();
+                string? Lo = value.Where(value => value.LimitType == "2").Select(value => value.LimitValue).FirstOrDefault();
+                string? Hi = value.Where(value => value.LimitType == "3").Select(value => value.LimitValue).FirstOrDefault();
+                string? Hihi = value.Where(value => value.LimitType == "4").Select(value => value.LimitValue).FirstOrDefault();
+
+                if ((Lolo is not null || Hihi is not null) && (Lo is not null || Hi is not null))
+                {
+                    limits = $"{Lolo}, {Lo} ... {Hi}, {Hihi}";
+                } else if (Lolo is not null || Hihi is not null)
+                {
+                    limits = $"{Lolo} ... {Hihi}";
+                } else  if (Lo is not null || Hi is not null)
+                {
+                    limits = $"{Lo} ... {Hi}";
+                }
+
+                listValues.Add(new QueryInServer_rtTable()
+                {
+                    TagName = value.First().TagName,
+                    Unit = value.First().Unit,
+                    Value = value.First().Value,
+                    Scale = value.First().Scale,
+                    Limits = limits
+                });
             }
 
             return listValues;

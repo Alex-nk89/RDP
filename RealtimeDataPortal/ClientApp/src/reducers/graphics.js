@@ -10,6 +10,7 @@ const initialState = {
 const graphics = (state = initialState, action) => {
     switch (action.type) {
         case 'INITIAL_STATE_GRAPHICS':
+            state = initialState;
             return {
                 ...state,
                 statusFetchingGraphic: 'loading'

@@ -33,7 +33,7 @@ const TableWrapper = ({ data }) => {
         }
 
         if (data.find(item => item.limitVisible === true)) {
-            columnContent.push('limit');
+            columnContent.push('limits');
             columnHeader.add('Норма ТР');
         }
 

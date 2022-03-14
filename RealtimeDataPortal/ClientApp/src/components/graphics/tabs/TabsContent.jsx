@@ -21,7 +21,7 @@ const TabContent = ({ index }) => {
             <Graphic key={item.tagId} attributes={item} index={index} date={date} />);
 
         //eslint-disable-next-line
-    }, []);
+    }, [date]);
 
     return (
         <div className={`tab-content ${activeTab === index ? 'tab-content_visible' : null}`}>
