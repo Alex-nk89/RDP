@@ -34,7 +34,7 @@ const Chart = ({ attributes, data, isScale, width }) => {
     };
 
     return (
-        <ResponsiveContainer width='100%' heigth={400}>
+        <ResponsiveContainer width='97%' aspect={3}>
             <LineChart data={data.history} syncId={typeName} width={width} height={350}>
                 <Line type="linear" dataKey="value" stroke={color} dot={false} strokeWidth={2} isAnimationActive={false} />
 
