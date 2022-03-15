@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useRequest, TextInput, Space, Loader, attributesInputs, ActionIcon,IoClose } from '../../index';
+import { useState, useEffect, useRef, useRequest, TextInput, Space, Loader, attributesInputs, ActionIcon, BsX } from '../../index';
 
 const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
     const tagNameRef = useRef(null);
@@ -71,12 +71,12 @@ const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
                         {...tag.tag}
                         onChange={tagSearch}
                         placeholder='Выберите тег'
-                        ref={tagNameRef}
+                        ref={tagNameRef}s
                         rightSection={loaderTagList}
                     />
 
                     <ActionIcon onClick={removeCurrentTag}>
-                        <IoClose />
+                        <BsX size={18}/>
                     </ActionIcon>
                 </div>
 

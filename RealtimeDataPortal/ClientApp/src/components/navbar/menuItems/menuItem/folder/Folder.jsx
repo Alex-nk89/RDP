@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { IoFolder, IoChevronDown } from 'react-icons/io5';
+import { BsFolderFill, BsChevronDown } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
 import { Collapse, Loader } from '@mantine/core';
 
@@ -67,10 +67,10 @@ const Folder = ({ id, name, isFullView }) => {
         <div className='folder'>
             <div className='folder-with-configurator'>
                 <p onClick={toChangeFolderState}>
-                    <IoFolder />
+                    <BsFolderFill size={16} />
                     <span>{name}</span>
                     {loader}
-                    {configMode ? null : <IoChevronDown className={`folder ${isOpenFolder}`} />}
+                    {configMode ? null : <BsChevronDown className={`folder ${isOpenFolder}`} />}
                 </p>
                 {menuConfig}
             </div>

@@ -1,6 +1,6 @@
 import {
     attributesInputs, settingsAddRemoveIcon, Divider, InputWrapper, Space, Group, ActionIcon, TextInput,
-    NumberInput, Checkbox, ParameterTag, Select, IoAdd, IoRemove, IoClose,
+    NumberInput, Checkbox, ParameterTag, Select, BsPlus, BsDash, BsX,
 } from '../../index';
 
 const Parameter = ({ number, parameter, enterParameter, parameterTypes, removeParameter }) => {
@@ -51,7 +51,7 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes, removePa
                     <h6>{`Параметер №${++number}`}</h6>
 
                     <ActionIcon onClick={removeCurrentParameter}>
-                        <IoClose />
+                        <BsX size={18}/>
                     </ActionIcon>
                 </div>
 
@@ -105,11 +105,11 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes, removePa
                     <InputWrapper label='Количество тегов'>
                         <Group>
                             <ActionIcon color='red' {...settingsAddRemoveIcon} onClick={removeTag}>
-                                <IoRemove />
+                                <BsDash />
                             </ActionIcon>
                             <span>{parameter.tags.length}</span>
                             <ActionIcon color='blue' {...settingsAddRemoveIcon} onClick={addTag}>
-                                <IoAdd />
+                                <BsPlus />
                             </ActionIcon>
                         </Group>
                     </InputWrapper>

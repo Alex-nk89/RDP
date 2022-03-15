@@ -3,7 +3,7 @@ import {
     useForm,
     TextInput, Space, attributesInputs, Select, Loader, Button,
     useRequest, useNotification,
-    IoSearch
+    BsSearch
 } from '../../index';
 
 const AddChangeTag = ({ operation, tagAttributes }) => {
@@ -105,7 +105,7 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
     };
 
     const searchButton = operation === 'change' ?
-        loadingTagList ? <Loader size={18} /> : <IoSearch size={18} onClick={getListTags} />
+        loadingTagList ? <Loader size={18} /> : <BsSearch size={16} onClick={getListTags} />
         : null;
 
     useEffect(() => {

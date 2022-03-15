@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from '@mantine/hooks';
 import { useModals } from '@mantine/modals';
 import { TextInput, Loader, Checkbox, Button, Space, Text } from '@mantine/core';
-import { IoSearch } from 'react-icons/io5';
+import { BsSearch } from 'react-icons/bs';
 
 import { useRequest } from '../../hooks/useRequest';
 import { useNotification } from '../../hooks/useNotification';
@@ -149,7 +149,7 @@ const DeleteElements = ({ typeElements }) => {
     };
 
     const searchButton = !searchingData ?
-        <IoSearch size={18} onClick={searchElements} /> : <Loader size={18} />;
+        <BsSearch size={16} onClick={searchElements} /> : <Loader size={18} />;
 
     return (
         <div className="info-block info-block__form">

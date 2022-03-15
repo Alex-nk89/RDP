@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Collapse } from '@mantine/core';
-import { IoSettings, IoChevronDown, IoBuild, IoServer, IoCodeWorking, IoPerson } from 'react-icons/io5';
+import { BsFillPersonLinesFill, BsServer, BsTagsFill, BsTools, BsChevronDown, BsScrewdriver } from 'react-icons/bs';
 
 const AdministratorMenu = () => {
     const { adminMode } = useSelector(state => state.navbar);
@@ -17,9 +17,9 @@ const AdministratorMenu = () => {
         <div className='folder'>
             <div className='folder-with-configurator'>
                 <p onClick={changeOpenedAdministrator}>
-                    <IoSettings />
+                    <BsTools size={16} />
                     <span>Администрирование</span>
-                    <IoChevronDown className={`folder ${isOpenFolder}`} />
+                    <BsChevronDown className={`folder ${isOpenFolder}`} />
                 </p>
             </div>
 
@@ -30,7 +30,7 @@ const AdministratorMenu = () => {
                             to='/Administrator/parameter-type'
                             className='page-with-configurator'
                             activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
-                            <IoBuild />
+                            <BsScrewdriver size={16} />
                             <span>Редактор типов параметра</span>
                         </NavLink>
                     </li>
@@ -39,7 +39,7 @@ const AdministratorMenu = () => {
                             to='/Administrator/servers'
                             className='page-with-configurator'
                             activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
-                            <IoServer />
+                            <BsServer size={16} />
                             <span>Редактор серверов</span>
                         </NavLink>
                     </li>
@@ -48,7 +48,7 @@ const AdministratorMenu = () => {
                             to='/Administrator/type-tags'
                             className='page-with-configurator'
                             activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
-                            <IoCodeWorking />
+                            <BsTagsFill size={16} />
                             <span>Редактор типов тега</span>
                         </NavLink>
                     </li>
@@ -57,7 +57,7 @@ const AdministratorMenu = () => {
                             to='/Administrator/access-profiles'
                             className='page-with-configurator'
                             activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
-                            <IoPerson />
+                            <BsFillPersonLinesFill size={16} />
                             <span>Редактор профилей доступа</span>
                         </NavLink>
                     </li>

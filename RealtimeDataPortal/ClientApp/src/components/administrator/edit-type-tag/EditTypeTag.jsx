@@ -1,7 +1,7 @@
 import {
     useState, useEffect, useRef,
     useForm,
-    IoSearch,
+    BsSearch,
     TextInput, Space, Select, Checkbox, Loader, Button,
     useRequest, useNotification,
     attributesInputs
@@ -116,7 +116,7 @@ export const EditTypeTag = ({ operation }) => {
     };
 
     const searchButton = operation === 'change' ?
-        searchingData ? <Loader size={18} /> : <IoSearch size={18} onClick={getListTypeTags} />
+        searchingData ? <Loader size={18} /> : <BsSearch size={16} onClick={getListTypeTags} />
         : null;
 
     const closeList = () => {

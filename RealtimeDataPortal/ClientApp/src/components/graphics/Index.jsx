@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
 import { LoadingOverlay, Space, Tooltip, Button, Tabs } from '@mantine/core';
-import { IoTrendingUpOutline, IoPrintOutline } from 'react-icons/io5';
-import { BsTable } from 'react-icons/bs';
+import { BsTable, BsGraphUp, BsPrinter } from 'react-icons/bs';
 
 import TabsHeader from "./tabs/Tabs";
 import ErrorsPage from '../errors-page/ErrorsPage';
@@ -31,5 +30,5 @@ export {
     TabsHeader, ErrorsPage, AppPreloader, HeaderGraphics, TabContent, Graphic, Settings, Calendar,
     MonthCalendar, DayCalendar, RangeCalendar, useFormateDate, useRequest, Chart, ApexChart, TableForGraphic,
     LoadingOverlay, Space, Tooltip, Button, Tabs,
-    IoTrendingUpOutline, IoPrintOutline, BsTable
+    BsGraphUp, BsPrinter, BsTable
 };

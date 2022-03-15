@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { IoReaderOutline, IoGridOutline, IoLayersOutline, IoTrendingUpOutline } from 'react-icons/io5';
+import { BsFillFileEarmarkFill, BsGridFill, BsFillBarChartFill, BsDiagram3Fill } from 'react-icons/bs';
 
 import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 
@@ -14,17 +14,17 @@ const Page = ({ id, name, componentId, type }) => {
         case 'externalPage':
             //eslint-disable-next-line
             link = <a href={`http:\\\\asodu-web\\RDP_Container\\Home?id=${id}`} target='_blank'>
-                <IoReaderOutline /><span>{name}</span>
+                <BsFillFileEarmarkFill size={16} /><span>{name}</span>
             </a>
             break;
         case 'graphic':
-            link = <NavLink to={`/graphics/${componentId}`}><IoTrendingUpOutline /><span>{name}</span></NavLink>
+            link = <NavLink to={`/graphics/${componentId}`}><BsFillBarChartFill size={16} /><span>{name}</span></NavLink>
             break;
         case 'table':
-            link = <NavLink to={`/table/${id}`}><IoGridOutline /><span>{name}</span></NavLink>
+            link = <NavLink to={`/table/${id}`}><BsGridFill size={16} /><span>{name}</span></NavLink>
             break;
-        case 'mnemoschema':
-            link = <NavLink to='/mnemoschema'><IoLayersOutline /><span>{name}</span></NavLink>
+        case 'mnemoscheme':
+            link = <NavLink to='/mnemoscheme'><BsDiagram3Fill size={16} /><span>{name}</span></NavLink>
             break;
         default:
             link = null

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, forwardRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useForm } from '@mantine/hooks';
-import { IoSearch } from 'react-icons/io5';
+import { BsSearch } from 'react-icons/bs';
 
 import { Tabs, TextInput, Space, ColorInput, Loader, Select, Button, Checkbox, Autocomplete } from '@mantine/core';
 
@@ -25,7 +25,7 @@ export {
     useState, useEffect, useRef, forwardRef,
     useParams,
     useForm,
-    IoSearch,
+    BsSearch,
     Tabs, TextInput, Space, ColorInput, Loader, Select, Button, Checkbox, Autocomplete,
     useRequest, useNotification,
     AppPreloader, ErrorsPage, ChangeParameterType, EditServer, EditTypeTag, DeleteElements, AccessProfiles,

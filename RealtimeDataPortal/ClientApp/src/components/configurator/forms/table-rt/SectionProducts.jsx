@@ -1,7 +1,7 @@
 import {
     useState, useEffect, useRef, useRequest,
     TextInput, Space, ActionIcon, Loader,
-    IoClose,
+    BsX,
     attributesInputs
 } from '../../index';
 
@@ -88,7 +88,7 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
                     />
 
                     <ActionIcon onClick={removeCurrentProduct}>
-                        <IoClose />
+                        <BsX />
                     </ActionIcon>
                 </div>
             </div>

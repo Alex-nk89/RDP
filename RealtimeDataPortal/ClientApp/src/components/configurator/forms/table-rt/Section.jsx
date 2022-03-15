@@ -1,6 +1,6 @@
 import {
     Divider, Space, ActionIcon, TextInput, InputWrapper, Group,
-    IoClose, IoAdd, IoRemove,
+    BsX, BsPlus, BsDash,
     SectionProducts,
     settingsAddRemoveIcon
 } from '../../index';
@@ -42,7 +42,7 @@ const Section = ({ number, removeSection, section, enterSection }) => {
                     <h6>{`Секция №${++number}`}</h6>
 
                     <ActionIcon onClick={removeCurentSection}>
-                        <IoClose />
+                        <BsX />
                     </ActionIcon>
                 </div>
 
@@ -62,11 +62,11 @@ const Section = ({ number, removeSection, section, enterSection }) => {
                     <InputWrapper label='Количество продуктов'>
                         <Group>
                             <ActionIcon color='red' {...settingsAddRemoveIcon} onClick={removeProduct}>
-                                <IoRemove />
+                                <BsDash />
                             </ActionIcon>
                             <span>{section.products.length}</span>
                             <ActionIcon color='blue' {...settingsAddRemoveIcon} onClick={addProduct}>
-                                <IoAdd />
+                                <BsPlus />
                             </ActionIcon>
                         </Group>
                     </InputWrapper>

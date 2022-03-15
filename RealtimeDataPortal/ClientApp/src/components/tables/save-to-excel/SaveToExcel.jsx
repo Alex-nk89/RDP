@@ -1,4 +1,4 @@
-import { Tooltip, ActionIcon, IoShareSocial } from '../Index';
+import { Tooltip, ActionIcon, BsShareFill } from '../Index';
 ///import TableToExcel from "../../../../../../node_modules/@linways/table-to-excel";
 
 const SaveToExcel = () => {
@@ -35,7 +35,7 @@ const SaveToExcel = () => {
     return (
         <Tooltip label='Открыть в Excel'>
             <ActionIcon onClick={save}>
-                <IoShareSocial size={18} />
+                <BsShareFill size={18} />
             </ActionIcon>
         </Tooltip>
     );

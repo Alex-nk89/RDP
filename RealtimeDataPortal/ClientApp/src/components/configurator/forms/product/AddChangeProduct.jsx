@@ -1,7 +1,7 @@
 import {
     useState, useEffect, useRef, useRequest, useNotification, Parameter, attributesInputs, settingsAddRemoveIcon,
     TextInput, Space, InputWrapper, Group, ActionIcon, Button, Loader,
-    IoRemove, IoAdd, IoSearch
+    BsDash, BsPlus, BsSearch
 } from '../../index';
 
 let productList = [];
@@ -181,7 +181,7 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
     };
 
     const searchButton = operation === 'change' ?
-        searchingProduct ? <Loader size={18} /> : <IoSearch size={18} onClick={getListProducts} />
+        searchingProduct ? <Loader size={18} /> : <BsSearch size={16} onClick={getListProducts} />
         : null;
 
     useEffect(() => {
@@ -229,11 +229,11 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                 <InputWrapper label='Количество параметров'>
                     <Group>
                         <ActionIcon color='red' {...settingsAddRemoveIcon} onClick={removeParameter}>
-                            <IoRemove />
+                            <BsDash />
                         </ActionIcon>
                         <span>{parameters.length}</span>
                         <ActionIcon color='blue' {...settingsAddRemoveIcon} onClick={addParameter}>
-                            <IoAdd />
+                            <BsPlus />
                         </ActionIcon>
                     </Group>
                 </InputWrapper>

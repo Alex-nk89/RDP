@@ -3,7 +3,7 @@ import {
     useDispatch, useSelector,
     AddChangeGraphic, AddChangeFolder, AddChangeExternalPage,
     Space, ActionIcon, MultiSelect,
-    IoAdd
+    BsPlus
 } from '../../index';
 
 import { updateNavbar } from '../../../../actions';
@@ -54,7 +54,7 @@ const AddChangeElement = () => {
 
     const addAccessIcon = (
         <ActionIcon onClick={addAccess}>
-            <IoAdd size={18} />
+            <BsPlus size={16} />
         </ActionIcon>
     );
 

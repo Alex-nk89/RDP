@@ -1,7 +1,7 @@
 import {
     useState, useEffect, useRef,
     useForm,
-    IoSearch,
+    BsSearch,
     TextInput, Space, Button, Loader, Checkbox,
     useRequest, useNotification,
     attributesInputs
@@ -64,7 +64,7 @@ export const EditServer = ({ operation }) => {
     };
 
     const searchButton = operation === 'change' ?
-        searchingData ? <Loader size={18} /> : <IoSearch size={18} onClick={getListServers} />
+        searchingData ? <Loader size={18} /> : <BsSearch size={16} onClick={getListServers} />
         : null;
 
     const selectServer = (event) => {

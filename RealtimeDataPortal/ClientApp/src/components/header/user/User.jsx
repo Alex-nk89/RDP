@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Menu, Switch } from "@mantine/core";
-import { IoChevronDown, IoBuild, IoSettings } from "react-icons/io5";
+import { BsFillGearFill, BsChevronDown, BsTools } from 'react-icons/bs';
 
 import { useNotification } from "../../configurator";
 import { toogleConfigMode, toogleAdminMode } from '../../../actions';
@@ -31,22 +31,22 @@ const User = () => {
             size="lg"
             control={
                 <div className="user-name">
-                    {user.name}
-                    <IoChevronDown className={openedMenu ? "menu-open" : "menu-close"} />
+                    {user.name}  
+                    <BsChevronDown className={openedMenu ? "menu-open" : "menu-close"} />
                 </div>
             }
             opened={openedMenu}
             onOpen={openMenu}
             onClose={closeMenu}>
             {user?.isAdministrator ?
-                <Menu.Item icon={<IoBuild />}>
+                <Menu.Item icon={<BsTools />}>
                     <label>
                         Администрирование
                         <Switch size='xs' checked={adminMode} onChange={changeAdminMode} />
                     </label>
                 </Menu.Item> : null}
             {user?.isConfigurator ?
-                <Menu.Item icon={<IoSettings />}>
+                <Menu.Item icon={<BsFillGearFill />}>
                     <label>
                         Конфигурирование
                         <Switch size="xs" checked={configMode} onChange={changeConfigMode} />

@@ -1,6 +1,6 @@
 import {
     useEffect, useParams, useRequest, useDispatch, useSelector, AppPreloader, ErrorsPage, Tag,
-    Product, AddChangeElement, InstructionForConfigurator, AddChangeTableRT
+    Product, AddChangeElement, InstructionForConfigurator, AddChangeTableRT, EditMnemoscheme
 } from './index';
 import './configurator.sass';
 
@@ -38,6 +38,10 @@ const Configurator = () => {
         if (Object.keys(componentInfo).length > 0) {
             if (['add-table', 'change-table'].includes(operation)) {
                 return <AddChangeTableRT />;
+            }
+
+            if (['add-mnemoscheme', 'change-mnemoscheme'].includes(operation)) {
+                return <EditMnemoscheme />;
             }
 
             if (operation === 'instruction') {

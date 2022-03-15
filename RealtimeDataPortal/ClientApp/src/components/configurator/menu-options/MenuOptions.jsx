@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { IoOptionsOutline, IoPencil, IoTrashBin, IoFolder, IoReader, IoTrendingUp, IoGrid } from "react-icons/io5";
+import { BsSliders, BsFillPencilFill, BsFillTrashFill, BsGridFill, 
+    BsDiagram3Fill, BsFillBarChartFill, BsFolderFill, BsFillFileEarmarkFill } from 'react-icons/bs';
 import { Menu, Divider, Text } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 
@@ -17,7 +18,7 @@ const MenuOptions = ({ type, id }) => {
     const modal = useModals();
     const { pathname } = useLocation();
 
-    const configButton = <div><IoOptionsOutline /></div>
+    const configButton = <div><BsSliders  /></div>
 
     const menuAttributes = {
         control: configButton,
@@ -55,25 +56,28 @@ const MenuOptions = ({ type, id }) => {
 
     const createOptions = [
         <Menu.Label key={5}>Создать:</Menu.Label>,
-        <Menu.Item key={1} icon={<IoFolder />} component={Link} to={`/Configurator/add-folder/${id}`}>
+        <Menu.Item key={1} icon={<BsFolderFill />} component={Link} to={`/Configurator/add-folder/${id}`}>
             Новая папка
         </Menu.Item>,
-        <Menu.Item key={2} icon={<IoReader />} component={Link} to={`/Configurator/add-externalPage/${id}`}>
+        <Menu.Item key={2} icon={<BsFillFileEarmarkFill />} component={Link} to={`/Configurator/add-externalPage/${id}`}>
             Внешняя страница
         </Menu.Item>,
-        <Menu.Item key={3} icon={<IoTrendingUp />} component={Link} to={`/Configurator/add-graphic/${id}`}>
+        <Menu.Item key={3} icon={<BsFillBarChartFill />} component={Link} to={`/Configurator/add-graphic/${id}`}>
             График
         </Menu.Item>,
-        <Menu.Item key={4} icon={<IoGrid />} component={Link} to={`/Configurator/add-table/${id}`}>
+        <Menu.Item key={4} icon={<BsGridFill />} component={Link} to={`/Configurator/add-table/${id}`}>
             Таблица реального времени
+        </Menu.Item>,
+        <Menu.Item key={4} icon={<BsDiagram3Fill />} component={Link} to={`/Configurator/add-mnemoscheme/${id}`}>
+            Мнемосхема
         </Menu.Item>
     ]
 
     const changeOptions = [
-        <Menu.Item key={6} icon={<IoPencil />} component={Link} to={`/Configurator/change-${type}/${id}`}>
+        <Menu.Item key={6} icon={<BsFillPencilFill />} component={Link} to={`/Configurator/change-${type}/${id}`}>
             Редактировать
         </Menu.Item>,
-        <Menu.Item key={7} icon={<IoTrashBin />} className='remove-item' onClick={openModal}>
+        <Menu.Item key={7} icon={<BsFillTrashFill />} className='remove-item' onClick={openModal}>
             Удалить
         </Menu.Item>
     ]

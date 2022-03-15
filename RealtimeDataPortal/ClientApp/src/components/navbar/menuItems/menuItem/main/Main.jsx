@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
-import { IoHome } from "react-icons/io5";
+import { BsFillHouseFill } from "react-icons/bs";
 
 import MenuOptions from "../../../../configurator/menu-options/MenuOptions";
 
@@ -15,7 +15,7 @@ const Main = () => {
     return (
         <div className={`main-with-configurator ${activeLink}`}>
             <NavLink exact to="/">
-                <IoHome size={16} />
+                <BsFillHouseFill size={17} />
                 <span>Главная</span>
             </NavLink>
             {menuConfig}

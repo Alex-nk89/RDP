@@ -2,7 +2,7 @@ import {
     useState, useEffect, useRef, useRequest, useNotification, useDispatch, useSelector,
     TextInput, Space, ActionIcon, MultiSelect, Checkbox, Button, InputWrapper, Group, Divider,
     attributesInputs, settingsAddRemoveIcon,
-    IoAdd, IoRemove,
+    BsPlus, BsDash,
     Section
 } from '../../index';
 import './tableRt.sass';
@@ -92,7 +92,7 @@ const AddChangeTableRT = () => {
 
     const addAccessIcon = (
         <ActionIcon onClick={addAccess}>
-            <IoAdd size={18} />
+            <BsPlus size={18} />
         </ActionIcon>
     );
 
@@ -247,11 +247,11 @@ const AddChangeTableRT = () => {
                     <InputWrapper label='Количество секций'>
                         <Group>
                             <ActionIcon color='red' {...settingsAddRemoveIcon} onClick={removeSection}>
-                                <IoRemove />
+                                <BsDash />
                             </ActionIcon>
                             <span>{sections.length}</span>
                             <ActionIcon color='blue' {...settingsAddRemoveIcon} onClick={addSection}>
-                                <IoAdd />
+                                <BsPlus />
                             </ActionIcon>
                         </Group>
                     </InputWrapper>

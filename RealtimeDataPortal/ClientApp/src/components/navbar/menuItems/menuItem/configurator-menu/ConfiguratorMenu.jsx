@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Collapse } from '@mantine/core';
-import { IoSettings, IoChevronDown, IoCodeWorkingOutline, IoTicket, IoReader } from 'react-icons/io5';
+import { BsFillGearFill, BsFillFileEarmarkTextFill, BsFillTagsFill, BsChevronDown, BsPencilSquare } from 'react-icons/bs';
 
 const ConfiguratorMenu = () => {
     const { configMode } = useSelector(state => state.navbar);
@@ -16,9 +16,9 @@ const ConfiguratorMenu = () => {
         <div className='folder'>
             <div className='folder-with-configurator'>
                 <p onClick={changeOpenedConfigurator}>
-                    <IoSettings />
+                    <BsFillGearFill size={16} />
                     <span>Конфигуратор</span>
-                    <IoChevronDown className={`folder ${isOpenFolder}`} />
+                    <BsChevronDown className={`folder ${isOpenFolder}`} />
                 </p>
             </div>
 
@@ -29,7 +29,7 @@ const ConfiguratorMenu = () => {
                             to='/Configurator/change-tag/0'
                             className='page-with-configurator'
                             activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
-                            <IoCodeWorkingOutline />
+                            <BsFillTagsFill size={16} />
                             <span>Редактор тегов</span>
                         </NavLink>
                     </li>
@@ -38,7 +38,7 @@ const ConfiguratorMenu = () => {
                             to='/Configurator/change-product/0'
                             className='page-with-configurator'
                             activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
-                            <IoTicket />
+                            <BsPencilSquare size={16} />
                             <span>Редактор продуктов</span>
                         </NavLink>
                     </li>
@@ -47,7 +47,7 @@ const ConfiguratorMenu = () => {
                             to='/Configurator/instruction/0'
                             className='page-with-configurator'
                             activeStyle={{ background: 'rgba(255, 255, 255, .2)' }} >
-                            <IoReader />
+                            <BsFillFileEarmarkTextFill size={16} />
                             <span>Инструкция</span>
                         </NavLink>
                     </li>

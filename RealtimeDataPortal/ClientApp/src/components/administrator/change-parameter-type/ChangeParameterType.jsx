@@ -2,7 +2,7 @@ import { Button } from '@mantine/core';
 import {
     useState, useEffect, useRef,
     useForm,
-    IoSearch,
+    BsSearch,
     TextInput, Space, ColorInput, Loader,
     useRequest, useNotification,
     attributesInputs
@@ -85,7 +85,7 @@ export const ChangeParameterType = ({ operation }) => {
 
     const searchButton = operation === 'add' ? null :
         !searchingData ?
-            <IoSearch size={18} onClick={searchParameterTypes} /> :
+            <BsSearch size={16} onClick={searchParameterTypes} /> :
             <Loader size={18} />;
 
     const submitForm = (values) => {

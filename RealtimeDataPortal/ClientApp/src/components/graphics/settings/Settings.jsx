@@ -2,7 +2,7 @@ import {
     useSelector, useDispatch,
     Calendar,
     Space, Tooltip, Button,
-    IoTrendingUpOutline, IoPrintOutline, BsTable
+    BsGraphUp, BsPrinter, BsTable
 } from '../Index';
 import { toogleIsScale, toogleIsVisibleTable } from '../../../actions';
 
@@ -50,7 +50,7 @@ const Settings = ({ calendar, setDate }) => {
 
                 <Tooltip label='Масштабировать' onClick={toggleScale}>
                     <Button {...settingsScaleToggle}>
-                        <IoTrendingUpOutline size={16} color={isScale ? 'white' : null} />
+                        <BsGraphUp size={16} color={isScale ? 'white' : null} />
                     </Button>
                 </Tooltip>
 
@@ -66,7 +66,7 @@ const Settings = ({ calendar, setDate }) => {
 
                 <Tooltip label='Печать'>
                     <Button {...settingsOff} onClick={toPrint}>
-                        <IoPrintOutline size={16} />
+                        <BsPrinter size={16} />
                     </Button>
                 </Tooltip>
             </div>
