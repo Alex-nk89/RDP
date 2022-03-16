@@ -1,9 +1,12 @@
+import {
+    FabricJSCanvas
+} from '..';
 
-export const EditMnemoschemeView = () => {
+export const EditMnemoschemeView = ({ onReady }) => {
 
     return (
         <div className='info-block info-block__mnemoscheme_view'>
-            Блок с видом мнемосхемы
+            <FabricJSCanvas onReady={onReady} className='canvas'/>
         </div>
     );
 };
