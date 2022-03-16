@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    title: 'add'
+    title: 'add',
 };
 
 const mnemoschemeSlice = createSlice({
     name: 'mnemoscheme',
     initialState,
     reducers: {
-        getTitle: (state, action) => { state.title = action.payload }
+        getTitle: (state, action) => { state.title = action.payload },
     }
 });
 

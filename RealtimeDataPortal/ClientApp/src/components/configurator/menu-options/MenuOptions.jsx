@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { BsSliders, BsFillPencilFill, BsFillTrashFill, BsGridFill, 
-    BsDiagram3Fill, BsFillBarChartFill, BsFolderFill, BsFillFileEarmarkFill } from 'react-icons/bs';
+    BsDiagram3Fill, BsFillBarChartFill, BsFolderFill, BsFileEarmarkRichtextFill } from 'react-icons/bs';
 import { Menu, Divider, Text } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 
@@ -59,7 +59,7 @@ const MenuOptions = ({ type, id }) => {
         <Menu.Item key={1} icon={<BsFolderFill />} component={Link} to={`/Configurator/add-folder/${id}`}>
             Новая папка
         </Menu.Item>,
-        <Menu.Item key={2} icon={<BsFillFileEarmarkFill />} component={Link} to={`/Configurator/add-externalPage/${id}`}>
+        <Menu.Item key={2} icon={<BsFileEarmarkRichtextFill />} component={Link} to={`/Configurator/add-externalPage/${id}`}>
             Внешняя страница
         </Menu.Item>,
         <Menu.Item key={3} icon={<BsFillBarChartFill />} component={Link} to={`/Configurator/add-graphic/${id}`}>
@@ -68,7 +68,7 @@ const MenuOptions = ({ type, id }) => {
         <Menu.Item key={4} icon={<BsGridFill />} component={Link} to={`/Configurator/add-table/${id}`}>
             Таблица реального времени
         </Menu.Item>,
-        <Menu.Item key={4} icon={<BsDiagram3Fill />} component={Link} to={`/Configurator/add-mnemoscheme/${id}`}>
+        <Menu.Item key={4} icon={<BsDiagram3Fill />} component={Link} to={`/Configurator/create-mnemoscheme/${id}`}>
             Мнемосхема
         </Menu.Item>
     ]

@@ -40,7 +40,7 @@ const Configurator = () => {
                 return <AddChangeTableRT />;
             }
 
-            if (['add-mnemoscheme', 'change-mnemoscheme'].includes(operation)) {
+            if (['create-mnemoscheme', 'change-mnemoscheme'].includes(operation)) {
                 return <EditMnemoscheme />;
             }
 

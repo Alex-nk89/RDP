@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { BsFillFileEarmarkFill, BsGridFill, BsFillBarChartFill, BsDiagram3Fill } from 'react-icons/bs';
+import { BsFileEarmarkRichtextFill, BsGridFill, BsFillBarChartFill, BsDiagram3Fill } from 'react-icons/bs';
 
 import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 
@@ -14,7 +14,7 @@ const Page = ({ id, name, componentId, type }) => {
         case 'externalPage':
             //eslint-disable-next-line
             link = <a href={`http:\\\\asodu-web\\RDP_Container\\Home?id=${id}`} target='_blank'>
-                <BsFillFileEarmarkFill size={16} /><span>{name}</span>
+                <BsFileEarmarkRichtextFill size={16} /><span>{name}</span>
             </a>
             break;
         case 'graphic':
