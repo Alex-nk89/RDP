@@ -1,4 +1,5 @@
 ﻿
+using RealtimeDataPortal.Models.DBClasses;
 using RealtimeDataPortal.Models.OtherClasses;
 
 namespace RealtimeDataPortal.Models
@@ -11,6 +12,7 @@ namespace RealtimeDataPortal.Models
         public rt_Tables Table { get; set; } = new();
         public List<rt_Sections> TableSections { get; set; } = new();
         public List<rt_SectionProduct> SectionProducts { get; set; } = new();
+        public Mnemoscheme Mnemoscheme { get; set; } = new();
         public int maxSectionId { get; set; }
 
 
@@ -108,6 +110,26 @@ namespace RealtimeDataPortal.Models
                     }
 
                     componentInfo.maxSectionId = rdp_base.rt_Sections.Select(s => (int?)s.SectionId).Max() ?? 0;
+                }
+                else if (operation.Contains("mnemoscheme"))
+                {
+                    string mnemoschemeContain = string.Empty;
+
+                    var mnemoschemeInfo = rdp_base.Mnemoscheme
+                        .Where(mnenoscheme => mnenoscheme.MnemoschemeId == componentInfo.TreesMenu.ComponentId)
+                        .ToList();
+
+                    foreach(var mnemoscheme in mnemoschemeInfo)
+                    {
+                        mnemoschemeContain += mnemoscheme.MnemoschemeContain;
+                    }
+
+                    componentInfo.Mnemoscheme = new Mnemoscheme()
+                    {
+                        Id = mnemoschemeInfo.First().Id,
+                        MnemoschemeId = mnemoschemeInfo.First().MnemoschemeId,
+                        MnemoschemeContain = mnemoschemeContain
+                    };
                 }
 
                 return componentInfo;

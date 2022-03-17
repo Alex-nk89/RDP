@@ -1,7 +1,7 @@
 import {
     useState, useEffect, useRef, useForm, useRequest, useNotification,
     useDispatch, useSelector,
-    AddChangeGraphic, AddChangeFolder, AddChangeExternalPage,
+    AddChangeGraphic, AddChangeFolder, AddChangeExternalPage, EditMnemoscheme,
     Space, ActionIcon, MultiSelect,
     BsPlus
 } from '../../index';
@@ -146,6 +146,8 @@ const AddChangeElement = () => {
             return <AddChangeGraphic {...attributes} />;
         case 'externalPage':
             return <AddChangeExternalPage {...attributes} />;
+        case 'mnemoscheme':
+            return <EditMnemoscheme {...attributes} />;
         default:
             return null;
     }

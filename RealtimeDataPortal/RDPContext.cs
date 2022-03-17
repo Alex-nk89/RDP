@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using RealtimeDataPortal.Models;
+﻿using RealtimeDataPortal.Models;
+using RealtimeDataPortal.Models.DBClasses;
 
 namespace RealtimeDataPortal
 {
@@ -30,11 +29,12 @@ namespace RealtimeDataPortal
         public virtual DbSet<rt_Tables> rt_Tables { get; set; } = null!;
         public virtual DbSet<rt_Sections> rt_Sections { get; set;} = null!;
         public virtual DbSet<rt_SectionProduct> rt_SectionProduct { get; set;} = null!;
+        public virtual DbSet<Mnemoscheme> Mnemoscheme {  get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=RDP_Base;Trusted_Connection=True;");
-            optionsBuilder.UseSqlServer("Server=asodu-app;Database=RealtimeDataPortal;User Id=RTDPortalUser;Password=G8inDMs27b");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=RDP_Base;Trusted_Connection=True;");
+            //optionsBuilder.UseSqlServer("Server=asodu-app;Database=RealtimeDataPortal;User Id=RTDPortalUser;Password=G8inDMs27b");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -108,9 +108,11 @@ namespace RealtimeDataPortal
             {
                 entity.HasKey("Id");
             });
+
+            modelBuilder.Entity<Mnemoscheme>(entity =>
+            {
+                entity.HasKey("Id");
+            });
         }
-
-
-
     }
 }

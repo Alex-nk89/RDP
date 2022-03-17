@@ -1,10 +1,10 @@
 import {
     useEffect, useParams, useRequest, useDispatch, useSelector, AppPreloader, ErrorsPage, Tag,
-    Product, AddChangeElement, InstructionForConfigurator, AddChangeTableRT, EditMnemoscheme
+    Product, AddChangeElement, InstructionForConfigurator, AddChangeTableRT
 } from './index';
 import './configurator.sass';
 
-import { fetchingComponentInfo, operationInitialize, initializeComponentInfo } from '../../actions';
+import { fetchingComponentInfo, operationInitialize, initializeComponentInfo, fetchingComponentInfoError } from '../../actions';
 
 const Configurator = () => {
     const { id, operation } = useParams();
@@ -20,7 +20,7 @@ const Configurator = () => {
 
             request(`GetComponentInformation?id=${id}&operation=${operation}`)
                 .then(componentInfo => dispatch(initializeComponentInfo(componentInfo)))
-                .catch(() => { })
+                .catch(() => dispatch(fetchingComponentInfoError()));
         }
 
         //eslint-disable-next-line
@@ -40,15 +40,12 @@ const Configurator = () => {
                 return <AddChangeTableRT />;
             }
 
-            if (['create-mnemoscheme', 'change-mnemoscheme'].includes(operation)) {
-                return <EditMnemoscheme />;
-            }
-
             if (operation === 'instruction') {
                 return <InstructionForConfigurator />;
             }
 
-            if (['add-folder', 'change-folder', 'add-externalPage', 'change-externalPage', 'add-graphic', 'change-graphic'].includes(operation)) {
+            if (['add-folder', 'change-folder', 'add-externalPage', 'change-externalPage', 
+            'add-graphic', 'change-graphic', 'create-mnemoscheme', 'change-mnemoscheme'].includes(operation)) {
                 return <AddChangeElement />;
             }
 

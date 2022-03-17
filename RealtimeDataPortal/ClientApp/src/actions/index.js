@@ -54,6 +54,12 @@ export const fetchingComponentInfo = () => {
     }
 };
 
+export const fetchingComponentInfoError = () => {
+    return {
+        type: 'COMPONENT_INFO_FETCHING_ERROR'
+    }
+};
+
 export const initializeComponentInfo = (componentInfo) => {
     return {
         type: 'INITIALIZE_COMPONENT_INFO',

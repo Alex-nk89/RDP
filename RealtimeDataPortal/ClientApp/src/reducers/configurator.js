@@ -22,6 +22,12 @@ const configurator = (state = initialState, action) => {
                 statusFetchingComponentInfo: 'idle',
                 componentInfo: action.payload
             }
+        case 'COMPONENT_INFO_FETCHING_ERROR':
+            return {
+                ...state,
+                statusFetchingComponentInfo: 'error',
+                componentInfo: {}
+            }
         default:
             return state;
     }

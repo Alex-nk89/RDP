@@ -1,6 +1,7 @@
 .info-block__mnemoscheme
     display: flex
     flex-wrap: wrap
+    min-height: 500px
     &_view
         padding: 2rem
         aspect-ratio: 16/9
@@ -10,7 +11,9 @@
             height: 100%
     &_form
         display: flex
-        flex-direction: column
+        flex-direction: row
+        flex-wrap: nowrap
+        justify-content: space-between
         margin-top: -1rem
         padding: 2rem
         &_create-block

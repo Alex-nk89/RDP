@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RealtimeDataPortal.Exceptions;
 using RealtimeDataPortal.Models;
+using RealtimeDataPortal.Models.DBClasses;
 using RealtimeDataPortal.Models.Exceptions;
 using RealtimeDataPortal.Models.OtherClasses;
 
@@ -146,6 +147,10 @@ namespace RealtimeDataPortal.Controllers
                 {
                     configurator.TreesMenu.ComponentId = new rt_Tables().AddChangeRTTable(configurator.Table);
                     new rt_Sections().AddChangeSections(configurator.TableSections, configurator.Table.TableId, configurator.SectionProducts);
+                }
+                else if (type == "mnemoscheme")
+                {
+                    configurator.TreesMenu.ComponentId = new Mnemoscheme().EditMnemoscheme(configurator.Mnemoscheme);
                 }
 
                 id = configurator.AddNewComponent(configurator.TreesMenu);
