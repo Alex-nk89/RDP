@@ -481,6 +481,31 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
+        [HttpGet("GetMnemoscheme")]
+        public Object GetMnemoscheme (int id)
+        {
+            try
+            {
+                var mnemoscheme = new Mnemoscheme().GetMnemoscheme(id, user);
+                return mnemoscheme;
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, new { Message = ex.Message });
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new
+                {
+                    Message = listMessagesError.NotGetData
+                });
+            }
+        }
+
         [HttpGet("GetListParameterTypes")]
         public Object GetListParameterTypes(string name)
         {

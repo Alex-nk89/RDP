@@ -4,7 +4,7 @@ import {
     fabric
 } from '..';
 
-export const MnemoschemeEditorCanvas = ({ setMnemoscheme }) => {
+export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
     const mnemoschemeRef = useRef();
     const componentInfo = useSelector(state => state.configurator.componentInfo);
 
@@ -24,7 +24,7 @@ export const MnemoschemeEditorCanvas = ({ setMnemoscheme }) => {
     }, []);
 
     return (
-        <div className='info-block info-block__mnemoscheme_view' ref={mnemoschemeRef}>
+        <div className='info-block info-block__mnemoscheme-editor__canvas' ref={mnemoschemeRef}>
             <canvas id='mnemoscheme' />
         </div>
     )

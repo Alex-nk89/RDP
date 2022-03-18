@@ -8,6 +8,7 @@ import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import Graphics from './components/graphics/Graphics';
 import TableRealtime from './components/tables/TableRealtime';
+import Mnemoscheme from './components/mnemoscheme/Mnemoscheme';
 //import Page_404 from './components/Page_404';
 import ErrorsPage from './components/errors-page/ErrorsPage';
 import Configurator from './components/configurator/Configurator';
@@ -39,6 +40,7 @@ const App = () => {
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Graphics/:id" component={Graphics} />
                     <Route exact path="/Table/:id" component={TableRealtime} />
+                    <Route exact path='/Mnemoscheme/:id' component={Mnemoscheme} />
                     <Route exact path="/Configurator/:operation/:id" component={Configurator} />
                     <Route exact path="/Administrator/:operation" component={Administrstor} />
                     <Route exact path="/Error" component={ErrorsPage} />

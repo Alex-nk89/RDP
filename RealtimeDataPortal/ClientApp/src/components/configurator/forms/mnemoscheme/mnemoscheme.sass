@@ -1,30 +1,23 @@
-.info-block__mnemoscheme
+.info-block__mnemoscheme-editor
     display: flex
     flex-wrap: wrap
-    min-height: 500px
-    &_view
+    position: relative
+    margin-top: 1rem
+    .info-block
+        margin-top: 0
+        padding: 1.5rem
+        flex-grow: 0.25
+    &__canvas
         padding: 2rem
         aspect-ratio: 16/9
-        position: relative
-        .canvas
-            width: 100%
-            height: 100%
-    &_form
+    &__panel
         display: flex
-        flex-direction: row
-        flex-wrap: nowrap
         justify-content: space-between
-        margin-top: -1rem
-        padding: 2rem
-        &_create-block
+        width: 100%
+        margin-top: 2rem
+        &__create-block
             display: flex
             flex-wrap: wrap
             align-items: center
-            .text-input
-                width: 200px
-                transition: width .5s ease
-                &_not-visible
-                    width: 0px
-                    transition: width .5s ease
-                    overflow: hidden
-
+            button
+                margin: 0.5rem .25rem

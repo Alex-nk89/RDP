@@ -24,7 +24,7 @@ const Page = ({ id, name, componentId, type }) => {
             link = <NavLink to={`/table/${id}`}><BsGridFill size={16} /><span>{name}</span></NavLink>
             break;
         case 'mnemoscheme':
-            link = <NavLink to='/mnemoscheme'><BsDiagram3Fill size={16} /><span>{name}</span></NavLink>
+            link = <NavLink to={`/mnemoscheme/${id}`}><BsDiagram3Fill size={16} /><span>{name}</span></NavLink>
             break;
         default:
             link = null
