@@ -3,14 +3,20 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     statusFetchingMnemoscheme: 'idle',
     title: '',
-    mnemoscheme: ''
+    mnemoschemeData: null
 };
 
 const mnemoschemeSlice = createSlice({
     name: 'mnemoscheme',
     initialState,
     reducers: {
-        fetchingMnemoscheme: (state) => { state.statusFetchingMnemoscheme = 'loading' }
+        fetchingMnemoscheme: (state) => { state.statusFetchingMnemoscheme = 'loading' },
+        fetchingMnemoschemeConfirmed: (state) => { state.statusFetchingMnemoscheme = 'confirmed' },
+        fetchingMnemoschemeError: (state) => { state.statusFetchingMnemoscheme = 'error' },
+        initializeMnemoscheme: (state, action) => {
+            state.statusFetchingMnemoscheme = 'confirmed';
+            state.mnemoschemeData = action.payload;
+        }
     }
 });
 
@@ -19,5 +25,8 @@ const { actions, reducer } = mnemoschemeSlice;
 export default reducer;
 
 export const {
-    fetchingMnemoscheme
+    fetchingMnemoscheme,
+    fetchingMnemoschemeConfirmed,
+    fetchingMnemoschemeError,
+    initializeMnemoscheme
 } = actions;
