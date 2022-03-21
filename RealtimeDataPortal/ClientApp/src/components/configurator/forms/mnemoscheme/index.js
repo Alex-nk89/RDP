@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ActionIcon, Button, ColorInput, Popover, Space, Stepper, Text, TextInput, Tooltip } from '@mantine/core';
@@ -25,7 +25,7 @@ const attributesInputs = {
 
 export {
     useState, useEffect, useRef,
-    useParams,
+    useParams, Redirect,
     useSelector, useDispatch,
     ActionIcon, Button, ColorInput, Popover, Space, Stepper, Text, TextInput, Tooltip,
     FabricJSCanvas, useFabricJSEditor, fabric,
