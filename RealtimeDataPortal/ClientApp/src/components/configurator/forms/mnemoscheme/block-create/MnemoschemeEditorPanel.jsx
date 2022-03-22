@@ -5,17 +5,16 @@ export const MnemoschemeEditorPanel = ({ mnemoscheme, saveMnemoscheme }) => {
     return (
         <div className='info-block__mnemoscheme-editor__panel'>
             <div className='info-block'>
-                <Text color='dimmed' size='sm'>Создать:</Text>
                 <MnemoschemeEditorPanelCreateElements mnemoscheme={mnemoscheme} />
             </div>
 
-            <div className='info-block'>
+            {/* <div className='info-block'>
                 <Text color='dimmed' size='sm'>Редактировать:</Text>
-            </div>
+            </div> */}
 
-            <div className='info-block'>
+            {/* <div className='info-block'>
                 <Text color='dimmed' size='sm'>Удалить:</Text>
-            </div>
+            </div> */}
 
             <div className='info-block'>
                 <Button onClick={saveMnemoscheme}>Сохранить</Button>

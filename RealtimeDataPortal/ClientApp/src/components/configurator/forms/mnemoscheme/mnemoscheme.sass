@@ -2,22 +2,27 @@
     display: flex
     flex-wrap: wrap
     position: relative
-    margin-top: 1rem
     .info-block
         margin-top: 0
         padding: 1.5rem
-        flex-grow: 0.25
     &__canvas
-        padding: 2rem
+        margin-top: 2rem
+        padding: .5rem
         aspect-ratio: 16/9
+        margin: 1rem auto
     &__panel
         display: flex
         justify-content: space-between
         width: 100%
-        margin-top: 2rem
+        .info-block
+            padding: .5rem
         &__create-block
             display: flex
             flex-wrap: wrap
             align-items: center
             button
                 margin: 0.5rem .25rem
+            &__block-add-text
+                min-width: 200px
+                padding: 1rem
+                background: '#fff'

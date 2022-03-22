@@ -7,7 +7,7 @@ import { ActionIcon, Button, ColorInput, Popover, Space, Stepper, Text, TextInpu
 import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react';
 import { fabric } from 'fabric';
 
-import { BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill } from 'react-icons/bs';
+import { BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripVertical } from 'react-icons/bs';
 import { IoSend } from 'react-icons/io5';
 
 import { useRequest } from '../../../../hooks/useRequest';
@@ -29,7 +29,7 @@ export {
     useSelector, useDispatch,
     ActionIcon, Button, ColorInput, Popover, Space, Stepper, Text, TextInput, Tooltip,
     FabricJSCanvas, useFabricJSEditor, fabric,
-    BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, IoSend,
+    BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripVertical, IoSend,
     useRequest, useNotification,
     MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanel, MnemoschemeEditorPanelCreateElements,
     attributesInputs

@@ -45,8 +45,8 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
 
                 <Stepper.Step label='Мнемосхема' description='Рисование мнемосхемы'>
                     <div className='info-block__mnemoscheme-editor'>
-                        <MnemoschemeEditorPreview setMnemoscheme={setMnemoscheme} />
                         <MnemoschemeEditorPanel mnemoscheme={mnemoscheme} saveMnemoscheme={saveMnemoscheme} />
+                        <MnemoschemeEditorPreview setMnemoscheme={setMnemoscheme} />
                     </div>
                 </Stepper.Step>
             </Stepper>
