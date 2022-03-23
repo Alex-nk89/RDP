@@ -6,7 +6,7 @@ namespace RealtimeDataPortal.Models
     public class User
     {
         public string Name { get; set; } = "";
-        public List<string> Groups { get; set; } = new List<string>() { "GTU75view", "testView", "configurator", "administrator" };
+        public List<string> Groups { get; set; } = new List<string>() /* { "GTU75view", "testView", "configurator", "administrator" } */;
         public bool IsFullView { get; set; } = false;
         public bool IsConfigurator { get; set; } = false;
         public bool IsAdministrator { get; set; } = false;
@@ -19,19 +19,19 @@ namespace RealtimeDataPortal.Models
 
         public void GetUser(string userName)
         {
-            //PrincipalContext ADContextGeneral = new PrincipalContext(ContextType.Domain);
-            //UserPrincipal user = UserPrincipal.FindByIdentity(ADContextGeneral, userName);
-            //PrincipalSearchResult<Principal> userGroups = user.GetAuthorizationGroups();
+            PrincipalContext ADContextGeneral = new PrincipalContext(ContextType.Domain);
+            UserPrincipal user = UserPrincipal.FindByIdentity(ADContextGeneral, userName);
+            PrincipalSearchResult<Principal> userGroups = user.GetAuthorizationGroups();
 
             Name = "Нагайцев Александр Евгеньевич";/* user.DisplayName; */
 
-            //if (userGroups.Count() > 0)
-            //{
-            //    foreach(var group in userGroups)
-            //    {
-            //        Groups.Add(group.Name);
-            //    }
-            //}        
+            if (userGroups.Count() > 0)
+            {
+                foreach(var group in userGroups)
+                {
+                    Groups.Add(group.Name);
+                }
+            }        
 
             AccessProfiles access = new AccessProfiles();
             var accessList = access.GetAccessProfiles();

@@ -10,13 +10,13 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
     const [addedText, setAddedText] = useState('');
     const [openedFieldAddedText, setOpenedFieldAddedText] = useState(false);
 
-    const figureAttributes = { fill: '#fff', stroke: '#000', width: 50, height: 50, };
+    const figureAttributes = { fill: '#fff', stroke: '#000', width: 50, height: 50 };
 
     const figures = {
-        line: { type: 'line', ...attributesInputs },
-        rectangle: { type: 'rect', ...figureAttributes },
-        circle: { type: 'circle', radius: 25, ...figureAttributes },
-        triangle: { type: 'triangle', ...figureAttributes },
+        line: { ...attributesInputs },
+        rectangle: { ...figureAttributes },
+        circle: { radius: 25, ...figureAttributes },
+        triangle: { ...figureAttributes },
     };
 
     const entryAddedText = (event) => setAddedText(event.target.value);
@@ -34,7 +34,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
     };
 
     const addRectangle = () => {
-        mnemoscheme.add(new fabric.Rect(figures.rectangle));
+        mnemoscheme.add(new fabric.Rect({ ...figures.rectangle }));
     };
 
     const addText = () => {
@@ -43,8 +43,27 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
         setAddedText('');
     };
 
+    const addTag = () => {
+        const tag = new fabric.Text(addedText, { fontSize: 14, fontFamily: 'system-ui' });
+
+        tag.toObject = (function (toObject) {
+            return function () {
+                return fabric.util.object.extend(toObject.call(this), {
+                    productId: this.productId,
+                    tagId: this.tagId
+                });
+            };
+        })(tag.toObject);
+
+        tag.productId = 1
+        mnemoscheme.add(tag);
+
+        setOpenedFieldAddedText(false);
+        setAddedText('');
+    };
+
     const buttonAddText = (
-        <ActionIcon onClick={addText}>
+        <ActionIcon onClick={addTag}>
             <IoSend />
         </ActionIcon>
     );
