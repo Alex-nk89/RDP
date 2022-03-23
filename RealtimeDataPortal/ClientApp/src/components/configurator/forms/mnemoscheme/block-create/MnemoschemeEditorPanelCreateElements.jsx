@@ -1,8 +1,8 @@
 import {
     useState,
-    ActionIcon, Button, Popover, Tooltip, TextInput,
+    ActionIcon, Popover, Tooltip, TextInput,
     fabric,
-    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsType, IoSend,
+    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsType, BsFonts, BsGripVertical, IoSend,
     attributesInputs
 } from "..";
 
@@ -71,27 +71,27 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
     return (
         <div className='info-block__mnemoscheme-editor__panel__create-block'>
             <Tooltip label='Добавить линию'>
-                <Button variant='light' compact onClick={addLine}>
-                    <BsSlashLg />
-                </Button>
+                <ActionIcon color="indigo" size="lg" onClick={addLine}>
+                    <BsSlashLg size={16} />
+                </ActionIcon>
             </Tooltip>
 
             <Tooltip label='Добавить круг'>
-                <Button variant='light' compact onClick={addCircle}>
-                    <BsFillCircleFill />
-                </Button>
+                <ActionIcon color="indigo" size="lg" onClick={addCircle}>
+                    <BsFillCircleFill size={18} />
+                </ActionIcon>
             </Tooltip>
 
             <Tooltip label='Добавить треугольник'>
-                <Button variant='light' compact onClick={addTriangle}>
-                    <BsTriangleFill />
-                </Button>
+                <ActionIcon color="indigo" size="lg" onClick={addTriangle}>
+                    <BsTriangleFill size={18} />
+                </ActionIcon>
             </Tooltip>
 
             <Tooltip label='Добавить прямоугольник'>
-                <Button variant='light' compact onClick={addRectangle}>
-                    <BsFillSquareFill />
-                </Button>
+                <ActionIcon color="indigo" size="lg" onClick={addRectangle}>
+                    <BsFillSquareFill size={18} />
+                </ActionIcon>
             </Tooltip>
 
             <Popover
@@ -101,20 +101,25 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
                 onClose={() => setOpenedFieldAddedText(false)}
                 target={(
                     <Tooltip label='Добавить текст'>
-                        <Button variant='light' compact onClick={() => setOpenedFieldAddedText(!openedFieldAddedText)}>
-                            <BsType />
-                        </Button>
+                        <ActionIcon color="indigo" size="lg" onClick={() => setOpenedFieldAddedText(!openedFieldAddedText)}>
+                            <BsFonts size={20} />
+                        </ActionIcon>
                     </Tooltip>
                 )}
             >
-                <TextInput
-                    size='xs'
-                    label='Введите текст'
-                    rightSection={buttonAddText}
-                    value={addedText}
-                    onChange={entryAddedText}
-                />
+                <div className='info-block__mnemoscheme-editor__panel__create-block__block-add-text'>
+                    <TextInput
+                        size='xs'
+                        label='Введите текст'
+                        rightSection={buttonAddText}
+                        value={addedText}
+                        onChange={entryAddedText}
+                    />
+                </div>
             </Popover>
+
+            <BsGripVertical size={24} style={{ color: '#aab3ba' }}/>
         </div>
     )
 };
+

@@ -17,6 +17,7 @@ const Mnemoscheme = () => {
     const dispatch = useDispatch();
     const { request, error } = useRequest();
     const { statusFetchingMnemoscheme, title } = useSelector(state => state.mnemoscheme);
+    const [svg, setSVG] = useState(null);
 
     useEffect(() => {
         dispatch(fetchingMnemoscheme());
@@ -24,19 +25,90 @@ const Mnemoscheme = () => {
         request(`GetMnemoscheme?id=${id}`)
             .then(result => {
                 dispatch(initializeMnemoscheme(result));
-                console.log(result[0].mnemoschemeContain)
 
-                const mnemoscheme = new fabric.Canvas('mnemoscheme', {
-                    width: 900,
-                    height: 620
-                }).loadFromJSON(result[0].mnemoschemeContain);
+                const newSVG = [];
 
-                mnemoscheme._objects.forEach(object => {
-                    object.lockMovementX = true;
-                    object.lockMovementY = true;
-                    object.selectable = false;
-                    object?.productId ? object.hoverCursor = 'pointer' : object.hoverCursor = 'default';
+                const mnemoscheme = new fabric.Canvas().loadFromJSON(result[0].mnemoschemeContain);
+                console.log(mnemoscheme.toSVG());
+
+                mnemoscheme._objects.forEach((object, index) => {
+                    console.log(object);
+
+                    const { left, top, radius, width, height, x1, x2, y1, y2,
+                        fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, text,
+                        strokeDashoffset, strokeLinejoin, strokeMiterlimit, fillRule, opacity, ownMatrixCache } = object;
+
+                    const matrix = `matrix(${ownMatrixCache.value.join(' ')})`;
+
+                    const style = {
+                        stroke,
+                        strokeWidth,
+                        strokeDasharray,
+                        strokeLinecap,
+                        strokeDashoffset,
+                        strokeLinejoin,
+                        strokeMiterlimit,
+                        fill,
+                        fillRule,
+                        opacity
+                    };
+
+                    switch (object.type) {
+                        case 'rect':
+                            newSVG.push(
+                                <rect
+                                    key={index}
+                                    style={style}
+                                    transform={matrix}
+                                    width={height}
+                                    height={width}
+                                    x={-(width / 2)}
+                                    y={-(height / 2)}
+                                />
+                            );
+                            break;
+                        case 'circle':
+                            newSVG.push(
+                                <circle
+                                    key={index}
+                                    transform={matrix}
+                                    style={style}
+                                    cx='0'
+                                    cy='0'
+                                    r={radius}
+                                />
+                            );
+                            break;
+                        case 'triangle':
+                            newSVG.push(
+                                <polygon
+                                    key={index}
+                                    transform={matrix}
+                                    style={style}
+                                    points="-25 25,0 -25,25 25"
+                                    x={left}
+                                    y={top}
+                                />
+                            );
+                            break;
+                        case 'line':
+                            newSVG.push(
+                                <line key={index} transform={matrix} style={style} x1={x1} y1={y1} x2={x2} y2={y2} />
+                            );
+                            break;
+                        case 'text':
+                            newSVG.push(
+                                <text key={index} transform={matrix}>
+                                    <tspan x='-11.99' y='4.4'>{text}</tspan>
+                                </text>
+                            );
+                            break;
+                        default:
+                            break;
+                    }
                 });
+
+                setSVG(newSVG);
 
                 mnemoscheme.on('mouse:down', followingALink);
 
@@ -75,13 +147,11 @@ const Mnemoscheme = () => {
             <h3 className='title'>{title}</h3>
 
             <div className='info-block info-block__mnemoscheme'>
-                <canvas id='mnemoscheme'></canvas>
                 <svg version="1.1"
                     baseProfile="full"
-                    width="100%" height="100%"
+                    width="100%" height="100%" viewBox="0 0 900 506" preserveAspectRatio="xMinYMin meet"
                     xmlns="http://www.w3.org/2000/svg">
-                    <rect width="100%" height="100%" fill="black" onClick={() => console.log('click')}/>
-                    <circle cx="150" cy="50%" r="50" fill="blue" />
+                    {svg}
                 </svg>
             </div>
         </div>
