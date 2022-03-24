@@ -1,4 +1,8 @@
-import { Button, Text, MnemoschemeEditorPanelCreateElements } from "..";
+import {
+    ActionIcon, Tooltip,
+    BsSave,
+    MnemoschemeEditorPanelCreateElements, MnemoschemeEditorPanelChangeElements
+} from "..";
 
 export const MnemoschemeEditorPanel = ({ mnemoscheme, saveMnemoscheme }) => {
 
@@ -6,24 +10,15 @@ export const MnemoschemeEditorPanel = ({ mnemoscheme, saveMnemoscheme }) => {
         <div className='info-block__mnemoscheme-editor__panel'>
             <div className='info-block'>
                 <MnemoschemeEditorPanelCreateElements mnemoscheme={mnemoscheme} />
+                <MnemoschemeEditorPanelChangeElements mnemoscheme={mnemoscheme} />
+
+                <Tooltip label='Сохранить'>
+                    <ActionIcon color="indigo" size="lg" onClick={saveMnemoscheme}>
+                        <BsSave size={18} />
+                    </ActionIcon>
+                </Tooltip>
+
             </div>
-
-            {/* <div className='info-block'>
-                <Text color='dimmed' size='sm'>Редактировать:</Text>
-            </div> */}
-
-            {/* <div className='info-block'>
-                <Text color='dimmed' size='sm'>Удалить:</Text>
-            </div> */}
-
-            <div className='info-block'>
-                <Button onClick={saveMnemoscheme}>Сохранить</Button>
-            </div>
-
-
-            {/* <div className='info-block__mnemoscheme_form_create-block'>
-                <Button onClick={saveMnemoscheme}>Сохранить</Button>
-            </div> */}
         </div>
     );
 };

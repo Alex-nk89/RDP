@@ -99,7 +99,7 @@ const Mnemoscheme = () => {
                         case 'text':
                             newSVG.push(
                                 <text key={index} transform={matrix}>
-                                    <tspan x='-11.99' y='4.4'>{text}</tspan>
+                                    <tspan x={-`${width / 2}`} y='4.4'>{text}</tspan>
                                 </text>
                             );
                             break;
@@ -149,7 +149,7 @@ const Mnemoscheme = () => {
             <div className='info-block info-block__mnemoscheme'>
                 <svg version="1.1"
                     baseProfile="full"
-                    width="100%" height="100%" viewBox="0 0 900 506" preserveAspectRatio="xMinYMin meet"
+                    width="100%" height="100%" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin meet"
                     xmlns="http://www.w3.org/2000/svg">
                     {svg}
                 </svg>

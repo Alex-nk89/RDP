@@ -2,7 +2,7 @@ import {
     useState,
     ActionIcon, Popover, Tooltip, TextInput,
     fabric,
-    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsType, BsFonts, BsGripVertical, IoSend,
+    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsFonts, BsGripVertical, IoSend,
     attributesInputs
 } from "..";
 
@@ -10,7 +10,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
     const [addedText, setAddedText] = useState('');
     const [openedFieldAddedText, setOpenedFieldAddedText] = useState(false);
 
-    const figureAttributes = { fill: '#fff', stroke: '#000', width: 50, height: 50 };
+    const figureAttributes = { fill: '#fff', stroke: '#000', width: 50, height: 50, top: 50, left: 50 };
 
     const figures = {
         line: { ...attributesInputs },
@@ -22,7 +22,13 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
     const entryAddedText = (event) => setAddedText(event.target.value);
 
     const addLine = () => {
-        mnemoscheme.add(new fabric.Line([10, 20, 30, 40], { stroke: '#000', top: 10, left: 10 }));
+        mnemoscheme.add(new fabric.Line([10, 20, 50, 25], { stroke: '#000', top: 50, left: 50 }));
+    };
+
+    const addArrow = () => {
+        mnemoscheme.add(new fabric.Path(`M 8 1 a 0.5 0.5 0 0 1 0.5 0.5 v 11.793 l 3.146 -3.147 a 0.5 0.5 0 0 
+            1 0.708 0.708 l -4 4 a 0.5 0.5 0 0 1 -0.708 0 l -4 -4 a 0.5 0.5 0 0 1 0.708 
+            -0.708 L 7.5 13.293 V 1.5 A 0.5 0.5 0 0 1 8 1 Z`, { stroke: '#000', strokeWidth: 1, top: 50, left: 50 }));
     };
 
     const addCircle = () => {
@@ -76,6 +82,12 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
                 </ActionIcon>
             </Tooltip>
 
+            <Tooltip label='Добавить стрелку'>
+                <ActionIcon color="indigo" size="lg" onClick={addArrow}>
+                    <BsArrowDown size={16} />
+                </ActionIcon>
+            </Tooltip>
+
             <Tooltip label='Добавить круг'>
                 <ActionIcon color="indigo" size="lg" onClick={addCircle}>
                     <BsFillCircleFill size={18} />
@@ -118,7 +130,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
                 </div>
             </Popover>
 
-            <BsGripVertical size={24} style={{ color: '#aab3ba' }}/>
+            <BsGripVertical size={24} style={{ color: '#aab3ba' }} />
         </div>
     )
 };

@@ -4,7 +4,7 @@ const initialState = {
     statusFetchingMnemoscheme: 'idle',
     id: 0,
     title: '',
-    mnemoschemeData: null
+    mnemoschemeData: {},
 };
 
 const mnemoschemeSlice = createSlice({
@@ -18,7 +18,7 @@ const mnemoschemeSlice = createSlice({
             state.id = action.payload[0].id;
             state.title = action.payload[0].mnemoschemeName;
             state.mnemoschemeData = action.payload[0].mnemoschemeContain;
-        }
+        },
     }
 });
 
@@ -29,5 +29,5 @@ export default reducer;
 export const {
     fetchingMnemoscheme,
     fetchingMnemoschemeError,
-    initializeMnemoscheme
+    initializeMnemoscheme,
 } = actions;

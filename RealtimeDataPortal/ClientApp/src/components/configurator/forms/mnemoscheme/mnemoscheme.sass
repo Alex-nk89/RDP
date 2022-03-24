@@ -11,10 +11,10 @@
         aspect-ratio: 16/9
         margin: 1rem auto
     &__panel
-        display: flex
-        justify-content: space-between
         width: 100%
         .info-block
+            display: flex
+            align-items: center
             padding: .5rem
         &__create-block
             display: flex
@@ -26,3 +26,17 @@
                 min-width: 200px
                 padding: 1rem
                 background: '#fff'
+        &__change-block
+            flex-grow: 1
+            display: flex
+            align-items: center
+            & > div
+                margin: 0.5rem .25rem
+            .mantine-ColorInput-root
+                max-width: 95px
+            .mantine-Input-wrapper 
+                input[type=number]
+                    max-width: 65px
+                input
+                    max-width: 80px
+            

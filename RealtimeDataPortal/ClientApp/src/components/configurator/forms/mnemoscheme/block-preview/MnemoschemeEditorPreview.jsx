@@ -8,9 +8,10 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
     const componentInfo = useSelector(state => state.configurator.componentInfo);
 
     useEffect(() => {
+
         const mnemoscheme = new fabric.Canvas('mnemoscheme', {
-            width: 900,
-            height: 506
+            width: 1200,
+            height: 675
         });
 
         if (componentInfo.mnemoscheme.mnemoschemeContain.length > 0) {
@@ -25,7 +26,7 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
     return (
         <div className='info-block__mnemoscheme-editor__canvas'>
             <div className='info-block'>
-                <canvas id='mnemoscheme' />
+                <canvas id='mnemoscheme'></canvas>
             </div>
         </div>
     )
