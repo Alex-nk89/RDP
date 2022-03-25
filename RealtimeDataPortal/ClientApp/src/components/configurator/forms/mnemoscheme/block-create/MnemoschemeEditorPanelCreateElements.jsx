@@ -2,11 +2,11 @@ import {
     useState,
     ActionIcon, Popover, Tooltip, TextInput,
     fabric,
-    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsFonts, BsGripVertical, IoSend,
+    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsFonts, BsGripHorizontal, BsSave, IoSend,
     attributesInputs
 } from "..";
 
-export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
+export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemoscheme }) => {
     const [addedText, setAddedText] = useState('');
     const [openedFieldAddedText, setOpenedFieldAddedText] = useState(false);
 
@@ -22,7 +22,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
     const entryAddedText = (event) => setAddedText(event.target.value);
 
     const addLine = () => {
-        mnemoscheme.add(new fabric.Line([10, 20, 50, 25], { stroke: '#000', top: 50, left: 50 }));
+        mnemoscheme.add(new fabric.Line([10, 20, 100, 20], { stroke: '#000', top: 50, left: 50, strokeWidth: 3 }));
     };
 
     const addArrow = () => {
@@ -75,7 +75,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
     );
 
     return (
-        <div className='info-block__mnemoscheme-editor__panel__create-block'>
+        <div className='info-block__mnemoscheme-editor__create-block'>
             <Tooltip label='Добавить линию'>
                 <ActionIcon color="indigo" size="lg" onClick={addLine}>
                     <BsSlashLg size={16} />
@@ -130,7 +130,13 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme }) => {
                 </div>
             </Popover>
 
-            <BsGripVertical size={24} style={{ color: '#aab3ba' }} />
+            <BsGripHorizontal size={24} style={{ color: '#aab3ba' }} />
+
+            <Tooltip label='Сохранить'>
+                <ActionIcon color="indigo" size="lg" onClick={saveMnemoscheme}>
+                    <BsSave size={18} />
+                </ActionIcon>
+            </Tooltip>
         </div>
     )
 };

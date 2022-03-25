@@ -1,42 +1,39 @@
 .info-block__mnemoscheme-editor
-    display: flex
-    flex-wrap: wrap
-    position: relative
     .info-block
+        position: relative
         margin-top: 0
-        padding: 1.5rem
+        padding: 0rem
     &__canvas
-        margin-top: 2rem
         padding: .5rem
         aspect-ratio: 16/9
-        margin: 1rem auto
-    &__panel
+        padding: 3.5rem 1rem 1rem 3.5rem
+    &__create-block
+        display: flex
+        flex-direction: column
+        align-items: center
+        position: absolute
+        height: 100%
+        padding: 2.5rem .5rem .5rem .5rem
+        z-index: 2
+        button
+            margin: 0.25rem
+        &__block-add-text
+            min-width: 200px
+            padding: 1rem
+            background: '#fff'
+    &__change-block
+        display: flex
+        justify-content: center
+        align-items: center
         width: 100%
-        .info-block
-            display: flex
-            align-items: center
-            padding: .5rem
-        &__create-block
-            display: flex
-            flex-wrap: wrap
-            align-items: center
-            button
-                margin: 0.5rem .25rem
-            &__block-add-text
-                min-width: 200px
-                padding: 1rem
-                background: '#fff'
-        &__change-block
-            flex-grow: 1
-            display: flex
-            align-items: center
-            & > div
-                margin: 0.5rem .25rem
-            .mantine-ColorInput-root
-                max-width: 95px
-            .mantine-Input-wrapper 
-                input[type=number]
-                    max-width: 65px
-                input
-                    max-width: 80px
-            
+        padding-left: 60px
+        position: absolute
+        z-index: 2
+        & > div
+            margin: 0.5rem .25rem
+        .mantine-ColorInput-wrapper
+            input
+                max-width: 160px
+        .mantine-NumberInput-wrapper, .mantine-Input-wrapper
+            input
+                max-width: 80px

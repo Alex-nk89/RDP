@@ -25,9 +25,7 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
 
     return (
         <div className='info-block__mnemoscheme-editor__canvas'>
-            <div className='info-block'>
-                <canvas id='mnemoscheme'></canvas>
-            </div>
+            <canvas id='mnemoscheme'></canvas>
         </div>
     )
 }

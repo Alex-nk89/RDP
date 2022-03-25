@@ -30,12 +30,12 @@ const Header = () => {
                 <div className="menu-btn" onClick={openNavbar} >
                     <IoMenu size={30} />
                 </div>
-                <div className="search">
+                {/* <div className="search">
                     <TextInput
                         placeholder="Поиск страниц..."
                         rightSection={search}
                         className="search-field" />
-                </div>
+                </div> */}
                 <div className="user">
                     {userBlock}
                 </div>

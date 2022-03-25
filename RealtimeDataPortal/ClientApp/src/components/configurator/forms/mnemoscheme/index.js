@@ -2,14 +2,15 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ActionIcon, Button, ColorInput, Input, Popover, Space, Stepper, Text, TextInput, Tooltip } from '@mantine/core';
+import { ActionIcon, Button, ColorInput, Input, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip } from '@mantine/core';
 
 import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react';
 import { fabric } from 'fabric';
 
 import {
-    BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripVertical, BsSave, BsArrowDown,
-    BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash
+    BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsGripVertical, BsSave, BsArrowDown,
+    BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, BsOption, 
+    BsAlt, BsArrowClockwise, BsArrowsAngleExpand
 } from 'react-icons/bs';
 import { IoSend } from 'react-icons/io5';
 
@@ -18,7 +19,6 @@ import { useNotification } from '../../../../hooks/useNotification';
 
 import { MnemoschemeEditorForm } from './block-form/MnemoschemeEditorForm';
 import { MnemoschemeEditorPreview } from './block-preview/MnemoschemeEditorPreview';
-import { MnemoschemeEditorPanel } from './block-create/MnemoschemeEditorPanel';
 import { MnemoschemeEditorPanelCreateElements } from './block-create/MnemoschemeEditorPanelCreateElements';
 import { MnemoschemeEditorPanelChangeElements } from './block-create/MnemoschemeEditorPanelChangeElements';
 
@@ -31,12 +31,13 @@ export {
     useState, useEffect, useRef,
     useParams, Redirect,
     useSelector, useDispatch,
-    ActionIcon, Button, ColorInput, Input, Popover, Space, Stepper, Text, TextInput, Tooltip,
+    ActionIcon, Button, ColorInput, Input, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip,
     FabricJSCanvas, useFabricJSEditor, fabric,
-    BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripVertical, BsSave, BsArrowDown,
-    BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, IoSend, 
+    BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsSave, BsArrowDown, BsGripVertical,
+    BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, BsOption, BsAlt,
+    BsArrowClockwise, BsArrowsAngleExpand, IoSend, 
     useRequest, useNotification,
-    MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanel, MnemoschemeEditorPanelCreateElements,
+    MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanelCreateElements,
     MnemoschemeEditorPanelChangeElements,
     attributesInputs
 }

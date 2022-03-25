@@ -34,8 +34,8 @@ const Mnemoscheme = () => {
                 mnemoscheme._objects.forEach((object, index) => {
                     console.log(object);
 
-                    const { left, top, radius, width, height, x1, x2, y1, y2,
-                        fill, stroke, strokeWidth, strokeDasharray, strokeLinecap, text,
+                    const { left, top, radius, width, height, x1, x2, y1, y2, rx, ry, path, pathOffset,
+                        fill, stroke, strokeWidth, strokeDashArray, strokeLinecap, text, fontSize, fontWeight,
                         strokeDashoffset, strokeLinejoin, strokeMiterlimit, fillRule, opacity, ownMatrixCache } = object;
 
                     const matrix = `matrix(${ownMatrixCache.value.join(' ')})`;
@@ -43,7 +43,7 @@ const Mnemoscheme = () => {
                     const style = {
                         stroke,
                         strokeWidth,
-                        strokeDasharray,
+                        strokeDasharray: strokeDashArray?.toString(),
                         strokeLinecap,
                         strokeDashoffset,
                         strokeLinejoin,
@@ -60,10 +60,12 @@ const Mnemoscheme = () => {
                                     key={index}
                                     style={style}
                                     transform={matrix}
-                                    width={height}
-                                    height={width}
+                                    width={width}
+                                    height={height}
                                     x={-(width / 2)}
                                     y={-(height / 2)}
+                                    rx={rx}
+                                    ry={ry}
                                 />
                             );
                             break;
@@ -99,8 +101,15 @@ const Mnemoscheme = () => {
                         case 'text':
                             newSVG.push(
                                 <text key={index} transform={matrix}>
-                                    <tspan x={-`${width / 2}`} y='4.4'>{text}</tspan>
+                                    <tspan x={-`${width / 2}`} y='4.4' fontSize={fontSize} fontWeight={fontWeight} >{text}</tspan>
                                 </text>
+                            );
+                            break;
+                        case 'path':
+                                const newPath = path.flatMap(path => path).join(' ');
+
+                            newSVG.push(
+                                <path key={index} d={newPath} transform={matrix + ` translate(-${pathOffset.x} -${pathOffset.y})`} style={style} />
                             );
                             break;
                         default:
@@ -159,3 +168,5 @@ const Mnemoscheme = () => {
 };
 
 export default Mnemoscheme;
+
+//canvas.add(new fabric.Path(`Q 3 0 6 3 T 3 9 T 0 15 T 3 18`, { top: 50, left: 50, stroke: '#000', fill: 'rgba(0, 0, 0, 0)' }));

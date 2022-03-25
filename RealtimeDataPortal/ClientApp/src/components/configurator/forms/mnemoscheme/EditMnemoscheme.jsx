@@ -3,7 +3,7 @@ import {
     useSelector,
     Space, Stepper,
     useNotification, useRequest,
-    MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanel
+    MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanelCreateElements, MnemoschemeEditorPanelChangeElements
 } from '.';
 import './mnemoscheme.sass';
 
@@ -45,11 +45,16 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
 
                 <Stepper.Step label='Мнемосхема' description='Рисование мнемосхемы'>
                     <div className='info-block__mnemoscheme-editor' >
-                        <MnemoschemeEditorPanel mnemoscheme={mnemoscheme} saveMnemoscheme={saveMnemoscheme} />
-                        <MnemoschemeEditorPreview setMnemoscheme={setMnemoscheme} />
+                        <div className='info-block'>
+                            <MnemoschemeEditorPanelCreateElements mnemoscheme={mnemoscheme} saveMnemoscheme={saveMnemoscheme} />
+                            <MnemoschemeEditorPanelChangeElements mnemoscheme={mnemoscheme} />
+                            <MnemoschemeEditorPreview setMnemoscheme={setMnemoscheme} />
+                        </div>
                     </div>
                 </Stepper.Step>
             </Stepper>
         </>
     );
 };
+
+//<MnemoschemeEditorPanel mnemoscheme={mnemoscheme} saveMnemoscheme={saveMnemoscheme} />

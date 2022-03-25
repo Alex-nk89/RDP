@@ -36,7 +36,7 @@ const App = () => {
             <main className={`${isOpenNavbar ? 'navbarOpen' : ''}`}>
                 <Header />
 
-                <Container size='md' className='container'>
+                <Container size='md' padding='xs' className='container'>
                     <Route exact path='/' component={Home} />
                     <Route exact path="/Graphics/:id" component={Graphics} />
                     <Route exact path="/Table/:id" component={TableRealtime} />
