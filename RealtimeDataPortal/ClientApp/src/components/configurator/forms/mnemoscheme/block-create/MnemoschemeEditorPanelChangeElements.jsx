@@ -1,54 +1,61 @@
 import {
     useState, useEffect,
-    ActionIcon, ColorInput, Input, NumberInput, Tooltip,
+    ActionIcon, ColorInput, Input, NumberInput, TextInput, Tooltip,
     BsBorderWidth, BsFillSquareFill, BsSquare, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight,
-    BsArrowBarDown, BsTrash, BsGripVertical, BsOption, BsAlt, BsArrowClockwise, BsArrowsAngleExpand
+    BsArrowBarDown, BsTrash, BsGripVertical, BsOption, BsAlt, BsArrowClockwise, BsArrowsAngleExpand, BsFonts,
+    useRequest, useNotification
 } from '..';
 
 export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
-    const [width, setWidth] = useState(50);
-    const [height, setHeight] = useState(50);
-    const [radius, setRadius] = useState(20);
-    const [colorElement, setColorElement] = useState('#000000');
-    const [colorStrokeElement, setColorStrokeElement] = useState('#000000');
-    const [strokeWidthElement, setStrokeWidthElement] = useState(1);
-    const [rxElement, setRXElement] = useState(0);
-    const [ryElement, setRYElement] = useState(0);
-    const [strokeDashArray, setStrokeDashArray] = useState('');
-    const [skewX, setSkewX] = useState(0);
-    const [skewY, setSkewY] = useState(0);
-    const [angle, setAngle] = useState(0);
-    const [fontSize, setFontSize] = useState(14);
-    const [fontWeight, setFontWeight] = useState(400);
     const [mnemoschemeActiveObjectType, setMnemoschemeActiveObjectType] = useState(null);
+    const [listTags, setListTags] = useState([]);
+    const [elementAttributes, setElementAttributes] = useState({
+        width: 50,
+        height: 50,
+        radius: 20,
+        colorElement: '#000',
+        colorStrokeElement: '#000',
+        strokeWidthElement: 1,
+        rxElement: 0,
+        ryElement: 0,
+        strokeDashArray: '',
+        skewX: 0,
+        skewY: 0,
+        angle: 0,
+        text: '',
+        fontSize: 14,
+        fontWeight: 400,
+        productId: 0,
+        tagId: 0,
+        tagName: ''
+    });
+
+    const { request } = useRequest();
+    const { show } = useNotification();
+
+    const visibleListTags = listTags.length > 0 ? true : false;
+
+    const closeList = () => setListTags([]);
 
     const getElementAttributes = (event) => {
-
         if (!event.target) {
             setMnemoschemeActiveObjectType(null);
             return;
         }
 
-        const { width, height, radius, angle, fill, stroke, strokeWidth, rx, ry, skewX, skewY, fontSize, fontWeight } = event.target;
+        const { width, height, radius, angle, fill, stroke, strokeWidth, rx, ry, skewX, skewY, text, fontSize, fontWeight,
+            productId, tagId, tagName, round } = event.target;
 
         setMnemoschemeActiveObjectType(event.target.type);
-        setWidth(width);
-        setHeight(height);
-        setRadius(radius);
-        setColorElement(fill);
-        setColorStrokeElement(stroke);
-        setStrokeWidthElement(strokeWidth);
-        setRXElement(rx);
-        setRYElement(ry);
-        setSkewX(skewX);
-        setSkewY(skewY);
-        setAngle(angle);
-        setFontSize(fontSize);
-        setFontWeight(fontWeight);
+        setElementAttributes({
+            ...elementAttributes, width, height, radius, angle, fill, stroke, strokeWidth, rx, ry,
+            skewX, skewY, fontSize, fontWeight,
+            text: productId > 0 ? '%' + tagName : text, tagId, tagName, productId, round
+        });
     }
 
     const changeWidth = (width) => {
-        setWidth(width);
+        setElementAttributes({ ...elementAttributes, width });
 
         if (mnemoscheme._activeObject) {
             mnemoscheme._activeObject.set({ width });
@@ -57,7 +64,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
     };
 
     const changeHeight = (height) => {
-        setHeight(height);
+        setElementAttributes({ ...elementAttributes, height });
 
         if (mnemoscheme._activeObject) {
             mnemoscheme._activeObject.set({ height });
@@ -66,8 +73,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
     };
 
     const changeAngle = (angle) => {
-        console.log(mnemoscheme._activeObject);
-        setAngle(angle);
+        setElementAttributes({ ...elementAttributes, angle });
 
         if (mnemoscheme._activeObject) {
             mnemoscheme._activeObject.set({ angle });
@@ -76,7 +82,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
     };
 
     const changeRadius = (radius) => {
-        setRadius(radius);
+        setElementAttributes({ ...elementAttributes, radius });
 
         if (mnemoscheme._activeObject) {
             mnemoscheme._activeObject.set({ radius });
@@ -84,53 +90,53 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         }
     };
 
-    const changeColorElement = (color) => {
-        setColorElement(color);
+    const changeColorElement = (colorElement) => {
+        setElementAttributes({ ...elementAttributes, colorElement });
 
         if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ fill: color });
+            mnemoscheme._activeObject.set({ fill: colorElement });
             mnemoscheme.renderAll();
         }
     };
 
-    const changeColorStrokeElement = (color) => {
-        setColorStrokeElement(color);
+    const changeColorStrokeElement = (colorStrokeElement) => {
+        setElementAttributes({ ...elementAttributes, colorStrokeElement });
 
         if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ stroke: color });
+            mnemoscheme._activeObject.set({ stroke: colorStrokeElement });
             mnemoscheme.renderAll();
         }
     };
 
-    const changeStrokeWidthElement = (strokeWidth) => {
-        setStrokeWidthElement(strokeWidth);
+    const changeStrokeWidthElement = (strokeWidthElement) => {
+        setElementAttributes({ ...elementAttributes, strokeWidthElement });
 
         if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ strokeWidth });
+            mnemoscheme._activeObject.set({ strokeWidth: strokeWidthElement });
             mnemoscheme.renderAll();
         }
     };
 
-    const changeRXElement = (rx) => {
-        setRXElement(rx);
+    const changeRXElement = (rxElement) => {
+        setElementAttributes({ ...elementAttributes, rxElement });
 
         if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ rx });
+            mnemoscheme._activeObject.set({ rx: rxElement });
             mnemoscheme.renderAll();
         }
     };
 
-    const changeRYElement = (ry) => {
-        setRYElement(ry);
+    const changeRYElement = (ryElement) => {
+        setElementAttributes({ ...elementAttributes, ryElement });
 
         if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ ry });
+            mnemoscheme._activeObject.set({ ry: ryElement });
             mnemoscheme.renderAll();
         }
     };
 
     const changeStrokeDashArray = (event) => {
-        setStrokeDashArray(event.target.value);
+        setElementAttributes({ ...elementAttributes, strokeDashArray: event.target.value });
 
         if (mnemoscheme._activeObject) {
             mnemoscheme._activeObject.set({ strokeDashArray: event.target.value.split(' ') });
@@ -139,7 +145,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
     };
 
     const changeSkewX = (skewX) => {
-        setSkewX(skewX);
+        setElementAttributes({ ...elementAttributes, skewX });;
 
         if (mnemoscheme._activeObject) {
             mnemoscheme._activeObject.set({ skewX });
@@ -148,7 +154,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
     };
 
     const changeSkewY = (skewY) => {
-        setSkewX(skewY);
+        setElementAttributes({ ...elementAttributes, skewY });
 
         if (mnemoscheme._activeObject) {
             mnemoscheme._activeObject.set({ skewY });
@@ -156,8 +162,28 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         }
     };
 
+    const changeText = (event) => {
+        const text = event.target.value;
+        setElementAttributes({ ...elementAttributes, text });
+
+        if (mnemoscheme._activeObject) {
+
+            if (text[0] === '%' && text.length > 3) {
+                request(`GetTags?name=${text.substring(1)}&forMnemoscheme=true`)
+                    .then(listTags => {
+                        setListTags(listTags);
+                    })
+                    .catch(error => show('error', error));
+            } else {
+                mnemoscheme._activeObject.set({ text });
+            }
+
+            mnemoscheme.renderAll();
+        }
+    };
+
     const changeFontSize = (fontSize) => {
-        setFontSize(fontSize);
+        setElementAttributes({ ...elementAttributes, fontSize });
 
         if (mnemoscheme._activeObject) {
             mnemoscheme._activeObject.set({ fontSize });
@@ -166,7 +192,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
     };
 
     const changeFontWeight = (fontWeight) => {
-        setFontWeight(fontWeight);
+        setElementAttributes({ ...elementAttributes, fontWeight });
 
         if (mnemoscheme._activeObject) {
             mnemoscheme._activeObject.set({ fontWeight });
@@ -182,12 +208,29 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         setMnemoschemeActiveObjectType(null);
     };
 
+    const selectTag = (event) => {
+        if (elementAttributes.text[0] === '%') {
+            const { tagid, productid, tagname, round } = event.target.dataset;
+
+            setElementAttributes({ ...elementAttributes, text: '%' + tagname });
+
+            mnemoscheme._activeObject.set({ tagId: Number(tagid), productId: Number(productid), tagName: tagname, text: '000.000', round: Number(round) });
+            mnemoscheme.renderAll();
+        }
+    };
+
     useEffect(() => {
         mnemoscheme?.on('mouse:down', getElementAttributes);
 
         return mnemoscheme?.on('mouse:down', getElementAttributes);
         //eslint-disable-next-line
     }, [mnemoscheme]);
+
+    useEffect(() => {
+        document.addEventListener("click", closeList);
+
+        return () => document.removeEventListener("click", closeList);
+    }, []);
 
     const selectWidth = ['rect', 'line'].includes(mnemoschemeActiveObjectType) ? (
         <Tooltip label='Изменить ширину'>
@@ -197,7 +240,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 type='number'
                 min='0' max='1200'
                 icon={<BsArrowBarRight size={18} color='#5c5c5c' />}
-                value={width}
+                value={elementAttributes.width}
                 onChange={changeWidth}
             />
         </Tooltip>
@@ -211,7 +254,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 type='number'
                 min='0' max='675'
                 icon={<BsArrowBarDown size={18} color='#5c5c5c' />}
-                value={height}
+                value={elementAttributes.height}
                 onChange={changeHeight}
             />
         </Tooltip>
@@ -225,7 +268,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 type='number'
                 min='1'
                 icon={<BsArrowsAngleExpand size={18} color='#5c5c5c' />}
-                value={radius}
+                value={elementAttributes.radius}
                 onChange={changeRadius}
             />
         </Tooltip>
@@ -238,7 +281,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 variant='filled'
                 type='number'
                 icon={<BsArrowClockwise size={18} color='#5c5c5c' />}
-                value={angle}
+                value={elementAttributes.angle}
                 onChange={changeAngle}
             />
         </Tooltip>
@@ -250,8 +293,8 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 size='xs'
                 variant='filled'
                 format="rgba"
-                icon={<BsFillSquareFill color={colorElement} size={18} />}
-                value={colorElement}
+                icon={<BsFillSquareFill color={elementAttributes.colorElement} size={18} />}
+                value={elementAttributes.colorElement}
                 onChange={changeColorElement}
             />
         </Tooltip>
@@ -263,8 +306,8 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 size='xs'
                 variant='filled'
                 format="rgba"
-                icon={<BsSquare color={colorStrokeElement} size={18} />}
-                value={colorStrokeElement}
+                icon={<BsSquare color={elementAttributes.colorStrokeElement} size={18} />}
+                value={elementAttributes.colorStrokeElement}
                 onChange={changeColorStrokeElement}
             />
         </Tooltip>
@@ -277,7 +320,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 variant='filled'
                 type='number'
                 icon={<BsBorderWidth size={18} color='#5c5c5c' />}
-                value={strokeWidthElement}
+                value={elementAttributes.strokeWidthElement}
                 onChange={changeStrokeWidthElement}
             />
         </Tooltip>
@@ -290,7 +333,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 variant='filled'
                 type='number'
                 icon={<BsArrow90DegRight size={18} color='#5c5c5c' />}
-                value={rxElement}
+                value={elementAttributes.rxElement}
                 onChange={changeRXElement}
             />
         </Tooltip>
@@ -303,7 +346,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 variant='filled'
                 type='number'
                 icon={<BsArrow90DegUp size={18} color='#5c5c5c' />}
-                value={ryElement}
+                value={elementAttributes.ryElement}
                 onChange={changeRYElement}
             />
         </Tooltip>
@@ -315,7 +358,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 size='xs'
                 variant='filled'
                 icon={<BsBorderStyle size={18} color='#5c5c5c' />}
-                value={strokeDashArray}
+                value={elementAttributes.strokeDashArray}
                 onChange={changeStrokeDashArray}
             />
         </Tooltip>
@@ -328,38 +371,83 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 variant='filled'
                 type='number'
                 icon={<BsOption size={18} color='#5c5c5c' />}
-                value={skewX}
+                value={elementAttributes.skewX}
                 onChange={changeSkewX}
             />
         </Tooltip>
     ) : null;
 
-    const selectSkewY = ['rect', 'path', 'circle', 'triangle', 'text'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Наклон по оси Y'>
-            <NumberInput
-                size='xs'
-                variant='filled'
-                type='number'
-                icon={<BsAlt size={18} color='#5c5c5c' />}
-                value={skewY}
-                onChange={changeSkewY}
-            />
-        </Tooltip>
-    ) : null;
+    const selectSkewY = ['rect', 'path', 'circle', 'triangle', 'text'].includes(mnemoschemeActiveObjectType)
+        ? (
+            <Tooltip label='Наклон по оси Y'>
+                <NumberInput
+                    size='xs'
+                    variant='filled'
+                    type='number'
+                    icon={<BsAlt size={18} color='#5c5c5c' />}
+                    value={elementAttributes.skewY}
+                    onChange={changeSkewY}
+                />
+            </Tooltip>
+        )
+        : null;
 
-    const selectFontSize = ['text'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Размер шрифта'>
-            <NumberInput
-                size='xs'
-                variant='filled'
-                type='number'
-                min='5'
-                icon={<BsAlt size={18} color='#5c5c5c' />}
-                value={fontSize}
-                onChange={changeFontSize}
-            />
-        </Tooltip>
-    ) : null;
+    const selectText = ['text'].includes(mnemoschemeActiveObjectType)
+        ? (
+            <div className='info-block__mnemoscheme-editor__change-block__text-block'>
+                <Tooltip label='Изменить текст'>
+                    <TextInput
+                        size='xs'
+                        variant='filled'
+                        icon={<BsFonts size={18} color='#5c5c5c' />}
+                        value={elementAttributes.text}
+                        onChange={changeText}
+                    />
+                </Tooltip>
+
+                <div className="info-block__mnemoscheme-editor__change-block__text-block__search-result" open={visibleListTags}>
+                    {
+                        listTags.map((tag, index) => (
+                            <p
+                                key={index}
+                                id={tag.tagId}
+                                data-tagid={tag.tagId}
+                                data-productid={tag.productId}
+                                data-tagname={tag.tagName}
+                                data-round={tag.round}
+                                className='info-block__mnemoscheme-editor__change-block__text-block__search-result__item'
+                                onClick={selectTag}
+                            >
+                                <span data-tagid={tag.tagId} data-productid={tag.productId} data-tagname={tag.tagName} data-round={tag.round} style={{ fontSize: '13px' }} >
+                                    {tag.tagName}
+                                </span>
+                                <br />
+                                <span data-tagid={tag.tagId} data-productid={tag.productId} data-tagname={tag.tagName} data-round={tag.round} style={{ fontSize: '12px', color: '#909296' }}>
+                                    {tag.productName}
+                                </span>
+                            </p>
+                        ))
+                    }
+                </div>
+            </div>
+        )
+        : null;
+
+    const selectFontSize = ['text'].includes(mnemoschemeActiveObjectType)
+        ? (
+            <Tooltip label='Размер шрифта'>
+                <NumberInput
+                    size='xs'
+                    variant='filled'
+                    type='number'
+                    min='5'
+                    icon={<BsAlt size={18} color='#5c5c5c' />}
+                    value={elementAttributes.fontSize}
+                    onChange={changeFontSize}
+                />
+            </Tooltip>
+        )
+        : null;
 
     const selectFontWeight = ['text'].includes(mnemoschemeActiveObjectType) ? (
         <Tooltip label='Толщина шрифта'>
@@ -369,7 +457,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 type='number'
                 min='100' max='900' step={100}
                 icon={<BsAlt size={18} color='#5c5c5c' />}
-                value={fontWeight}
+                value={elementAttributes.fontWeight}
                 onChange={changeFontWeight}
             />
         </Tooltip>
@@ -387,6 +475,10 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
 
     return (
         <div className='info-block__mnemoscheme-editor__change-block'>
+            {selectText}
+            {selectFontSize}
+            {selectFontWeight}
+
             {selectColorElement}
             {selectColorStrokeElement}
 
@@ -403,9 +495,6 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
 
             {selectSkewX}
             {selectSkewY}
-
-            {selectFontSize}
-            {selectFontWeight}
 
             {deleteElement}
         </div>

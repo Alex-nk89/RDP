@@ -15,11 +15,31 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
         });
 
         if (componentInfo.mnemoscheme.mnemoschemeContain.length > 0) {
-            mnemoscheme.loadFromJSON(componentInfo.mnemoscheme.mnemoschemeContain);
+            //mnemoscheme.loadFromJSON(componentInfo.mnemoscheme.mnemoschemeContain);
+            const _objects = new fabric.Canvas().loadFromJSON(componentInfo.mnemoscheme.mnemoschemeContain)._objects.map(object => object);
+
+            _objects.forEach(object => {
+
+                if (object.type === 'text') {
+                    object.toObject = (function (toObject) {
+                        return function () {
+                            return fabric.util.object.extend(toObject.call(this), {
+                                productId: this.productId,
+                                tagId: this.tagId,
+                                tagName: this.tagName,
+                                round: this.round
+                            });
+                        };
+                    })(object.toObject);
+
+                    mnemoscheme.add(object);
+                } else {
+                    mnemoscheme.add(object);
+                }
+            });
         }
 
         setMnemoscheme(mnemoscheme);
-
         //eslint-disable-next-line
     }, []);
 

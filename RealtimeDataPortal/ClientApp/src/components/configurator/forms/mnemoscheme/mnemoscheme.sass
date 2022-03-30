@@ -1,3 +1,5 @@
+@import '../../../../style/_mixins'
+    
 .info-block__mnemoscheme-editor
     .info-block
         position: relative
@@ -17,10 +19,6 @@
         z-index: 2
         button
             margin: 0.25rem
-        &__block-add-text
-            min-width: 200px
-            padding: 1rem
-            background: '#fff'
     &__change-block
         display: flex
         justify-content: center
@@ -37,3 +35,13 @@
         .mantine-NumberInput-wrapper, .mantine-Input-wrapper
             input
                 max-width: 80px
+        &__text-block
+            position: relative
+            width: 100%
+            max-width: 300px
+            white-space: nowrap
+            .mantine-Tooltip-root
+                width: 100%
+            p
+                line-height: 1.1rem
+            @include search-result(300px)

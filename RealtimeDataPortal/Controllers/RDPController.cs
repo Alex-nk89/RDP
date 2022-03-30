@@ -20,7 +20,7 @@ namespace RealtimeDataPortal.Controllers
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        
+
         static User user;
 
         [HttpGet("GetUser")]
@@ -216,12 +216,15 @@ namespace RealtimeDataPortal.Controllers
         }
 
         [HttpGet("GetTags")]
-        public Object GetTags(string name)
+        public Object GetTags(string name, bool forMnemoscheme = false)
         {
             try
             {
                 if (!user.IsConfigurator)
                     throw new ForbiddenException(listMessagesError.NotAccess);
+
+                if (forMnemoscheme)
+                    return new TagInfo().GetListTagsForMnemoscheme(name);
 
                 return new TagInfo().GetTags(name);
             }
@@ -481,12 +484,12 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
-        [HttpGet("GetMnemoscheme")]
-        public Object GetMnemoscheme (int id)
+        [HttpGet("GetMnemoschemeImage")]
+        public Object GetMnemoschemeImage(int id)
         {
             try
             {
-                var mnemoscheme = new Mnemoscheme().GetMnemoscheme(id, user);
+                var mnemoscheme = new Mnemoscheme().GetMnemoschemeImage(id, user);
                 return mnemoscheme;
             }
             catch (NotFoundException ex)
@@ -503,6 +506,28 @@ namespace RealtimeDataPortal.Controllers
                 {
                     Message = listMessagesError.NotGetData
                 });
+            }
+        }
+
+        [HttpPost("GetMnemoschemeTagsValues")]
+        public Object GetMnemoschemeTagsValues(int[] tagsId)
+        {
+            try
+            {
+                var listTags = new Mnemoscheme().GetMnemoschemeTagsValues(tagsId);
+                return listTags;
+            }
+            catch (NotFoundException ex)
+            {
+                return StatusCode(404, new { Message = ex.Message });
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
             }
         }
 
@@ -597,7 +622,7 @@ namespace RealtimeDataPortal.Controllers
             {
                 if (!user.IsAdministrator)
                     throw new ForbiddenException(listMessagesError.NotAccess);
-                    
+
                 new Server().EditServer(server);
                 return new { Success = listMessagesError.Saved };
             }

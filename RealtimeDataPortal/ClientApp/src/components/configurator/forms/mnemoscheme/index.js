@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ActionIcon, Button, ColorInput, Input, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip } from '@mantine/core';
+import { ActionIcon, Button, ColorInput, Input, NumberInput, Popover, Select, Space, Stepper, Text, TextInput, Tooltip } from '@mantine/core';
 
 import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react';
 import { fabric } from 'fabric';
@@ -10,7 +10,7 @@ import { fabric } from 'fabric';
 import {
     BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsGripVertical, BsSave, BsArrowDown,
     BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, BsOption, 
-    BsAlt, BsArrowClockwise, BsArrowsAngleExpand
+    BsAlt, BsArrowClockwise, BsArrowsAngleExpand, BsFillBadgeAdFill
 } from 'react-icons/bs';
 import { IoSend } from 'react-icons/io5';
 
@@ -28,14 +28,14 @@ const attributesInputs = {
 };
 
 export {
-    useState, useEffect, useRef,
+    useState, useEffect, useRef, useMemo,
     useParams, Redirect,
     useSelector, useDispatch,
-    ActionIcon, Button, ColorInput, Input, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip,
+    ActionIcon, Button, ColorInput, Input, NumberInput, Popover, Select, Space, Stepper, Text, TextInput, Tooltip,
     FabricJSCanvas, useFabricJSEditor, fabric,
     BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsSave, BsArrowDown, BsGripVertical,
     BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, BsOption, BsAlt,
-    BsArrowClockwise, BsArrowsAngleExpand, IoSend, 
+    BsArrowClockwise, BsArrowsAngleExpand, BsFillBadgeAdFill, IoSend, 
     useRequest, useNotification,
     MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanelCreateElements,
     MnemoschemeEditorPanelChangeElements,

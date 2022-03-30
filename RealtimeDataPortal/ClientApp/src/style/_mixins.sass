@@ -1,9 +1,9 @@
 @import './_variables'
 
-@mixin search-result
+@mixin search-result($width)
     &__search-result
         position: absolute
-        width: calc(100% - 55px)
+        width: $width
         max-height: 0px
         margin-top: 5px
         padding: 0
@@ -12,6 +12,7 @@
         z-index: 2
         &::-webkit-scrollbar
             width: 8px
+            height: 8px
         &::-webkit-scrollbar-track
             background: #fff
         &::-webkit-scrollbar-thumb
@@ -33,10 +34,12 @@
             cursor: pointer
             &:hover
                 background-color: rgb(241, 243, 245)
+                
 
 @mixin scrollbar
     &::-webkit-scrollbar
         width: 8px
+        height: 8px
     &::-webkit-scrollbar-track
         background: #fff
     &::-webkit-scrollbar-thumb

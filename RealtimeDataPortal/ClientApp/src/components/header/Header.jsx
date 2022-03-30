@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { TextInput, ActionIcon } from "@mantine/core";
-import { IoSearch, IoMenu } from "react-icons/io5";
+import { IoMenu } from "react-icons/io5";
 
 import User from "./user/User";
 import { toogleNavbarState } from "../../actions";
@@ -12,10 +11,10 @@ const Header = () => {
     const { configMode, adminMode } = useSelector(state => state.navbar);
     const dispatch = useDispatch();
 
-    const search =
-        <ActionIcon>
-            <IoSearch size={20} color="#6c757d" />
-        </ActionIcon>
+    //const search =
+    //    <ActionIcon>
+    //        <IoSearch size={20} color="#6c757d" />
+    //    </ActionIcon>
 
     const openNavbar = () => dispatch(toogleNavbarState());
 

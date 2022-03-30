@@ -22,7 +22,7 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
             tag: { value: '', error: '' }
         }],
         position: { value: '', error: '' },
-        round: { value: 0, error: '' },
+        round: { value: 3, error: '' },
         showLimits: false
     };
 
