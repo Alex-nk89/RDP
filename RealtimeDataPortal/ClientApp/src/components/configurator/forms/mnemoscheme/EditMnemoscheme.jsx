@@ -18,7 +18,9 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
     const [mnemoscheme, setMnemoscheme] = useState(null);
 
     const saveMnemoscheme = () => {
-        componentInfo.mnemoscheme.mnemoschemeContain = JSON.stringify(mnemoscheme);
+        //componentInfo.mnemoscheme.mnemoschemeContain = JSON.stringify(mnemoscheme);
+        //const component = componentInfo;
+        //component.mnemoscheme.mnemoschemeContain = JSON.stringify(mnemoscheme);
 
         request('AddChangeElement', 'POST', JSON.stringify(componentInfo))
             .then(result => show('success', result.message))

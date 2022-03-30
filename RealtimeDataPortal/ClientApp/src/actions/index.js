@@ -41,32 +41,6 @@ export const updateNavbar = () => {
     }
 };
 
-export const operationInitialize = (operation) => {
-    return {
-        type: 'OPERATION_INITIALIZE',
-        payload: operation
-    }
-};
-
-export const fetchingComponentInfo = () => {
-    return {
-        type: 'COMPONENT_INFO_FETCHING'
-    }
-};
-
-export const fetchingComponentInfoError = () => {
-    return {
-        type: 'COMPONENT_INFO_FETCHING_ERROR'
-    }
-};
-
-export const initializeComponentInfo = (componentInfo) => {
-    return {
-        type: 'INITIALIZE_COMPONENT_INFO',
-        payload: componentInfo
-    }
-};
-
 export const initialStateGraphics = () => {
     return {
         type: 'INITIAL_STATE_GRAPHICS'

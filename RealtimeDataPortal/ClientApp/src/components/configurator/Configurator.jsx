@@ -4,7 +4,7 @@ import {
 } from './index';
 import './configurator.sass';
 
-import { fetchingComponentInfo, operationInitialize, initializeComponentInfo, fetchingComponentInfoError } from '../../actions';
+import { fetchingComponentInfo, operationInitialize, initializeComponentInfo, fetchingComponentInfoError } from '../../reducers/configuratorSlice';
 
 const Configurator = () => {
     const { id, operation } = useParams();
