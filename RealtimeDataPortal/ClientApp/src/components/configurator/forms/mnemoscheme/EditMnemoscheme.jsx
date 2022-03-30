@@ -12,17 +12,17 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
 
     const { request } = useRequest();
     const { show } = useNotification();
+
     const componentInfo = useSelector(state => state.configurator.componentInfo);
 
     const [activeStep, setActiveStep] = useState(0);
     const [mnemoscheme, setMnemoscheme] = useState(null);
 
     const saveMnemoscheme = () => {
-        //componentInfo.mnemoscheme.mnemoschemeContain = JSON.stringify(mnemoscheme);
-        //const component = componentInfo;
-        //component.mnemoscheme.mnemoschemeContain = JSON.stringify(mnemoscheme);
 
-        request('AddChangeElement', 'POST', JSON.stringify(componentInfo))
+        const component = { ...componentInfo, mnemoscheme: { ...componentInfo.mnemoscheme, mnemoschemeContain: JSON.stringify(mnemoscheme) } };
+
+        request('AddChangeElement', 'POST', JSON.stringify(component))
             .then(result => show('success', result.message))
             .catch(error => show('error', error));
     };

@@ -31,5 +31,5 @@ export const {
     operationInitialize,
     fetchingComponentInfo,
     fetchingComponentInfoError,
-    initializeComponentInfo
+    initializeComponentInfo,
 } = actions;
