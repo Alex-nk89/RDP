@@ -64,7 +64,7 @@ const Mnemoscheme = () => {
             const matrix = `matrix(${ownMatrixCache.value.join(' ')})`;
 
             const textContain = productId > 0
-                ? Number(listTagsValue.find(tag => tag?.tagId === tagId).value).toFixed(round)
+                ? listTagsValue.find(tag => tag?.tagId === tagId)?.value?.toFixed(round) ?? '###'
                 : text;
 
             const textElementClass = productId > 0

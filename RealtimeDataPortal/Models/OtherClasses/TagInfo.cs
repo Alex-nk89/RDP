@@ -49,6 +49,8 @@ namespace RealtimeDataPortal.Models.OtherClasses
                         on parameter.ParameterId equals parameterTag.ParameterId
                      join tag in rdp_base.Tag
                         on parameterTag.TagId equals tag.TagId
+                     join parameterType in rdp_base.ParameterType
+                        on parameter.ParameterTypeId equals parameterType.ParameterTypeId
                      where EF.Functions.Like(tag.TagName, $"%{name}%")
                       || EF.Functions.Like(parameter.Position, $"%{name}%")
                      select new {
@@ -56,7 +58,8 @@ namespace RealtimeDataPortal.Models.OtherClasses
                          TagName = tag.TagName,
                          ProductId = product.ProductId,
                          ProductName = $"{product.ProductName} ({parameter.Position})",
-                         Round = parameter.Round
+                         Round = parameter.Round,
+                         Color = parameterType.Color
                      })
                      .AsNoTracking()
                      .Distinct()

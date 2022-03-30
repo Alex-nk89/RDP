@@ -210,11 +210,14 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
 
     const selectTag = (event) => {
         if (elementAttributes.text[0] === '%') {
-            const { tagid, productid, tagname, round } = event.target.dataset;
+            const { tagid, productid, tagname, round, color } = event.target.dataset;
 
             setElementAttributes({ ...elementAttributes, text: '%' + tagname });
 
-            mnemoscheme._activeObject.set({ tagId: Number(tagid), productId: Number(productid), tagName: tagname, text: '000.000', round: Number(round) });
+            mnemoscheme._activeObject.set({
+                tagId: Number(tagid), productId: Number(productid), tagName: tagname,
+                text: '000.000', round: Number(round), fill: color
+            });
             mnemoscheme.renderAll();
         }
     };
@@ -287,18 +290,20 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         </Tooltip>
     ) : null;
 
-    const selectColorElement = ['rect', 'circle', 'triangle', 'text'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Изменить цвет заливки'>
-            <ColorInput
-                size='xs'
-                variant='filled'
-                format="rgba"
-                icon={<BsFillSquareFill color={elementAttributes.colorElement} size={18} />}
-                value={elementAttributes.colorElement}
-                onChange={changeColorElement}
-            />
-        </Tooltip>
-    ) : null;
+    const selectColorElement = ['rect', 'circle', 'triangle', 'text'].includes(mnemoschemeActiveObjectType) && !elementAttributes.productId
+        ? (
+            <Tooltip label='Изменить цвет заливки'>
+                <ColorInput
+                    size='xs'
+                    variant='filled'
+                    format="rgba"
+                    icon={<BsFillSquareFill color={elementAttributes.colorElement} size={18} />}
+                    value={elementAttributes.colorElement}
+                    onChange={changeColorElement}
+                />
+            </Tooltip>
+        )
+        : null;
 
     const selectColorStrokeElement = ['rect', 'line', 'path', 'circle', 'triangle'].includes(mnemoschemeActiveObjectType) ? (
         <Tooltip label='Изменить цвет обводки'>
@@ -415,14 +420,27 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                                 data-productid={tag.productId}
                                 data-tagname={tag.tagName}
                                 data-round={tag.round}
+                                data-color={tag.color}
                                 className='info-block__mnemoscheme-editor__change-block__text-block__search-result__item'
                                 onClick={selectTag}
                             >
-                                <span data-tagid={tag.tagId} data-productid={tag.productId} data-tagname={tag.tagName} data-round={tag.round} style={{ fontSize: '13px' }} >
+                                <span
+                                    data-tagid={tag.tagId}
+                                    data-productid={tag.productId}
+                                    data-tagname={tag.tagName}
+                                    data-round={tag.round}
+                                    data-color={tag.color}
+                                    style={{ fontSize: '13px' }} >
                                     {tag.tagName}
                                 </span>
                                 <br />
-                                <span data-tagid={tag.tagId} data-productid={tag.productId} data-tagname={tag.tagName} data-round={tag.round} style={{ fontSize: '12px', color: '#909296' }}>
+                                <span
+                                    data-tagid={tag.tagId}
+                                    data-productid={tag.productId}
+                                    data-tagname={tag.tagName}
+                                    data-round={tag.round}
+                                    data-color={tag.color}
+                                    style={{ fontSize: '12px', color: '#909296' }}>
                                     {tag.productName}
                                 </span>
                             </p>
