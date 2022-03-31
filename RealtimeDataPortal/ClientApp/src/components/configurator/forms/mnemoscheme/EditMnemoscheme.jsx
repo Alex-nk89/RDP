@@ -40,17 +40,17 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
         event.e.stopPropagation();
     };
 
-    function grabCanvas (event) {
+    function grabCanvas(event) {
         const evt = event.e;
         if (evt.altKey === true) {
-          this.isDragging = true;
-          this.selection = false;
-          this.lastPosX = evt.clientX;
-          this.lastPosY = evt.clientY;
+            this.isDragging = true;
+            this.selection = false;
+            this.lastPosX = evt.clientX;
+            this.lastPosY = evt.clientY;
         }
     };
 
-    function moveCanvas (event) {
+    function moveCanvas(event) {
         if (this.isDragging) {
             const e = event.e;
             let vpt = this.viewportTransform;
@@ -59,13 +59,25 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
             this.requestRenderAll();
             this.lastPosX = e.clientX;
             this.lastPosY = e.clientY;
-          }
+        }
     };
 
-    function letGoCanvas () {
+    function letGoCanvas() {
         this.setViewportTransform(this.viewportTransform);
         this.isDragging = false;
         this.selection = true;
+    };
+
+    const deleteChoiseElement = (event) => {
+        if (event.code === 'Delete') {
+            if (mnemoscheme) {
+                const removingObjects = mnemoscheme.getActiveObjects();
+
+                removingObjects.forEach(object => {
+                    mnemoscheme.remove(object);
+                });
+            }
+        }
     };
 
     useEffect(() => {
@@ -93,6 +105,13 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
         mnemoscheme?.on('mouse:up', letGoCanvas);
 
         return mnemoscheme?.on('mouse:up', letGoCanvas);
+        //eslint-disable-next-line
+    }, [mnemoscheme]);
+
+    useEffect(() => {
+        document.addEventListener('keyup', deleteChoiseElement);
+
+        return document.addEventListener('keyup', deleteChoiseElement);
         //eslint-disable-next-line
     }, [mnemoscheme]);
 
