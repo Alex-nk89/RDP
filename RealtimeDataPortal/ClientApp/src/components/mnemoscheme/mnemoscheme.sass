@@ -1,10 +1,20 @@
-.info-block
-    &__mnemoscheme
-        width: 100%
-        aspect-ratio: 16/9
+@import '../../style/_mixins'
+
+.info-block__mnemoscheme
+    &__header
+        display: flex
+        justify-content: space-between
+        align-items: center
+        .mantine-Select-wrapper
+            max-width: 100px
+    &__canvas
         padding: 2rem
-        &_subtitle
+        &__subtitle
+            margin: 0
             margin-top: 0
             color: #6c757d
-        &__tag
-            cursor: pointer
+        & > div
+            max-height: 710px
+            overflow: auto
+            @include scrollbar
+            

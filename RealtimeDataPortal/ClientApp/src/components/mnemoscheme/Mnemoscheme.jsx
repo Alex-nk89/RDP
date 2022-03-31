@@ -3,6 +3,8 @@ import { useParams, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { useRequest } from '../../hooks/useRequest';
 import { fabric } from "fabric";
+import { Select } from "@mantine/core";
+import { BsZoomIn } from 'react-icons/bs';
 
 import AppPreloader from "../loader/appPreloader";
 import ErrorsPage from "../errors-page/ErrorsPage";
@@ -13,16 +15,18 @@ import './mnemoscheme.sass';
 
 const Mnemoscheme = () => {
     const { id } = useParams();
-    const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch();
     const { request, error } = useRequest();
     const { show } = useState();
     const { statusFetchingMnemoscheme, title } = useSelector(state => state.mnemoscheme);
+
+    const [redirect, setRedirect] = useState(false);
     const [dateOfReceiptOfData, setDateOfReceiptOfData] = useState('');
     const [updateMnemoscheme, setUpdateMnemoscheme] = useState(0);
     const [listTagsId, setListTagsId] = useState([]);
     const [listTagsValue, setListTagsValue] = useState([]);
     const [mnemoschemeObjects, setMnemoschemeObjects] = useState([]);
+    const [zoom, setZoom] = useState('100%');
 
     const followingALink = (options) => {
         const productId = options.target.dataset?.productid;
@@ -53,12 +57,12 @@ const Mnemoscheme = () => {
 
     const texts = useMemo(() => {
         return mnemoschemeObjects.filter(object => object.type === 'text').map((textElement, index) => {
-            const { text, ownMatrixCache, width, stroke, strokeWidth, strokeDashArray, strokeLinecap, strokeDashoffset,
+            const { text, fontSize, ownMatrixCache, width, stroke, strokeWidth, strokeDashArray, strokeLinecap, strokeDashoffset,
                 strokeLinejoin, strokeMiterlimit, fill, fillRule, opacity, fontWeight, productId, tagId, round } = textElement;
 
             const style = {
                 stroke, strokeWidth, strokeDasharray: strokeDashArray?.toString(), strokeLinecap, strokeDashoffset,
-                strokeLinejoin, strokeMiterlimit, fill, fillRule, opacity
+                strokeLinejoin, strokeMiterlimit, fill, fillRule, opacity, fontSize, fontWeight
             };
 
             const matrix = `matrix(${ownMatrixCache.value.join(' ')})`;
@@ -80,7 +84,7 @@ const Mnemoscheme = () => {
             );
         });
         //eslint-disable-next-line
-    }, [listTagsValue]);
+    }, [mnemoschemeObjects, listTagsValue]);
 
     const circles = useMemo(() => {
         return mnemoschemeObjects.filter(object => object.type === 'circle').map((circle, index) => {
@@ -192,9 +196,6 @@ const Mnemoscheme = () => {
         //eslint-disable-next-line
     }, [listTagsId, updateMnemoscheme]);
 
-
-
-
     if (redirect) {
         return (
             <>
@@ -212,23 +213,38 @@ const Mnemoscheme = () => {
     }
 
     return (
-        <div>
-            <h3 className='title'>{title}</h3>
+        <div className='info-block__mnemoscheme'>
+            <div className='info-block__mnemoscheme__header'>
+                <h3 className='title'>{title}</h3>
 
-            <div className='info-block info-block__mnemoscheme'>
-                <p className='info-block__mnemoscheme__subtitle'>Данные получены: {dateOfReceiptOfData}</p>
+                <Select
+                    size='xs'
+                    maxDropdownHeight={150}
+                    icon={<BsZoomIn />}
+                    value={zoom}
+                    onChange={setZoom}
+                    data={['50%', '75%', '100%', '125%', '150%', '175%', '200%']}
+                />
+            </div>
 
-                <svg version="1.1"
-                    baseProfile="full"
-                    width="100%" height="100%" viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin meet"
-                    xmlns="http://www.w3.org/2000/svg">
-                    {rectangles}
-                    {texts}
-                    {circles}
-                    {triangles}
-                    {lines}
-                    {paths}
-                </svg>
+            <div className='info-block__mnemoscheme__canvas info-block'>
+                <p className='info-block__mnemoscheme__canvas__subtitle'>
+                    Данные получены: {dateOfReceiptOfData}
+                </p>
+
+                <div>
+                    <svg version="1.1"
+                        baseProfile="full"
+                        width={zoom} height={zoom} viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin meet"
+                        xmlns="http://www.w3.org/2000/svg">
+                        {rectangles}
+                        {texts}
+                        {circles}
+                        {triangles}
+                        {lines}
+                        {paths}
+                    </svg>
+                </div>
             </div>
         </div>
     );
@@ -238,47 +254,39 @@ export default Mnemoscheme;
 
 //canvas.add(new fabric.Path(`Q 3 0 6 3 T 3 9 T 0 15 T 3 18`, { top: 50, left: 50, stroke: '#000', fill: 'rgba(0, 0, 0, 0)' }));
 
-//mnemoscheme._objects.forEach((object, index) => {
-                //    const { left, top, radius, width, height, x1, x2, y1, y2, rx, ry, path, pathOffset,
-                //        fill, stroke, strokeWidth, strokeDashArray, strokeLinecap, text, fontSize, fontWeight,
-                //        strokeDashoffset, strokeLinejoin, strokeMiterlimit, fillRule, opacity, ownMatrixCache,
-                //        productId, tagId } = object;
-
-                //    const matrix = `matrix(${ownMatrixCache.value.join(' ')})`;
-
-                //    const style = {
-                //        stroke,
-                //        strokeWidth,
-                //        strokeDasharray: strokeDashArray?.toString(),
-                //        strokeLinecap,
-                //        strokeDashoffset,
-                //        strokeLinejoin,
-                //        strokeMiterlimit,
-                //        fill,
-                //        fillRule,
-                //        opacity
-                //    };
-
-                //    switch (object.type) {
-                //        case 'text':
-                //            if (productId > 0) listTagsId.push(Number(tagId));
-
-                //            console.log(listTagsValue.length)
-
-                //            svg.push(
-                //                <text key={index} transform={matrix} onClick={followingALink}>
-                //                    <tspan x={-`${width / 2}`} y='4.4' style={style} fontSize={fontSize} fontWeight={fontWeight} data-productid={productId}>
-                //                        {listTagsValue[1]}
-                //                    </tspan>
-                //                </text>
-                //            );
-
-                //            break;
-                //        default:
-                //            break;
-                //    };
-
-                //});
-
-                //setListTagsId(listTagsId);
-                //setSVG(svg);
+//<div>
+//    <div className='header'>
+//        <h3 className='title'>{title}</h3>
+//    </div>
+//
+//
+//    <div className='info-block info-block__mnemoscheme'>
+//        <div className='info-block__mnemoscheme__control'>
+//            <p className='info-block__mnemoscheme__control__subtitle'>Данные получены: {dateOfReceiptOfData}</p>
+//
+//            <Select
+//                size='xs'
+//                maxDropdownHeight={150}
+//                icon={<BsZoomIn />}
+//                value={zoom}
+//                onChange={setZoom}
+//                data={['50%', '75%', '100%', '125%', '150%', '175%', '200%']}
+//            />
+//        </div>
+//
+//        <div className='info-block__mnemoscheme__canvas'>
+//            <svg version="1.1"
+//                baseProfile="full"
+//                width={zoom} height={zoom} viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin meet"
+//                xmlns="http://www.w3.org/2000/svg">
+//                {rectangles}
+//                {texts}
+//                {circles}
+//                {triangles}
+//                {lines}
+//                {paths}
+//            </svg>
+//        </div>
+//
+//    </div>
+//</div>
