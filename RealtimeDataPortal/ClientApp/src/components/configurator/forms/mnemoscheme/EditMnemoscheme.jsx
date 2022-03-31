@@ -9,6 +9,7 @@ import './mnemoscheme.sass';
 
 export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIcon, multiSelect, loadingForButton }) => {
     const title = action === 'create' ? 'Создание мнемосхемы' : 'Редактирование мнемосхемы';
+    let copiedObject = null;
 
     const { request } = useRequest();
     const { show } = useNotification();
@@ -68,16 +69,80 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
         this.selection = true;
     };
 
-    const deleteChoiseElement = (event) => {
-        if (event.code === 'Delete') {
-            if (mnemoscheme) {
-                const removingObjects = mnemoscheme.getActiveObjects();
+    const moveChoiseElement = (event) => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.code) && mnemoscheme) {
+            const activeObjects = mnemoscheme.getActiveObjects();
 
-                removingObjects.forEach(object => {
-                    mnemoscheme.remove(object);
-                });
-            }
+            switch (event.code) {
+                case 'ArrowUp':
+                    activeObjects.forEach(object => object.set({ top: object.top - 1 }));
+                    break;
+                case 'ArrowDown':
+                    activeObjects.forEach(object => object.set({ top: object.top + 1 }));
+                    break;
+                case 'ArrowLeft':
+                    activeObjects.forEach(object => object.set({ left: object.left - 1 }));
+                    break;
+                case 'ArrowRight':
+                    activeObjects.forEach(object => object.set({ left: object.left + 1 }));
+                    break;
+                default:
+                    break;
+            };
+
+            mnemoscheme.renderAll();
         }
+    };
+
+    const actionChoiseElement = (event) => {
+        if (['Delete', 'KeyC', 'KeyV'].includes(event.code) && mnemoscheme) {
+            const activeObjects = mnemoscheme.getActiveObjects();
+
+            switch (event.code) {
+                case 'Delete':
+                    activeObjects.forEach(object => mnemoscheme.remove(object));
+                    break;
+                case 'KeyC':
+                    mnemoscheme.getActiveObject().clone(function (cloned) {
+                        copiedObject = cloned;
+                    });
+                    break;
+                case 'KeyV':
+                    if (copiedObject) pasteObject(copiedObject);
+                    break;
+                default:
+                    break;
+            };
+
+            mnemoscheme.renderAll();
+        }
+    };
+
+    const pasteObject = (copiedObject) => {
+        copiedObject.clone(function (clonedObj) {
+            mnemoscheme.discardActiveObject();
+
+            clonedObj.set({
+                left: clonedObj.left + 10,
+                top: clonedObj.top + 10,
+                evented: true,
+            });
+
+            if (clonedObj.type === 'activeSelection') {
+                clonedObj.canvas = mnemoscheme;
+                clonedObj.forEachObject(function (obj) {
+                    mnemoscheme.add(obj);
+                });
+                clonedObj.setCoords();
+            } else {
+                mnemoscheme.add(clonedObj);
+            }
+
+            copiedObject.top += 10;
+            copiedObject.left += 10;
+            mnemoscheme.setActiveObject(clonedObj);
+            mnemoscheme.requestRenderAll();
+        });
     };
 
     useEffect(() => {
@@ -109,9 +174,16 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
     }, [mnemoscheme]);
 
     useEffect(() => {
-        document.addEventListener('keyup', deleteChoiseElement);
+        document.addEventListener('keydown', moveChoiseElement);
 
-        return document.addEventListener('keyup', deleteChoiseElement);
+        return document.addEventListener('keydown', moveChoiseElement);
+        //eslint-disable-next-line
+    }, [mnemoscheme]);
+
+    useEffect(() => {
+        document.addEventListener('keyup', actionChoiseElement);
+
+        return document.addEventListener('keyup', actionChoiseElement);
         //eslint-disable-next-line
     }, [mnemoscheme]);
 
