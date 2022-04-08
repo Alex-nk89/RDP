@@ -29,8 +29,6 @@ const CellValue = ({ parameter, round }) => {
                         </Notification>
                     )
                     : null}
-
-
             </Popover>
         </td>
     )

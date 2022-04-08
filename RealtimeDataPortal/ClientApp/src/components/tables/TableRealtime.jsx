@@ -28,7 +28,7 @@ const TableRealtime = () => {
                 setTableData(tableData);
                 setProccess('confirmed');
             })
-            .catch(error => { });
+            .catch(() => { });
 
         return () => clearTimeout(updateTable);
         //eslint-disable-next-line

@@ -2,13 +2,13 @@ import {
     useSelector, useDispatch,
     Calendar,
     Space, Tooltip, Button,
-    BsGraphUp, BsPrinter, BsTable
+    BsGraphUp, BsPrinter, BsTable, BsGridFill
 } from '../Index';
-import { toogleIsScale, toogleIsVisibleTable } from '../../../actions';
+import { toggleIsScale, toggleIsVisibleTable, toggleIsDoubleView } from '../../../reducers/graphicsSlice';
 
 const Settings = ({ calendar, setDate }) => {
     const dispatch = useDispatch();
-    const { isScale, isVisibleTable } = useSelector(state => state.graphics);
+    const { isScale, isVisibleTable, isDoubleView } = useSelector(state => state.graphics);
 
     const settingsOn = {
         compact: true,
@@ -25,9 +25,11 @@ const Settings = ({ calendar, setDate }) => {
 
     const settingsScaleToggle = isScale ? settingsOn : settingsOff;
     const settingsTableToggle = isVisibleTable ? settingsOn : settingsOff;
+    const settingsDoubleViewToggle = isDoubleView ? settingsOn : settingsOff;
 
-    const toggleScale = () => dispatch(toogleIsScale());
-    const toggleVisibleTable = () => dispatch(toogleIsVisibleTable());
+    const toggleScale = () => dispatch(toggleIsScale());
+    const toggleVisibleTable = () => dispatch(toggleIsVisibleTable());
+    const toggleDoubleView = () => dispatch(toggleIsDoubleView());
 
     const toPrint = () => window.print();
 
@@ -38,13 +40,13 @@ const Settings = ({ calendar, setDate }) => {
             </div>
 
             <div className='settings__additional'>
-                {/* <Space w="xs" />
+                <Space w="xs" />
 
-                <Tooltip label='Сменить вид'>
-                    <Button {...settingsOff}>
-                        <IoGridOutline size={16}/>
+                <Tooltip label='Сменить вид' onClick={toggleDoubleView}>
+                    <Button {...settingsDoubleViewToggle}>
+                        <BsGridFill size={16} color={isDoubleView ? 'white' : null} />
                     </Button>
-                </Tooltip> */}
+                </Tooltip>
 
                 <Space w="xs" />
 

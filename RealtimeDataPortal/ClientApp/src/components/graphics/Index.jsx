@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from 'reselect';
-import { LoadingOverlay, Space, Tooltip, Button, Tabs } from '@mantine/core';
-import { BsTable, BsGraphUp, BsPrinter } from 'react-icons/bs';
+import { Button, Grid, LoadingOverlay, Space, Tabs, Tooltip } from '@mantine/core';
+import { BsTable, BsGraphUp, BsPrinter, BsGridFill } from 'react-icons/bs';
 
 import TabsHeader from "./tabs/Tabs";
 import ErrorsPage from '../errors-page/ErrorsPage';
@@ -29,6 +29,6 @@ export {
     useSelector, useDispatch, createSelector,
     TabsHeader, ErrorsPage, AppPreloader, HeaderGraphics, TabContent, Graphic, Settings, Calendar,
     MonthCalendar, DayCalendar, RangeCalendar, useFormateDate, useRequest, Chart, ApexChart, TableForGraphic,
-    LoadingOverlay, Space, Tooltip, Button, Tabs,
-    BsGraphUp, BsPrinter, BsTable
+    Grid, LoadingOverlay, Space, Tooltip, Button, Tabs,
+    BsGraphUp, BsPrinter, BsTable, BsGridFill
 };

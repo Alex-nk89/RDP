@@ -23,7 +23,7 @@ namespace RealtimeDataPortal.Models
             UserPrincipal user = UserPrincipal.FindByIdentity(ADContextGeneral, userName);
             PrincipalSearchResult<Principal> userGroups = user.GetAuthorizationGroups();
 
-            Name = "Нагайцев Александр Евгеньевич";/* user.DisplayName; */
+            Name = user.DisplayName;
 
             if (userGroups.Count() > 0)
             {

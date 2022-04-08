@@ -4,6 +4,7 @@ import {
     BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsGripHorizontal, BsSave, BsFillBadgeAdFill,
     attributesInputs
 } from "..";
+import ImageTracer from 'imagetracerjs';
 
 export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemoscheme }) => {
 
@@ -47,13 +48,94 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
                     productId: this.productId,
                     tagId: this.tagId,
                     tagName: this.tagName,
-                    round: this.round
+                    round: this.round,
+                    isAutomaticColorSelection: this.isAutomaticColorSelection
                 });
             };
         })(tag.toObject);
 
         mnemoscheme.add(tag);
     };
+
+    const selectImage = async (event) => {
+        const urlToUserImage = window.URL.createObjectURL(event.target.files[0]);
+        const typeImage = event.target.files[0].type;
+
+        if (typeImage.includes('svg')) {
+            fabric.loadSVGFromURL(
+                urlToUserImage,
+                function (objects, options) {
+                    let loadedObject = fabric.util.groupSVGElements(objects, options);
+
+                    loadedObject.set({
+                        left: 50,
+                        top: 50,
+                        opacity: 0.99
+                    });
+
+                    mnemoscheme.add(loadedObject);
+                    console.log(options?.viewBoxWidth || options?.width || 50)
+                }
+            );
+        }
+
+
+
+        //ImageTracer.imageToSVG(
+        //    window.URL.createObjectURL(event.target.files[0]),
+        //    function (svgstr) {
+        //        fabric.loadSVGFromString(
+        //            svgstr,
+        //            function (objects, options) {
+        //                objects.forEach(object => {
+        //                    if (object.type === 'path') {
+        //                        //console.log(object)
+        //                        const path = new fabric.Path(object.d);
+        //                        path.set({
+        //                            stroke: object.stroke,
+        //                            fill: object.fill
+        //                        });
+        //                        mnemoscheme.add(path);
+        //                    } else {
+        //                        console.log(object.type);
+        //                    }
+        //                });
+        //            }
+        //        );
+        //    },
+        //    "default"
+        //);
+
+
+        //const image = document.createElement('svg');
+        //image.src = window.URL.createObjectURL(event.target.files[0]);
+
+        //image.onload = function () {
+        //    window.URL.revokeObjectURL(this.src);
+        //}
+
+        //mnemoscheme.add(new fabric.Image(image, {
+        //    top: 0,
+        //    left: 0,
+        //    width: 1000,
+        //    height: 500,
+        //    opacity: 0.99
+        //}));
+        //
+        //var reader = new FileReader();
+        //reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(image);
+        //reader.readAsDataURL(selectedFile);
+        //
+        ////const image = new fabric.Image(selectedFile, { width: 100, height: 100 });
+        //
+        //mnemoscheme.add(new fabric.Image(image, {
+        //    left: 100,
+        //    top: 100,
+        //    height: 100,
+        //    width: 100,
+        //    opacity: 0.85
+        //}));
+    }
 
     return (
         <div className='info-block__mnemoscheme-editor__create-block'>
@@ -92,6 +174,19 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
                     <BsFillBadgeAdFill size={18} />
                 </ActionIcon>
             </Tooltip>
+
+
+            <Tooltip label='Добавить изображение'>
+                <label htmlFor='download'>
+                    <BsSave size={18} />
+                </label>
+                {/* <ActionIcon color="indigo" size="lg">
+                    <BsSave size={18} />
+                </ActionIcon> */}
+
+                <input id='download' type='file' style={{ display: 'none' }} onChange={selectImage} accept='image/*' />
+            </Tooltip>
+
 
             <BsGripHorizontal size={24} style={{ color: '#aab3ba' }} />
 

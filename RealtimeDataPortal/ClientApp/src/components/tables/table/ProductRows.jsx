@@ -19,10 +19,16 @@ const ProductRows = ({ products, data, name, columnContent, type }) => {
             let row = Array.from(columnContent).map((name, indexCol) => {
                 const rowSpan = indexParam === 0 && indexCol === 0 ? parameters.size : null;
                 const parameterName = parameterData[0][name];
-                const cell = indexCol === 0 ? <Link to={`/graphics/${productId}`}>{parameterName}</Link> : parameterName;
 
-                return indexParam > 0 && indexCol === 0 ? null :
-                    <td key={indexCol} rowSpan={rowSpan}>{cell}</td>;
+                const cell = indexCol === 0
+                    ? <td key={indexCol} rowSpan={rowSpan} style={{ textAlign: 'left' }}>
+                        <Link to={`/graphics/${productId}`}>
+                            {parameterName}
+                        </Link>
+                    </td>
+                    : <td key={indexCol} rowSpan={rowSpan}>{parameterName}</td>;
+
+                return indexParam > 0 && indexCol === 0 ? null : cell;
             });
 
             Array.from(type).forEach((type, index) => {

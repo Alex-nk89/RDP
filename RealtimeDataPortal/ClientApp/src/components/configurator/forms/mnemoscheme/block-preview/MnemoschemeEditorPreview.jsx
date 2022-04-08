@@ -27,7 +27,8 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
                                 productId: this.productId,
                                 tagId: this.tagId,
                                 tagName: this.tagName,
-                                round: this.round
+                                round: this.round,
+                                isAutomaticColorSelection: this.isAutomaticColorSelection
                             });
                         };
                     })(object.toObject);

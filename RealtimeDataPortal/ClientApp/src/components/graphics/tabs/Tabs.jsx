@@ -1,5 +1,5 @@
 import { useSelector, useDispatch, Tabs } from '../Index';
-import { setActiveTab } from '../../../actions';
+import { setActiveTab } from '../../../reducers/graphicsSlice';
 import './tabs.sass';
 
 const TabsHeader = () => {

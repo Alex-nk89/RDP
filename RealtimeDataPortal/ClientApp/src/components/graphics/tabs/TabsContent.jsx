@@ -1,13 +1,15 @@
+import { Col } from '@mantine/core';
 import {
     useState, useMemo,
     useSelector,
+    Grid,
     HeaderGraphics, Graphic, Settings, TabsHeader
 } from '../Index';
 
 import './tabs.sass';
 
 const TabContent = ({ index }) => {
-    const { attributesGraphic, activeTab, tabsNames } = useSelector(state => state.graphics);
+    const { attributesGraphic, activeTab, tabsNames, isDoubleView } = useSelector(state => state.graphics);
 
     const [date, setDate] = useState({
         start: null,
@@ -15,23 +17,36 @@ const TabContent = ({ index }) => {
     });
 
     const parameter = attributesGraphic.filter(item => item.typeName === tabsNames[index]);
+    const calendar = parameter.find(parameter => parameter.calendar).calendar;
 
     const graphic = useMemo(() => {
-        return parameter.map(item =>
-            <Graphic key={item.tagId} attributes={item} index={index} date={date} />);
+        return parameter.map(item => {
+            if (item.visibleToGraphic) {
+                return (
+                    <Col key={item.tagId} span={isDoubleView ? 6 : 12}>
+                        <Graphic attributes={item} index={index} date={date} />
+                    </Col>
+                )
+            } else return null;
+        }
+
+        );
 
         //eslint-disable-next-line
-    }, [date]);
+    }, [date, isDoubleView]);
 
     return (
         <div className={`tab-content ${activeTab === index ? 'tab-content_visible' : null}`}>
             <div className='tab-content__header'>
                 <HeaderGraphics />
 
-                <Settings calendar={parameter[0].calendar} setDate={setDate} />
+                <Settings calendar={calendar} setDate={setDate} />
             </div>
             <TabsHeader />
-            {graphic}
+
+            <Grid justify='center'>
+                {graphic}
+            </Grid>
         </div>
     );
 }

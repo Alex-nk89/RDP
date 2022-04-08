@@ -160,6 +160,9 @@ const Mnemoscheme = () => {
     }, [mnemoschemeObjects]);
 
     useEffect(() => {
+        setZoom('100%');
+        setMnemoschemeObjects([]);
+
         dispatch(fetchingMnemoscheme());
 
         request(`GetMnemoschemeImage?id=${id}`)

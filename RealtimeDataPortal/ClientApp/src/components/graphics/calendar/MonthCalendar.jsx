@@ -13,7 +13,7 @@ const getDates = () => {
     let dates = [];
 
     for (let i = 0; i < 12; i++) {
-        const date = new Date((new Date()).setMonth((new Date()).getMonth() - i));
+        const date = new Date(new Date().getFullYear(), new Date().getMonth() - i, 1);
 
         dates.push({
             value: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,

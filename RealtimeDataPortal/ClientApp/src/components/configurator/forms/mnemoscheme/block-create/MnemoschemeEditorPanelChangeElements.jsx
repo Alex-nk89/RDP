@@ -27,7 +27,8 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         fontWeight: 400,
         productId: 0,
         tagId: 0,
-        tagName: ''
+        tagName: '',
+        isAutomaticColorSelection: true
     });
 
     const { request } = useRequest();
@@ -44,13 +45,13 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         }
 
         const { width, height, radius, angle, fill, stroke, strokeWidth, rx, ry, skewX, skewY, text, fontSize, fontWeight,
-            productId, tagId, tagName, round } = event.target;
+            productId, tagId, tagName, round, isAutomaticColorSelection } = event.target;
 
         setMnemoschemeActiveObjectType(event.target.type);
         setElementAttributes({
             ...elementAttributes, width, height, radius, angle, fill, stroke, strokeWidth, rx, ry,
             skewX, skewY, fontSize, fontWeight,
-            text: productId > 0 ? '%' + tagName : text, tagId, tagName, productId, round
+            text: productId > 0 ? '%' + tagName : text, tagId, tagName, productId, round, isAutomaticColorSelection
         });
     }
 
@@ -215,8 +216,13 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
             setElementAttributes({ ...elementAttributes, text: '%' + tagname });
 
             mnemoscheme._activeObject.set({
-                tagId: Number(tagid), productId: Number(productid), tagName: tagname,
-                text: '000.000', round: Number(round), fill: color
+                tagId: Number(tagid), 
+                productId: Number(productid), 
+                tagName: tagname,
+                text: '000.000', 
+                round: Number(round), 
+                fill: color, 
+                isAutomaticColorSelection: true
             });
             mnemoscheme.renderAll();
         }
@@ -290,7 +296,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         </Tooltip>
     ) : null;
 
-    const selectColorElement = ['rect', 'circle', 'triangle', 'text'].includes(mnemoschemeActiveObjectType) && !elementAttributes.productId
+    const selectColorElement = ['rect', 'circle', 'triangle', 'text'].includes(mnemoschemeActiveObjectType) && !elementAttributes.isAutomaticColorSelection
         ? (
             <Tooltip label='Изменить цвет заливки'>
                 <ColorInput

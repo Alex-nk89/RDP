@@ -6,7 +6,7 @@ import {
     useRequest
 } from './Index';
 
-import { initialStateGraphics, getAttributesForGraphic } from '../../actions';
+import { initialStateGraphics, getAttributesForGraphic } from '../../reducers/graphicsSlice';
 import './graphics.sass';
 
 const Graphics = () => {
