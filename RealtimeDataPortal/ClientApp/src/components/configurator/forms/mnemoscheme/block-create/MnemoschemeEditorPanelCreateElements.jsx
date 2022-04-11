@@ -58,83 +58,28 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     };
 
     const selectImage = async (event) => {
-        const urlToUserImage = window.URL.createObjectURL(event.target.files[0]);
-        const typeImage = event.target.files[0].type;
+        // Для преобразования SVG-изображения используется встроенные в библиотеку fabricjs средства,
+        // для остальных изображений - библиотека imagetracer
+        const urlToUserImage = window.URL.createObjectURL(event.target?.files[0]);
+        const typeImage = event.target.files[0]?.type;
+
+        const addObjectsFromImage = (objects) => {
+            objects.forEach(object => {
+                if (object.type === 'path') {
+                    mnemoscheme.add(new fabric.Path(object.d, { ...object }));
+                }
+            });
+        };
 
         if (typeImage.includes('svg')) {
-            fabric.loadSVGFromURL(
+            fabric.loadSVGFromURL(urlToUserImage, addObjectsFromImage);
+        } else {
+            ImageTracer.imageToSVG(
                 urlToUserImage,
-                function (objects, options) {
-                    let loadedObject = fabric.util.groupSVGElements(objects, options);
-
-                    loadedObject.set({
-                        left: 50,
-                        top: 50,
-                        opacity: 0.99
-                    });
-
-                    mnemoscheme.add(loadedObject);
-                    console.log(options?.viewBoxWidth || options?.width || 50)
-                }
-            );
+                function (svgString) {
+                    fabric.loadSVGFromString(svgString, addObjectsFromImage);
+                });
         }
-
-
-
-        //ImageTracer.imageToSVG(
-        //    window.URL.createObjectURL(event.target.files[0]),
-        //    function (svgstr) {
-        //        fabric.loadSVGFromString(
-        //            svgstr,
-        //            function (objects, options) {
-        //                objects.forEach(object => {
-        //                    if (object.type === 'path') {
-        //                        //console.log(object)
-        //                        const path = new fabric.Path(object.d);
-        //                        path.set({
-        //                            stroke: object.stroke,
-        //                            fill: object.fill
-        //                        });
-        //                        mnemoscheme.add(path);
-        //                    } else {
-        //                        console.log(object.type);
-        //                    }
-        //                });
-        //            }
-        //        );
-        //    },
-        //    "default"
-        //);
-
-
-        //const image = document.createElement('svg');
-        //image.src = window.URL.createObjectURL(event.target.files[0]);
-
-        //image.onload = function () {
-        //    window.URL.revokeObjectURL(this.src);
-        //}
-
-        //mnemoscheme.add(new fabric.Image(image, {
-        //    top: 0,
-        //    left: 0,
-        //    width: 1000,
-        //    height: 500,
-        //    opacity: 0.99
-        //}));
-        //
-        //var reader = new FileReader();
-        //reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(image);
-        //reader.readAsDataURL(selectedFile);
-        //
-        ////const image = new fabric.Image(selectedFile, { width: 100, height: 100 });
-        //
-        //mnemoscheme.add(new fabric.Image(image, {
-        //    left: 100,
-        //    top: 100,
-        //    height: 100,
-        //    width: 100,
-        //    opacity: 0.85
-        //}));
     }
 
     return (
