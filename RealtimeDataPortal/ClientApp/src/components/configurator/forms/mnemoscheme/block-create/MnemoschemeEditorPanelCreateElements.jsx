@@ -2,7 +2,7 @@ import {
     ActionIcon, Tooltip,
     fabric,
     BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsGripHorizontal, BsSave,
-    BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine,
+    BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle,
     attributesInputs
 } from "..";
 import ImageTracer from 'imagetracerjs';
@@ -37,6 +37,11 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     const addCircle = () => {
         mnemoscheme.add(new fabric.Circle(figures.circle));
     };
+
+    const addSemicircle = () => {
+        mnemoscheme.add(new fabric.Path(`M 0 8 A 1 1 0 0 1 16 8 A 1 1 0 0 1 15 8 A 1 1 0 0 0 1 8 Q 1 8 1 8 A 1 1 0 0 1 0 8`,
+            { top: 50, left: 50, fill: '#000' }));
+    }
 
     const addTriangle = () => {
         mnemoscheme.add(new fabric.Triangle(figures.triangle));
@@ -114,6 +119,12 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
             <Tooltip label='Добавить круг'>
                 <ActionIcon color="indigo" size="lg" onClick={addCircle}>
                     <BsFillCircleFill size={18} />
+                </ActionIcon>
+            </Tooltip>
+
+            <Tooltip label='Добавить полукруг'>
+                <ActionIcon color="indigo" size="lg" onClick={addSemicircle}>
+                    <BsSemicircle size={18} />
                 </ActionIcon>
             </Tooltip>
 

@@ -10,7 +10,7 @@ import { fabric } from 'fabric';
 import {
     BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsGripVertical, BsSave, BsArrowDown,
     BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, BsOption, 
-    BsAlt, BsArrowClockwise, BsArrowsAngleExpand, BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine
+    BsAlt, BsArrowClockwise, BsArrowsAngleExpand, BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle
 } from 'react-icons/bs';
 import { IoSend } from 'react-icons/io5';
 
@@ -35,7 +35,7 @@ export {
     FabricJSCanvas, useFabricJSEditor, fabric,
     BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsSave, BsArrowDown, BsGripVertical,
     BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, BsOption, BsAlt,
-    BsArrowClockwise, BsArrowsAngleExpand, BsFillBadgeAdFill, IoSend, BsFillFileEarmarkImageFill, BsWawyLine,
+    BsArrowClockwise, BsArrowsAngleExpand, BsFillBadgeAdFill, IoSend, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle,
     useRequest, useNotification,
     MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanelCreateElements,
     MnemoschemeEditorPanelChangeElements,
