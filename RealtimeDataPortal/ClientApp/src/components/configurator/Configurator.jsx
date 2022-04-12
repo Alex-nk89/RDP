@@ -45,7 +45,7 @@ const Configurator = () => {
             }
 
             if (['add-folder', 'change-folder', 'add-externalPage', 'change-externalPage', 
-            'add-graphic', 'change-graphic', 'create-mnemoscheme', 'change-mnemoscheme'].includes(operation)) {
+            'add-graphic', 'change-graphic', 'add-mnemoscheme', 'change-mnemoscheme'].includes(operation)) {
                 return <AddChangeElement />;
             }
 

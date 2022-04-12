@@ -489,7 +489,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
 
     const selectBringForward = mnemoschemeActiveObjectType
         ? (
-            <Tooltip label='Поднять слой'>
+            <Tooltip label='Переместить вперед'>
                 <ActionIcon color="indigo" size="lg" onClick={bringForward} >
                     <BsFront size={18} />
                 </ActionIcon>
@@ -499,7 +499,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
 
     const selectSendBacwards = mnemoschemeActiveObjectType
         ? (
-            <Tooltip label='Опустить слой'>
+            <Tooltip label='Переместить назад'>
                 <ActionIcon color="indigo" size="lg" onClick={sendBackwards} >
                     <BsBack size={18} />
                 </ActionIcon>

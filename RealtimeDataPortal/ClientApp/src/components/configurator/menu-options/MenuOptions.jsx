@@ -68,7 +68,7 @@ const MenuOptions = ({ type, id }) => {
         <Menu.Item key={4} icon={<BsGridFill />} component={Link} to={`/Configurator/add-table/${id}`}>
             Таблица реального времени
         </Menu.Item>,
-        <Menu.Item key={4} icon={<BsDiagram3Fill />} component={Link} to={`/Configurator/create-mnemoscheme/${id}`}>
+        <Menu.Item key={4} icon={<BsDiagram3Fill />} component={Link} to={`/Configurator/add-mnemoscheme/${id}`}>
             Мнемосхема
         </Menu.Item>
     ]

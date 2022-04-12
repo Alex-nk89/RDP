@@ -104,7 +104,7 @@ namespace RealtimeDataPortal.Models
                                            .ToList()
                                            .GroupBy(p => p.ProductId);
 
-                    foreach(var sectionProduct in sectionProducts)
+                    foreach (var sectionProduct in sectionProducts)
                     {
                         componentInfo.SectionProducts.Add(sectionProduct.First());
                     }
@@ -116,20 +116,22 @@ namespace RealtimeDataPortal.Models
                     string mnemoschemeContain = string.Empty;
 
                     var mnemoschemeInfo = rdp_base.Mnemoscheme
-                        .Where(mnenoscheme => mnenoscheme.MnemoschemeId == componentInfo.TreesMenu.ComponentId)
+                        .Where(mnemoscheme => mnemoscheme.MnemoschemeId == componentInfo.TreesMenu.ComponentId)
                         .ToList();
 
-                    foreach(var mnemoscheme in mnemoschemeInfo)
+                    foreach (var mnemoscheme in mnemoschemeInfo)
                     {
                         mnemoschemeContain += mnemoscheme.MnemoschemeContain;
                     }
 
-                    componentInfo.Mnemoscheme = new Mnemoscheme()
-                    {
-                        Id = mnemoschemeInfo.First().Id,
-                        MnemoschemeId = mnemoschemeInfo.First().MnemoschemeId,
-                        MnemoschemeContain = mnemoschemeContain
-                    };
+                    componentInfo.Mnemoscheme = mnemoschemeInfo.Count() > 0
+                        ? new Mnemoscheme()
+                        {
+                            Id = mnemoschemeInfo.First().Id,
+                            MnemoschemeId = mnemoschemeInfo.First().MnemoschemeId,
+                            MnemoschemeContain = mnemoschemeContain
+                        }
+                        : new();
                 }
 
                 return componentInfo;

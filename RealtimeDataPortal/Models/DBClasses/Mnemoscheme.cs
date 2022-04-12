@@ -13,10 +13,15 @@ namespace RealtimeDataPortal.Models.DBClasses
         {
             using (RDPContext rdp_base = new())
             {
+                if (mnemoscheme.MnemoschemeId == 0)
+                {
+                    mnemoscheme.MnemoschemeId = rdp_base.Mnemoscheme.Max(m => m.MnemoschemeId) + 1;
+                }
+
                 rdp_base.Mnemoscheme.Update(mnemoscheme);
                 rdp_base.SaveChanges();
 
-                return mnemoscheme.Id;
+                return mnemoscheme.MnemoschemeId;
             }
         }
 

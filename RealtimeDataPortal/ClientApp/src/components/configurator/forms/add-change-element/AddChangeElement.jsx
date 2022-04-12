@@ -10,7 +10,7 @@ import { updateNavbar } from '../../../../actions';
 
 const AddChangeElement = () => {
     const { componentInfo, operation } = useSelector(state => state.configurator);
-    const { treesMenu, externalPages, graphics, adGroups } = { ...componentInfo };
+    const { treesMenu, externalPages, graphics, mnemoscheme, adGroups } = { ...componentInfo };
 
     const [accesses, setAccesses] = useState([]);
     const [oldAccesses, setOldAccesses] = useState([]);
@@ -28,8 +28,8 @@ const AddChangeElement = () => {
             access: '',
             link: '',
             product: '',
-            productId: 0
-
+            productId: 0,
+            mnemoschemeContain: ''
         },
         validationRules: {
             name: value => value.trim().length >= 3 && value.trim().length <= 100,
@@ -89,6 +89,11 @@ const AddChangeElement = () => {
             Graphics: {
                 ComponentId: action === 'add' ? 0 : graphics.componentId,
                 productId: form.getInputProps('productId').value
+            },
+            Mnemoscheme: {
+                Id: action === 'add' ? 0 : mnemoscheme.id,
+                MnemoschemeId: action === 'add' ? 0 : mnemoscheme.mnemoschemeId,
+                MnemoschemeContain: values.mnemoschemeContain
             },
             ADGroups: accesses,
             AdGroupsOld: oldAccesses
