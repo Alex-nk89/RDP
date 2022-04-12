@@ -9,7 +9,7 @@ import ImageTracer from 'imagetracerjs';
 
 export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemoscheme }) => {
 
-    const figureAttributes = { fill: '#fff', stroke: '#000', width: 50, height: 50, top: 50, left: 50 };
+    const figureAttributes = { fill: 'rgba(255, 255, 255, 1)', stroke: 'rgba(0, 0, 0, 1)', width: 50, height: 50, top: 50, left: 50 };
 
     const figures = {
         line: { ...attributesInputs },
@@ -24,14 +24,14 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     };
 
     const addWawyLine = () => {
-        mnemoscheme.add(new fabric.Path(`M 8 1 Q 14 5 8 8 Q 0 12 8 16 Q 9 16 8 15 Q 2 12 8 9 Q 16 5 8 0 Q 7 0 8 1`,
-            { top: 50, left: 50, fill: '#000' }));
+        mnemoscheme.add(new fabric.Path(`M 8 1 Q 14 5 8 8 Q 0 12 8 16 Q 9 16 8 15 Q 2 12 8 9 Q 16 5 8 0 Q 7 0 8 1z`,
+            { top: 50, left: 50, fill: 'rgba(0, 0, 0, 1)', stroke: 'rgba(0, 0, 0, 1)' }));
     }
 
     const addArrow = () => {
         mnemoscheme.add(new fabric.Path(`M 8 1 a 0.5 0.5 0 0 1 0.5 0.5 v 11.793 l 3.146 -3.147 a 0.5 0.5 0 0 
             1 0.708 0.708 l -4 4 a 0.5 0.5 0 0 1 -0.708 0 l -4 -4 a 0.5 0.5 0 0 1 0.708 
-            -0.708 L 7.5 13.293 V 1.5 A 0.5 0.5 0 0 1 8 1 Z`, { stroke: '#000', strokeWidth: 1, top: 50, left: 50 }));
+            -0.708 L 7.5 13.293 V 1.5 A 0.5 0.5 0 0 1 8 1 Z`, { stroke: 'rgba(0, 0, 0, 1)', strokeWidth: 1, top: 50, left: 50 }));
     };
 
     const addCircle = () => {
@@ -40,7 +40,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
 
     const addSemicircle = () => {
         mnemoscheme.add(new fabric.Path(`M 0 8 A 1 1 0 0 1 16 8 A 1 1 0 0 1 15 8 A 1 1 0 0 0 1 8 Q 1 8 1 8 A 1 1 0 0 1 0 8`,
-            { top: 50, left: 50, fill: '#000' }));
+            { top: 50, left: 50, fill: 'rgba(0, 0, 0, 1)' }));
     }
 
     const addTriangle = () => {
@@ -52,7 +52,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     };
 
     const addTag = () => {
-        const tag = new fabric.Text('text', { fontSize: 14, fontFamily: 'system-ui' });
+        const tag = new fabric.Text('text', { fontSize: 14, fontFamily: 'system-ui', fontWeight: 400 });
 
         tag.toObject = (function (toObject) {
             return function () {

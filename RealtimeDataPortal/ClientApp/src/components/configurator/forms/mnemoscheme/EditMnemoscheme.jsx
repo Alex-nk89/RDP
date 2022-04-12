@@ -35,7 +35,7 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
         let zoom = mnemoscheme.getZoom();
         zoom *= 0.999 ** delta;
         if (zoom > 5) zoom = 5;
-        if (zoom < 0.1) zoom = 0.1;
+        if (zoom < 1) zoom = 1;
         mnemoscheme.zoomToPoint({ x: event.e.offsetX, y: event.e.offsetY }, zoom);
         event.e.preventDefault();
         event.e.stopPropagation();
@@ -205,7 +205,7 @@ export const EditMnemoscheme = ({ action, form, nameRef, submitForm, addAccessIc
 
                 <Stepper.Step label='Мнемосхема' description='Рисование мнемосхемы'>
                     <div className='info-block__mnemoscheme-editor' >
-                        <div className='info-block'>
+                        <div className='info-block' >
                             <MnemoschemeEditorPanelCreateElements mnemoscheme={mnemoscheme} saveMnemoscheme={saveMnemoscheme} />
                             <MnemoschemeEditorPanelChangeElements mnemoscheme={mnemoscheme} />
                             <MnemoschemeEditorPreview setMnemoscheme={setMnemoscheme} />

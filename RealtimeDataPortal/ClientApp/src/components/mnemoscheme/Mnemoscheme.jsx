@@ -3,8 +3,8 @@ import { useParams, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { useRequest } from '../../hooks/useRequest';
 import { fabric } from "fabric";
-import { Select } from "@mantine/core";
-import { BsZoomIn } from 'react-icons/bs';
+import { ActionIcon, Select } from "@mantine/core";
+import { BsZoomIn, BsArrowsFullscreen, BsFullscreenExit } from 'react-icons/bs';
 
 import AppPreloader from "../loader/appPreloader";
 import ErrorsPage from "../errors-page/ErrorsPage";
@@ -25,8 +25,17 @@ const Mnemoscheme = () => {
     const [updateMnemoscheme, setUpdateMnemoscheme] = useState(0);
     const [listTagsId, setListTagsId] = useState([]);
     const [listTagsValue, setListTagsValue] = useState([]);
-    const [mnemoschemeObjects, setMnemoschemeObjects] = useState([]);
+    const [mnemoscheme, setMnemoscheme] = useState({});
     const [zoom, setZoom] = useState('100%');
+    const [isMnemoschemeFullscreen, setIsMnemoschemeFullscreen] = useState(false);
+
+    const togglerMnemoschemeFullscreen = isMnemoschemeFullscreen
+        ? <BsFullscreenExit />
+        : <BsArrowsFullscreen />;
+
+    const classIsMnemoschemeFullscreen = isMnemoschemeFullscreen
+        ? 'fullscreen'
+        : null;
 
     const followingALink = (options) => {
         const productId = options.target.dataset?.productid;
@@ -36,8 +45,12 @@ const Mnemoscheme = () => {
         }
     };
 
+    const toggleIsMnemoschemeFullscreen = () => {
+        setIsMnemoschemeFullscreen(!isMnemoschemeFullscreen);
+    }
+
     const rectangles = useMemo(() => {
-        return mnemoschemeObjects.filter(object => object.type === 'rect').map((rect, index) => {
+        return mnemoscheme._objects?.filter(object => object.type === 'rect').map((rect, index) => {
             const { width, height, rx, ry, stroke, strokeWidth, strokeDashArray, strokeLinecap, strokeDashoffset, strokeLinejoin,
                 strokeMiterlimit, fill, fillRule, opacity, ownMatrixCache } = rect;
 
@@ -53,10 +66,10 @@ const Mnemoscheme = () => {
             );
         });
         //eslint-disable-next-line
-    }, [mnemoschemeObjects]);
+    }, [mnemoscheme._objects]);
 
     const texts = useMemo(() => {
-        return mnemoschemeObjects.filter(object => object.type === 'text').map((textElement, index) => {
+        return mnemoscheme._objects?.filter(object => object.type === 'text').map((textElement, index) => {
             const { text, fontSize, ownMatrixCache, width, stroke, strokeWidth, strokeDashArray, strokeLinecap, strokeDashoffset,
                 strokeLinejoin, strokeMiterlimit, fill, fillRule, opacity, fontWeight, productId, tagId, round } = textElement;
 
@@ -84,10 +97,10 @@ const Mnemoscheme = () => {
             );
         });
         //eslint-disable-next-line
-    }, [mnemoschemeObjects, listTagsValue]);
+    }, [mnemoscheme._objects, listTagsValue]);
 
     const circles = useMemo(() => {
-        return mnemoschemeObjects.filter(object => object.type === 'circle').map((circle, index) => {
+        return mnemoscheme._objects?.filter(object => object.type === 'circle').map((circle, index) => {
             const { ownMatrixCache, radius, stroke, strokeWidth, strokeDashArray, strokeLinecap, strokeDashoffset,
                 strokeLinejoin, strokeMiterlimit, fill, fillRule, opacity } = circle;
 
@@ -102,10 +115,10 @@ const Mnemoscheme = () => {
                 <circle key={index} transform={matrix} style={style} cx='0' cy='0' r={radius} />
             );
         });
-    }, [mnemoschemeObjects]);
+    }, [mnemoscheme._objects]);
 
     const triangles = useMemo(() => {
-        return mnemoschemeObjects.filter(object => object.type === 'triangle').map((triangle, index) => {
+        return mnemoscheme._objects?.filter(object => object.type === 'triangle').map((triangle, index) => {
             const { left, top, stroke, strokeWidth, strokeDashArray, strokeLinecap, strokeDashoffset, strokeLinejoin,
                 strokeMiterlimit, fill, fillRule, opacity, ownMatrixCache } = triangle;
 
@@ -120,10 +133,10 @@ const Mnemoscheme = () => {
                 <polygon key={index} transform={matrix} style={style} points="-25 25,0 -25,25 25" x={left} y={top} />
             );
         });
-    }, [mnemoschemeObjects]);
+    }, [mnemoscheme._objects]);
 
     const lines = useMemo(() => {
-        return mnemoschemeObjects.filter(object => object.type === 'line').map((line, index) => {
+        return mnemoscheme._objects?.filter(object => object.type === 'line').map((line, index) => {
             const { x1, x2, y1, y2, stroke, strokeWidth, strokeDashArray, strokeLinecap, strokeDashoffset, strokeLinejoin,
                 strokeMiterlimit, fill, fillRule, opacity, ownMatrixCache } = line;
 
@@ -138,10 +151,10 @@ const Mnemoscheme = () => {
                 <line key={index} transform={matrix} style={style} x1={x1} y1={y1} x2={x2} y2={y2} />
             );
         });
-    }, [mnemoschemeObjects]);
+    }, [mnemoscheme._objects]);
 
     const paths = useMemo(() => {
-        return mnemoschemeObjects.filter(object => object.type === 'path').map((pathElement, index) => {
+        return mnemoscheme._objects?.filter(object => object.type === 'path').map((pathElement, index) => {
             const { pathOffset, path, ownMatrixCache, stroke, strokeWidth, strokeDashArray, strokeLinecap,
                 strokeDashoffset, strokeLinejoin, strokeMiterlimit, fill, fillRule, opacity } = pathElement;
 
@@ -157,23 +170,24 @@ const Mnemoscheme = () => {
                 <path key={index} d={newPath} transform={matrix + ` translate(-${pathOffset.x} -${pathOffset.y})`} style={style} />
             );
         });
-    }, [mnemoschemeObjects]);
+    }, [mnemoscheme._objects]);
 
     useEffect(() => {
         setZoom('100%');
-        setMnemoschemeObjects([]);
+        setMnemoscheme({});
 
         dispatch(fetchingMnemoscheme());
 
         request(`GetMnemoschemeImage?id=${id}`)
             .then(mnemoschemeData => {
                 const mnemoscheme = new fabric.Canvas().loadFromJSON(mnemoschemeData[0].mnemoschemeContain);
+
                 // Без следующей строки приложение крашится. Причина такого поведения не ясна.
                 mnemoscheme.toSVG();
-                const objects = mnemoscheme._objects;
-                setMnemoschemeObjects(objects);
+                setMnemoscheme(mnemoscheme);
+
                 setListTagsId(
-                    objects.filter(object => object.type === 'text' && object.productId > 0).map(object => object.tagId)
+                    mnemoscheme._objects.filter(object => object.type === 'text' && object.productId > 0).map(object => object.tagId)
                 );
                 dispatch(initializeMnemoscheme(mnemoschemeData));
             })
@@ -230,15 +244,22 @@ const Mnemoscheme = () => {
                 />
             </div>
 
-            <div className='info-block__mnemoscheme__canvas info-block'>
-                <p className='info-block__mnemoscheme__canvas__subtitle'>
-                    Данные получены: {dateOfReceiptOfData}
-                </p>
+            <div className={`info-block__mnemoscheme__canvas info-block ${classIsMnemoschemeFullscreen}`}>
+                <div className='info-block__mnemoscheme__canvas__header'>
+                    <p className='info-block__mnemoscheme__canvas__header__subtitle'>
+                        Данные получены: {dateOfReceiptOfData}
+                    </p>
+
+                    <ActionIcon onClick={toggleIsMnemoschemeFullscreen}>
+                        {togglerMnemoschemeFullscreen}
+                    </ActionIcon>
+                </div>
 
                 <div>
                     <svg version="1.1"
                         baseProfile="full"
-                        width={zoom} height={zoom} viewBox="0 0 1200 675" preserveAspectRatio="xMinYMin meet"
+                        style={{ backgroundColor: mnemoscheme.backgroundColor }}
+                        width={zoom} height={zoom} viewBox="0 0 1000 440" preserveAspectRatio="xMinYMin meet"
                         xmlns="http://www.w3.org/2000/svg">
                         {rectangles}
                         {texts}

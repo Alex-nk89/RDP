@@ -1,6 +1,17 @@
 @import '../../style/_mixins'
 
 .info-block__mnemoscheme
+    .fullscreen
+        position: fixed
+        top: 0
+        right: 0
+        bottom: 0
+        left: 0
+        overflow: auto
+        z-index: 10
+        @include scrollbar
+    .info-block
+        margin-top: 0
     &__header
         display: flex
         justify-content: space-between
@@ -8,13 +19,19 @@
         .mantine-Select-wrapper
             max-width: 100px
     &__canvas
-        padding: 2rem
-        &__subtitle
-            margin: 0
-            margin-top: 0
-            color: #6c757d
-        & > div
-            max-height: 710px
-            overflow: auto
-            @include scrollbar
-            
+        padding: 1rem
+        overflow: auto
+        @include scrollbar
+        &__header
+            display: flex
+            justify-content: space-between
+            align-items: center
+            padding: .5rem 0
+            &__subtitle
+                margin: 0
+                margin-top: 0
+                color: #6c757d
+            & > div
+                max-height: 710px
+                overflow: auto
+                @include scrollbar

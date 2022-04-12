@@ -10,13 +10,16 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
     useEffect(() => {
 
         const mnemoscheme = new fabric.Canvas('mnemoscheme', {
-            width: 1200,
-            height: 675
+            width: 1000,
+            height: 440,
         });
 
         if (componentInfo.mnemoscheme.mnemoschemeContain.length > 0) {
-            //mnemoscheme.loadFromJSON(componentInfo.mnemoscheme.mnemoschemeContain);
-            const _objects = new fabric.Canvas().loadFromJSON(componentInfo.mnemoscheme.mnemoschemeContain)._objects.map(object => object);
+            const loadedMnemoscheme = new fabric.Canvas().loadFromJSON(componentInfo.mnemoscheme.mnemoschemeContain);
+
+            mnemoscheme.setBackgroundColor(loadedMnemoscheme.backgroundColor, mnemoscheme.renderAll.bind(mnemoscheme));
+
+            const _objects = loadedMnemoscheme._objects.map(object => object);
 
             _objects.forEach(object => {
 
@@ -41,12 +44,13 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
         }
 
         setMnemoscheme(mnemoscheme);
+
         //eslint-disable-next-line
     }, []);
 
     return (
         <div className='info-block__mnemoscheme-editor__canvas'>
-            <canvas id='mnemoscheme'></canvas>
+            <canvas id='mnemoscheme' ></canvas>
         </div>
     )
 }

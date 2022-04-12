@@ -3,18 +3,20 @@ import {
     ActionIcon, ColorInput, Input, NumberInput, TextInput, Tooltip,
     BsBorderWidth, BsFillSquareFill, BsSquare, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight,
     BsArrowBarDown, BsTrash, BsGripVertical, BsOption, BsAlt, BsArrowClockwise, BsArrowsAngleExpand, BsFonts,
+    BsFillPaletteFill, BsFront, BsBack,
     useRequest, useNotification
 } from '..';
 
 export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
+
     const [mnemoschemeActiveObjectType, setMnemoschemeActiveObjectType] = useState(null);
     const [listTags, setListTags] = useState([]);
     const [elementAttributes, setElementAttributes] = useState({
         width: 50,
         height: 50,
         radius: 20,
-        colorElement: '#000',
-        colorStrokeElement: '#000',
+        colorElement: 'rgba(255, 255, 255, 1)',
+        colorStrokeElement: 'rgba(255, 255, 255, 1)',
         strokeWidthElement: 1,
         rxElement: 0,
         ryElement: 0,
@@ -28,7 +30,8 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         productId: 0,
         tagId: 0,
         tagName: '',
-        isAutomaticColorSelection: true
+        isAutomaticColorSelection: true,
+        backgroundColor: 'rgba(255, 255, 255, 1)'
     });
 
     const { request } = useRequest();
@@ -48,119 +51,99 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
             productId, tagId, tagName, round, isAutomaticColorSelection } = event.target;
 
         setMnemoschemeActiveObjectType(event.target.type);
+
         setElementAttributes({
-            ...elementAttributes, width, height, radius, angle, fill, stroke, strokeWidth, rx, ry,
-            skewX, skewY, fontSize, fontWeight,
-            text: productId > 0 ? '%' + tagName : text, tagId, tagName, productId, round, isAutomaticColorSelection
+            ...elementAttributes,
+            width, height, radius, angle, fill, stroke, strokeWidth, rx, ry, skewX, skewY, fontSize, fontWeight,
+            tagId, tagName, productId, round, isAutomaticColorSelection,
+            text: productId > 0 ? '%' + tagName : text,
+            colorStrokeElement: stroke,
+            strokeWidthElement: strokeWidth
         });
     }
 
     const changeWidth = (width) => {
-        setElementAttributes({ ...elementAttributes, width });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ width });
+        if (width > 0) {
+            setElementAttributes({ ...elementAttributes, width });
+            mnemoscheme?._activeObject.set({ width });
             mnemoscheme.renderAll();
         }
     };
 
     const changeHeight = (height) => {
-        setElementAttributes({ ...elementAttributes, height });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ height });
+        if (height > 0) {
+            setElementAttributes({ ...elementAttributes, height });
+            mnemoscheme?._activeObject.set({ height });
             mnemoscheme.renderAll();
         }
     };
 
     const changeAngle = (angle) => {
         setElementAttributes({ ...elementAttributes, angle });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ angle });
-            mnemoscheme.renderAll();
-        }
+        mnemoscheme?._activeObject.set({ angle });
+        mnemoscheme.renderAll();
     };
 
     const changeRadius = (radius) => {
-        setElementAttributes({ ...elementAttributes, radius });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ radius });
+        if (radius > 0) {
+            setElementAttributes({ ...elementAttributes, radius });
+            mnemoscheme?._activeObject.set({ radius });
             mnemoscheme.renderAll();
         }
     };
 
     const changeColorElement = (colorElement) => {
         setElementAttributes({ ...elementAttributes, colorElement });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ fill: colorElement });
-            mnemoscheme.renderAll();
-        }
+        mnemoscheme?._activeObject.set({ fill: colorElement });
+        mnemoscheme.renderAll();
     };
 
     const changeColorStrokeElement = (colorStrokeElement) => {
         setElementAttributes({ ...elementAttributes, colorStrokeElement });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ stroke: colorStrokeElement });
-            mnemoscheme.renderAll();
-        }
+        mnemoscheme?._activeObject.set({ stroke: colorStrokeElement });
+        mnemoscheme.renderAll();
     };
 
     const changeStrokeWidthElement = (strokeWidthElement) => {
-        setElementAttributes({ ...elementAttributes, strokeWidthElement });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ strokeWidth: strokeWidthElement });
+        if (strokeWidthElement >= 0) {
+            setElementAttributes({ ...elementAttributes, strokeWidthElement });
+            mnemoscheme?._activeObject.set({ strokeWidth: strokeWidthElement });
             mnemoscheme.renderAll();
         }
     };
 
     const changeRXElement = (rxElement) => {
-        setElementAttributes({ ...elementAttributes, rxElement });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ rx: rxElement });
+        if (rxElement >= 0) {
+            setElementAttributes({ ...elementAttributes, rxElement });
+            mnemoscheme?._activeObject.set({ rx: rxElement });
             mnemoscheme.renderAll();
         }
     };
 
     const changeRYElement = (ryElement) => {
-        setElementAttributes({ ...elementAttributes, ryElement });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ ry: ryElement });
+        if (ryElement >= 0) {
+            setElementAttributes({ ...elementAttributes, ryElement });
+            mnemoscheme?._activeObject.set({ ry: ryElement });
             mnemoscheme.renderAll();
         }
     };
 
     const changeStrokeDashArray = (event) => {
         setElementAttributes({ ...elementAttributes, strokeDashArray: event.target.value });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ strokeDashArray: event.target.value.split(' ') });
-            mnemoscheme.renderAll();
-        }
+        mnemoscheme?._activeObject.set({ strokeDashArray: event.target.value.split(' ') });
+        mnemoscheme.renderAll();
     };
 
     const changeSkewX = (skewX) => {
         setElementAttributes({ ...elementAttributes, skewX });;
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ skewX });
-            mnemoscheme.renderAll();
-        }
+        mnemoscheme?._activeObject.set({ skewX });
+        mnemoscheme.renderAll();
     };
 
     const changeSkewY = (skewY) => {
         setElementAttributes({ ...elementAttributes, skewY });
-
-        if (mnemoscheme._activeObject) {
-            mnemoscheme._activeObject.set({ skewY });
-            mnemoscheme.renderAll();
-        }
+        mnemoscheme?._activeObject.set({ skewY });
+        mnemoscheme.renderAll();
     };
 
     const changeText = (event) => {
@@ -184,21 +167,29 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
     };
 
     const changeFontSize = (fontSize) => {
-        setElementAttributes({ ...elementAttributes, fontSize });
-
-        if (mnemoscheme._activeObject) {
+        if (fontSize >= 5) {
+            setElementAttributes({ ...elementAttributes, fontSize });
             mnemoscheme._activeObject.set({ fontSize });
             mnemoscheme.renderAll();
         }
     };
 
     const changeFontWeight = (fontWeight) => {
-        setElementAttributes({ ...elementAttributes, fontWeight });
-
-        if (mnemoscheme._activeObject) {
+        if (fontWeight >= 300 && fontWeight <= 800) {
+            setElementAttributes({ ...elementAttributes, fontWeight });
             mnemoscheme._activeObject.set({ fontWeight });
             mnemoscheme.renderAll();
         }
+    };
+
+    const bringForward = () => {
+        mnemoscheme?._activeObject.bringForward();
+        mnemoscheme.renderAll();
+    };
+
+    const sendBackwards = () => {
+        mnemoscheme?._activeObject.sendBackwards();
+        mnemoscheme.renderAll();
     };
 
     const deleteSelectedItem = () => {
@@ -216,20 +207,29 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
             setElementAttributes({ ...elementAttributes, text: '%' + tagname });
 
             mnemoscheme._activeObject.set({
-                tagId: Number(tagid), 
-                productId: Number(productid), 
+                tagId: Number(tagid),
+                productId: Number(productid),
                 tagName: tagname,
-                text: '000.000', 
-                round: Number(round), 
-                fill: color, 
+                text: '000.000',
+                round: Number(round),
+                fill: color,
                 isAutomaticColorSelection: true
             });
             mnemoscheme.renderAll();
         }
     };
 
+    const changeMnemoschemeBackgroundColor = (color) => {
+        setElementAttributes({ ...elementAttributes, backgroundColor: color });
+        mnemoscheme.setBackgroundColor(color, mnemoscheme.renderAll.bind(mnemoscheme));
+    }
+
     useEffect(() => {
         mnemoscheme?.on('mouse:down', getElementAttributes);
+
+        if (mnemoscheme) {
+            setElementAttributes({ ...elementAttributes, backgroundColor: mnemoscheme.backgroundColor });
+        }
 
         return mnemoscheme?.on('mouse:down', getElementAttributes);
         //eslint-disable-next-line
@@ -296,7 +296,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         </Tooltip>
     ) : null;
 
-    const selectColorElement = ['rect', 'circle', 'triangle', 'text'].includes(mnemoschemeActiveObjectType) && !elementAttributes.isAutomaticColorSelection
+    const selectColorElement = ['rect', 'circle', 'triangle', 'text', 'path'].includes(mnemoschemeActiveObjectType) && !elementAttributes.isAutomaticColorSelection
         ? (
             <Tooltip label='Изменить цвет заливки'>
                 <ColorInput
@@ -311,7 +311,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         )
         : null;
 
-    const selectColorStrokeElement = ['rect', 'line', 'path', 'circle', 'triangle'].includes(mnemoschemeActiveObjectType) ? (
+    const selectColorStrokeElement = ['rect', 'line', 'path', 'circle', 'triangle', 'text'].includes(mnemoschemeActiveObjectType) ? (
         <Tooltip label='Изменить цвет обводки'>
             <ColorInput
                 size='xs'
@@ -324,7 +324,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         </Tooltip>
     ) : null;
 
-    const selectStrokeWidthElement = ['rect', 'line', 'circle', 'triangle'].includes(mnemoschemeActiveObjectType) ? (
+    const selectStrokeWidthElement = ['rect', 'line', 'circle', 'triangle', 'path', 'text'].includes(mnemoschemeActiveObjectType) ? (
         <Tooltip label='Изменить ширину обводки'>
             <NumberInput
                 size='xs'
@@ -363,7 +363,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         </Tooltip>
     ) : null;
 
-    const selectStrokeDashArray = ['rect', 'line', 'circle', 'triangle'].includes(mnemoschemeActiveObjectType) ? (
+    const selectStrokeDashArray = ['rect', 'line', 'circle', 'triangle', 'path'].includes(mnemoschemeActiveObjectType) ? (
         <Tooltip label='Обводка пунктирной линией'>
             <Input
                 size='xs'
@@ -474,18 +474,38 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         : null;
 
     const selectFontWeight = ['text'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Толщина шрифта'>
+        <Tooltip label='Толщина текста'>
             <NumberInput
                 size='xs'
                 variant='filled'
                 type='number'
-                min='100' max='900' step={100}
+                min='300' max='800' step={100}
                 icon={<BsAlt size={18} color='#5c5c5c' />}
                 value={elementAttributes.fontWeight}
                 onChange={changeFontWeight}
             />
         </Tooltip>
     ) : null;
+
+    const selectBringForward = mnemoschemeActiveObjectType
+        ? (
+            <Tooltip label='Поднять слой'>
+                <ActionIcon color="indigo" size="lg" onClick={bringForward} >
+                    <BsFront size={18} />
+                </ActionIcon>
+            </Tooltip>
+        )
+        : null;
+
+    const selectSendBacwards = mnemoschemeActiveObjectType
+        ? (
+            <Tooltip label='Опустить слой'>
+                <ActionIcon color="indigo" size="lg" onClick={sendBackwards} >
+                    <BsBack size={18} />
+                </ActionIcon>
+            </Tooltip>
+        )
+        : null;
 
     const deleteElement = mnemoschemeActiveObjectType ? (
         <>
@@ -496,6 +516,23 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
             </ActionIcon>
         </>
     ) : null;
+
+    const selectMnemoschemeBackgroundColor = !mnemoschemeActiveObjectType
+        ? (
+            <>
+                <Tooltip label='Сменить цвет фона'>
+                    <ColorInput
+                        size='xs'
+                        variant='filled'
+                        format='rgba'
+                        icon={<BsFillPaletteFill color={elementAttributes.backgroundColor} size={18} />}
+                        value={elementAttributes.backgroundColor}
+                        onChange={changeMnemoschemeBackgroundColor}
+                    />
+                </Tooltip>
+            </>
+        )
+        : null;
 
     return (
         <div className='info-block__mnemoscheme-editor__change-block'>
@@ -520,7 +557,12 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
             {selectSkewX}
             {selectSkewY}
 
+            {selectBringForward}
+            {selectSendBacwards}
+
             {deleteElement}
+
+            {selectMnemoschemeBackgroundColor}
         </div>
     );
 }
