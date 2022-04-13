@@ -190,6 +190,18 @@ namespace RealtimeDataPortal.Models
                     new rt_Sections().AddChangeSections(new(), removedElement.ComponentId, new());
                 }
 
+                if (removedElement.Type == "mnemoscheme")
+                {
+                    List<Mnemoscheme> mnemoscheme = rdp_base.Mnemoscheme
+                        .Where(mnemoscheme => mnemoscheme.MnemoschemeId == removedElement.ComponentId)
+                        .ToList();
+
+                    if(mnemoscheme.Count() != 0)
+                    {
+                        rdp_base.Mnemoscheme.RemoveRange(mnemoscheme);
+                    }
+                }
+
                 rdp_base.TreesMenu.Remove(removedElement);
 
                 List<AccessToComponent> accessToComponent = rdp_base.AccessToComponent
