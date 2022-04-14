@@ -22,7 +22,7 @@ export const EditMnemoscheme = ({ action, form, submitForm, addAccessIcon, multi
         const delta = event.e.deltaY;
         let zoom = mnemoscheme.getZoom();
         zoom *= 0.999 ** delta;
-        if (zoom > 5) zoom = 5;
+        if (zoom > 10) zoom = 10;
         if (zoom < 1) zoom = 1;
         mnemoscheme.zoomToPoint({ x: event.e.offsetX, y: event.e.offsetY }, zoom);
         event.e.preventDefault();

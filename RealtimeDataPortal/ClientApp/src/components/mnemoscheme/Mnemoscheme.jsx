@@ -245,11 +245,11 @@ const Mnemoscheme = () => {
             </div>
 
             <div className={`info-block__mnemoscheme__canvas info-block ${classIsMnemoschemeFullscreen}`}>
-                <div className='info-block__mnemoscheme__canvas__header'>
-                    <p className='info-block__mnemoscheme__canvas__header__subtitle'>
-                        Данные получены: {dateOfReceiptOfData}
-                    </p>
+                <p className='info-block__mnemoscheme__canvas__subtitle'>
+                    Данные получены: {dateOfReceiptOfData}
+                </p>
 
+                <div className='fullscreen-button'>
                     <ActionIcon onClick={toggleIsMnemoschemeFullscreen}>
                         {togglerMnemoschemeFullscreen}
                     </ActionIcon>

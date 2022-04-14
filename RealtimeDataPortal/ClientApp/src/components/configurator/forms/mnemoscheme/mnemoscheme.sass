@@ -1,5 +1,5 @@
 @import '../../../../style/_mixins'
-    
+
 .info-block__mnemoscheme-editor
     .info-block
         position: relative
@@ -12,8 +12,6 @@
         padding: .5rem
         aspect-ratio: 16/7
         padding: 3.5rem 1rem 1rem 3.5rem
-        canvas
-            border: 1px solid #e7e7e7
     &__create-block
         display: flex
         flex-direction: column
@@ -23,7 +21,17 @@
         padding: 2.5rem .5rem .5rem .5rem
         z-index: 2
         button
-            margin: 0.25rem
+            margin: 0.1rem
+        &__form-template
+            padding: 1rem
+            border: 1px solid #e7e7e7
+            form
+                display: flex
+                flex-wrap: nowrap
+                justify-content: space-between
+                align-items: flex-end
+                .mantine-TextInput-root
+                    min-width: 250px
     &__change-block
         display: flex
         justify-content: center
@@ -33,7 +41,7 @@
         position: absolute
         z-index: 2
         & > div
-            margin: 0.5rem .25rem
+            margin: 0.5rem .15rem
         .mantine-ColorInput-wrapper
             input
                 max-width: 170px

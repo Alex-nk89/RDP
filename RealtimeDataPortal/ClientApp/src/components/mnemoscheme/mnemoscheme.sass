@@ -4,7 +4,7 @@
     .fullscreen
         position: fixed
         top: 10px
-        right: 50px
+        right: 10px
         bottom: 10px
         left: 10px
         overflow: auto
@@ -12,6 +12,7 @@
         @include scrollbar
     .info-block
         margin-top: 0
+        width: auto
     &__header
         display: flex
         justify-content: space-between
@@ -22,16 +23,11 @@
         padding: 1rem
         overflow: auto
         @include scrollbar
-        &__header
-            display: flex
-            justify-content: space-between
-            align-items: center
-            padding: .5rem 0
-            &__subtitle
-                margin: 0
-                margin-top: 0
-                color: #6c757d
-            & > div
-                max-height: 710px
-                overflow: auto
-                @include scrollbar
+        &__subtitle
+            margin: 0
+            margin-top: 0
+            color: #6c757d
+        & > div
+            max-height: 710px
+            overflow: auto
+            @include scrollbar

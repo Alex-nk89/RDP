@@ -14,6 +14,16 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
             height: 440,
         });
 
+        // Ограничительные линии для холста
+        mnemoscheme.add(new fabric.Line([-1, -1, -1, 441], { stroke: '#e7e7e7' })
+            .set({ selectable: false, hoverCursor: 'unset' }));
+        mnemoscheme.add(new fabric.Line([-1, -1, 1001, -1], { stroke: '#e7e7e7' })
+            .set({ selectable: false, hoverCursor: 'unset' }));
+        mnemoscheme.add(new fabric.Line([1001, -1, 1001, 441], { stroke: '#e7e7e7' })
+            .set({ selectable: false, hoverCursor: 'unset' }));
+        mnemoscheme.add(new fabric.Line([-1, 441, 1001, 441], { stroke: '#e7e7e7' })
+            .set({ selectable: false, hoverCursor: 'unset' }));
+
         if (componentInfo.mnemoscheme.mnemoschemeContain.length > 0) {
             const loadedMnemoscheme = new fabric.Canvas().loadFromJSON(componentInfo.mnemoscheme.mnemoschemeContain);
 

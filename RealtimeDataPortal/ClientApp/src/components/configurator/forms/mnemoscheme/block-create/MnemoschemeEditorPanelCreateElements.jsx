@@ -1,13 +1,40 @@
 import {
-    ActionIcon, Tooltip,
+    useState, useForm,
+    ActionIcon, Button, Loader, Popover, TextInput, Tooltip,
     fabric,
-    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsGripHorizontal, BsSave,
-    BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle,
-    attributesInputs
+    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsGripHorizontal, IoSend,
+    BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle, BsFillPlusSquareFill, BsFillSaveFill,
+    BsListOl,
+    attributesInputs,
+    useNotification, useRequest
 } from "..";
 import ImageTracer from 'imagetracerjs';
+import { BsTrash } from "react-icons/bs";
 
 export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemoscheme }) => {
+    const { show } = useNotification();
+    const { request } = useRequest();
+
+    const [openFormSavingTemplate, setOpenFormSavingTemplate] = useState(false);
+    const [isOpenedListTemplates, setIsOpenedListTemplates] = useState(false);
+
+    const [loadingTemplates, setLoadingTemplates] = useState(false);
+    const [sendingTemplate, setSendingTemplate] = useState(false);
+
+    const [listTemplates, setListTemplates] = useState([]);
+
+    const form = useForm({
+        initialValues: {
+            name: '',
+            template: ''
+        },
+        validationRules: {
+            name: value => value.trim().length > 0
+        },
+        errorMessages: {
+            name: 'Наименование должно содержать хотя бы один символ'
+        }
+    });
 
     const figureAttributes = { fill: 'rgba(255, 255, 255, 1)', stroke: 'rgba(0, 0, 0, 1)', width: 50, height: 50, top: 50, left: 50 };
 
@@ -69,6 +96,55 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
         mnemoscheme.add(tag);
     };
 
+    const addSelectedTemplate = (event) => {
+        const id = event.target.dataset.templateid;
+
+        request(`GetMnemoschemeTemplates?id=${id}`)
+            .then((template) => {
+                const objects = JSON.parse(template[0].templateContain);
+
+                const maxLeft = objects.length > 1
+                    ? Math.max.apply(null, objects.map(object => Math.abs(object.left)))
+                    : objects[0].left * -1;
+                const maxTop = objects.length > 1
+                    ? Math.max.apply(null, objects.map(object => Math.abs(object.top)))
+                    : objects[0].top * -1;
+
+                objects.forEach(object => {
+                    let newObject = null;
+
+                    switch (object.type) {
+                        case 'line':
+                            newObject = new fabric.Line([object.x1, object.y1, object.x2, object.y2], { ...object });
+                            break;
+                        case 'path':
+                            newObject = new fabric.Path(object.path.flatMap(x => x).join(' '), { ...object })
+                            break;
+                        case 'circle':
+                            newObject = new fabric.Circle({ ...object });
+                            break;
+                        case 'triangle':
+                            newObject = new fabric.Triangle({ ...object });
+                            break;
+                        case 'rect':
+                            newObject = new fabric.Rect({ ...object });
+                            break;
+                        case 'text':
+                            console.log(object)
+                            newObject = new fabric.Text('text', { ...object });
+                            break;
+                        default: break;
+                    }
+
+                    // Сдвиг вставляемого объекта в левую верхнюю часть холста
+                    newObject.set({ left: object.left + maxLeft + 20, top: object.top + maxTop + 20 });
+                    mnemoscheme.add(newObject);
+                    setIsOpenedListTemplates(false);
+                });
+            })
+            .catch(message => show('error', message));
+    };
+
     const selectImage = async (event) => {
         // Для преобразования SVG-изображения используется встроенные в библиотеку fabricjs средства,
         // для остальных изображений - библиотека imagetracer
@@ -94,7 +170,104 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
         }
 
         event.target.value = null;
-    }
+    };
+
+    const getTemplate = () => {
+        const selectedObjects = mnemoscheme.getActiveObjects();
+        setListTemplates([]);
+
+        if (selectedObjects.length > 0) {
+            form.values.template = JSON.stringify(selectedObjects);
+
+            // Ограничение длины из-за ограничений БД длины содержимого ячейки
+            if (form.values.template.length < 8000) {
+                setOpenFormSavingTemplate(true);
+            } else {
+                show('error', 'Рамер шаблона превышает допустимую длину');
+            }
+        } else {
+            show('warning', 'Не выбран ни один объект!');
+        }
+    };
+
+    const closeTemplateForm = () => setOpenFormSavingTemplate(false);
+
+    const saveTemplate = (values) => {
+        setSendingTemplate(true);
+
+        request(
+            'SaveMnemoschemeTemplates',
+            'POST',
+            JSON.stringify({
+                templateId: 0,
+                templateName: values?.name,
+                templateContain: values.template
+            }))
+            .then(message => show('success', message.success))
+            .catch(message => show('error', message))
+            .finally(() => {
+                setOpenFormSavingTemplate(false);
+                setSendingTemplate(false);
+                form.reset();
+            });
+    };
+
+    const removeTemplate = (event) => {
+        const id = event.target.dataset.templateid;
+        event.stopPropagation();
+
+        request(`RemoveMnemoschemeTemplates?id=${id}`)
+            .then(message => show('success', message.success))
+            .catch(message => show('error', message))
+            .finally(() => {
+                setIsOpenedListTemplates(false);
+                setListTemplates([]);
+            });
+    };
+
+    const templateForm = (
+        <div className='info-block__mnemoscheme-editor__create-block__form-template'>
+            <form onSubmit={form.onSubmit(values => saveTemplate(values))}>
+                <TextInput
+                    {...attributesInputs}
+                    {...form.getInputProps('name')}
+                    label='Наименование шаблона'
+                    placeholder='Введите наименование'
+                    size='xs'
+                />
+
+                <Button variant='white' size='xs' type='submit'>
+                    <IoSend size={16} />
+                </Button>
+            </form>
+        </div>
+    );
+
+    const openListTemplates = () => {
+        setLoadingTemplates(true);
+
+        request(`GetMnemoschemeTemplates`)
+            .then(listTemplates => setListTemplates(listTemplates))
+            .catch(message => show('error', message))
+            .finally(() => {
+                setIsOpenedListTemplates(true);
+                setLoadingTemplates(false);
+            });
+    };
+    const closeListTemplates = () => setIsOpenedListTemplates(false);
+
+    const divListTemplates = (
+        <ul className='list'>
+            {listTemplates.map(template => (
+                <li key={template.templateId} data-templateid={template.templateId} onClick={addSelectedTemplate}>
+                    <span data-templateid={template.templateId} >{template.templateName}</span>
+
+                    <ActionIcon color='red' data-templateid={template.templateId} onClick={removeTemplate}>
+                        <BsTrash data-templateid={template.templateId} />
+                    </ActionIcon>
+                </li>
+            ))}
+        </ul>);
 
     return (
         <div className='info-block__mnemoscheme-editor__create-block'>
@@ -158,12 +331,45 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
                 <input id='download' type='file' style={{ display: 'none' }} onChange={selectImage} accept='image/*' />
             </Tooltip>
 
+            <Popover
+                opened={isOpenedListTemplates}
+                onClose={closeListTemplates}
+                position='right'
+                width={250}
+                target={loadingTemplates
+                    ? <Loader size={16} />
+                    : <Tooltip label='Добавить шаблон'>
+                        <ActionIcon color='indigo' size='lg' onClick={openListTemplates}>
+                            <BsListOl size={18} />
+                        </ActionIcon>
+                    </Tooltip>
+                }
+            >
+                {divListTemplates}
+            </Popover>
 
             <BsGripHorizontal size={24} style={{ color: '#aab3ba' }} />
 
+            <Popover
+                opened={openFormSavingTemplate}
+                onClose={closeTemplateForm}
+                position='right'
+                width={320}
+                target={sendingTemplate
+                    ? <Loader size={16} />
+                    : <Tooltip label='Сохранить шаблон'>
+                        <ActionIcon color="indigo" size="lg" onClick={getTemplate}>
+                            <BsFillPlusSquareFill size={18} />
+                        </ActionIcon>
+                    </Tooltip>
+                }
+            >
+                {templateForm}
+            </Popover>
+
             <Tooltip label='Сохранить'>
                 <ActionIcon color="indigo" size="lg" onClick={saveMnemoscheme}>
-                    <BsSave size={18} />
+                    <BsFillSaveFill size={18} />
                 </ActionIcon>
             </Tooltip>
         </div>

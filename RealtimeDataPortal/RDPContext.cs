@@ -30,6 +30,7 @@ namespace RealtimeDataPortal
         public virtual DbSet<rt_Sections> rt_Sections { get; set;} = null!;
         public virtual DbSet<rt_SectionProduct> rt_SectionProduct { get; set;} = null!;
         public virtual DbSet<Mnemoscheme> Mnemoscheme {  get; set; } = null!;
+        public  virtual DbSet<MnemoschemeTemplates> MnemoschemeTemplates {  get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -112,6 +113,11 @@ namespace RealtimeDataPortal
             modelBuilder.Entity<Mnemoscheme>(entity =>
             {
                 entity.HasKey("Id");
+            });
+
+            modelBuilder.Entity<MnemoschemeTemplates>(entity =>
+            {
+                entity.HasKey("TemplateId");
             });
         }
     }

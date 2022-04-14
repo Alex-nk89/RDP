@@ -763,5 +763,68 @@ namespace RealtimeDataPortal.Controllers
             }
         }
 
+        [HttpPost("SaveMnemoschemeTemplates")]
+        public Object SaveMnemoschemeTemplates(MnemoschemeTemplates template)
+        {
+            try
+            {
+                if (!user.IsAdministrator || !user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
+                new MnemoschemeTemplates().SaveMnemoschemeTemplate(template);
+                return new { Success = listMessagesError.Saved };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+            }
+        }
+
+        [HttpGet("GetMnemoschemeTemplates")]
+        public Object GetMnemoschemeTemplates(int id)
+        {
+            try
+            {
+                if (!user.IsAdministrator || !user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
+                List<MnemoschemeTemplates> templates = new MnemoschemeTemplates().GetTemplates(id);
+                return templates;
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+            }
+        }
+
+        [HttpGet("RemoveMnemoschemeTemplates")]
+        public Object RemoveMnemoschemeTemplates(int id)
+        {
+            try
+            {
+                if (!user.IsAdministrator || !user.IsConfigurator)
+                    throw new ForbiddenException(listMessagesError.NotAccess);
+
+                new MnemoschemeTemplates().DeleteMnemoschemeTemplate(id);
+
+                return new { Success = listMessagesError.Deleted };
+            }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, new { ex.Message });
+            }
+            catch
+            {
+                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+            }
+        }
     }
 }

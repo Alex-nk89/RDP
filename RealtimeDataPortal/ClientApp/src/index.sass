@@ -36,6 +36,7 @@ ul
     color: $menu-color
 
 .info-block
+    position: relative
     width: 100%
     margin: 0 auto
     margin-top: 2rem
@@ -46,3 +47,24 @@ ul
         max-width: 700px
         padding: 2rem
         border-radius: 5px
+
+.fullscreen-button
+    position: absolute
+    top: .5rem
+    right: .5rem
+
+.list
+    padding: .2rem
+    border: 1px solid #e7e7e7
+    border-radius: 5px
+    li
+        display: flex
+        justify-content: space-between
+        align-items: center
+        border-radius: 5px
+        padding: .5rem 1rem
+        span
+            flex-grow: 1
+        &:hover
+            background: rgb(241, 243, 245)
+            cursor: pointer

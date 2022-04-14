@@ -3,9 +3,10 @@ import { useParams, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
-    ActionIcon, Button, ColorInput, Input, NumberInput, Popover, Select, Space, Stepper,
+    ActionIcon, Button, ColorInput, Input, Loader, NumberInput, Popover, Select, Space, Stepper,
     Text, TextInput, Tooltip, NativeSelect
 } from '@mantine/core';
+import { useForm } from '@mantine/hooks';
 
 import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react';
 import { fabric } from 'fabric';
@@ -14,7 +15,7 @@ import {
     BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsGripVertical, BsSave, BsArrowDown,
     BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, BsOption,
     BsAlt, BsArrowClockwise, BsArrowsAngleExpand, BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle,
-    BsFillPaletteFill, BsFront, BsBack
+    BsFillPaletteFill, BsFront, BsBack, BsFillPlusSquareFill, BsFillSaveFill, BsListOl
 } from 'react-icons/bs';
 import { IoSend } from 'react-icons/io5';
 
@@ -35,12 +36,14 @@ export {
     useState, useEffect, useRef, useMemo,
     useParams, Redirect,
     useSelector, useDispatch,
-    ActionIcon, Button, ColorInput, Input, NumberInput, Popover, Select, Space, Stepper, Text, TextInput, Tooltip, NativeSelect,
+    useForm,
+    ActionIcon, Button, ColorInput, Input, Loader, NumberInput, Popover, Select, Space, Stepper, Text, TextInput, 
+    Tooltip, NativeSelect,
     FabricJSCanvas, useFabricJSEditor, fabric,
     BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsSave, BsArrowDown, BsGripVertical,
     BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, BsOption, BsAlt,
     BsArrowClockwise, BsArrowsAngleExpand, BsFillBadgeAdFill, IoSend, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle,
-    BsFillPaletteFill, BsFront, BsBack,
+    BsFillPaletteFill, BsFront, BsBack, BsFillPlusSquareFill, BsFillSaveFill, BsListOl,
     useRequest, useNotification,
     MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanelCreateElements,
     MnemoschemeEditorPanelChangeElements,
