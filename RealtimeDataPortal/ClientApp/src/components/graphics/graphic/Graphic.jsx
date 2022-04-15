@@ -17,7 +17,7 @@ const Graphic = ({ attributes, date }) => {
 
     const [data, setData] = useState([]);
 
-    const chart = useMemo(() => <Chart attributes={attributes} data={data} isScale={isScale} width={900} />,
+    const chart = useMemo(() => <Chart attributes={attributes} data={data} isScale={isScale} />,
         //<ApexChart data={data} attributes={attributes} isScale={isScale} />
         //eslint-disable-next-line
         [data, isScale]);

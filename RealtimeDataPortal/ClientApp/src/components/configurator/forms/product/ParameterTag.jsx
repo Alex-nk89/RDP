@@ -71,7 +71,7 @@ const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
                         {...tag.tag}
                         onChange={tagSearch}
                         placeholder='Выберите тег'
-                        ref={tagNameRef}s
+                        ref={tagNameRef}
                         rightSection={loaderTagList}
                     />
 

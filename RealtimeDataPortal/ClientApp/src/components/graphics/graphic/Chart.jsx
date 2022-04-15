@@ -1,6 +1,6 @@
 import { ResponsiveContainer, ReferenceLine, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
-const Chart = ({ attributes, data, isScale, width }) => {
+const Chart = ({ attributes, data, isScale }) => {
     const { color, typeName } = { ...attributes };
     const { unit, scaleMinEU, scaleMaxEU, limitHi: { limitHi, descrLimitHi },
         limitHihi: { limitHihi, descrLimitHihi }, limitLo: { limitLo, descrLimitLo },
@@ -35,7 +35,7 @@ const Chart = ({ attributes, data, isScale, width }) => {
 
     return (
         <ResponsiveContainer width='97%' aspect={3}>
-            <LineChart data={data.history} syncId={typeName} width={width} height={350}>
+            <LineChart data={data.history} syncId={typeName} width={800} height={350}>
                 <Line type="linear" dataKey="value" stroke={color} dot={false} strokeWidth={2} isAnimationActive={false} />
 
                 <ReferenceLine y={limitHihi} stroke="#ff0000" strokeWidth={2} strokeDasharray="3 3" />

@@ -8,7 +8,6 @@ const Product = () => {
     useEffect(() => {
         request('GetAttributesForProducts')
             .then(result => {
-                console.log(result)
                 if (Object.keys(result).length > 0) {
                     setAttributesForProducts(result);
                     setProccess('confirmed');

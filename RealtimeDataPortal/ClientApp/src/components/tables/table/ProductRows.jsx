@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CellValue } from '../Index';
+import { CellValue, BsFillBarChartFill } from '../Index';
 
 const ProductRows = ({ products, data, name, columnContent, type }) => {
 
@@ -23,7 +23,7 @@ const ProductRows = ({ products, data, name, columnContent, type }) => {
                 const cell = indexCol === 0
                     ? <td key={indexCol} rowSpan={rowSpan} style={{ textAlign: 'left' }}>
                         <Link to={`/graphics/${productId}`}>
-                            {parameterName}
+                            {parameterName}<BsFillBarChartFill />
                         </Link>
                     </td>
                     : <td key={indexCol} rowSpan={rowSpan}>{parameterName}</td>;

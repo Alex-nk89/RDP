@@ -55,10 +55,7 @@ const Parameter = ({ number, parameter, enterParameter, parameterTypes, removePa
                     </ActionIcon>
                 </div>
 
-
                 <fieldset>
-
-
                     <Space h='xs' />
 
                     <TextInput
