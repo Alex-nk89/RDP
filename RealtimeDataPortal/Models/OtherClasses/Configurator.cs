@@ -166,6 +166,17 @@ namespace RealtimeDataPortal.Models
             {
                 TreesMenu removedElement = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new();
 
+                if (removedElement.Type == "folder")
+                {
+                    int countChildsElement = rdp_base.TreesMenu
+                        .Where(tm => tm.ParentId == id)
+                        .Count();
+
+                    if (countChildsElement > 0) {
+                        throw new Exception("");
+                    }
+                }
+
                 if (removedElement.Type == "externalPage")
                 {
                     ExternalPages removingExternalPage = rdp_base.ExternalPages

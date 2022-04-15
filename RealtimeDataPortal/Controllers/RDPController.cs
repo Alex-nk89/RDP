@@ -206,11 +206,15 @@ namespace RealtimeDataPortal.Controllers
             {
                 return StatusCode(403, new { Message = ex.Message });
             }
-            catch
+            catch (Exception ex)
             {
+                string message = ex.Message.Length == 0
+                    ? "Невозможно удалить непустую папку!"
+                    : listMessagesError.NotDeleted;
+
                 return StatusCode(500, new
                 {
-                    Message = listMessagesError.NotDeleted
+                    Message = message
                 });
             }
         }

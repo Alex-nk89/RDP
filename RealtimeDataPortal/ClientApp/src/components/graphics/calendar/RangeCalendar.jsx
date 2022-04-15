@@ -28,7 +28,7 @@ const RangeCalendar = ({ setDate }) => {
     const [errorDate, setErrorDate] = useState(false);
     const settingsCalendar = {
         size: 'xs',
-        local:'ru',
+        locale: 'ru',
         inputFormat: "DD.MM.YYYY",
         placeholder: 'Выберите дату'
     }
@@ -58,7 +58,7 @@ const RangeCalendar = ({ setDate }) => {
 
         setErrorDate(false);
 
-        if(startDate < endDate) {
+        if (startDate < endDate) {
             setDate({
                 start: startDate,
                 end: endDate
@@ -69,21 +69,21 @@ const RangeCalendar = ({ setDate }) => {
     }
 
     const selectRange = visibleCalendarRange ? <>
-        <DatePicker value={startDayRange} onChange={setStartDayRange} {...settingsCalendar} local='ru'/>
+        <DatePicker value={startDayRange} onChange={setStartDayRange} {...settingsCalendar} local='ru' />
         <Space w="xs" />
-        <TimeInput value={startTimeRange} onChange={setStartTimeRange} size='xs'/>
+        <TimeInput value={startTimeRange} onChange={setStartTimeRange} size='xs' />
         <Space w="xs" />
 
         <span> - </span>
         <Space w="xs" />
 
-        <DatePicker value={endDayRange} onChange={setEndDayRange} {...settingsCalendar} error={errorDate}/>
+        <DatePicker value={endDayRange} onChange={setEndDayRange} {...settingsCalendar} error={errorDate} />
         <Space w="xs" />
-        <TimeInput value={endTimeRange} onChange={setEndTimeRange} size='xs' error={errorDate}/>
+        <TimeInput value={endTimeRange} onChange={setEndTimeRange} size='xs' error={errorDate} />
         <Space w="xs" />
 
         <Button onClick={choiseRange} compact variant='light' size='md'>
-            <IoSync size={16} color='gray'/>
+            <IoSync size={16} color='gray' />
         </Button>
     </> : null;
 
@@ -155,7 +155,7 @@ const RangeCalendar = ({ setDate }) => {
 
     return (
         <div className='settings__calendar__choise-date'>
-            <Select size='xs' data={selectList} value={select} onChange={setSelect} placeholder='Выберите время'/>
+            <Select size='xs' data={selectList} value={select} onChange={setSelect} placeholder='Выберите время' />
             <Space w="xs" />
 
             {selectDay}

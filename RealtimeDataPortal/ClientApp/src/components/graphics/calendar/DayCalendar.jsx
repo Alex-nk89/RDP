@@ -6,7 +6,7 @@ const DayCalendar = ({ setDate }) => {
     const [day, setDay] = useState(null);
     const settingsCalendar = {
         size: 'xs',
-        local:'ru',
+        locale:'ru',
         inputFormat: "DD.MM.YYYY"
     }
 
