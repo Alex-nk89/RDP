@@ -35,6 +35,9 @@ const AddChangeTableRT = () => {
         }]
     };
 
+    const user = useSelector(state => state.user.user);
+    const disabledButton = user?.isConfigurator ? false : true;
+
     const nameRef = useRef();
     const { request } = useRequest();
     const { show } = useNotification();
@@ -306,7 +309,7 @@ const AddChangeTableRT = () => {
 
                     {/* <Space h="md" /> */}
 
-                    <Button type='submit' loading={fetchingData}>Сохранить</Button>
+                    <Button type='submit' loading={fetchingData} disabled={disabledButton}>Сохранить</Button>
                 </form>
             </div>
         </>

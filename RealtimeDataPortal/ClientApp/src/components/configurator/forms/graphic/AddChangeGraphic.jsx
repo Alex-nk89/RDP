@@ -1,5 +1,5 @@
 import {
-    useState, useEffect, useRef, useRequest, useNotification,
+    useState, useEffect, useRef, useRequest, useNotification, useSelector,
     TextInput, Space, Button, Loader,
     attributesInputs
 } from '../../index';
@@ -9,6 +9,8 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
     const productRef = useRef(null);
     const { request } = useRequest();
     const { show } = useNotification();
+    const user = useSelector(state => state.user.user);
+    const disabledButton = user?.isConfigurator ? false : true;
 
     const [productListFound, setProductListFound] = useState([]);
     const [loadingListProducts, setLoadingListProducts] = useState(false);
@@ -120,7 +122,7 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
 
                     <Space h="md" />
 
-                    <Button type="submit" loading={loadingForButton}>Сохранить</Button>
+                    <Button type="submit" loading={loadingForButton} disabled={disabledButton}>Сохранить</Button>
                 </form>
             </div>
         </>

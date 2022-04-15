@@ -50,7 +50,7 @@ namespace RealtimeDataPortal.Controllers
                 TreesMenu menuList = new TreesMenu();
 
                 if (!treesMenu.isFullView)
-                    treesMenu.isFullView = user.IsFullView || user.IsConfigurator || user.IsAdministrator;
+                    treesMenu.isFullView = user.IsFullView || user.IsConfigurator || user.IsAdministrator || user.IsConfiguratorRead;
 
                 return menuList.GetMenu(treesMenu.ParentId, user.Groups, treesMenu.isFullView);
             }
@@ -96,7 +96,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.IsConfigurator)
+                if (!(user.IsConfigurator || user.IsConfiguratorRead))
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
                 return new Configurator().GetComponentInformation(id, operation);
@@ -220,7 +220,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.IsConfigurator)
+                if (!(user.IsConfigurator || user.IsConfiguratorRead))
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
                 if (forMnemoscheme)
@@ -243,7 +243,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.IsConfigurator)
+                if (!(user.IsConfigurator || user.IsConfiguratorRead))
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
                 return new
@@ -307,7 +307,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.IsConfigurator)
+                if (!(user.IsConfigurator || user.IsConfiguratorRead))
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
                 using (RDPContext rdp_base = new())
@@ -359,7 +359,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.IsConfigurator)
+                if (!(user.IsConfigurator || user.IsConfiguratorRead))
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
                 return new QueryProduct().GetListProducts(name);
@@ -379,7 +379,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.IsConfigurator)
+                if (!(user.IsConfigurator || user.IsConfiguratorRead))
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
                 return new Products().GetListProducts(name).ToList();
@@ -768,7 +768,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.IsAdministrator || !user.IsConfigurator)
+                if (!user.IsConfigurator)
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
                 new MnemoschemeTemplates().SaveMnemoschemeTemplate(template);
@@ -789,7 +789,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.IsAdministrator || !user.IsConfigurator)
+                if (!(user.IsConfigurator || user.IsConfiguratorRead))
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
                 List<MnemoschemeTemplates> templates = new MnemoschemeTemplates().GetTemplates(id);
@@ -810,7 +810,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if (!user.IsAdministrator || !user.IsConfigurator)
+                if (!user.IsConfigurator)
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
                 new MnemoschemeTemplates().DeleteMnemoschemeTemplate(id);

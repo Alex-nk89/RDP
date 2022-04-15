@@ -1,10 +1,13 @@
 import {
+    useSelector,
     TextInput, Space, Button,
     attributesInputs
 } from '../../index';
 
 const AddChangeFolder = ({ action, form, nameRef, submitForm, addAccessIcon, multiSelect, loadingForButton }) => {
     const title = action === 'add' ? 'Добавить папку' : 'Редактировать папку';
+    const user = useSelector(state => state.user.user);
+    const disabledButton = user?.isConfigurator ? false : true;
 
     return (
         <>
@@ -33,7 +36,7 @@ const AddChangeFolder = ({ action, form, nameRef, submitForm, addAccessIcon, mul
 
                     <Space h="md" />
 
-                    <Button type="submit" loading={loadingForButton}>Сохранить</Button>
+                    <Button type="submit" loading={loadingForButton} disabled={disabledButton}>Сохранить</Button>
                 </form>
             </div>
         </>

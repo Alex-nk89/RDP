@@ -1,6 +1,7 @@
 import {
     useState, useEffect, useRef,
     useForm,
+    useSelector,
     TextInput, Space, attributesInputs, Select, Loader, Button,
     useRequest, useNotification,
     BsSearch
@@ -10,6 +11,9 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
     const nameRef = useRef(null);
     const { request } = useRequest();
     const { show } = useNotification();
+
+    const user = useSelector(state => state.user.user);
+    const disabledButton = user?.isConfigurator ? false : true;
 
     const [tagsList, setTagsList] = useState([]);
     const [loadingTagList, setLoadingTagList] = useState(false);
@@ -97,7 +101,7 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
                 .catch(error => show('error', error))
                 .finally(() => setLoadingTagList(false));
         } else {
-            form.setErrors({ tagName: 'Введите минимум 3 символа'});
+            form.setErrors({ tagName: 'Введите минимум 3 символа' });
             setTagsList([]);
         }
 
@@ -163,7 +167,7 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
 
                 <Space h="md" />
 
-                <Button type="submit" loading={loaderSubmitForm}>Сохранить</Button>
+                <Button type="submit" loading={loaderSubmitForm} disabled={disabledButton}>Сохранить</Button>
             </form>
         </div>
     );

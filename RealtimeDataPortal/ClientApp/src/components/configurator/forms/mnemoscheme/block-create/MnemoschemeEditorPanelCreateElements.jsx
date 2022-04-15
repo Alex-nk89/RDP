@@ -1,5 +1,5 @@
 import {
-    useState, useForm,
+    useState, useForm, useSelector,
     ActionIcon, Button, Loader, Popover, TextInput, Tooltip,
     fabric,
     BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsGripHorizontal, IoSend,
@@ -14,6 +14,9 @@ import { BsTrash } from "react-icons/bs";
 export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemoscheme }) => {
     const { show } = useNotification();
     const { request } = useRequest();
+
+    const user = useSelector(state => state.user.user);
+    const disabledButton = user?.isConfigurator ? false : true;
 
     const [openFormSavingTemplate, setOpenFormSavingTemplate] = useState(false);
     const [isOpenedListTemplates, setIsOpenedListTemplates] = useState(false);
@@ -358,7 +361,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
                 target={sendingTemplate
                     ? <Loader size={16} />
                     : <Tooltip label='Сохранить шаблон'>
-                        <ActionIcon color="indigo" size="lg" onClick={getTemplate}>
+                        <ActionIcon color="indigo" size="lg" onClick={getTemplate} disabled={disabledButton}>
                             <BsFillPlusSquareFill size={18} />
                         </ActionIcon>
                     </Tooltip>
@@ -368,7 +371,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
             </Popover>
 
             <Tooltip label='Сохранить'>
-                <ActionIcon color="indigo" size="lg" onClick={saveMnemoscheme}>
+                <ActionIcon color="indigo" size="lg" onClick={saveMnemoscheme} disabled={disabledButton}>
                     <BsFillSaveFill size={18} />
                 </ActionIcon>
             </Tooltip>

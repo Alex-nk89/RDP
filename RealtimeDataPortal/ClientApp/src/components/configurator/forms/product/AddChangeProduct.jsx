@@ -1,5 +1,5 @@
 import {
-    useState, useEffect, useRef, useRequest, useNotification, Parameter, attributesInputs, settingsAddRemoveIcon,
+    useState, useEffect, useRef, useRequest, useNotification, useSelector, Parameter, attributesInputs, settingsAddRemoveIcon,
     TextInput, Space, InputWrapper, Group, ActionIcon, Button, Loader,
     BsDash, BsPlus, BsSearch
 } from '../../index';
@@ -13,6 +13,9 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
     const { request } = useRequest();
     const { show } = useNotification();
     const { parameterTypes, maxParameterId } = attributesForProducts;
+
+    const user = useSelector(state => state.user.user);
+    const disabledButton = user?.isConfigurator ? false : true;
 
     const parameter = {
         parameterId: maxParameterId + 1,
@@ -73,7 +76,7 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                 .catch(error => show('error', error))
                 .finally(() => setSearchingProduct(false));
         } else {
-            setProductName({ ...productName, error: 'ВВедите минимум 3 символа'})
+            setProductName({ ...productName, error: 'ВВедите минимум 3 символа' })
             setProductListFound([]);
         }
 
@@ -250,7 +253,7 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
 
                 <Space h="md" />
 
-                <Button type="submit" loading={loaderSubmitForm}>Сохранить</Button>
+                <Button type="submit" loading={loaderSubmitForm} disabled={disabledButton}>Сохранить</Button>
             </form>
         </div>
     );

@@ -26,7 +26,7 @@ const User = () => {
         adminMode ? show('success', 'Режим администрирования выключен') : show('success', 'Режим администрирования включен');
     }
 
-    const userBlock = user?.isAdministrator || user?.isConfigurator ?
+    const userBlock = user?.isAdministrator || user?.isConfigurator || user?.isConfiguratorRead ?
         <Menu
             size="lg"
             control={
@@ -45,7 +45,7 @@ const User = () => {
                         <Switch size='xs' checked={adminMode} onChange={changeAdminMode} />
                     </label>
                 </Menu.Item> : null}
-            {user?.isConfigurator ?
+            {user?.isConfigurator || user?.isConfiguratorRead ?
                 <Menu.Item icon={<BsFillGearFill />}>
                     <label>
                         Конфигурирование

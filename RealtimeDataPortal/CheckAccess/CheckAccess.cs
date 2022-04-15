@@ -18,7 +18,7 @@ namespace RealtimeDataPortal.CheckAccess
             // 5. Далее рекурсивно проверяем родителей страницы
             //
 
-            if (user.IsFullView || user.IsConfigurator || user.IsAdministrator)
+            if (user.IsFullView || user.IsConfigurator || user.IsAdministrator || user.IsConfiguratorRead)
                 return true;
 
             List<TreesMenu> treesMenuWithAccesses = new List<TreesMenu>();

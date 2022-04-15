@@ -10,7 +10,8 @@ namespace RealtimeDataPortal.Models
         public bool IsFullView { get; set; } = false;
         public bool IsConfigurator { get; set; } = false;
         public bool IsAdministrator { get; set; } = false;
-        private static HttpContext _httpContext => new HttpContextAccessor().HttpContext;
+        public bool IsConfiguratorRead { get; set; } = false;
+        //private static HttpContext _httpContext => new HttpContextAccessor().HttpContext;
 
         public User(string userName)
         {
@@ -49,6 +50,11 @@ namespace RealtimeDataPortal.Models
             if (Groups.Contains(accessList.Where(al => al.Function == "admin").Select(al => al.ADGroup).First()))
             {
                 IsAdministrator = true;
+            }
+
+            if (Groups.Contains(accessList.Where(al => al.Function == "customizerRead").Select(al => al.ADGroup).First()))
+            {
+                IsConfiguratorRead = true;
             }
         }
     }

@@ -1,10 +1,13 @@
 import {
+    useSelector,
     TextInput, Space, Button,
     attributesInputs
 } from '../../index';
 
 const AddChangeExternalPage = ({ action, form, nameRef, submitForm, addAccessIcon, multiSelect, loadingForButton }) => {
-    const title = action === 'add' ? 'Добавление страницы' : 'Редактирование страницы'
+    const title = action === 'add' ? 'Добавление страницы' : 'Редактирование страницы';
+    const user = useSelector(state => state.user.user);
+    const disabledButton = user?.isConfigurator ? false : true;
 
     return (
         <>
@@ -34,13 +37,13 @@ const AddChangeExternalPage = ({ action, form, nameRef, submitForm, addAccessIco
                         label='Группы доступа'
                         placeholder='Введите группу из Active Directory'
                         rightSection={addAccessIcon}
-                        /* ref={accessRef} */ />
+                    />
 
                     {multiSelect}
 
                     <Space h="md" />
 
-                    <Button type="submit" loading={loadingForButton}>Сохранить</Button>
+                    <Button type="submit" loading={loadingForButton} disabled={disabledButton}>Сохранить</Button>
                 </form>
             </div>
         </>
