@@ -15,6 +15,7 @@ import Configurator from './components/configurator/Configurator';
 import { Administrstor } from './components/administrator/Administrator';
 import AppPreloader from './components/loader/appPreloader';
 import { useRequest } from './hooks/useRequest';
+import { ScrollToTop } from './components/scroll-to-top/ScrollToTop';
 
 import { userInitialize, userFetching, userFetchingError } from './actions';
 
@@ -44,6 +45,7 @@ const App = () => {
                     <Route exact path="/Configurator/:operation/:id" component={Configurator} />
                     <Route exact path="/Administrator/:operation" component={Administrstor} />
                     <Route exact path="/Error" component={ErrorsPage} />
+                    <ScrollToTop />
                 </Container>
             </main>
         </>

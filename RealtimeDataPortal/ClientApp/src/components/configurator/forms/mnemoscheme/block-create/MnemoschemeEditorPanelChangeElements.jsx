@@ -520,7 +520,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
     const selectMnemoschemeBackgroundColor = !mnemoschemeActiveObjectType
         ? (
             <>
-                <Tooltip label='Сменить цвет фона'>
+                <Tooltip label='Сменить цвет фона' >
                     <ColorInput
                         size='xs'
                         variant='filled'

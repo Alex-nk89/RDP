@@ -18,13 +18,25 @@ const Page = ({ id, name, componentId, type }) => {
             </a>
             break;
         case 'graphic':
-            link = <NavLink to={`/graphics/${componentId}`}><BsFillBarChartFill size={16} /><span>{name}</span></NavLink>
+            link =
+                <NavLink to={`/graphics/${componentId}`}>
+                    <BsFillBarChartFill size={16} />
+                    <span>{name}</span>
+                </NavLink>
             break;
         case 'table':
-            link = <NavLink to={`/table/${id}`}><BsGridFill size={16} /><span>{name}</span></NavLink>
+            link =
+                <NavLink to={`/table/${id}`}>
+                    <BsGridFill size={16} />
+                    <span>{name}</span>
+                </NavLink>
             break;
         case 'mnemoscheme':
-            link = <NavLink to={`/mnemoscheme/${id}`}><BsDiagram3Fill size={16} /><span>{name}</span></NavLink>
+            link =
+                <NavLink to={`/mnemoscheme/${id}`}>
+                    <BsDiagram3Fill size={16} />
+                    <span>{name}</span>
+                </NavLink>
             break;
         default:
             link = null
