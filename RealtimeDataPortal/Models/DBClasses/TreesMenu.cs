@@ -96,7 +96,7 @@ namespace RealtimeDataPortal.Models
                     }
                 }
 
-                return treesMenu;
+                return treesMenu.OrderBy(tm => tm.Name);
             }
         }
 
