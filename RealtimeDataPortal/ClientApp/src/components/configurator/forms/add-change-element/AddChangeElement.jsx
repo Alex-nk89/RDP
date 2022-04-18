@@ -15,8 +15,8 @@ const AddChangeElement = () => {
     const [accesses, setAccesses] = useState([]);
     const [oldAccesses, setOldAccesses] = useState([]);
     const [loadingForButton, setLoadingForButton] = useState(false);
-
     const nameRef = useRef(null);
+
     const { request } = useRequest();
     const { show } = useNotification();
     const dispatch = useDispatch();
@@ -117,7 +117,6 @@ const AddChangeElement = () => {
     };
 
     useEffect(() => {
-
         form.reset();
         setAccesses([]);
         setOldAccesses([]);

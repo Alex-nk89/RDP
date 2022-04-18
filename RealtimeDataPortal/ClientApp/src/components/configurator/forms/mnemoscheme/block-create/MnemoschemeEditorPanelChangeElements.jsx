@@ -3,11 +3,14 @@ import {
     ActionIcon, ColorInput, Input, NumberInput, TextInput, Tooltip,
     BsBorderWidth, BsFillSquareFill, BsSquare, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight,
     BsArrowBarDown, BsTrash, BsGripVertical, BsOption, BsAlt, BsArrowClockwise, BsArrowsAngleExpand, BsFonts,
-    BsFillPaletteFill, BsFront, BsBack,
+    BsFillPaletteFill, //BsFront, BsBack,
     useRequest, useNotification
 } from '..';
 
 export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
+    // От возможности изменять порядок слоев принято решение отказаться, из-за особенностей преобразования в SVG при выводе схемы для просмотра.
+    // Для сохранения порядка слоев придется выводить по очереди все объекты, что лишает возможности мемоизировать все объекты за исключением 
+    // тегов. С ростом схемы будет падать производительность приложения
 
     const [mnemoschemeActiveObjectType, setMnemoschemeActiveObjectType] = useState(null);
     const [listTags, setListTags] = useState([]);
@@ -182,15 +185,15 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         }
     };
 
-    const bringForward = () => {
-        mnemoscheme?._activeObject.bringForward();
-        mnemoscheme.renderAll();
-    };
+    //const bringForward = () => {
+    //    mnemoscheme?._activeObject.bringForward();
+    //    mnemoscheme.renderAll();
+    //};
 
-    const sendBackwards = () => {
-        mnemoscheme?._activeObject.sendBackwards();
-        mnemoscheme.renderAll();
-    };
+    //const sendBackwards = () => {
+    //    mnemoscheme?._activeObject.sendBackwards();
+    //    mnemoscheme.renderAll();
+    //};
 
     const deleteSelectedItem = () => {
         if (mnemoscheme._activeObject) {
@@ -487,25 +490,25 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         </Tooltip>
     ) : null;
 
-    const selectBringForward = mnemoschemeActiveObjectType
-        ? (
-            <Tooltip label='Переместить вперед'>
-                <ActionIcon color="indigo" size="lg" onClick={bringForward} >
-                    <BsFront size={18} />
-                </ActionIcon>
-            </Tooltip>
-        )
-        : null;
+    //const selectBringForward = mnemoschemeActiveObjectType
+    //    ? (
+    //        <Tooltip label='Переместить вперед'>
+    //            <ActionIcon color="indigo" size="lg" onClick={bringForward} >
+    //                <BsFront size={18} />
+    //            </ActionIcon>
+    //        </Tooltip>
+    //    )
+    //    : null;
 
-    const selectSendBacwards = mnemoschemeActiveObjectType
-        ? (
-            <Tooltip label='Переместить назад'>
-                <ActionIcon color="indigo" size="lg" onClick={sendBackwards} >
-                    <BsBack size={18} />
-                </ActionIcon>
-            </Tooltip>
-        )
-        : null;
+    //const selectSendBackwards = mnemoschemeActiveObjectType
+    //    ? (
+    //        <Tooltip label='Переместить назад'>
+    //            <ActionIcon color="indigo" size="lg" onClick={sendBackwards} >
+    //                <BsBack size={18} />
+    //            </ActionIcon>
+    //        </Tooltip>
+    //    )
+    //    : null;
 
     const deleteElement = mnemoschemeActiveObjectType ? (
         <>
@@ -556,9 +559,6 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
 
             {selectSkewX}
             {selectSkewY}
-
-            {selectBringForward}
-            {selectSendBacwards}
 
             {deleteElement}
 

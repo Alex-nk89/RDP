@@ -198,7 +198,7 @@ const Mnemoscheme = () => {
     useEffect(() => {
         const updateMnemoschemeTimer = setTimeout(() => {
             setUpdateMnemoscheme(updateMnemoscheme => updateMnemoscheme + 1);
-        }, 3000);
+        }, 57000);
 
         if (listTagsId.length > 0) {
             request('GetMnemoschemeTagsValues', 'POST', JSON.stringify(listTagsId))

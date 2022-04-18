@@ -39,50 +39,59 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
         }
     });
 
-    const figureAttributes = { fill: 'rgba(255, 255, 255, 1)', stroke: 'rgba(0, 0, 0, 1)', width: 50, height: 50, top: 50, left: 50 };
-
-    const figures = {
-        line: { ...attributesInputs },
-        rectangle: { ...figureAttributes },
-        circle: { radius: 25, ...figureAttributes },
-        triangle: { ...figureAttributes },
-    };
+    const figureAttributes = { fill: 'rgba(255, 255, 255, 1)', stroke: 'rgba(0, 0, 0, 1)', width: 50, height: 50 };
 
     const addLine = () => {
+        const coords = mnemoscheme.getVpCenter();
+
         mnemoscheme.add(new fabric.Line([10, 20, 100, 20],
-            { stroke: '#000', top: 50, left: 50, strokeWidth: 3 }));
+            { stroke: '#000', top: coords.y, left: coords.x, strokeWidth: 2 }));
     };
 
     const addWawyLine = () => {
+        const coords = mnemoscheme.getVpCenter();
+
         mnemoscheme.add(new fabric.Path(`M 8 1 Q 14 5 8 8 Q 0 12 8 16 Q 9 16 8 15 Q 2 12 8 9 Q 16 5 8 0 Q 7 0 8 1z`,
-            { top: 50, left: 50, fill: 'rgba(0, 0, 0, 1)', stroke: 'rgba(0, 0, 0, 1)' }));
+            { top: coords.y, left: coords.x, fill: 'rgba(0, 0, 0, 1)', stroke: 'rgba(0, 0, 0, 1)' }));
     }
 
     const addArrow = () => {
+        const coords = mnemoscheme.getVpCenter();
+
         mnemoscheme.add(new fabric.Path(`M 8 1 a 0.5 0.5 0 0 1 0.5 0.5 v 11.793 l 3.146 -3.147 a 0.5 0.5 0 0 
             1 0.708 0.708 l -4 4 a 0.5 0.5 0 0 1 -0.708 0 l -4 -4 a 0.5 0.5 0 0 1 0.708 
-            -0.708 L 7.5 13.293 V 1.5 A 0.5 0.5 0 0 1 8 1 Z`, { stroke: 'rgba(0, 0, 0, 1)', strokeWidth: 1, top: 50, left: 50 }));
+            -0.708 L 7.5 13.293 V 1.5 A 0.5 0.5 0 0 1 8 1 Z`, { stroke: 'rgba(0, 0, 0, 1)', strokeWidth: 1, top: coords.y, left: coords.x }));
     };
 
     const addCircle = () => {
-        mnemoscheme.add(new fabric.Circle(figures.circle));
+        const coords = mnemoscheme.getVpCenter();
+
+        mnemoscheme.add(new fabric.Circle({ radius: 20, top: coords.y - 20, left: coords.x - 20, ...figureAttributes }));
     };
 
     const addSemicircle = () => {
+        const coords = mnemoscheme.getVpCenter();
+
         mnemoscheme.add(new fabric.Path(`M 0 8 A 1 1 0 0 1 16 8 A 1 1 0 0 1 15 8 A 1 1 0 0 0 1 8 Q 1 8 1 8 A 1 1 0 0 1 0 8`,
-            { top: 50, left: 50, fill: 'rgba(0, 0, 0, 1)' }));
+            { top: coords.y, left: coords.x, fill: 'rgba(0, 0, 0, 1)' }));
     }
 
     const addTriangle = () => {
-        mnemoscheme.add(new fabric.Triangle(figures.triangle));
+        const coords = mnemoscheme.getVpCenter();
+
+        mnemoscheme.add(new fabric.Triangle({ top: coords.y - 25, left: coords.x - 25, ...figureAttributes }));
     };
 
     const addRectangle = () => {
-        mnemoscheme.add(new fabric.Rect({ ...figures.rectangle }));
+        const coords = mnemoscheme.getVpCenter();
+
+        mnemoscheme.add(new fabric.Rect({ top: coords.y - 25, left: coords.x - 25, ...figureAttributes }));
     };
 
     const addTag = () => {
-        const tag = new fabric.Text('text', { fontSize: 14, fontFamily: 'system-ui', fontWeight: 400 });
+        const coords = mnemoscheme.getVpCenter();
+
+        const tag = new fabric.Text('text', { fontSize: 14, fontFamily: 'system-ui', fontWeight: 400, top: coords.y - 7, left: coords.x - 10 });
 
         tag.toObject = (function (toObject) {
             return function () {
@@ -100,18 +109,12 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     };
 
     const addSelectedTemplate = (event) => {
+        const coords = mnemoscheme.getVpCenter();
         const id = event.target.dataset.templateid;
 
         request(`GetMnemoschemeTemplates?id=${id}`)
             .then((template) => {
                 const objects = JSON.parse(template[0].templateContain);
-
-                const maxLeft = objects.length > 1
-                    ? Math.max.apply(null, objects.map(object => Math.abs(object.left)))
-                    : objects[0].left * -1;
-                const maxTop = objects.length > 1
-                    ? Math.max.apply(null, objects.map(object => Math.abs(object.top)))
-                    : objects[0].top * -1;
 
                 objects.forEach(object => {
                     let newObject = null;
@@ -140,7 +143,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
                     }
 
                     // Сдвиг вставляемого объекта в левую верхнюю часть холста
-                    newObject.set({ left: object.left + maxLeft + 20, top: object.top + maxTop + 20 });
+                    newObject.set({ left: object.left + coords.x, top: object.top + coords.y });
                     mnemoscheme.add(newObject);
                     setIsOpenedListTemplates(false);
                 });
