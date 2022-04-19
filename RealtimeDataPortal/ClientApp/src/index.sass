@@ -19,6 +19,7 @@ main
 
 nav
     position: fixed
+    z-index: 10
     
 #root
     display: flex
@@ -43,6 +44,8 @@ ul
     border-radius: 8px
     background: #fff
     box-shadow: 0 0 0.875rem 0 rgb(41 48 66 / 5%)
+    overflow: auto
+    @include scrollbar
     &__form
         max-width: 700px
         padding: 2rem

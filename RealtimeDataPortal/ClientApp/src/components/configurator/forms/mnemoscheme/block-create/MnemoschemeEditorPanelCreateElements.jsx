@@ -91,7 +91,10 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     const addTag = () => {
         const coords = mnemoscheme.getVpCenter();
 
-        const tag = new fabric.Text('text', { fontSize: 14, fontFamily: 'system-ui', fontWeight: 400, top: coords.y - 7, left: coords.x - 10 });
+        const tag = new fabric.Text('text', {
+            fontSize: 14, fontFamily: 'system-ui',
+            fontWeight: 400, top: coords.y - 7, left: coords.x - 10, strokeWidth: 0
+        });
 
         tag.toObject = (function (toObject) {
             return function () {

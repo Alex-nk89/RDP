@@ -18,9 +18,9 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         width: 50,
         height: 50,
         radius: 20,
-        colorElement: 'rgba(255, 255, 255, 1)',
-        colorStrokeElement: 'rgba(255, 255, 255, 1)',
-        strokeWidthElement: 1,
+        fill: 'rgba(255, 255, 255, 1)',
+        stroke: 'rgba(255, 255, 255, 1)',
+        strokeWidth: 1,
         rxElement: 0,
         ryElement: 0,
         strokeDashArray: '',
@@ -33,7 +33,6 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         productId: 0,
         tagId: 0,
         tagName: '',
-        isAutomaticColorSelection: true,
         backgroundColor: 'rgba(255, 255, 255, 1)'
     });
 
@@ -51,17 +50,15 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         }
 
         const { width, height, radius, angle, fill, stroke, strokeWidth, rx, ry, skewX, skewY, text, fontSize, fontWeight,
-            productId, tagId, tagName, round, isAutomaticColorSelection } = event.target;
+            productId, tagId, tagName, round } = event.target;
 
         setMnemoschemeActiveObjectType(event.target.type);
 
         setElementAttributes({
             ...elementAttributes,
             width, height, radius, angle, fill, stroke, strokeWidth, rx, ry, skewX, skewY, fontSize, fontWeight,
-            tagId, tagName, productId, round, isAutomaticColorSelection,
-            text: productId > 0 ? '%' + tagName : text,
-            colorStrokeElement: stroke,
-            strokeWidthElement: strokeWidth
+            tagId, tagName, productId, round,
+            text: productId > 0 ? '%' + tagName : text
         });
     }
 
@@ -95,22 +92,22 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         }
     };
 
-    const changeColorElement = (colorElement) => {
-        setElementAttributes({ ...elementAttributes, colorElement });
-        mnemoscheme?._activeObject.set({ fill: colorElement });
+    const changeFill = (fill) => {
+        setElementAttributes({ ...elementAttributes, fill });
+        mnemoscheme?._activeObject.set({ fill });
         mnemoscheme.renderAll();
     };
 
-    const changeColorStrokeElement = (colorStrokeElement) => {
-        setElementAttributes({ ...elementAttributes, colorStrokeElement });
-        mnemoscheme?._activeObject.set({ stroke: colorStrokeElement });
+    const changeStroke = (stroke) => {
+        setElementAttributes({ ...elementAttributes, stroke });
+        mnemoscheme?._activeObject.set({ stroke });
         mnemoscheme.renderAll();
     };
 
-    const changeStrokeWidthElement = (strokeWidthElement) => {
-        if (strokeWidthElement >= 0) {
-            setElementAttributes({ ...elementAttributes, strokeWidthElement });
-            mnemoscheme?._activeObject.set({ strokeWidth: strokeWidthElement });
+    const changeStrokeWidth = (strokeWidth) => {
+        if (strokeWidth >= 0) {
+            setElementAttributes({ ...elementAttributes, strokeWidth });
+            mnemoscheme?._activeObject.set({ strokeWidth });
             mnemoscheme.renderAll();
         }
     };
@@ -215,8 +212,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
                 tagName: tagname,
                 text: '000.000',
                 round: Number(round),
-                fill: color,
-                isAutomaticColorSelection: true
+                fill: color
             });
             mnemoscheme.renderAll();
         }
@@ -299,43 +295,43 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         </Tooltip>
     ) : null;
 
-    const selectColorElement = ['rect', 'circle', 'triangle', 'text', 'path'].includes(mnemoschemeActiveObjectType) && !elementAttributes.isAutomaticColorSelection
+    const selectFill = ['rect', 'circle', 'triangle', 'text', 'path'].includes(mnemoschemeActiveObjectType)
         ? (
             <Tooltip label='Изменить цвет заливки'>
                 <ColorInput
                     size='xs'
                     variant='filled'
                     format="rgba"
-                    icon={<BsFillSquareFill color={elementAttributes.colorElement} size={18} />}
-                    value={elementAttributes.colorElement}
-                    onChange={changeColorElement}
+                    icon={<BsFillSquareFill color={elementAttributes.fill} size={18} />}
+                    value={elementAttributes.fill}
+                    onChange={changeFill}
                 />
             </Tooltip>
         )
         : null;
 
-    const selectColorStrokeElement = ['rect', 'line', 'path', 'circle', 'triangle', 'text'].includes(mnemoschemeActiveObjectType) ? (
+    const selectStroke = ['rect', 'line', 'path', 'circle', 'triangle'].includes(mnemoschemeActiveObjectType) ? (
         <Tooltip label='Изменить цвет обводки'>
             <ColorInput
                 size='xs'
                 variant='filled'
                 format="rgba"
-                icon={<BsSquare color={elementAttributes.colorStrokeElement} size={18} />}
-                value={elementAttributes.colorStrokeElement}
-                onChange={changeColorStrokeElement}
+                icon={<BsSquare color={elementAttributes.stroke} size={18} />}
+                value={elementAttributes.stroke}
+                onChange={changeStroke}
             />
         </Tooltip>
     ) : null;
 
-    const selectStrokeWidthElement = ['rect', 'line', 'circle', 'triangle', 'path', 'text'].includes(mnemoschemeActiveObjectType) ? (
+    const selectStrokeWidth = ['rect', 'line', 'circle', 'triangle', 'path'].includes(mnemoschemeActiveObjectType) ? (
         <Tooltip label='Изменить ширину обводки'>
             <NumberInput
                 size='xs'
                 variant='filled'
                 type='number'
                 icon={<BsBorderWidth size={18} color='#5c5c5c' />}
-                value={elementAttributes.strokeWidthElement}
-                onChange={changeStrokeWidthElement}
+                value={elementAttributes.strokeWidth}
+                onChange={changeStrokeWidth}
             />
         </Tooltip>
     ) : null;
@@ -543,15 +539,15 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
             {selectFontSize}
             {selectFontWeight}
 
-            {selectColorElement}
-            {selectColorStrokeElement}
+            {selectFill}
+            {selectStroke}
 
             {selectWidth}
             {selectHeight}
             {selectRadius}
             {selectAngle}
 
-            {selectStrokeWidthElement}
+            {selectStrokeWidth}
             {selectStrokeDashArray}
 
             {selectRXElement}
