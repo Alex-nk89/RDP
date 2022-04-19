@@ -25,7 +25,11 @@ import { useNotification } from '../../../../hooks/useNotification';
 import { MnemoschemeEditorForm } from './block-form/MnemoschemeEditorForm';
 import { MnemoschemeEditorPreview } from './block-preview/MnemoschemeEditorPreview';
 import { MnemoschemeEditorPanelCreateElements } from './block-create/MnemoschemeEditorPanelCreateElements';
-import { MnemoschemeEditorPanelChangeElements } from './block-create/MnemoschemeEditorPanelChangeElements';
+import { MnemoschemeEditorPanelChangeElements } from './block-change/MnemoschemeEditorPanelChangeElements';
+import { MnemoschemeEditorPanelColorsAttribute } from './block-change/MnemoschemeEditorPanelColorsAttribute';
+import { MnemoschemeEditorPanelDimensionsAttribute } from './block-change/MnemoschemeEditorPanelDimensionsAttribute';
+import { MnemoschemeEditorPanelStrokeAttribute } from './block-change/MnemoschemeEditorPanelStrokeAttribute';
+import { MnemoschemeEditorPanelTextAttribute } from './block-change/MnemoschemeEditorPanelTextAttribute';
 
 const attributesInputs = {
     required: true,
@@ -37,7 +41,7 @@ export {
     useParams, Redirect,
     useSelector, useDispatch,
     useForm,
-    ActionIcon, Button, ColorInput, Input, Loader, NumberInput, Popover, Select, Space, Stepper, Text, TextInput, 
+    ActionIcon, Button, ColorInput, Input, Loader, NumberInput, Popover, Select, Space, Stepper, Text, TextInput,
     Tooltip, NativeSelect,
     FabricJSCanvas, useFabricJSEditor, fabric,
     BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsSave, BsArrowDown, BsGripVertical,
@@ -46,6 +50,7 @@ export {
     BsFillPaletteFill, BsFront, BsBack, BsFillPlusSquareFill, BsFillSaveFill, BsListOl,
     useRequest, useNotification,
     MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanelCreateElements,
-    MnemoschemeEditorPanelChangeElements,
+    MnemoschemeEditorPanelChangeElements, MnemoschemeEditorPanelColorsAttribute, MnemoschemeEditorPanelDimensionsAttribute,
+    MnemoschemeEditorPanelStrokeAttribute, MnemoschemeEditorPanelTextAttribute,
     attributesInputs
 }

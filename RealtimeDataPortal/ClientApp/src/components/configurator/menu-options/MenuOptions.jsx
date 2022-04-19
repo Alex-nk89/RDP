@@ -60,7 +60,7 @@ const MenuOptions = ({ type, id }) => {
 
     const createOptions = user?.isConfigurator
         ? [
-            <Menu.Label key={5}>Создать:</Menu.Label>,
+            <Menu.Label key={6}>Создать:</Menu.Label>,
             <Menu.Item key={1} icon={<BsFolderFill />} component={Link} to={`/Configurator/add-folder/${id}`}>
                 Новая папка
             </Menu.Item>,
@@ -73,23 +73,23 @@ const MenuOptions = ({ type, id }) => {
             <Menu.Item key={4} icon={<BsGridFill />} component={Link} to={`/Configurator/add-table/${id}`}>
                 Таблица реального времени
             </Menu.Item>,
-            <Menu.Item key={4} icon={<BsDiagram3Fill />} component={Link} to={`/Configurator/add-mnemoscheme/${id}`}>
+            <Menu.Item key={5} icon={<BsDiagram3Fill />} component={Link} to={`/Configurator/add-mnemoscheme/${id}`}>
                 Мнемосхема
             </Menu.Item>
         ] : null;
 
     const changeOptions = user?.isConfigurator
         ? [
-            <Menu.Item key={6} icon={<BsFillPencilFill />} component={Link} to={`/Configurator/change-${type}/${id}`}>
+            <Menu.Item key={7} icon={<BsFillPencilFill />} component={Link} to={`/Configurator/change-${type}/${id}`}>
                 Редактировать
             </Menu.Item>,
-            <Menu.Item key={7} icon={<BsFillTrashFill />} className='remove-item' onClick={openModal}>
+            <Menu.Item key={8} icon={<BsFillTrashFill />} className='remove-item' onClick={openModal}>
                 Удалить
             </Menu.Item>
         ]
         :
         [
-            <Menu.Item key={6} icon={<BsFillPencilFill />} component={Link} to={`/Configurator/change-${type}/${id}`}>
+            <Menu.Item key={7} icon={<BsFillPencilFill />} component={Link} to={`/Configurator/change-${type}/${id}`}>
                 Редактировать
             </Menu.Item>
         ];
