@@ -10,7 +10,7 @@ namespace RealtimeDataPortal.Models
 
         public int AddChangeProduct(Products product)
         {
-            using(RDPContext rdp_base = new())
+            using (RDPContext rdp_base = new())
             {
                 rdp_base.Products.Update(product);
                 rdp_base.SaveChanges();
@@ -19,27 +19,15 @@ namespace RealtimeDataPortal.Models
             }
         }
 
-        public List<Products> GetListProducts(string name)
-        {
-            using(RDPContext rdp_base = new())
-            {
-                List<Products> listProducts = (from product in rdp_base.Products
-                                           where EF.Functions.Like(product.ProductName, $"%{name}%")
-                                           select product).AsNoTracking().ToList();
-
-                return listProducts;
-            }
-        }
-
         public bool DeleteProducts(int[] productIds)
         {
-            using(RDPContext rdp_base = new())
+            using (RDPContext rdp_base = new())
             {
                 List<Products> deletingProducts = new();
                 List<Parameter> deletingParameters = new();
                 List<ParameterTag> deletingParameterTags = new();
 
-                foreach(int productId in productIds)
+                foreach (int productId in productIds)
                 {
                     deletingProducts.Add(new Products() { ProductId = productId });
 
@@ -55,7 +43,7 @@ namespace RealtimeDataPortal.Models
                     rdp_base.ParameterTag.RemoveRange(deletingParameterTags);
                 }
 
-                
+
 
                 rdp_base.SaveChanges();
 

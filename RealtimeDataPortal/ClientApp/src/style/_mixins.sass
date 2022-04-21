@@ -28,13 +28,18 @@
             width: 100%
             margin: 0
             border-radius: 4px
-            padding: .3em 1em
+            padding: .3rem 1rem
             font-size: 14px
-            line-height: 2em
+            line-height: 1.5rem
             cursor: pointer
+            div:nth-child(1)
+                font-size: 1rem
+            div:nth-child(2)
+                font-size: .85rem
+                font-weight: 300
+                color: #808080
             &:hover
                 background-color: rgb(241, 243, 245)
-                
 
 @mixin scrollbar
     &::-webkit-scrollbar
@@ -56,7 +61,7 @@
             flex-grow: 1
 
 @mixin fieldset-block
-    & > div 
+    & > div
         display: flex
         align-items: center
         & > div
@@ -66,7 +71,7 @@
 @mixin add-change-form
     .mantine-11178a2
         margin-right: 0
-    .mantine-1euen2d 
+    .mantine-1euen2d
         width: 100%
         padding: 0
     .mantine-Tabs-tabControl
@@ -79,4 +84,3 @@
         color: $main-color
     .mantine-Tabs-tabActive:last-child
         color: #FF6B6B
-    

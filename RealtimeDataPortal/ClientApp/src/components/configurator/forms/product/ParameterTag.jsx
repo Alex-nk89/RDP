@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useRequest, TextInput, Space, Loader, attributesInputs, ActionIcon, BsX } from '../../index';
+import { useState, useEffect, useRef, useRequest, TextInput, Space, Loader, attributesInputs, ActionIcon, BsX, Text } from '../../index';
 
 const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
     const tagNameRef = useRef(null);
@@ -85,14 +85,15 @@ const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
 
             <div className="info-block__form__search-result" open={visibleListTags}>
                 {tagsList.map(tag =>
-                    <p
+                    <div
                         key={tag.tagId}
                         id={tag.tagId}
                         className="info-block__form__search-result__item"
                         onClick={selectTag}
                     >
-                        {`${tag.tagName} (${tag.serverName})`}
-                    </p>)}
+                        <Text id={tag.tagId}>{tag.tagName}</Text>
+                        <Text id={tag.tagId}>Сервер: {tag.serverName}</Text>
+                    </div>)}
             </div>
         </>
     );

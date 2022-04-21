@@ -34,7 +34,6 @@ import SectionProducts from './forms/table-rt/SectionProducts';
 import { EditMnemoscheme } from './forms/mnemoscheme/EditMnemoscheme'
 
 const attributesInputs = {
-    required: true,
     autoComplete: 'off'
 };
 

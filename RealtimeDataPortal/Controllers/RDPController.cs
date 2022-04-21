@@ -386,7 +386,16 @@ namespace RealtimeDataPortal.Controllers
                 if (!(user.IsConfigurator || user.IsConfiguratorRead))
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
-                return new Products().GetListProducts(name).ToList();
+                var listProducts = new QueryProduct().GetListProducts(name).GroupBy(p => p.ProductId);
+                var listProductsUniq = 
+                    (from products in listProducts
+                     select new {
+                         ProductId = products.First().ProductId,
+                         ProductName = products.First().ProductName,
+                         Position = products.First().Position
+                     }).ToList();
+
+                return listProductsUniq;
             }
             catch (ForbiddenException ex)
             {

@@ -1,12 +1,10 @@
 import {
-    useState, useForm, useSelector,
+    useState, useForm, useSelector, useNotification, useRequest,
     ActionIcon, Button, Loader, Popover, TextInput, Tooltip,
-    fabric,
+    fabric, attributesInputs, 
     BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsGripHorizontal, IoSend,
     BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle, BsFillPlusSquareFill, BsFillSaveFill,
-    BsListOl,
-    attributesInputs,
-    useNotification, useRequest
+    BsListOl
 } from "..";
 import ImageTracer from 'imagetracerjs';
 import { BsTrash } from "react-icons/bs";

@@ -126,18 +126,16 @@ namespace RealtimeDataPortal.Models.OtherClasses
             {
                 List<QueryProduct> listProducts = (from product in rdp_base.Set<Products>()
                                                    join parameter in rdp_base.Set<Parameter>()
-                                                        on product.ProductId equals parameter.ProductId into parameters
-                                                   from parameter in parameters.DefaultIfEmpty()
+                                                        on product.ProductId equals parameter.ProductId
                                                    join parameterTag in rdp_base.Set<ParameterTag>()
-                                                        on parameter.ParameterId equals parameterTag.ParameterId into parameterTags
-                                                   from parameterTag in parameterTags.DefaultIfEmpty()
+                                                        on parameter.ParameterId equals parameterTag.ParameterId
                                                    join tag in rdp_base.Set<Tag>()
-                                                        on parameterTag.TagId equals tag.TagId into tags
-                                                   from tag in tags.DefaultIfEmpty()
-                                                   where productId == null ?
-                                                        EF.Functions.Like(product.ProductName, $"%{name}%")
-                                                        || EF.Functions.Like(parameter.Position, $"%{name}%") :
-                                                        product.ProductId == productId
+                                                        on parameterTag.TagId equals tag.TagId
+                                                   where productId == null
+                                                        ? EF.Functions.Like(product.ProductName, $"%{name}%")
+                                                            || EF.Functions.Like(parameter.Position, $"%{name}%")
+                                                            || product.ProductId.ToString() == name
+                                                        : product.ProductId == productId
                                                    select new QueryProduct()
                                                    {
                                                        ProductId = product.ProductId,
@@ -150,7 +148,10 @@ namespace RealtimeDataPortal.Models.OtherClasses
                                                        ParameterTagId = parameterTag.ParameterTagId,
                                                        TagId = parameterTag.TagId,
                                                        TagName = tag.TagName
-                                                   }).AsNoTracking().ToList();
+                                                   })
+                                                   .OrderBy(p => p.ProductName)
+                                                   .AsNoTracking()
+                                                   .ToList();
 
                 return listProducts;
             }

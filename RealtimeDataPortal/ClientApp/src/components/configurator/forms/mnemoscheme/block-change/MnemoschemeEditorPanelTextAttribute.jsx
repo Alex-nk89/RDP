@@ -9,9 +9,7 @@ export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectTyp
     const { show } = useNotification();
 
     const [listTags, setListTags] = useState([]);
-
     const visibleListTags = listTags.length > 0 ? true : false;
-
 
     const closeList = () => setListTags([]);
 

@@ -1,6 +1,6 @@
 import {
     useState, useEffect, useRef, useRequest, useNotification, useSelector, Parameter, attributesInputs, settingsAddRemoveIcon,
-    TextInput, Space, InputWrapper, Group, ActionIcon, Button, Loader,
+    TextInput, Space, InputWrapper, Group, ActionIcon, Button, Loader, Text,
     BsDash, BsPlus, BsSearch
 } from '../../index';
 
@@ -76,7 +76,7 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                 .catch(error => show('error', error))
                 .finally(() => setSearchingProduct(false));
         } else {
-            setProductName({ ...productName, error: 'ВВедите минимум 3 символа' })
+            setProductName({ ...productName, error: 'Введите минимум 3 символа' })
             setProductListFound([]);
         }
 
@@ -174,7 +174,7 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                 }));
 
             request('AddChangeProduct', 'POST', JSON.stringify(sentData))
-                .then(result => show('success', 'Продукт сохранен'))
+                .then(() => show('success', 'Продукт сохранен'))
                 .catch(error => show('error', error))
                 .finally(() => setLoadingSubmit(false));
 
@@ -187,11 +187,27 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
         searchingProduct ? <Loader size={18} /> : <BsSearch size={16} onClick={getListProducts} />
         : null;
 
+    const productIdView = productId
+        ? (
+            <>
+                <Space h="md" />
+
+                <Group>
+                    <Text weight={500} size='sm'>id продукта: </Text>
+                    <Text size='sm'>{productId}</Text>
+                </Group>
+
+
+            </>
+        )
+        : null
+
     useEffect(() => {
         productNameRef.current.focus();
 
         setProductName({ value: '', error: '' });
         setParameters([parameter]);
+        productId = 0;
         //eslint-disable-next-line
     }, [operation]);
 
@@ -217,15 +233,20 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
 
                 <div className="info-block__form__search-result" open={visibleProductList}>
                     {productListFound.map(({ productId, productName, position }) =>
-                        <p
+                        <div
                             key={productId}
                             data-productid={productId}
                             data-productname={productName}
                             className="info-block__form__search-result__item"
-                            onClick={selectProduct}>
-                            {productName} ({position})
-                        </p>)}
+                            onClick={selectProduct}
+                        >
+                            <Text data-productid={productId} data-productname={productName}>{productName}</Text>
+                            <Text data-productid={productId} data-productname={productName}>(id: {productId}{position.length > 0 ? `, Позиция: ${position}` : null})</Text>
+                        </div>
+                    )}
                 </div>
+
+                {productIdView}
 
                 <Space h="md" />
 

@@ -64,9 +64,17 @@ const DeleteElements = ({ typeElements }) => {
 
     const list = (
         <ul className='info-block__form__list-elements-to-remove'>
-            {listElements.map(({ id, name, isChecked }) =>
+            {listElements.map(({ id, name, position, isChecked }) =>
                 <li key={id}>
-                    <Checkbox label={name} data-id={id} onChange={selectTagToRemove} checked={isChecked} />
+                    <Checkbox
+                        label={<div className="info-block__form__search-result__item">
+                            <Text>{name}</Text>
+                            <Text>id: {id}{position ? `, Позиция: ${position}` : null}</Text>
+                        </div>}
+                        data-id={id}
+                        onChange={selectTagToRemove}
+                        checked={isChecked}
+                    />
                 </li>)}
         </ul>
     );
@@ -127,7 +135,7 @@ const DeleteElements = ({ typeElements }) => {
                                 case 'tag':
                                     return { id: item.tagId, name: `${item.tagName} (${item.serverName})`, isChecked: false };
                                 case 'product':
-                                    return { id: item.productId, name: `${item.productName}`, isChecked: false };
+                                    return { id: item.productId, name: item.productName, position: item.position, isChecked: false };
                                 case 'parameter-type':
                                     return { id: item.parameterTypeId, name: `${item.label} - ${item.parameterTypeName}`, isChecked: false };
                                 case 'servers':
