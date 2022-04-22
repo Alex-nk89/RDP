@@ -5,7 +5,6 @@ namespace RealtimeDataPortal.Models.DBClasses
 {
     public class Mnemoscheme
     {
-        public int Id { get; set; }
         public int MnemoschemeId { get; set; }
         public string MnemoschemeContain { get; set; } = string.Empty;
 
@@ -13,11 +12,6 @@ namespace RealtimeDataPortal.Models.DBClasses
         {
             using (RDPContext rdp_base = new())
             {
-                if (mnemoscheme.MnemoschemeId == 0)
-                {
-                    mnemoscheme.MnemoschemeId = rdp_base.Mnemoscheme.Max(m => m.MnemoschemeId) + 1;
-                }
-
                 rdp_base.Mnemoscheme.Update(mnemoscheme);
                 rdp_base.SaveChanges();
 
@@ -42,7 +36,6 @@ namespace RealtimeDataPortal.Models.DBClasses
                      where treesMenu.Id == id
                      select new
                      {
-                         Id = mnemoschemeData.Id,
                          MnemoschemeId = mnemoschemeData.MnemoschemeId,
                          MnemoschemeContain = mnemoschemeData.MnemoschemeContain,
                          MnemoschemeName = treesMenu.Name

@@ -91,7 +91,6 @@ const AddChangeElement = () => {
                 productId: form.getInputProps('productId').value
             },
             Mnemoscheme: {
-                Id: action === 'add' ? 0 : mnemoscheme.id,
                 MnemoschemeId: action === 'add' ? 0 : mnemoscheme.mnemoschemeId,
                 MnemoschemeContain: values.mnemoschemeContain
             },

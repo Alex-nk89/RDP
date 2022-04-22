@@ -113,7 +113,7 @@ namespace RealtimeDataPortal
 
             modelBuilder.Entity<Mnemoscheme>(entity =>
             {
-                entity.HasKey("Id");
+                entity.HasKey("MnemoschemeId");
             });
 
             modelBuilder.Entity<MnemoschemeTemplates>(entity =>

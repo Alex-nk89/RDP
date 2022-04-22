@@ -181,6 +181,7 @@ const Mnemoscheme = () => {
         request(`GetMnemoschemeImage?id=${id}`)
             .then(mnemoschemeData => {
                 const mnemoscheme = new fabric.Canvas().loadFromJSON(mnemoschemeData[0].mnemoschemeContain);
+                console.log(mnemoscheme)
 
                 // Без следующей строки приложение крашится. Причина такого поведения не ясна.
                 mnemoscheme.toSVG();

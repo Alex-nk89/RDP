@@ -127,7 +127,6 @@ namespace RealtimeDataPortal.Models
                     componentInfo.Mnemoscheme = mnemoschemeInfo.Count() > 0
                         ? new Mnemoscheme()
                         {
-                            Id = mnemoschemeInfo.First().Id,
                             MnemoschemeId = mnemoschemeInfo.First().MnemoschemeId,
                             MnemoschemeContain = mnemoschemeContain
                         }

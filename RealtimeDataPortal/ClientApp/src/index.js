@@ -21,7 +21,11 @@ const rootElement = document.getElementById('root');
 
 ReactDOM.render(
 	<Provider store={store}>
-		<MantineProvider>
+		<MantineProvider
+			theme={{
+				fontFamily: 'Inter'
+			}}
+		>
 			<NotificationsProvider>
 				<ModalsProvider>
 					<BrowserRouter basename={baseUrl}>
