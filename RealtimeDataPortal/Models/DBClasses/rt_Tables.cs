@@ -30,35 +30,25 @@ namespace RealtimeDataPortal.Models
             {
                 tableRealtime = (from treesMenu in rdp_base.TreesMenu
                      join table in rdp_base.rt_Tables 
-                        on treesMenu.ComponentId equals table.TableId into tables
-                     from table in tables.DefaultIfEmpty()
+                        on treesMenu.ComponentId equals table.TableId
                      join section in rdp_base.rt_Sections 
-                        on table.TableId equals section.TableId into sections
-                     from section in sections.DefaultIfEmpty()
+                        on table.TableId equals section.TableId
                      join sectionProduct in rdp_base.rt_SectionProduct 
-                        on section.SectionId equals sectionProduct.SectionId into sectionProducts
-                     from sectionProduct in sectionProducts.DefaultIfEmpty()
+                        on section.SectionId equals sectionProduct.SectionId
                      join product in rdp_base.Products 
-                        on sectionProduct.ProductId equals product.ProductId into products
-                     from product in products.DefaultIfEmpty()
+                        on sectionProduct.ProductId equals product.ProductId
                      join parameter in rdp_base.Parameter 
-                        on product.ProductId equals parameter.ProductId into parameters
-                     from parameter in parameters.DefaultIfEmpty()
+                        on product.ProductId equals parameter.ProductId
                      join parameterTag in rdp_base.ParameterTag 
-                        on parameter.ParameterId equals parameterTag.ParameterId into parameterTags
-                     from parameterTag in parameterTags.DefaultIfEmpty()
+                        on parameter.ParameterId equals parameterTag.ParameterId
                      join tag in rdp_base.Tag 
-                        on parameterTag.TagId equals tag.TagId into tags
-                     from tag in tags.DefaultIfEmpty()
+                        on parameterTag.TagId equals tag.TagId
                      join tagsType in rdp_base.TagsType 
-                        on tag.TagTypeId equals tagsType.TagTypeId into tagsType
-                     from tagType in tagsType.DefaultIfEmpty()
+                        on tag.TagTypeId equals tagsType.TagTypeId
                      join parameterType in rdp_base.ParameterType 
-                        on parameter.ParameterTypeId equals parameterType.ParameterTypeId into parameterTypes
-                     from parameterType in parameterTypes.DefaultIfEmpty()
+                        on parameter.ParameterTypeId equals parameterType.ParameterTypeId
                      join server in rdp_base.Server 
-                        on tag.ServerId equals server.ServerId into servers
-                     from server in servers.DefaultIfEmpty()
+                        on tag.ServerId equals server.ServerId
                      where treesMenu.Id == id
                      select new Query_rtTable()
                      {
@@ -76,7 +66,8 @@ namespace RealtimeDataPortal.Models
                          Position = parameter.Position,
                          Round = parameter.Round,
                          TagName = tag.TagName,
-                         TypeShortName = tagType.TypeShortName,
+                         TagTypeId = tagsType.TagTypeId,
+                         TypeShortName = tagsType.TypeShortName,
                          ServerName = server.ServerName,
                          ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
                                 $"User Id={server.UserName};Password={server.Password}"
@@ -111,6 +102,7 @@ namespace RealtimeDataPortal.Models
                              join values in listValues 
                                 on table.TagName equals values.TagName into listValue
                              from value in listValue.DefaultIfEmpty()
+                             orderby table.ProductName, table.TagTypeId
                              select new Query_rtTable()
                              {
                                  Id = table.Id,
@@ -133,7 +125,8 @@ namespace RealtimeDataPortal.Models
                                  Limits = value?.Limits ?? null,
                                  TypeShortName = table.TypeShortName,
                                  ServerName = table.ServerName,
-                             }).ToList();
+                             })
+                             .ToList();
 
         return tableRealtime;
      }

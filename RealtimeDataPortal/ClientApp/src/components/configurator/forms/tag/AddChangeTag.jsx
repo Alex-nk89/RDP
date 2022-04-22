@@ -2,7 +2,7 @@ import {
     useState, useEffect, useRef,
     useForm,
     useSelector,
-    TextInput, Space, attributesInputs, Select, Loader, Button,
+    TextInput, Space, attributesInputs, Select, Loader, Button, Text,
     useRequest, useNotification,
     BsSearch
 } from '../../index';
@@ -138,13 +138,15 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
 
                 <div className="info-block__form__search-result" open={visibleListTags}>
                     {tagsList.map(tag =>
-                        <p
+                        <div
                             key={tag.tagId}
                             id={tag.tagId}
                             className="info-block__form__search-result__item"
-                            onClick={selectTag}>
-                            {`${tag.tagName} (${tag.serverName})`}
-                        </p>)}
+                            onClick={selectTag}
+                        >
+                            <Text id={tag.tagId}>{tag.tagName}</Text>
+                            <Text id={tag.tagId}>Сервер: {tag.serverName}</Text>
+                        </div>)}
                 </div>
 
                 <Space h="md" />

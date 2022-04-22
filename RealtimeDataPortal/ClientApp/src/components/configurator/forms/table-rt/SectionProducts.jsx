@@ -1,6 +1,6 @@
 import {
     useState, useEffect, useRef, useRequest,
-    TextInput, Space, ActionIcon, Loader,
+    TextInput, Space, ActionIcon, Loader, Text,
     BsX,
     attributesInputs
 } from '../../index';
@@ -54,9 +54,9 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
 
     const selectProduct = (event) => {
         const selectedProductId = event.target.dataset.productid;
-        const { productId, productName, position } = productsList.find(product => Number(product.productId) === Number(selectedProductId));
+        const { productId, productName } = productsList.find(product => Number(product.productId) === Number(selectedProductId));
 
-        enterProduct(--number, { ...product, productId: Number(productId), productName: { value: `${productName} (${position})`, error: '' } });
+        enterProduct(--number, { ...product, productId: Number(productId), productName: { value: productName, error: '' } });
     };
 
     const closeList = () => {
@@ -95,14 +95,15 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
 
             <div className="info-block__form__search-result" open={visibleListTags}>
                 {productsList.map(({ productId, productName, position }) =>
-                    <p
+                    <div
                         key={productId}
                         data-productid={productId}
                         className="info-block__form__search-result__item"
                         onClick={selectProduct}
                     >
-                        {`${productName} (${position})`}
-                    </p>)}
+                        <Text data-productid={productId}>{productName}</Text>
+                        <Text data-productid={productId}>id: {productId} {position.length > 0 ? `, Позиция: ${position}` : null}</Text>
+                    </div>)}
             </div>
         </>
     );

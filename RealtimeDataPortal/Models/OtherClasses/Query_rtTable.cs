@@ -22,6 +22,7 @@
         public string? Scale { get; set; } = string.Empty;
         public string? Limits { get; set; } = string.Empty;
         public string TypeShortName { get; set; } = string.Empty;
+        public int TagTypeId { get; set; }
         public string ServerName { get; set; } = string.Empty;
         public string ServerConnection { get; set; } = string.Empty;
     }

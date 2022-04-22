@@ -36,6 +36,7 @@ namespace RealtimeDataPortal
         {
             //optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=RDP_Base;Trusted_Connection=True;");
             optionsBuilder.UseSqlServer("Server=asodu-app;Database=RealtimeDataPortal;User Id=RTDPortalUser;Password=G8inDMs27b");
+            optionsBuilder.LogTo(Console.WriteLine);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

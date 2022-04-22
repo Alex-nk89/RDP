@@ -160,7 +160,7 @@ export const EditTypeTag = ({ operation }) => {
                     )}
                 </div>
 
-                <Space />
+                <Space h='sm' />
 
                 <TextInput
                     {...attributesInputs}
@@ -169,7 +169,7 @@ export const EditTypeTag = ({ operation }) => {
                     placeholder='Введите label'
                 />
 
-                <Space />
+                <Space h='sm' />
 
                 <TextInput
                     {...attributesInputs}
@@ -178,7 +178,7 @@ export const EditTypeTag = ({ operation }) => {
                     placeholder='Введите сокращенное наименование'
                 />
 
-                <Space />
+                <Space h='sm' />
 
                 <TextInput
                     {...attributesInputs}
@@ -187,7 +187,7 @@ export const EditTypeTag = ({ operation }) => {
                     type='number'
                 />
 
-                <Space />
+                <Space h='sm' />
 
                 <Select
                     {...attributesInputs}
@@ -197,14 +197,14 @@ export const EditTypeTag = ({ operation }) => {
                     data={listCalendars}
                 />
 
-                <Space />
+                <Space h='sm' />
 
                 <Checkbox
                     {...form.getInputProps('visibleToGraphic', { type: 'checkbox' })}
                     label='Показывать на графике'
                 />
 
-                <Space />
+                <Space h='sm' />
 
                 <Button type='submit' loading={savingData}>
                     Сохранить

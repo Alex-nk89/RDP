@@ -124,36 +124,56 @@ namespace RealtimeDataPortal.Models.OtherClasses
         {
             using (RDPContext rdp_base = new())
             {
-                List<QueryProduct> listProducts = (from product in rdp_base.Set<Products>()
-                                                   join parameter in rdp_base.Set<Parameter>()
-                                                        on product.ProductId equals parameter.ProductId
-                                                   join parameterTag in rdp_base.Set<ParameterTag>()
-                                                        on parameter.ParameterId equals parameterTag.ParameterId
-                                                   join tag in rdp_base.Set<Tag>()
-                                                        on parameterTag.TagId equals tag.TagId
-                                                   where productId == null
-                                                        ? EF.Functions.Like(product.ProductName, $"%{name}%")
-                                                            || EF.Functions.Like(parameter.Position, $"%{name}%")
-                                                            || product.ProductId.ToString() == name
-                                                        : product.ProductId == productId
-                                                   select new QueryProduct()
-                                                   {
-                                                       ProductId = product.ProductId,
-                                                       ProductName = product.ProductName,
-                                                       ParameterId = parameter.ParameterId,
-                                                       ParameterTypeId = parameter.ParameterTypeId,
-                                                       Position = parameter.Position,
-                                                       Round = parameter.Round,
-                                                       ShowLimits = parameter.ShowLimit,
-                                                       ParameterTagId = parameterTag.ParameterTagId,
-                                                       TagId = parameterTag.TagId,
-                                                       TagName = tag.TagName
-                                                   })
-                                                   .OrderBy(p => p.ProductName)
-                                                   .AsNoTracking()
-                                                   .ToList();
+                IQueryable<QueryProduct> queryProducts =
+                    (from product in rdp_base.Set<Products>()
+                     join parameter in rdp_base.Set<Parameter>()
+                         on product.ProductId equals parameter.ProductId
+                     join parameterTag in rdp_base.Set<ParameterTag>()
+                         on parameter.ParameterId equals parameterTag.ParameterId
+                     join tag in rdp_base.Set<Tag>()
+                         on parameterTag.TagId equals tag.TagId
+                     select new QueryProduct()
+                     {
+                         ProductId = product.ProductId,
+                         ProductName = product.ProductName,
+                         ParameterId = parameter.ParameterId,
+                         ParameterTypeId = parameter.ParameterTypeId,
+                         Position = parameter.Position,
+                         Round = parameter.Round,
+                         ShowLimits = parameter.ShowLimit,
+                         ParameterTagId = parameterTag.ParameterTagId,
+                         TagId = parameterTag.TagId,
+                         TagName = tag.TagName
+                     });
 
-                return listProducts;
+                var listProductsByProductName = productId == null
+                    ? queryProducts
+                        .Where(l => l.ProductName.Contains(name))
+                        .AsNoTracking()
+                        .ToList()
+                    : queryProducts.Where(l => l.ProductId == productId).AsNoTracking().ToList();
+                
+                var listProductsByPosition = productId == null
+                    ? queryProducts
+                        .Where(l => l.Position.Contains(name))
+                        .AsNoTracking()
+                        .ToList()
+                    : listProductsByProductName;
+                
+                var listProductsByProductId = productId == null
+                    ? queryProducts
+                        .Where(l => l.ProductId.ToString() == name)
+                        .AsNoTracking()
+                        .ToList()
+                    : listProductsByProductName;
+                
+                var listProducts = listProductsByProductName
+                    .Union(listProductsByPosition)
+                    .Union(listProductsByProductId)
+                    .Distinct()
+                    .OrderBy(l => l.ProductName);
+
+                return listProducts.ToList();
             }
         }
     }

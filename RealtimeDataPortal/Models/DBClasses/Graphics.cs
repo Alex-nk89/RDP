@@ -39,6 +39,7 @@ namespace RealtimeDataPortal.Models
                                                join server in rdp_base.Server
                                                     on tag.ServerId equals server.ServerId into servers
                                                from server in servers.DefaultIfEmpty()
+                                               orderby tagsType.TagTypeId
                                                where product.ProductId == id
                                                select new Attributes()
                                                {
@@ -57,7 +58,8 @@ namespace RealtimeDataPortal.Models
                                                    ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
                                                        $";User Id={server.UserName};Password={server.Password}",
                                                    IsDateOffset = server.IsDateOffset
-                                               }).ToList();
+                                               })
+                                               .ToList();
 
                 if (attributes.Count == 0) throw new NotFoundException("Страница не найдена.");
 
