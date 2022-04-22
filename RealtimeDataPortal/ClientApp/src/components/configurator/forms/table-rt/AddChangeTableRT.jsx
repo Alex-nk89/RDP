@@ -25,7 +25,7 @@ const AddChangeTableRT = () => {
     const title = isAddOperation ? 'Добавление таблицы реального времени' : 'Редактирование таблицы реального времени';
     const { table, tableSections, sectionProducts, treesMenu, maxSectionId, adGroups } = componentInfo;
 
-    const section = {
+    let section = {
         id: maxSectionId + 1,
         name: { value: '', error: '' },
         products: [{
@@ -54,9 +54,9 @@ const AddChangeTableRT = () => {
     const [scaleVisible, setScaleVisible] = useState(isAddOperation ? true : table.scaleVisible);
     const [limitVisible, setLimitVisible] = useState(isAddOperation ? false : table.limitVisible);
     const [sections, setSections] = useState(
-        isAddOperation ?
-            [section] :
-            tableSections.map(section => {
+        isAddOperation
+            ? [section]
+            : tableSections.map(section => {
                 const products = sectionProducts.filter(product => product.sectionId === section.sectionId);
 
                 return {
@@ -202,6 +202,7 @@ const AddChangeTableRT = () => {
                     if (isAddOperation) {
                         resetForm();
                         setAccesses([]);
+                        setSections([section]);
                     }
 
                     dispatch(updateNavbar());

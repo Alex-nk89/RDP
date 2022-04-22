@@ -1,6 +1,6 @@
 import {
     useState, useEffect, useRef, useRequest, useNotification, useSelector,
-    TextInput, Space, Button, Loader,
+    TextInput, Space, Button, Loader, Text,
     attributesInputs
 } from '../../index';
 
@@ -24,7 +24,7 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
 
     const selectProduct = event => {
         const selectedProductId = event.target.dataset.productid;
-        const selectedProductName = event.target.textContent;
+        const selectedProductName = productListFound.find(product => product.productId === Number(selectedProductId)).productName;
 
         form.setValues((currentValues) => ({ ...currentValues, product: selectedProductName, productId: selectedProductId }));
     }
@@ -98,14 +98,15 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
 
                     <div className="info-block__form__search-result" open={visibleProductList}>
                         {productListFound.map(({ productId, productName, position }) =>
-                            <p
+                            <div
                                 key={productId}
                                 data-productid={productId}
                                 className="info-block__form__search-result__item"
                                 onClick={selectProduct}
                             >
-                                {productName} ({position})
-                            </p>)}
+                                <Text data-productid={productId}>{productName}</Text>
+                                <Text data-productid={productId}>id: {productId}{position.length > 0 ? `, Позиция: ${position}` : null}</Text>
+                            </div>)}
                     </div>
 
                     <Space h="md" />

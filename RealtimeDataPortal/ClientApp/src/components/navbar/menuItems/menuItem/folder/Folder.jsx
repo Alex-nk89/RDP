@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BsFolderFill, BsChevronDown } from 'react-icons/bs';
 import { useSelector } from 'react-redux';
-import { Collapse, Loader } from '@mantine/core';
+import { Collapse, Loader, Tooltip } from '@mantine/core';
 
 import { useRequest } from '../../../../../hooks/useRequest';
 import { useNotification } from '../../../../../hooks/useNotification';
@@ -17,6 +17,12 @@ const Folder = ({ id, name, isFullView }) => {
     const [items, setItems] = useState([]);
     const [folderState, setFolderState] = useState(false);
     const [thereIsItem, setThereIsItem] = useState(false);
+
+    const modifiedName = name.length > 25
+        ? name.slice(0, 22) + ' ...'
+        : name;
+
+    const delay = 500;
 
     useEffect(() => {
         if (folderState) {
@@ -66,12 +72,14 @@ const Folder = ({ id, name, isFullView }) => {
     return (
         <div className='folder'>
             <div className='folder-with-configurator'>
-                <p onClick={toChangeFolderState}>
-                    <BsFolderFill size={16} />
-                    <span>{name}</span>
-                    {loader}
-                    {configMode ? null : <BsChevronDown className={`folder ${isOpenFolder}`} />}
-                </p>
+                <Tooltip openDelay={delay} label={name} placement='start'>
+                    <p onClick={toChangeFolderState}>
+                        <BsFolderFill size={16} />
+                        <span>{modifiedName}</span>
+                        {loader}
+                        {configMode ? null : <BsChevronDown className={`folder ${isOpenFolder}`} />}
+                    </p>
+                </Tooltip>
                 {menuConfig}
             </div>
 

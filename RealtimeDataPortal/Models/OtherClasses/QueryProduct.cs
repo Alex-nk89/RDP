@@ -122,6 +122,10 @@ namespace RealtimeDataPortal.Models.OtherClasses
 
         public List<QueryProduct> GetListProducts(string name, int? productId = null)
         {
+            // Поиск продуктов возможен по его имени, позиции или id
+            // Если все условия обьединять в один запрос время поиска значительно увеличивается
+            // Для уменьшения времени принято решение разделить один запрос на три
+
             using (RDPContext rdp_base = new())
             {
                 IQueryable<QueryProduct> queryProducts =

@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { BsFileEarmarkRichtextFill, BsGridFill, BsFillBarChartFill, BsDiagram3Fill } from 'react-icons/bs';
+import { Tooltip } from '@mantine/core';
 
 import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
 
@@ -10,33 +11,47 @@ const Page = ({ id, name, componentId, type }) => {
     const { configMode } = useSelector(state => state.navbar);
     let link;
 
+    const modifiedName = name.length > 25
+        ? name.slice(0, 22) + ' ...'
+        : name;
+
+    const delay = 500;
+
     switch (type) {
         case 'externalPage':
             //eslint-disable-next-line
-            link = <a href={`http:\\\\asodu-web\\RDP_Container\\Home?id=${id}`} target='_blank'>
-                <BsFileEarmarkRichtextFill size={16} /><span>{name}</span>
-            </a>
+            link = <Tooltip openDelay={delay} label={name} placement='start'>
+                <a href={`http:\\\\asodu-web\\RDP_Container\\Home?id=${id}`} target='_blank' rel='noreferrer'>
+                    <BsFileEarmarkRichtextFill size={14} /><span>{name}</span>
+                </a >
+            </Tooltip>
             break;
         case 'graphic':
             link =
-                <NavLink to={`/graphics/${componentId}`}>
-                    <BsFillBarChartFill size={16} />
-                    <span>{name}</span>
-                </NavLink>
+                <Tooltip openDelay={delay} label={name} placement='start'>
+                    <NavLink to={`/graphics/${componentId}`}>
+                        <BsFillBarChartFill size={14} />
+                        <span>{modifiedName}</span>
+                    </NavLink>
+                </Tooltip>
             break;
         case 'table':
             link =
-                <NavLink to={`/table/${id}`}>
-                    <BsGridFill size={16} />
-                    <span>{name}</span>
-                </NavLink>
+                <Tooltip openDelay={delay} label={name} placement='start'>
+                    <NavLink to={`/table/${id}`}>
+                        <BsGridFill size={14} />
+                        <span>{name}</span>
+                    </NavLink>
+                </Tooltip>
             break;
         case 'mnemoscheme':
             link =
-                <NavLink to={`/mnemoscheme/${id}`}>
-                    <BsDiagram3Fill size={16} />
-                    <span>{name}</span>
-                </NavLink>
+                <Tooltip openDelay={delay} label={name} placement='start'>
+                    <NavLink to={`/mnemoscheme/${id}`}>
+                        <BsDiagram3Fill size={14} />
+                        <span>{name}</span>
+                    </NavLink>
+                </Tooltip>
             break;
         default:
             link = null
