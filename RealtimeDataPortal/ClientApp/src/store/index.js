@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import user from '../reducers/user';
-import navbar from '../reducers/navbar';
+import user from '../reducers/userSlice';
+import navbar from '../reducers/navbarSlice';
 import configurator from '../reducers/configuratorSlice';
 import mnemoscheme from '../reducers/mnemoschemeSlice';
 import graphics from '../reducers/graphicsSlice';

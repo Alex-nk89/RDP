@@ -15,7 +15,7 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
         });
 
         // Ограничительные линии для холста
-        mnemoscheme.add(new fabric.Line([-1, -1, -1, 441], { stroke: '#e7e7e7' })
+        mnemoscheme.add(new fabric.Line([1, 1, -1, 441], { stroke: '#e7e7e7' })
             .set({ selectable: false, hoverCursor: 'unset' }));
         mnemoscheme.add(new fabric.Line([-1, -1, 1001, -1], { stroke: '#e7e7e7' })
             .set({ selectable: false, hoverCursor: 'unset' }));

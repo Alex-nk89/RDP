@@ -9,7 +9,7 @@ import { useModals } from "@mantine/modals";
 
 import { useRequest } from "..";
 import { useNotification } from "..";
-import { updateNavbar } from "../../../actions";
+import { updateNavbar } from "../../../reducers/navbarSlice";
 
 import './menuOptions.sass';
 

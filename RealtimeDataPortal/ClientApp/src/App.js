@@ -17,7 +17,7 @@ import AppPreloader from './components/loader/appPreloader';
 import { useRequest } from './hooks/useRequest';
 import { ScrollToTop } from './components/scroll-to-top/ScrollToTop';
 
-import { userInitialize, userFetching, userFetchingError } from './actions';
+import { userInitialize, userFetching, userFetchingError } from './reducers/userSlice';
 
 import "./css/bootstrap-reboot.min.css";
 

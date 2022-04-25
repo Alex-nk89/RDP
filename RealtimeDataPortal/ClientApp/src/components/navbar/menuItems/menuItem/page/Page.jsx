@@ -11,8 +11,8 @@ const Page = ({ id, name, componentId, type }) => {
     const { configMode } = useSelector(state => state.navbar);
     let link;
 
-    const modifiedName = name.length > 25
-        ? name.slice(0, 22) + ' ...'
+    const modifiedName = name.length > 23
+        ? name.slice(0, 20) + ' ...'
         : name;
 
     const delay = 500;

@@ -4,7 +4,7 @@ import { Menu, Switch } from "@mantine/core";
 import { BsFillGearFill, BsChevronDown, BsTools } from 'react-icons/bs';
 
 import { useNotification } from "../../configurator";
-import { toogleConfigMode, toogleAdminMode } from '../../../actions';
+import { toogleConfigMode, toogleAdminMode } from '../../../reducers/navbarSlice';
 
 const User = () => {
     const { user } = useSelector(state => state.user);

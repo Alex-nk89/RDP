@@ -17,7 +17,7 @@ const TabContent = ({ index }) => {
     });
 
     const parameter = attributesGraphic.filter(item => item.typeName === tabsNames[index]);
-    const calendar = parameter.find(parameter => parameter.calendar).calendar;
+    const calendar = parameter.find(parameter => parameter.calendar)?.calendar;
 
     const graphic = useMemo(() => {
         return parameter.map(item => {

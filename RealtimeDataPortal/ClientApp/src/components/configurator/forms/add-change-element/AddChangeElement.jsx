@@ -6,7 +6,7 @@ import {
     BsPlus
 } from '../../index';
 
-import { updateNavbar } from '../../../../actions';
+import { updateNavbar } from '../../../../reducers/navbarSlice';
 
 const AddChangeElement = () => {
     const { componentInfo, operation } = useSelector(state => state.configurator);
@@ -28,7 +28,8 @@ const AddChangeElement = () => {
             access: '',
             link: '',
             product: '',
-            productId: 0,
+            productId: undefined,
+            position: undefined,
             mnemoschemeContain: ''
         },
         validationRules: {
@@ -127,7 +128,8 @@ const AddChangeElement = () => {
                 access: '',
                 link: externalPages.link,
                 productId: graphics.componentId,
-                product: `${graphics.name} (${graphics.position})`
+                product: graphics.name,
+                position: graphics.position
             }));
 
             setAccesses(adGroups);

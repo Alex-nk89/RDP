@@ -7,7 +7,7 @@ import {
 } from '../../index';
 import './tableRt.sass';
 
-import { updateNavbar } from '../../../../actions';
+import { updateNavbar } from '../../../../reducers/navbarSlice';
 
 const AddChangeTableRT = () => {
     // Компонент для добавления/редактирования таблиц реального времени
@@ -31,7 +31,8 @@ const AddChangeTableRT = () => {
         products: [{
             id: 0,
             productId: 0,
-            productName: { value: '', error: '' }
+            productName: { value: '', error: '' },
+            position: ''
         }]
     };
 
@@ -62,11 +63,12 @@ const AddChangeTableRT = () => {
                 return {
                     id: section.sectionId,
                     name: { value: section.sectionName, error: '' },
-                    products: products.map(product =>
+                    products: products.map(({ id, productId, productName, position }) =>
                     ({
-                        id: product.id,
-                        productId: product.productId,
-                        productName: { value: `${product.productName} (${product.position})`, error: '' }
+                        id: id,
+                        productId: productId,
+                        productName: { value: productName, error: '' },
+                        position
                     }))
                 };
             })
@@ -167,7 +169,6 @@ const AddChangeTableRT = () => {
             setFetchingData(true);
 
             const component = {
-                //...componentInfo,
                 TreesMenu: {
                     Id: isAddOperation ? 0 : treesMenu.id,
                     Name: name.value,

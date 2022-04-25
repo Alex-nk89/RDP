@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { IoMenu } from "react-icons/io5";
 
 import User from "./user/User";
-import { toogleNavbarState } from "../../actions";
+import { toogleNavbarState } from "../../reducers/navbarSlice";
 
 import "./header.sass";
 

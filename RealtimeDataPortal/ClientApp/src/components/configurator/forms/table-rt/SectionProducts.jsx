@@ -82,6 +82,7 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
                         {...attributesInputs}
                         {...product.productName}
                         placeholder='Выберите продукт'
+                        description={product.productId > 0 ? `id: ${product.productId}, Позиция: ${product.position}` : null}
                         onChange={searchProduct}
                         ref={productRef}
                         rightSection={loaderProductList}

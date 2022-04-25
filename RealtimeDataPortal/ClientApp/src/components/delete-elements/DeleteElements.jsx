@@ -95,7 +95,7 @@ const DeleteElements = ({ typeElements }) => {
 
         request(methods.delete, 'POST', JSON.stringify(deletingElements))
             .then(result => {
-                show('success', result.success);
+                show('success', result.message);
                 form.reset();
                 setListElements([]);
             })

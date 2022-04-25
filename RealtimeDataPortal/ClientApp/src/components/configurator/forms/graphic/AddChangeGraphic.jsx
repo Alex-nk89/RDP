@@ -9,6 +9,7 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
     const productRef = useRef(null);
     const { request } = useRequest();
     const { show } = useNotification();
+
     const user = useSelector(state => state.user.user);
     const disabledButton = user?.isConfigurator ? false : true;
 
@@ -17,6 +18,9 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
 
     const loaderProductList = loadingListProducts ? <Loader size={16} /> : null;
     const visibleProductList = productListFound.length > 0 ? true : false;
+
+    const productId = form.values.productId > 0 ? `id: ${form.values.productId}` : ''; 
+    const position = form.values.position?.length > 0 ? `, Позиция: ${form.values.position}` : '';
 
     const closeList = () => {
         setProductListFound([]);
@@ -94,6 +98,7 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
                         placeholder='Выберите продукт'
                         ref={productRef}
                         rightSection={loaderProductList}
+                        description={productId + position}
                     />
 
                     <div className="info-block__form__search-result" open={visibleProductList}>

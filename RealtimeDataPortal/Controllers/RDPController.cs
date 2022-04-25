@@ -294,7 +294,8 @@ namespace RealtimeDataPortal.Controllers
                 if (!user.IsConfigurator)
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
-                return new Tag().DeleteTags(id);
+                new Tag().DeleteTags(id);
+                return new { Message = listMessagesError.Deleted };
             }
             catch (ForbiddenException ex)
             {
@@ -415,7 +416,8 @@ namespace RealtimeDataPortal.Controllers
                 if (!user.IsConfigurator)
                     throw new ForbiddenException(listMessagesError.NotAccess);
 
-                return new { success = new Products().DeleteProducts(id) };
+                new Products().DeleteProducts(id);
+                return new { Message = listMessagesError.Deleted };
             }
             catch (ForbiddenException ex)
             {
@@ -751,7 +753,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+                return StatusCode(500, new { Message = listMessagesError.NotGetData });
             }
         }
 
@@ -772,7 +774,7 @@ namespace RealtimeDataPortal.Controllers
             }
             catch
             {
-                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+                return StatusCode(500, new { Message = listMessagesError.NotSaved });
             }
         }
 
