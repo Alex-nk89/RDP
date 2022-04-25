@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container } from '@mantine/core';
 
@@ -9,7 +9,6 @@ import Home from './components/home/Home';
 import Graphics from './components/graphics/Graphics';
 import TableRealtime from './components/tables/TableRealtime';
 import Mnemoscheme from './components/mnemoscheme/Mnemoscheme';
-//import Page_404 from './components/Page_404';
 import ErrorsPage from './components/errors-page/ErrorsPage';
 import Configurator from './components/configurator/Configurator';
 import { Administrstor } from './components/administrator/Administrator';
@@ -38,18 +37,21 @@ const App = () => {
                 <Header />
 
                 <Container size='md' padding='xs' className='container'>
-                    <Route exact path='/' component={Home} />
-                    <Route exact path="/Graphics/:id" component={Graphics} />
-                    <Route exact path="/Table/:id" component={TableRealtime} />
-                    <Route exact path='/Mnemoscheme/:id' component={Mnemoscheme} />
-                    <Route exact path="/Configurator/:operation/:id" component={Configurator} />
-                    <Route exact path="/Administrator/:operation" component={Administrstor} />
-                    <Route exact path="/Error" component={ErrorsPage} />
+                    <Switch>
+                        <Route exact path='/' component={Home} />
+                        <Route exact path="/Graphics/:id" component={Graphics} />
+                        <Route exact path="/Table/:id" component={TableRealtime} />
+                        <Route exact path='/Mnemoscheme/:id' component={Mnemoscheme} />
+                        <Route exact path="/Configurator/:operation/:id" component={Configurator} />
+                        <Route exact path="/Administrator/:operation" component={Administrstor} />
+                        <Route exact path="/Error" component={ErrorsPage} />
+                        <Route path="*" render={props => <ErrorsPage statusCode={404} statusText='Page not found' message='Страница не найдена' {...props} />} />
+                    </Switch>
+
                     <ScrollToTop />
                 </Container>
             </main>
         </>
-
 
     useEffect(() => {
         dispatch(userFetching());
