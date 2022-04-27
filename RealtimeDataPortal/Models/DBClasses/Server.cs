@@ -25,23 +25,37 @@
 
         public void EditServer(Server server)
         {
-            using (RDPContext rdp_base = new())
+            try
             {
-                rdp_base.Server.Update(server);
-                rdp_base.SaveChanges();
+                using (RDPContext rdp_base = new())
+                {
+                    rdp_base.Server.Update(server);
+                    rdp_base.SaveChanges();
+                }
+            }
+            catch
+            {
+                throw new Exception("NotSaved");
             }
         }
 
         public void DeleteServers(int[] ids)
         {
-            using (RDPContext rdp_base = new())
+            try
             {
-                var deletingServes = rdp_base.Server
-                    .Where(server => ids.Contains(server.ServerId))
-                    .AsNoTracking();
+                using (RDPContext rdp_base = new())
+                {
+                    var deletingServes = rdp_base.Server
+                        .Where(server => ids.Contains(server.ServerId))
+                        .AsNoTracking();
 
-                rdp_base.Server.RemoveRange(deletingServes);
-                rdp_base.SaveChanges();
+                    rdp_base.Server.RemoveRange(deletingServes);
+                    rdp_base.SaveChanges();
+                }
+            }
+            catch
+            {
+                throw new Exception("NotDeleted");
             }
         }
     }

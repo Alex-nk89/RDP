@@ -259,7 +259,7 @@ const Mnemoscheme = () => {
                     <svg version="1.1"
                         baseProfile="full"
                         style={{ backgroundColor: mnemoscheme.backgroundColor }}
-                        width={zoom} height={zoom} viewBox="0 0 1000 440" preserveAspectRatio="xMinYMin meet"
+                        width={zoom} height={zoom} viewBox="0 0 1920 920" preserveAspectRatio="xMinYMin meet"
                         xmlns="http://www.w3.org/2000/svg">
                         {rectangles}
                         {texts}

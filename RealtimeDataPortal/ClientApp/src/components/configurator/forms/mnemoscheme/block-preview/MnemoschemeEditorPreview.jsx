@@ -1,27 +1,28 @@
 import {
-    useEffect,
+    useEffect, useRef,
     useSelector,
     fabric
 } from '..';
 
-export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
+export const MnemoschemeEditorPreview = ({ setMnemoscheme, mnemoscheme }) => {
     const componentInfo = useSelector(state => state.configurator.componentInfo);
+    const canvasContainerRef = useRef();
+    const width = 1920;
+    const height = 920;
 
     useEffect(() => {
-
-        const mnemoscheme = new fabric.Canvas('mnemoscheme', {
-            width: 1000,
-            height: 440,
-        });
+        const mnemoscheme = new fabric.Canvas('mnemoscheme', { width, height });
+        const zoom = (canvasContainerRef?.current?.clientWidth - 65) / 1920;
+        mnemoscheme.setZoom(zoom);
 
         // Ограничительные линии для холста
-        mnemoscheme.add(new fabric.Line([1, 1, -1, 441], { stroke: '#e7e7e7' })
+        mnemoscheme.add(new fabric.Line([-1, -1, -1, mnemoscheme.getHeight() + 1], { stroke: '#787878' })
             .set({ selectable: false, hoverCursor: 'unset' }));
-        mnemoscheme.add(new fabric.Line([-1, -1, 1001, -1], { stroke: '#e7e7e7' })
+        mnemoscheme.add(new fabric.Line([-1, -1, mnemoscheme.getWidth() + 1, -1], { stroke: '#787878' })
             .set({ selectable: false, hoverCursor: 'unset' }));
-        mnemoscheme.add(new fabric.Line([1001, -1, 1001, 441], { stroke: '#e7e7e7' })
+        mnemoscheme.add(new fabric.Line([mnemoscheme.getWidth() + 1, -1, mnemoscheme.getWidth() + 1, mnemoscheme.getHeight() + 1], { stroke: '#787878' })
             .set({ selectable: false, hoverCursor: 'unset' }));
-        mnemoscheme.add(new fabric.Line([-1, 441, 1001, 441], { stroke: '#e7e7e7' })
+        mnemoscheme.add(new fabric.Line([-1, mnemoscheme.getHeight() + 1, mnemoscheme.getWidth() + 1, mnemoscheme.getHeight() + 1], { stroke: '#787878' })
             .set({ selectable: false, hoverCursor: 'unset' }));
 
         if (componentInfo.mnemoscheme.mnemoschemeContain.length > 0) {
@@ -59,7 +60,7 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme }) => {
     }, []);
 
     return (
-        <div className='info-block__mnemoscheme-editor__canvas'>
+        <div className='info-block__mnemoscheme-editor__canvas' ref={canvasContainerRef}>
             <canvas id='mnemoscheme' ></canvas>
         </div>
     )

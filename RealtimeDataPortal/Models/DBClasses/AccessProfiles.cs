@@ -17,10 +17,17 @@
 
         public void EditAccessProfiles(List<AccessProfiles> accessProfiles)
         {
-            using (RDPContext rdp_base = new())
+            try
             {
-                rdp_base.AccessProfiles.UpdateRange(accessProfiles);
-                rdp_base.SaveChanges();
+                using (RDPContext rdp_base = new())
+                {
+                    rdp_base.AccessProfiles.UpdateRange(accessProfiles);
+                    rdp_base.SaveChanges();
+                }
+            }
+            catch
+            {
+                throw new Exception("NotSaved");
             }
         }
 

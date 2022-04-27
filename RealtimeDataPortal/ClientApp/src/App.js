@@ -59,7 +59,6 @@ const App = () => {
         request('GetUser')
             .then((user) => {
                 dispatch(userInitialize(user));
-                //setProccess('confirmed');
             })
             .catch(() => dispatch(userFetchingError()));
         //eslint-disable-next-line

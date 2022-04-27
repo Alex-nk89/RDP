@@ -1,10 +1,11 @@
 ﻿using RealtimeDataPortal.Models;
+using RealtimeDataPortal.Models.OtherClasses;
 
 namespace RealtimeDataPortal.CheckAccess
 {
     public class CheckAccess
     {
-        public bool GetAccess(int id, User user, string? type = null)
+        public bool GetAccess(int id, CurrentUser currentUser, string? type = null)
         {
             // Проверка доступа к странице.
             // 1. Проверка у пользователя ролей полного просмотра (isFullView), конфигуратора (isConfigurator), 
@@ -16,9 +17,8 @@ namespace RealtimeDataPortal.CheckAccess
             // с таблиц реального времени) другим
             // 4. Проверяем дан ли доступ непосредственно само странице
             // 5. Далее рекурсивно проверяем родителей страницы
-            //
 
-            if (user.IsFullView || user.IsConfigurator || user.IsAdministrator || user.IsConfiguratorRead)
+            if (currentUser.IsFullView || currentUser.IsConfigurator || currentUser.IsAdministrator || currentUser.IsConfiguratorRead)
                 return true;
 
             List<TreesMenu> treesMenuWithAccesses = new List<TreesMenu>();
@@ -28,7 +28,7 @@ namespace RealtimeDataPortal.CheckAccess
                 treesMenuWithAccesses = (from tm in rdp_base.TreesMenu
                                          join atc in rdp_base.AccessToComponent on tm.Id equals atc.IdComponent into accesses
                                          from access in accesses.DefaultIfEmpty()
-                                         where user.Groups.Contains(access.ADGroupToAccess)
+                                         where currentUser.ADGroups.Contains(access.ADGroupToAccess)
                                          select new TreesMenu()
                                          {
                                              Id = tm.Id,
@@ -37,12 +37,12 @@ namespace RealtimeDataPortal.CheckAccess
             }
 
             if (type is null)
-                return CheckAccessToPage(user, treesMenuWithAccesses, id);
+                return CheckAccessToPage(currentUser, treesMenuWithAccesses, id);
 
             return false;
         }
 
-        private bool CheckAccessToPage(User user, List<TreesMenu> treesMenuWithAccesses, int id, int? idChildren = null)
+        private bool CheckAccessToPage(CurrentUser currentUser, List<TreesMenu> treesMenuWithAccesses, int id, int? idChildren = null)
         {
             using (RDPContext rdp_base = new RDPContext())
             {
@@ -64,7 +64,7 @@ namespace RealtimeDataPortal.CheckAccess
 
                 foreach (var item in parents)
                 {
-                    if (CheckAccessToPage(user, treesMenuWithAccesses, item.Id, item.ChildrenId))
+                    if (CheckAccessToPage(currentUser, treesMenuWithAccesses, item.Id, item.ChildrenId))
                         return true;
                 }
 

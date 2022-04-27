@@ -1,4 +1,5 @@
-﻿using System.Data.OleDb;
+﻿using RealtimeDataPortal.Models.OtherClasses;
+using System.Data.OleDb;
 
 namespace RealtimeDataPortal.Models
 {
@@ -27,7 +28,7 @@ namespace RealtimeDataPortal.Models
             isDateOffset = this.isDateOffset;
         }
 
-        public Object GetGraphic(Query query, User user)
+        public Object GetGraphic(Query query)
         {
             (string? startDate, string? endDate, string calendar, string? serverConnection, string tagName, int? wwResolution,
                 int round, isDateOffset) = query;

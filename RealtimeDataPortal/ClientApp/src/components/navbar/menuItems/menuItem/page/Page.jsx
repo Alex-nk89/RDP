@@ -20,11 +20,13 @@ const Page = ({ id, name, componentId, type }) => {
     switch (type) {
         case 'externalPage':
             //eslint-disable-next-line
-            link = <Tooltip openDelay={delay} label={name} placement='start'>
-                <a href={`http:\\\\asodu-web\\RDP_Container\\Home?id=${id}`} target='_blank' rel='noreferrer'>
-                    <BsFileEarmarkRichtextFill size={14} /><span>{name}</span>
-                </a >
-            </Tooltip>
+            link =
+                <Tooltip openDelay={delay} label={name} placement='start'>
+                    <a href={`http:\\\\asodu-web\\RDP_Container\\Home?id=${id}`} target='_blank' rel='noreferrer'>
+                        <BsFileEarmarkRichtextFill size={14} />
+                        <span>{modifiedName}</span>
+                    </a>
+                </Tooltip>
             break;
         case 'graphic':
             link =

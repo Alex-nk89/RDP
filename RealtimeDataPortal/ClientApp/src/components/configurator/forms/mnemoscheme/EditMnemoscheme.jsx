@@ -23,7 +23,7 @@ export const EditMnemoscheme = ({ action, form, submitForm, addAccessIcon, multi
         let zoom = mnemoscheme.getZoom();
         zoom *= 0.999 ** delta;
         if (zoom > 10) zoom = 10;
-        if (zoom < 1) zoom = 1;
+        if (zoom < 0.3) zoom = 0.3;
         mnemoscheme.zoomToPoint({ x: event.e.offsetX, y: event.e.offsetY }, zoom);
         event.e.preventDefault();
         event.e.stopPropagation();
@@ -196,7 +196,7 @@ export const EditMnemoscheme = ({ action, form, submitForm, addAccessIcon, multi
                         <div className='info-block' >
                             <MnemoschemeEditorPanelCreateElements mnemoscheme={mnemoscheme} saveMnemoscheme={saveMnemoscheme} />
                             <MnemoschemeEditorPanelChangeElements mnemoscheme={mnemoscheme} />
-                            <MnemoschemeEditorPreview setMnemoscheme={setMnemoscheme} />
+                            <MnemoschemeEditorPreview setMnemoscheme={setMnemoscheme} mnemoscheme={mnemoscheme} />
                         </div>
                     </div>
                 </Stepper.Step>

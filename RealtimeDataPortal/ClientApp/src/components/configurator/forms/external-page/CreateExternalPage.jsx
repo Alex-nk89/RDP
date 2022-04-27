@@ -1,6 +1,6 @@
 import {
     useSelector,
-    TextInput, Space, Button,
+    Button, TextInput, Space,
     attributesInputs
 } from '../../index';
 

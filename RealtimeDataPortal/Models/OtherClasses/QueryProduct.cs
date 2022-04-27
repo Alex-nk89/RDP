@@ -116,7 +116,7 @@ namespace RealtimeDataPortal.Models.OtherClasses
             }
             catch
             {
-                throw new Exception();
+                throw new Exception("NotSaved");
             }
         }
 

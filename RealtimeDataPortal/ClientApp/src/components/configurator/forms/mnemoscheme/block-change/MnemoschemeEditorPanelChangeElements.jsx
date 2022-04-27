@@ -1,10 +1,10 @@
 import {
     useState, useEffect,
-    ActionIcon, ColorInput, Tooltip,
+    ActionIcon,
     BsTrash, BsGripVertical,
-    BsFillPaletteFill, //BsFront, BsBack,
     MnemoschemeEditorPanelColorsAttribute, MnemoschemeEditorPanelDimensionsAttribute,
-    MnemoschemeEditorPanelStrokeAttribute, MnemoschemeEditorPanelTextAttribute
+    MnemoschemeEditorPanelStrokeAttribute, MnemoschemeEditorPanelTextAttribute,
+    MnemoschemeEditorPanelCanvasAttribute
 } from '..';
 
 export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
@@ -72,11 +72,6 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         setMnemoschemeActiveObjectType(null);
     };
 
-    const changeMnemoschemeBackgroundColor = (color) => {
-        setElementAttributes({ ...elementAttributes, backgroundColor: color });
-        mnemoscheme.setBackgroundColor(color, mnemoscheme.renderAll.bind(mnemoscheme));
-    }
-
     useEffect(() => {
         mnemoscheme?.on('mouse:down', getElementAttributes);
 
@@ -118,23 +113,6 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         </>
     ) : null;
 
-    const selectMnemoschemeBackgroundColor = !mnemoschemeActiveObjectType
-        ? (
-            <>
-                <Tooltip label='Сменить цвет фона' >
-                    <ColorInput
-                        size='xs'
-                        variant='filled'
-                        format='rgba'
-                        icon={<BsFillPaletteFill color={elementAttributes.backgroundColor} size={18} />}
-                        value={elementAttributes.backgroundColor}
-                        onChange={changeMnemoschemeBackgroundColor}
-                    />
-                </Tooltip>
-            </>
-        )
-        : null;
-
     return (
         <div className='info-block__mnemoscheme-editor__change-block'>
             <MnemoschemeEditorPanelTextAttribute
@@ -167,7 +145,12 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
 
             {deleteElement}
 
-            {selectMnemoschemeBackgroundColor}
+            <MnemoschemeEditorPanelCanvasAttribute
+                mnemoschemeActiveObjectType={mnemoschemeActiveObjectType}
+                elementAttributes={elementAttributes}
+                setElementAttributes={setElementAttributes}
+                mnemoscheme={mnemoscheme}
+            />
         </div>
     );
 }

@@ -38,18 +38,19 @@ namespace RealtimeDataPortal.Models
         }
 
 
-        public Object GetMenu(int parentId, List<string> groups, bool isFullView = false)
+        public Object GetMenu(int parentId, ICollection<string> groups, bool isFullView = false)
         {
-            using (RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new ())
             {
                 IQueryable<TreesMenu> treesMenus = rdp_base.TreesMenu
                     .Where(tm => tm.ParentId == parentId)
-                    .Select(tm => new TreesMenu() {
+                    .Select(tm => new TreesMenu()
+                    {
                         Id = tm.Id,
                         Name = tm.Name,
                         ParentId = tm.ParentId,
                         Type = tm.Type,
-                        ComponentId= tm.ComponentId,
+                        ComponentId = tm.ComponentId,
                         isFullView = true
                     })
                     .Distinct();
@@ -57,7 +58,8 @@ namespace RealtimeDataPortal.Models
                 if (!isFullView)
                 {
                     treesMenus = (from tm in treesMenus
-                                  join atc in rdp_base.AccessToComponent on tm.Id equals atc.IdComponent into menuItems
+                                  join atc in rdp_base.AccessToComponent
+                                    on tm.Id equals atc.IdComponent into menuItems
                                   from menuItem in menuItems.DefaultIfEmpty()
                                   where groups.Contains(menuItem.ADGroupToAccess)
                                   select new TreesMenu()
@@ -67,7 +69,7 @@ namespace RealtimeDataPortal.Models
                                       ParentId = tm.ParentId,
                                       Type = tm.Type,
                                       ComponentId = tm.ComponentId,
-                                      isFullView = menuItem.IdChildren == 0 ? true : false
+                                      isFullView = menuItem.IdChildren == 0 ? true : false,
                                   })
                                   .Distinct();
                 }
@@ -100,24 +102,24 @@ namespace RealtimeDataPortal.Models
             }
         }
 
-        public TreesMenu GetComponentInformation(int id, string operation)
-        {
-            using (RDPContext rdp_base = new RDPContext())
-            {
-                TreesMenu treesMenus = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new TreesMenu();
-
-                string[] adGroups = rdp_base.AccessToComponent
-                    .Where(atc => atc.IdComponent == id && atc.IdChildren == 0)
-                    .Select(tm => tm.ADGroupToAccess).ToArray();
-
-                treesMenus.ADGroups = adGroups;
-
-                if (operation.Contains("external-page"))
-                    treesMenus.ExternalPages = rdp_base.ExternalPages.Where(ep => ep.Id == treesMenus.ComponentId).FirstOrDefault();
-
-                return treesMenus;
-            }
-        }
+        //public TreesMenu GetComponentInformation(int id, string operation)
+        //{
+        //    using (RDPContext rdp_base = new RDPContext())
+        //    {
+        //        TreesMenu treesMenus = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new TreesMenu();
+        //
+        //        string[] adGroups = rdp_base.AccessToComponent
+        //            .Where(atc => atc.IdComponent == id && atc.IdChildren == 0)
+        //            .Select(tm => tm.ADGroupToAccess).ToArray();
+        //
+        //        treesMenus.ADGroups = adGroups;
+        //
+        //        if (operation.Contains("external-page"))
+        //            treesMenus.ExternalPages = rdp_base.ExternalPages.Where(ep => ep.Id == treesMenus.ComponentId).FirstOrDefault();
+        //
+        //        return treesMenus;
+        //    }
+        //}
 
         public int AddNewComponent(TreesMenu treesMenu)
         {
@@ -132,7 +134,7 @@ namespace RealtimeDataPortal.Models
 
         public void DeleteElement(int id)
         {
-            using(RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new RDPContext())
             {
                 TreesMenu removedElement = new TreesMenu() { Id = id };
                 rdp_base.TreesMenu.Remove(removedElement);
@@ -140,7 +142,7 @@ namespace RealtimeDataPortal.Models
                 List<AccessToComponent> accessToComponent = rdp_base.AccessToComponent
                     .Where(atc => atc.IdComponent == id && (atc.IdChildren == 0 || atc.IdChildren == null)).Distinct().ToList();
 
-                foreach(var access in accessToComponent)
+                foreach (var access in accessToComponent)
                 {
                     new AccessToComponent().DeleteAccessToComponent(id, access.IdChildren, access.ADGroupToAccess);
                 }

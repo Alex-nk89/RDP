@@ -35,7 +35,7 @@ namespace RealtimeDataPortal.Models
 
         public Configurator GetComponentInformation(int id, string operation)
         {
-            using (RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new ())
             {
                 Configurator componentInfo = new();
                 int? idChildren = operation.Contains("folder") ? 0 : null;
@@ -46,7 +46,7 @@ namespace RealtimeDataPortal.Models
                 }
 
                 componentInfo.TreesMenu = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ??
-                    throw new NotFoundException("Не удалось получить информацию о компоненте.");
+                    throw new Exception();
 
                 string[] adGroups = rdp_base.AccessToComponent
                     .Where(atc => atc.IdComponent == id && atc.IdChildren == idChildren)
@@ -55,8 +55,10 @@ namespace RealtimeDataPortal.Models
                 componentInfo.ADGroups = adGroups;
 
                 if (operation.Contains("externalPage"))
+                {
                     componentInfo.ExternalPages = rdp_base.ExternalPages
                         .Where(ep => ep.Id == componentInfo.TreesMenu.ComponentId).FirstOrDefault() ?? new();
+                }
                 else if (operation == "change-graphic")
                 {
                     componentInfo.Graphics = (from treesMenu in rdp_base.TreesMenu
@@ -172,7 +174,7 @@ namespace RealtimeDataPortal.Models
                         .Count();
 
                     if (countChildsElement > 0) {
-                        throw new Exception("");
+                        throw new Exception("NotDeletedNoEmptyFolder");
                     }
                 }
 

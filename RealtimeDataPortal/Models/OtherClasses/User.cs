@@ -11,7 +11,7 @@ namespace RealtimeDataPortal.Models
         public bool IsConfigurator { get; set; } = false;
         public bool IsAdministrator { get; set; } = false;
         public bool IsConfiguratorRead { get; set; } = false;
-        //private static HttpContext _httpContext => new HttpContextAccessor().HttpContext;
+        private static HttpContext _httpContext => new HttpContextAccessor().HttpContext;
 
         public User(string userName)
         {

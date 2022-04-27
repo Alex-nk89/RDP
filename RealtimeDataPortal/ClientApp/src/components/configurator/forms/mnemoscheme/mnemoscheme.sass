@@ -9,9 +9,15 @@
         display: flex
         justify-content: center
         align-items: center
-        padding: .5rem
         aspect-ratio: 16/7
         padding: 3.5rem 1rem 1rem 3.5rem
+        .canvas-container
+            max-height: 570px
+            overflow: auto
+            @include scrollbar
+            &::-webkit-scrollbar
+                width: 0px
+                height: 0px
     &__create-block
         display: flex
         flex-direction: column

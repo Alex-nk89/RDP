@@ -12,30 +12,44 @@ namespace RealtimeDataPortal.Models
 
         public bool AddChangeTag (Tag tag)
         {
-            using(RDPContext rdp_base = new())
+            try
             {
-                rdp_base.Tag.Update(tag);
-                rdp_base.SaveChanges();
+                using (RDPContext rdp_base = new())
+                {
+                    rdp_base.Tag.Update(tag);
+                    rdp_base.SaveChanges();
 
-                return true;
+                    return true;
+                }
+            }
+            catch
+            {
+                throw new Exception("NotSaved");
             }
         }
 
         public bool DeleteTags (int[] id)
         {
-            using(RDPContext rdp_base = new())
+            try
             {
-                List<Tag> tags = new();
-
-                foreach(int tag in id)
+                using (RDPContext rdp_base = new())
                 {
-                    tags.Add(new Tag() { TagId = tag });
+                    List<Tag> tags = new();
+
+                    foreach (int tag in id)
+                    {
+                        tags.Add(new Tag() { TagId = tag });
+                    }
+
+                    rdp_base.Tag.RemoveRange(tags);
+                    rdp_base.SaveChanges();
+
+                    return true;
                 }
-
-                rdp_base.Tag.RemoveRange(tags);
-                rdp_base.SaveChanges();
-
-                return true;
+            }
+            catch
+            {
+                throw new Exception("NotDeleted");
             }
         }
     }

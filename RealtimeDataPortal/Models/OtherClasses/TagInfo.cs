@@ -16,11 +16,14 @@ namespace RealtimeDataPortal.Models.OtherClasses
             {
                 List<TagInfo> tags = 
                     (from tag in rdp_base.Tag
-                     join srv in rdp_base.Server on tag.ServerId equals srv.ServerId into servers
+                     join server in rdp_base.Server 
+                        on tag.ServerId equals server.ServerId into servers
                      from server in servers.DefaultIfEmpty()
-                     join pt in rdp_base.ParameterTag on tag.TagId equals pt.TagId into parameterTags
+                     join parameterTag in rdp_base.ParameterTag 
+                        on tag.TagId equals parameterTag.TagId into parameterTags
                      from parameterTag in parameterTags.DefaultIfEmpty()
-                     join param in rdp_base.Parameter on parameterTag.ParameterId equals param.ParameterId into parameters
+                     join parameter in rdp_base.Parameter 
+                        on parameterTag.ParameterId equals parameter.ParameterId into parameters
                      from parameter in parameters.DefaultIfEmpty()
                      where EF.Functions.Like(tag.TagName, $"%{name}%") 
                      || EF.Functions.Like(parameter.Position, $"%{name}%")
@@ -31,7 +34,11 @@ namespace RealtimeDataPortal.Models.OtherClasses
                          TagTypeId = tag.TagTypeId,
                          ServerId = server.ServerId,
                          ServerName = server.ServerName
-                     }).Distinct().Take(50).AsNoTracking().ToList();
+                     })
+                     .Distinct()
+                     .Take(50)
+                     .AsNoTracking()
+                     .ToList();
 
                 return tags;
             }

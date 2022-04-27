@@ -1,9 +1,10 @@
 ﻿global using Microsoft.EntityFrameworkCore;
+global using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RealtimeDataPortal.Exceptions;
 using RealtimeDataPortal.Models;
 using RealtimeDataPortal.Models.DBClasses;
-using RealtimeDataPortal.Models.Exceptions;
 using RealtimeDataPortal.Models.OtherClasses;
 
 namespace RealtimeDataPortal.Controllers
@@ -12,8 +13,6 @@ namespace RealtimeDataPortal.Controllers
     [Route("[controller]")]
     public class RDPController : ControllerBase
     {
-        static readonly ListMessagesError listMessagesError = new();
-
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public RDPController(IHttpContextAccessor httpContextAccessor)
@@ -21,104 +20,92 @@ namespace RealtimeDataPortal.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        static User user;
+        public bool CheckRoleUser (string role)
+        {
+            try
+            {
+                CurrentUser currentUser = JsonSerializer
+                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
+                    ?? throw new Exception("NoGetUser");
 
-        [HttpGet("GetUser")]
+                Dictionary<string, bool> roles = new Dictionary<string, bool>()
+                {
+                    { "IsFullView", currentUser.IsFullView },
+                    { "IsConfigurator", currentUser.IsConfigurator },
+                    { "IsAdministrator", currentUser.IsAdministrator },
+                    { "IsConfiguratorRead", currentUser.IsConfiguratorRead }
+                };
+
+                return roles[role];
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        [Route("GetUser")]
         public Object GetUser()
         {
             try
             {
-                string? userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-                user = new User("NagaytsevAE");
-                return user;
+                new CurrentUser().GetCurrentUser();
+                CurrentUser? currentUser = JsonSerializer.Deserialize<CurrentUser>(
+                    _httpContextAccessor.HttpContext?.Session.GetString("currentUser") 
+                    ?? throw new Exception("NoGetUser"));
+                
+                return currentUser;
             }
-            catch
+            catch(Exception ex)
             {
-                return StatusCode(401, new
-                {
-                    Message = "Не удалось получить данные о пользователе. Попробуйте " +
-                    "перезапустить приложение."
-                });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("GetMenu")]
+        [Route("GetMenu")]
         public Object GetMenu(TreesMenu treesMenu)
         {
             try
             {
-                TreesMenu menuList = new TreesMenu();
+                CurrentUser currentUser = JsonSerializer
+                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser")) 
+                    ?? throw new Exception("NoGetUser");
 
                 if (!treesMenu.isFullView)
-                    treesMenu.isFullView = user.IsFullView || user.IsConfigurator || user.IsAdministrator || user.IsConfiguratorRead;
-
-                return menuList.GetMenu(treesMenu.ParentId, user.Groups, treesMenu.isFullView);
-            }
-            catch
-            {
-                return StatusCode(500, new
                 {
-                    Message = listMessagesError.NotGetData
-                });
-            }
+                    treesMenu.isFullView = 
+                        CheckRoleUser("IsFullView") || CheckRoleUser("IsConfigurator") 
+                        || CheckRoleUser("IsAdministrator") || CheckRoleUser("IsConfiguratorRead");
+                }
 
-        }
-
-        [HttpGet("GetLink")]
-        public Object GetLink(int id)
-        {
-            try
-            {
-                ExternalPages externalPages = new ExternalPages();
-                var link = externalPages.GetLink(id, user);
-
-                return link;
+                return new TreesMenu().GetMenu(treesMenu.ParentId, currentUser.ADGroups, treesMenu.isFullView);
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
-                return StatusCode(404, new { Message = ex.Message });
-            }
-            catch (ForbiddenException ex)
-            {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new
-                {
-                    Message = listMessagesError.NotGetData
-                });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetComponentInformation")]
+        [Route("GetComponentInformation")]
         public Object GetComponentInformation(int id, string operation)
         {
             try
             {
-                if (!(user.IsConfigurator || user.IsConfiguratorRead))
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!(CheckRoleUser("IsConfigurator") || CheckRoleUser("IsConfiguratorRead")))
+                    throw new Exception("NotAccess");
 
                 return new Configurator().GetComponentInformation(id, operation);
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch (NotFoundException ex)
-            {
-                return StatusCode(404, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new
-                {
-                    Message = listMessagesError.NotGetData
-                });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("AddChangeElement")]
+        [Route("AddChangeElement")]
         public Object AddChangeElement(Configurator configurator)
         {
             // Добавлениие/редактирование элементов таких как графики, таблицы РВ, папки и т.д.
@@ -132,8 +119,8 @@ namespace RealtimeDataPortal.Controllers
 
             try
             {
-                if (!user.IsConfigurator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsConfigurator"))
+                    throw new Exception("NotAccess");
 
                 if (type == "externalPage")
                 {
@@ -169,24 +156,16 @@ namespace RealtimeDataPortal.Controllers
                     accessToComponent.DeleteAccessToComponent(id, idChildren, deletedAccess);
                 }
 
-                return new { Message = listMessagesError.Saved };
-            }
-            catch (ForbiddenException ex)
-            {
-                return StatusCode(403, new { Message = ex.Message });
+                return new { new Messages().GetMessage("Saved").Message };
             }
             catch (Exception ex)
             {
-                string error = ex.Message;
-
-                return StatusCode(500, new
-                {
-                    Message = listMessagesError.NotSaved
-                });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("DeleteElement")]
+        [Route("DeleteElement")]
         public Object DeleteElement(int id)
         {
             // Удаление элементов таких как графики, таблицы РВ и тд.
@@ -195,60 +174,47 @@ namespace RealtimeDataPortal.Controllers
 
             try
             {
-                if (!user.IsConfigurator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsConfigurator"))
+                    throw new Exception("NotAccess");
 
                 new Configurator().DeleteElement(id);
 
-                return new { Message = listMessagesError.Deleted };
-            }
-            catch (ForbiddenException ex)
-            {
-                return StatusCode(403, new { Message = ex.Message });
+                return new { new Messages().GetMessage("Deleted").Message };
             }
             catch (Exception ex)
             {
-                string message = ex.Message.Length == 0
-                    ? "Невозможно удалить непустую папку!"
-                    : listMessagesError.NotDeleted;
-
-                return StatusCode(500, new
-                {
-                    Message = message
-                });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetTags")]
+        [Route("GetTags")]
         public Object GetTags(string name, bool forMnemoscheme = false)
         {
             try
             {
-                if (!(user.IsConfigurator || user.IsConfiguratorRead))
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!(CheckRoleUser("IsConfigurator") || CheckRoleUser("IsConfiguratorRead")))
+                    throw new Exception("NotAccess");
 
                 if (forMnemoscheme)
                     return new TagInfo().GetListTagsForMnemoscheme(name);
 
                 return new TagInfo().GetTags(name);
             }
-            catch (ForbiddenException ex)
+            catch(Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetAttributesForTag")]
+        [Route("GetAttributesForTag")]
         public Object GetAtrributesForTag()
         {
             try
             {
-                if (!(user.IsConfigurator || user.IsConfiguratorRead))
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!(CheckRoleUser("IsConfigurator") || CheckRoleUser("IsConfiguratorRead")))
+                    throw new Exception("NotAccess");
 
                 return new
                 {
@@ -256,64 +222,55 @@ namespace RealtimeDataPortal.Controllers
                     Servers = new Server().GetListServers(null)
                 };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("AddChangeTag")]
+        [Route("AddChangeTag")]
         public Object AddChangeTag(Tag tag)
         {
             try
             {
-                if (!user.IsConfigurator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsConfigurator"))
+                    throw new Exception("NotAccess");
 
                 return new { success = new Tag().AddChangeTag(tag) };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("DeleteTags")]
+        [Route("DeleteTags")]
         public Object DeleteTags(int[] id)
         {
             try
             {
-                if (!user.IsConfigurator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsConfigurator"))
+                    throw new Exception("NotAccess");
 
                 new Tag().DeleteTags(id);
-                return new { Message = listMessagesError.Deleted };
+                return new { new Messages().GetMessage("Deleted").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetAttributesForProducts")]
+        [Route("GetAttributesForProducts")]
         public Object GetAttributesForProducts()
         {
             try
             {
-                if (!(user.IsConfigurator || user.IsConfiguratorRead))
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!(CheckRoleUser("IsConfigurator") || CheckRoleUser("IsConfiguratorRead")))
+                    throw new Exception("NotAccess");
 
                 using (RDPContext rdp_base = new())
                 {
@@ -329,202 +286,169 @@ namespace RealtimeDataPortal.Controllers
                     };
                 }
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("AddChangeProduct")]
+        [Route("AddChangeProduct")]
         public Object AddChangeProduct(List<QueryProduct> queryProduct)
         {
             try
             {
-                if (!user.IsConfigurator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if(!CheckRoleUser("IsConfigurator"))
+                    throw new Exception("NotAccess");
 
                 return new { success = new QueryProduct().AddChangeProduct(queryProduct) };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetListProducts")]
+        [Route("GetListProducts")]
         public Object GetListProducts(string name)
         {
             try
             {
-                if (!(user.IsConfigurator || user.IsConfiguratorRead))
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!(CheckRoleUser("IsConfigurator") || CheckRoleUser("IsConfiguratorRead")))
+                    throw new Exception("NotAccess");
 
                 return new QueryProduct().GetListProducts(name);
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetListProductsForDelete")]
+        [Route("GetListProductsForDelete")]
         public Object GetListProductsForDelete(string name)
         {
             try
             {
-                if (!(user.IsConfigurator || user.IsConfiguratorRead))
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!(CheckRoleUser("IsConfigurator") || CheckRoleUser("IsConfiguratorRead")))
+                    throw new Exception("NotAccess");
 
                 var listProducts = new QueryProduct().GetListProducts(name).GroupBy(p => p.ProductId);
-                var listProductsUniq = 
+
+                var listProductsUniq =
                     (from products in listProducts
-                     select new {
-                         ProductId = products.First().ProductId,
-                         ProductName = products.First().ProductName,
-                         Position = products.First().Position
+                     select new
+                     {
+                         products.First().ProductId,
+                         products.First().ProductName,
+                         products.First().Position
                      }).ToList();
 
                 return listProductsUniq;
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("DeleteProducts")]
+        [Route("DeleteProducts")]
         public Object DeleteProducts(int[] id)
         {
             try
             {
-                if (!user.IsConfigurator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsConfigurator"))
+                    throw new Exception("NotAccess");
 
                 new Products().DeleteProducts(id);
-                return new { Message = listMessagesError.Deleted };
+                return new { new Messages().GetMessage("Deleted").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetAttributesForGraphic")]
+        [Route("GetAttributesForGraphic")]
         public Object GetAttributesForGraphic(int id)
         {
             try
             {
-                List<Attributes> attributesGraphic = new Graphics().GetAttributesForGraphic(id, user);
+                CurrentUser currentUser = JsonSerializer
+                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
+                    ?? throw new Exception("NoGetUser");
+
+                List<Attributes> attributesGraphic = new Graphics().GetAttributesForGraphic(id, currentUser);
 
                 return attributesGraphic;
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
-                return StatusCode(404, new { Message = ex.Message });
-            }
-            catch (ForbiddenException ex)
-            {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new
-                {
-                    Message = listMessagesError.NotGetData
-                });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("GetGraphic")]
+        [Route("GetGraphic")]
         public Object GetGraphic(Query query)
         {
             try
             {
-                var dataGraphics = new Query().GetGraphic(query, user);
+                var dataGraphics = new Query().GetGraphic(query);
 
                 return dataGraphics;
             }
-            catch
+            catch (Exception ex)
             {
-                return StatusCode(500, new
-                {
-                    Message = listMessagesError.NotGetData
-                });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetTableRealtime")]
+        [Route("GetTableRealtime")]
         public Object GetTableRealtime(int id)
         {
             try
             {
-                var tableRealtime = new rt_Tables().GetTableRealtime(id, user);
+                CurrentUser currentUser = JsonSerializer
+                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
+                    ?? throw new Exception("NoGetUser");
+
+                var tableRealtime = new rt_Tables().GetTableRealtime(id, currentUser);
 
                 return tableRealtime;
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
-                return StatusCode(404, new { Message = ex.Message });
-            }
-            catch (ForbiddenException ex)
-            {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new
-                {
-                    Message = listMessagesError.NotGetData
-                });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetMnemoschemeImage")]
+        [Route("GetMnemoschemeImage")]
         public Object GetMnemoschemeImage(int id)
         {
             try
             {
-                var mnemoscheme = new Mnemoscheme().GetMnemoschemeImage(id, user);
+                CurrentUser currentUser = JsonSerializer
+                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
+                    ?? throw new Exception("NoGetUser");
+
+                var mnemoscheme = new Mnemoscheme().GetMnemoschemeImage(id, currentUser);
                 return mnemoscheme;
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
-                return StatusCode(404, new { Message = ex.Message });
-            }
-            catch (ForbiddenException ex)
-            {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new
-                {
-                    Message = listMessagesError.NotGetData
-                });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("GetMnemoschemeTagsValues")]
+        [Route("GetMnemoschemeTagsValues")]
         public Object GetMnemoschemeTagsValues(int[] tagsId)
         {
             try
@@ -532,314 +456,271 @@ namespace RealtimeDataPortal.Controllers
                 var listTags = new Mnemoscheme().GetMnemoschemeTagsValues(tagsId);
                 return listTags;
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
-                return StatusCode(404, new { Message = ex.Message });
-            }
-            catch (ForbiddenException ex)
-            {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetListParameterTypes")]
+        [Route("GetListParameterTypes")]
         public Object GetListParameterTypes(string name)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 return new ParameterType().GetListParameterTypes(name);
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("EditParameterType")]
+        [Route("EditParameterType")]
         public Object EditParameterType(ParameterType parameter)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 new ParameterType().EditParameterType(parameter);
-                return new { Success = listMessagesError.Saved };
+                return new { new Messages().GetMessage("Saved").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { Message = ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("DeleteParameterTypes")]
+        [Route("DeleteParameterTypes")]
         public Object DeleteParameterTypes(int[] ids)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 new ParameterType().DeleteParameterTypes(ids);
 
-                return new { Success = listMessagesError.Deleted };
+                return new { new Messages().GetMessage("Deleted").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetListServers")]
+        [Route("GetListServers")]
         public Object GetListServers(string name)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 var listServers = new Server().GetListServers(name);
                 return listServers;
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("EditServer")]
+        [Route("EditServer")]
         public Object EditServer(Server server)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 new Server().EditServer(server);
-                return new { Success = listMessagesError.Saved };
+                return new { new Messages().GetMessage("Saved").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("DeleteServers")]
+        [Route("DeleteServers")]
         public Object DeleteServers(int[] ids)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 new Server().DeleteServers(ids);
 
-                return new { Success = listMessagesError.Deleted };
+                return new { new Messages().GetMessage("Deleted").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetListTypesTag")]
+        [Route("GetListTypesTag")]
         public Object GetListTypesTag(string name)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 var listTypesTag = new TagsType().GetListTypesTag(name);
                 return listTypesTag;
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("EditTypeTag")]
+        [Route("EditTypeTag")]
         public Object EditTypeTag(TagsType tagType)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new Exception(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 new TagsType().EditTypeTag(tagType);
-                return new { Success = listMessagesError.Saved };
+                return new { new Messages().GetMessage("Saved").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("DeleteTypesTag")]
+        [Route("DeleteTypesTag")]
         public Object DeleteTypesTag(int[] ids)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 new TagsType().DeleteTypeTag(ids);
-                return new { Success = listMessagesError.Deleted };
+                return new { new Messages().GetMessage("Deleted").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetAccessProfiles")]
+        [Route("GetAccessProfiles")]
         public Object GetAccessProfiles()
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 var accessProfiles = new AccessProfiles().GetAccessProfiles();
                 return accessProfiles;
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("EditAccessProfiles")]
+        [Route("EditAccessProfiles")]
         public Object EditAccessProfiles(List<AccessProfiles> accessProfiles)
         {
             try
             {
-                if (!user.IsAdministrator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 new AccessProfiles().EditAccessProfiles(accessProfiles);
-                return new { Success = listMessagesError.Saved };
+                return new { new Messages().GetMessage("Saved").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpPost("SaveMnemoschemeTemplates")]
+        [Route("SaveMnemoschemeTemplates")]
         public Object SaveMnemoschemeTemplates(MnemoschemeTemplates template)
         {
             try
             {
-                if (!user.IsConfigurator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsAdministrator"))
+                    throw new Exception("NotAccess");
 
                 new MnemoschemeTemplates().SaveMnemoschemeTemplate(template);
-                return new { Success = listMessagesError.Saved };
+                return new { new Messages().GetMessage("Saved").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotSaved });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("GetMnemoschemeTemplates")]
+        [Route("GetMnemoschemeTemplates")]
         public Object GetMnemoschemeTemplates(int id)
         {
             try
             {
-                if (!(user.IsConfigurator || user.IsConfiguratorRead))
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!(CheckRoleUser("IsConfigurator") || CheckRoleUser("IsConfiguratorRead")))
+                    throw new Exception("NotAccess");
 
                 List<MnemoschemeTemplates> templates = new MnemoschemeTemplates().GetTemplates(id);
                 return templates;
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
-            }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotGetData });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
         }
 
-        [HttpGet("RemoveMnemoschemeTemplates")]
+        [Route("RemoveMnemoschemeTemplates")]
         public Object RemoveMnemoschemeTemplates(int id)
         {
             try
             {
-                if (!user.IsConfigurator)
-                    throw new ForbiddenException(listMessagesError.NotAccess);
+                if (!CheckRoleUser("IsConfigurator"))
+                    throw new Exception("NotAccess");
 
                 new MnemoschemeTemplates().DeleteMnemoschemeTemplate(id);
 
-                return new { Success = listMessagesError.Deleted };
+                return new { new Messages().GetMessage("Deleted").Message };
             }
-            catch (ForbiddenException ex)
+            catch (Exception ex)
             {
-                return StatusCode(403, new { ex.Message });
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
             }
-            catch
-            {
-                return StatusCode(500, new { Message = listMessagesError.NotDeleted });
-            }
+        }
+
+        [Route("AddImageOnMnemoscheme")]
+        public void AddImageOnMnemoscheme(IFormFile file)
+        {
+
         }
     }
 }

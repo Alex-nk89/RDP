@@ -24,26 +24,40 @@
 
         public void SaveMnemoschemeTemplate(MnemoschemeTemplates template)
         {
-            using(RDPContext rdp_base = new())
+            try
             {
-                rdp_base.MnemoschemeTemplates.Add(template);
-                rdp_base.SaveChanges();
+                using (RDPContext rdp_base = new())
+                {
+                    rdp_base.MnemoschemeTemplates.Add(template);
+                    rdp_base.SaveChanges();
+                }
+            }
+            catch
+            {
+                throw new Exception("NotSaved");
             }
         }
 
         public void DeleteMnemoschemeTemplate(int id)
         {
-            using(RDPContext rdp_base = new())
+            try
             {
-                MnemoschemeTemplates? deletedTemplate = rdp_base.MnemoschemeTemplates
-                    .Where(m => m.TemplateId == id)
-                    .FirstOrDefault();
-
-                if(deletedTemplate is not null)
+                using (RDPContext rdp_base = new())
                 {
-                    rdp_base.MnemoschemeTemplates.Remove(deletedTemplate);
-                    rdp_base.SaveChanges();
+                    MnemoschemeTemplates? deletedTemplate = rdp_base.MnemoschemeTemplates
+                        .Where(m => m.TemplateId == id)
+                        .FirstOrDefault();
+
+                    if (deletedTemplate is not null)
+                    {
+                        rdp_base.MnemoschemeTemplates.Remove(deletedTemplate);
+                        rdp_base.SaveChanges();
+                    }
                 }
+            }
+            catch
+            {
+                throw new Exception("NotDeleted");
             }
         }
     }

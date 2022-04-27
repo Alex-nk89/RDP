@@ -19,12 +19,16 @@ namespace RealtimeDataPortal.Models
             using(RDPContext rdp_base = new())
             {
                 List <rt_Sections> initialSections = rdp_base.rt_Sections
-                    .Where(section => section.TableId == tableId).AsNoTracking().ToList();
+                    .Where(section => section.TableId == tableId)
+                    .AsNoTracking()
+                    .ToList();
 
                 List<rt_SectionProduct> initialSectionProducts = rdp_base.rt_SectionProduct
-                    .Where(product => initialSections.Select(section => section.SectionId)
-                        .Contains(product.SectionId))
-                    .AsNoTracking().ToList();
+                    .Where(product => initialSections
+                    .Select(section => section.SectionId)
+                    .Contains(product.SectionId))
+                    .AsNoTracking()
+                    .ToList();
 
                 var deletingSections = initialSections
                     .Where(section =>
@@ -52,9 +56,6 @@ namespace RealtimeDataPortal.Models
 
                 foreach(var section in deletingSections)
                 {
-                    //new rt_SectionProduct().RemoveSectionProducts(
-                    //    initialSectionProducts.Where(product => product.SectionId == section.SectionId).ToList()
-                    //);
                     new rt_SectionProduct().AddChangeSectionProducts(section.SectionId, new(), initialSectionProducts);
 
                     rdp_base.rt_Sections.Remove(section);

@@ -30,6 +30,7 @@ import { MnemoschemeEditorPanelColorsAttribute } from './block-change/Mnemoschem
 import { MnemoschemeEditorPanelDimensionsAttribute } from './block-change/MnemoschemeEditorPanelDimensionsAttribute';
 import { MnemoschemeEditorPanelStrokeAttribute } from './block-change/MnemoschemeEditorPanelStrokeAttribute';
 import { MnemoschemeEditorPanelTextAttribute } from './block-change/MnemoschemeEditorPanelTextAttribute';
+import { MnemoschemeEditorPanelCanvasAttribute } from './block-change/MnemoschemeEditorPanelCanvasAttribute';
 
 const attributesInputs = {
     required: true,
@@ -51,6 +52,6 @@ export {
     useRequest, useNotification,
     MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanelCreateElements,
     MnemoschemeEditorPanelChangeElements, MnemoschemeEditorPanelColorsAttribute, MnemoschemeEditorPanelDimensionsAttribute,
-    MnemoschemeEditorPanelStrokeAttribute, MnemoschemeEditorPanelTextAttribute,
+    MnemoschemeEditorPanelStrokeAttribute, MnemoschemeEditorPanelTextAttribute, MnemoschemeEditorPanelCanvasAttribute,
     attributesInputs
 }

@@ -2,3 +2,9 @@
 
 # CA1416: Проверка совместимости платформы
 dotnet_diagnostic.CA1416.severity = none
+
+# CS8603: Возможно, возврат ссылки, допускающей значение NULL.
+dotnet_diagnostic.CS8603.severity = suggestion
+
+# CS8604: Возможно, аргумент-ссылка, допускающий значение NULL.
+dotnet_diagnostic.CS8604.severity = silent

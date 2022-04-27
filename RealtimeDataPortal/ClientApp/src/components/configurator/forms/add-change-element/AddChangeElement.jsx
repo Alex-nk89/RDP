@@ -85,7 +85,7 @@ const AddChangeElement = () => {
             },
             ExternalPages: {
                 Id: action === 'add' ? 0 : externalPages.id,
-                Link: form.getInputProps('link').value
+                Link: form.getInputProps('link').value,
             },
             Graphics: {
                 ComponentId: action === 'add' ? 0 : graphics.componentId,

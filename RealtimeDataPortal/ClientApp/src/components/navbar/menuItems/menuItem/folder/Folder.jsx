@@ -27,7 +27,7 @@ const Folder = ({ id, name, isFullView }) => {
     useEffect(() => {
         if (folderState) {
             request(`GetMenu`, 'POST', JSON.stringify({
-                ParentId: id,
+                parentId: id,
                 isFullView: isFullView,
             }))
                 .then(menuItems => {

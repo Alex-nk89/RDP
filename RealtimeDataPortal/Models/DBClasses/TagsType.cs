@@ -29,23 +29,37 @@ namespace RealtimeDataPortal.Models
 
         public void EditTypeTag(TagsType tagType)
         {
-            using (RDPContext rdp_base = new())
+            try
             {
-                rdp_base.TagsType.Update(tagType);
-                rdp_base.SaveChanges();
+                using (RDPContext rdp_base = new())
+                {
+                    rdp_base.TagsType.Update(tagType);
+                    rdp_base.SaveChanges();
+                }
+            }
+            catch
+            {
+                throw new Exception("NotSaved");
             }
         }
 
         public void DeleteTypeTag (int[] ids)
         {
-            using(RDPContext rdp_base = new())
+            try
             {
-                var deletingTypesTag = rdp_base.TagsType
-                    .Where(typeTag => ids.Contains(typeTag.TagTypeId))
-                    .AsNoTracking();
+                using (RDPContext rdp_base = new())
+                {
+                    var deletingTypesTag = rdp_base.TagsType
+                        .Where(typeTag => ids.Contains(typeTag.TagTypeId))
+                        .AsNoTracking();
 
-                rdp_base.TagsType.RemoveRange(deletingTypesTag);
-                rdp_base.SaveChanges();
+                    rdp_base.TagsType.RemoveRange(deletingTypesTag);
+                    rdp_base.SaveChanges();
+                }
+            }
+            catch
+            {
+                throw new Exception("NotDeleted");
             }
         }
     }

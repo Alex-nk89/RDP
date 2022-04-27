@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RealtimeDataPortal.Models.Exceptions;
+using RealtimeDataPortal.Models.OtherClasses;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealtimeDataPortal.Models
@@ -11,14 +11,14 @@ namespace RealtimeDataPortal.Models
         public string Name { get; set; } = string.Empty;
         public string Position { get; set; } = string.Empty;
 
-        public List<Attributes> GetAttributesForGraphic(int id, User user)
+        public List<Attributes> GetAttributesForGraphic(int id, CurrentUser currentUser)
         {
             CheckAccess.CheckAccess check = new CheckAccess.CheckAccess();
 
-            if (!check.GetAccess(id, user))
-                throw new ForbiddenException("У Вас нет доступа к странице.");
+            if (!check.GetAccess(id, currentUser))
+                throw new Exception("NotAccessForView");
 
-            using (RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new ())
             {
                 List<Attributes> attributes = (from product in rdp_base.Products
                                                join parameter in rdp_base.Parameter 
@@ -61,7 +61,7 @@ namespace RealtimeDataPortal.Models
                                                })
                                                .ToList();
 
-                if (attributes.Count == 0) throw new NotFoundException("Страница не найдена.");
+                if (attributes.Count == 0) throw new Exception("PageNotFound");
 
                 return attributes;
             }

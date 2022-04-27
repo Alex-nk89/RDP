@@ -1,5 +1,4 @@
-﻿using RealtimeDataPortal.Models.Exceptions;
-using RealtimeDataPortal.Models.OtherClasses;
+﻿using RealtimeDataPortal.Models.OtherClasses;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.OleDb;
 
@@ -13,7 +12,7 @@ namespace RealtimeDataPortal.Models
         public bool UnitVisible { get; set; }
         public bool LimitVisible { get; set; }
 
-        public List<Query_rtTable> GetTableRealtime(int id, User user)
+        public List<Query_rtTable> GetTableRealtime(int id, CurrentUser currentUser)
         {
             // 1. Собираем данные для построения таблицы
             // 2. Получаем текущие значения для тегов из таблицы
@@ -21,10 +20,10 @@ namespace RealtimeDataPortal.Models
 
             CheckAccess.CheckAccess check = new CheckAccess.CheckAccess();
 
-            if (!check.GetAccess(id, user))
-                throw new ForbiddenException("У Вас нет доступа к странице.");
+            if (!check.GetAccess(id, currentUser))
+                throw new Exception("NotAccessForView");
 
-            List<Query_rtTable> tableRealtime = new List<Query_rtTable>();
+            List<Query_rtTable> tableRealtime = new();
 
             using (RDPContext rdp_base = new())
             {
@@ -73,7 +72,7 @@ namespace RealtimeDataPortal.Models
                                 $"User Id={server.UserName};Password={server.Password}"
                      }).ToList();
 
-                     if (tableRealtime.Count == 0) throw new NotFoundException("Страница не найдена.");
+                     if (tableRealtime.Count == 0) throw new Exception("NotFound");
             }
 
             List<string> serverList = (from server in tableRealtime

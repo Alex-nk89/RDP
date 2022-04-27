@@ -1,4 +1,4 @@
-﻿using RealtimeDataPortal.Models.Exceptions;
+﻿using RealtimeDataPortal.Models.OtherClasses;
 using System.Data.OleDb;
 
 namespace RealtimeDataPortal.Models.DBClasses
@@ -19,12 +19,12 @@ namespace RealtimeDataPortal.Models.DBClasses
             }
         }
 
-        public Object GetMnemoschemeImage(int id, User user)
+        public Object GetMnemoschemeImage(int id, CurrentUser currentUser)
         {
             CheckAccess.CheckAccess check = new CheckAccess.CheckAccess();
 
-            if (!check.GetAccess(id, user))
-                throw new ForbiddenException("У Вас нет доступа к странице.");
+            if (!check.GetAccess(id, currentUser))
+                throw new Exception("NotAccessForView");
 
             using (RDPContext rdp_base = new())
             {
@@ -36,14 +36,15 @@ namespace RealtimeDataPortal.Models.DBClasses
                      where treesMenu.Id == id
                      select new
                      {
-                         MnemoschemeId = mnemoschemeData.MnemoschemeId,
-                         MnemoschemeContain = mnemoschemeData.MnemoschemeContain,
+                         mnemoschemeData.MnemoschemeId,
+                         mnemoschemeData.MnemoschemeContain,
                          MnemoschemeName = treesMenu.Name
                      })
                      .AsNoTracking()
                      .ToList();
 
-                if (mnemoscheme.Count == 0) throw new NotFoundException("Страница не найдена.");
+                if (mnemoscheme.Count == 0) 
+                    throw new Exception("PageNotFound");
 
                 return mnemoscheme;
             }

@@ -31,23 +31,37 @@ namespace RealtimeDataPortal.Models
 
         public void EditParameterType(ParameterType parameterType)
         {
-            using (RDPContext rdp_base = new())
+            try
             {
-                rdp_base.ParameterType.Update(parameterType);
-                rdp_base.SaveChanges();
+                using (RDPContext rdp_base = new())
+                {
+                    rdp_base.ParameterType.Update(parameterType);
+                    rdp_base.SaveChanges();
+                }
+            }
+            catch
+            {
+                throw new Exception("NotSaved");
             }
         }
 
         public void DeleteParameterTypes(int[] ids)
         {
-            using RDPContext rdp_base = new();
+            try
+            {
+                using RDPContext rdp_base = new();
 
-            var deletingParameterTypes = rdp_base.ParameterType
-                .Where(parameter => ids.Contains(parameter.ParameterTypeId))
-                .AsNoTracking();
+                var deletingParameterTypes = rdp_base.ParameterType
+                    .Where(parameter => ids.Contains(parameter.ParameterTypeId))
+                    .AsNoTracking();
 
-            rdp_base.ParameterType.RemoveRange(deletingParameterTypes);
-            rdp_base.SaveChanges();
+                rdp_base.ParameterType.RemoveRange(deletingParameterTypes);
+                rdp_base.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception("NotDeleted");
+            }
         }
     }
 }
