@@ -1,14 +1,11 @@
 
-using Microsoft.AspNetCore.Authentication.Negotiate;
-using Microsoft.AspNetCore.Server.IISIntegration;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddAuthentication(IISDefaults.AuthenticationScheme);
+//builder.Services.AddAuthentication(IISDefaults.AuthenticationScheme);
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 
@@ -25,9 +22,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseSession();
+app.UseAuthorization();
 
 app.UseRouting();
-
 
 app.MapControllerRoute(
     name: "default",

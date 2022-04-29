@@ -1,7 +1,7 @@
 import {
     useState, useForm, useSelector, useNotification, useRequest,
     ActionIcon, Button, Loader, Popover, TextInput, Tooltip,
-    fabric, attributesInputs, 
+    fabric, attributesInputs,
     BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsGripHorizontal, IoSend,
     BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle, BsFillPlusSquareFill, BsFillSaveFill,
     BsListOl
@@ -155,9 +155,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     const selectImage = async (event) => {
         // Для преобразования SVG-изображения используется встроенные в библиотеку fabricjs средства,
         // для остальных изображений - библиотека imagetracer
-
         const urlToUserImage = window.URL.createObjectURL(event.target?.files[0]);
-
         const typeImage = event.target.files[0]?.type;
 
         const addObjectsFromImage = (objects) => {

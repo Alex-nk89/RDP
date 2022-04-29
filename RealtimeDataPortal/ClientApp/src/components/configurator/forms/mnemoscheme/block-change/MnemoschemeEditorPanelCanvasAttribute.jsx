@@ -33,3 +33,22 @@ export const MnemoschemeEditorPanelCanvasAttribute = ({ mnemoschemeActiveObjectT
         </>
     );
 }
+
+
+//let reader = new FileReader();
+//        //reader.readAsDataURL(event.target?.files[0]);
+//        //reader.onload = function () {
+//            const img = document.createElement('img');
+//            img.src = urlToUserImage;
+//            mnemoscheme.add(new fabric.Image(img, { width: 600, height: 600 }));
+//        //}
+
+
+//let reader = new FileReader();
+//reader.readAsDataURL(event.target?.files[0]);
+//reader.onload = function() {
+//    const img = document.createElement('img');
+//    img.src = reader.result;
+//    document.querySelector('.info-block__mnemoscheme-editor__create-block').append(img);
+//    //mnemoscheme.add(new fabric.Image(URL.createObjectURL(reader.result)));
+//}

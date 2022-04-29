@@ -204,5 +204,3 @@ export const EditMnemoscheme = ({ action, form, submitForm, addAccessIcon, multi
         </>
     );
 };
-
-//<MnemoschemeEditorPanel mnemoscheme={mnemoscheme} saveMnemoscheme={saveMnemoscheme} />

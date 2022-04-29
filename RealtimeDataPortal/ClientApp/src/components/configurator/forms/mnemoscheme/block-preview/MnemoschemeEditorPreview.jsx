@@ -12,28 +12,30 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme, mnemoscheme }) => {
 
     useEffect(() => {
         const mnemoscheme = new fabric.Canvas('mnemoscheme', { width, height });
-        const zoom = (canvasContainerRef?.current?.clientWidth - 65) / 1920;
+        const zoom = (canvasContainerRef?.current?.clientWidth - 55) / 1920;
         mnemoscheme.setZoom(zoom);
 
         // Ограничительные линии для холста
-        mnemoscheme.add(new fabric.Line([-1, -1, -1, mnemoscheme.getHeight() + 1], { stroke: '#787878' })
-            .set({ selectable: false, hoverCursor: 'unset' }));
-        mnemoscheme.add(new fabric.Line([-1, -1, mnemoscheme.getWidth() + 1, -1], { stroke: '#787878' })
-            .set({ selectable: false, hoverCursor: 'unset' }));
-        mnemoscheme.add(new fabric.Line([mnemoscheme.getWidth() + 1, -1, mnemoscheme.getWidth() + 1, mnemoscheme.getHeight() + 1], { stroke: '#787878' })
-            .set({ selectable: false, hoverCursor: 'unset' }));
-        mnemoscheme.add(new fabric.Line([-1, mnemoscheme.getHeight() + 1, mnemoscheme.getWidth() + 1, mnemoscheme.getHeight() + 1], { stroke: '#787878' })
-            .set({ selectable: false, hoverCursor: 'unset' }));
+        if (componentInfo.mnemoscheme.mnemoschemeContain.length === 0) {
+            mnemoscheme.add(new fabric.Line([-2, -2, -2, mnemoscheme.getHeight() + 2], { stroke: '#787878' })
+                .set({ selectable: false, hoverCursor: 'unset' }));
+            mnemoscheme.add(new fabric.Line([-2, -2, mnemoscheme.getWidth() + 2, -2], { stroke: '#787878' })
+                .set({ selectable: false, hoverCursor: 'unset' }));
+            mnemoscheme.add(new fabric.Line([mnemoscheme.getWidth() + 2, -2, mnemoscheme.getWidth() + 2, mnemoscheme.getHeight() + 2], { stroke: '#787878' })
+                .set({ selectable: false, hoverCursor: 'unset' }));
+            mnemoscheme.add(new fabric.Line([-2, mnemoscheme.getHeight() + 2, mnemoscheme.getWidth() + 2, mnemoscheme.getHeight() + 2], { stroke: '#787878' })
+                .set({ selectable: false, hoverCursor: 'unset' }));
+        }
 
         if (componentInfo.mnemoscheme.mnemoschemeContain.length > 0) {
             const loadedMnemoscheme = new fabric.Canvas().loadFromJSON(componentInfo.mnemoscheme.mnemoschemeContain);
+            console.log(loadedMnemoscheme._objects[0])
 
             mnemoscheme.setBackgroundColor(loadedMnemoscheme.backgroundColor, mnemoscheme.renderAll.bind(mnemoscheme));
 
             const _objects = loadedMnemoscheme._objects.map(object => object);
 
             _objects.forEach(object => {
-
                 if (object.type === 'text') {
                     object.toObject = (function (toObject) {
                         return function () {

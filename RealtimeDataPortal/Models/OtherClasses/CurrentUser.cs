@@ -1,21 +1,26 @@
-﻿using RealtimeDataPortal.Exceptions;
+﻿using Microsoft.AspNetCore.Authentication;
+using RealtimeDataPortal.Exceptions;
 using System.DirectoryServices.AccountManagement;
+using System.Security.Claims;
 
 namespace RealtimeDataPortal.Models.OtherClasses
 {
     public class CurrentUser
     {
+        public string UserSid { get; set; } = string.Empty;
         public string? Name {  get; set; }
         public ICollection<string> ADGroups { get; set; } = new List<string>();
         public bool IsFullView { get; set; } = false;
         public bool IsConfigurator { get; set; } = false;
         public bool IsAdministrator { get; set; } = false;
         public bool IsConfiguratorRead { get; set; } = false;
+        public string Role { get; set; } = "administrator";
         private static HttpContext _httpContext => new HttpContextAccessor().HttpContext;
 
         public void GetCurrentUser ()
         {
             CurrentUser currentUser = new();
+
             //Name = _httpContext.User?.Identity?.Name;
             Name = "NagaytsevAE";
 
@@ -29,6 +34,7 @@ namespace RealtimeDataPortal.Models.OtherClasses
             PrincipalSearchResult<Principal> userGroups = user.GetAuthorizationGroups();
 
             currentUser.Name = user.Name;
+            currentUser.UserSid = user.Sid.ToString();
 
             if (userGroups.Count() > 0)
             {

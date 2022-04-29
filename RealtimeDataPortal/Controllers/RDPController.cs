@@ -1,6 +1,6 @@
 ﻿global using Microsoft.EntityFrameworkCore;
 global using System.Text.Json;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealtimeDataPortal.Exceptions;
 using RealtimeDataPortal.Models;
