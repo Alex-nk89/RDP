@@ -31,7 +31,8 @@ import AddChangeTableRT from './forms/table-rt/AddChangeTableRT';
 import InstructionForConfigurator from './instruction-for-configurator/InstructionForConfigurator';
 import Section from './forms/table-rt/Section';
 import SectionProducts from './forms/table-rt/SectionProducts';
-import { EditMnemoscheme } from './forms/mnemoscheme/EditMnemoscheme'
+import { EditMnemoscheme } from './forms/mnemoscheme/EditMnemoscheme';
+import { EditCustomTable } from './forms/custom-table/EditCustomTable';
 
 const attributesInputs = {
     autoComplete: 'off'
@@ -47,7 +48,7 @@ export {
     useSelector, useDispatch, createSelector,
     AddChangeFolder, AppPreloader, ErrorsPage, AddChangeExternalPage, Tag, AddChangeTag, DeleteElements, Product, AddChangeProduct,
     Parameter, ParameterTag, AddChangeElement, AddChangeGraphic, AddChangeTableRT, InstructionForConfigurator, 
-    Section, SectionProducts, EditMnemoscheme,
+    Section, SectionProducts, EditMnemoscheme, EditCustomTable,
     attributesInputs, settingsAddRemoveIcon,
     TextInput, Space, Button, useForm, MultiSelect, ActionIcon, Tabs, Select, Loader, Checkbox, useModals, Text, Group,
     InputWrapper, Divider, NumberInput,

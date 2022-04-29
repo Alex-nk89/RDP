@@ -6,7 +6,7 @@ import {
 import './mnemoscheme.sass';
 
 export const EditMnemoscheme = ({ action, form, submitForm, addAccessIcon, multiSelect }) => {
-    const title = action === 'create' ? 'Создание мнемосхемы' : 'Редактирование мнемосхемы';
+    const title = action === 'add' ? 'Создание мнемосхемы' : 'Редактирование мнемосхемы';
     let copiedObject = null;
 
     const [activeStep, setActiveStep] = useState(0);

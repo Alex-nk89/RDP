@@ -1,7 +1,7 @@
 import {
     useState, useEffect, useRef, useForm, useRequest, useNotification,
     useDispatch, useSelector,
-    AddChangeGraphic, AddChangeFolder, AddChangeExternalPage, EditMnemoscheme,
+    AddChangeGraphic, AddChangeFolder, AddChangeExternalPage, EditMnemoscheme, EditCustomTable,
     Space, ActionIcon, MultiSelect,
     BsPlus
 } from '../../index';
@@ -144,18 +144,15 @@ const AddChangeElement = () => {
         action, form, nameRef: nameRef, submitForm, addAccessIcon, multiSelect, loadingForButton
     };
 
-    switch (type) {
-        case 'folder':
-            return <AddChangeFolder {...attributes} />;
-        case 'graphic':
-            return <AddChangeGraphic {...attributes} />;
-        case 'externalPage':
-            return <AddChangeExternalPage {...attributes} />;
-        case 'mnemoscheme':
-            return <EditMnemoscheme {...attributes} />;
-        default:
-            return null;
-    }
+    const seletedForm = new Map([
+        ['folder', <AddChangeFolder {...attributes} />],
+        ['graphic', <AddChangeGraphic {...attributes} />],
+        ['externalPage', <AddChangeExternalPage {...attributes} />],
+        ['mnemoscheme', <EditMnemoscheme {...attributes} />],
+        ['customtable', <EditCustomTable {...attributes} />],
+    ]);
+
+    return seletedForm.get(type) || null;
 }
 
 export default AddChangeElement;

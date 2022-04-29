@@ -17,7 +17,7 @@ namespace RealtimeDataPortal.Models.OtherClasses
         public string Role { get; set; } = "administrator";
         private static HttpContext _httpContext => new HttpContextAccessor().HttpContext;
 
-        public void GetCurrentUser ()
+        public CurrentUser GetCurrentUser ()
         {
             CurrentUser currentUser = new();
 
@@ -52,6 +52,8 @@ namespace RealtimeDataPortal.Models.OtherClasses
             currentUser.IsConfiguratorRead = currentUser.ADGroups.Contains(accessList.First(a => a.Function == "customizerRead").ADGroup);
 
             _httpContext.Session.SetString("currentUser", JsonSerializer.Serialize(currentUser));
+
+            return currentUser;
         }
     }
 }

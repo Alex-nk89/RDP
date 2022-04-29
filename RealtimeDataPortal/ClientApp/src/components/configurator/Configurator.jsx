@@ -44,8 +44,9 @@ const Configurator = () => {
                 return <InstructionForConfigurator />;
             }
 
-            if (['add-folder', 'change-folder', 'add-externalPage', 'change-externalPage', 
-            'add-graphic', 'change-graphic', 'add-mnemoscheme', 'change-mnemoscheme'].includes(operation)) {
+            if (['add-folder', 'change-folder', 'add-externalPage', 'change-externalPage',
+                'add-graphic', 'change-graphic', 'add-mnemoscheme', 'change-mnemoscheme',
+                'add-customtable', 'change-customtable'].includes(operation)) {
                 return <AddChangeElement />;
             }
 

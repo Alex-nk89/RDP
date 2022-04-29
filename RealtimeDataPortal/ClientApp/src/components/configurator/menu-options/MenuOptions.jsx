@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    BsSliders, BsFillPencilFill, BsFillTrashFill, BsGridFill,
+    BsSliders, BsFillPencilFill, BsFillTrashFill, BsGridFill, BsGrid1X2Fill,
     BsDiagram3Fill, BsFillBarChartFill, BsFolderFill, BsFileEarmarkRichtextFill
 } from 'react-icons/bs';
 import { Menu, Divider, Text } from "@mantine/core";
@@ -60,7 +60,7 @@ const MenuOptions = ({ type, id }) => {
 
     const createOptions = user?.isConfigurator
         ? [
-            <Menu.Label key={6}>Создать:</Menu.Label>,
+            <Menu.Label key={7}>Создать:</Menu.Label>,
             <Menu.Item key={1} icon={<BsFolderFill />} component={Link} to={`/Configurator/add-folder/${id}`}>
                 Новая папка
             </Menu.Item>,
@@ -75,21 +75,24 @@ const MenuOptions = ({ type, id }) => {
             </Menu.Item>,
             <Menu.Item key={5} icon={<BsDiagram3Fill />} component={Link} to={`/Configurator/add-mnemoscheme/${id}`}>
                 Мнемосхема
+            </Menu.Item>,
+            <Menu.Item key={6} icon={<BsGrid1X2Fill />} component={Link} to={`/Configurator/add-customtable/${id}`}>
+                Настраиваемая таблица
             </Menu.Item>
         ] : null;
 
     const changeOptions = user?.isConfigurator
         ? [
-            <Menu.Item key={7} icon={<BsFillPencilFill />} component={Link} to={`/Configurator/change-${type}/${id}`}>
+            <Menu.Item key={8} icon={<BsFillPencilFill />} component={Link} to={`/Configurator/change-${type}/${id}`}>
                 Редактировать
             </Menu.Item>,
-            <Menu.Item key={8} icon={<BsFillTrashFill />} className='remove-item' onClick={openModal}>
+            <Menu.Item key={9} icon={<BsFillTrashFill />} className='remove-item' onClick={openModal}>
                 Удалить
             </Menu.Item>
         ]
         :
         [
-            <Menu.Item key={7} icon={<BsFillPencilFill />} component={Link} to={`/Configurator/change-${type}/${id}`}>
+            <Menu.Item key={10} icon={<BsFillPencilFill />} component={Link} to={`/Configurator/change-${type}/${id}`}>
                 Редактировать
             </Menu.Item>
         ];
