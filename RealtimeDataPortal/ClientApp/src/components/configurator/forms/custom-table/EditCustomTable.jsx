@@ -6,7 +6,7 @@ import {
 
 import './customtable.sass';
 
-export const EditCustomTable = ({ action, form, addAccessIcon, multiSelect }) => {
+export const EditCustomTable = ({ action, form, submitForm, addAccessIcon, multiSelect }) => {
     const title = action === 'add' ? 'Создание таблицы' : 'Редактирование таблицы';
 
     const [activeStep, setActiveStep] = useState(0);
@@ -30,7 +30,10 @@ export const EditCustomTable = ({ action, form, addAccessIcon, multiSelect }) =>
                 </Stepper.Step>
 
                 <Stepper.Step label='Таблица' description='Конструктор таблицы'>
-                    <EditorCustomTable />
+                    <EditorCustomTable
+                        form={form} 
+                        submitForm={submitForm}
+                    />
                 </Stepper.Step>
             </Stepper>
         </>

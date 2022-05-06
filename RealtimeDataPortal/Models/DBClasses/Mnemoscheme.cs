@@ -142,5 +142,18 @@ namespace RealtimeDataPortal.Models.DBClasses
 
             return listTagsWithValues;
         }
+
+        public Mnemoscheme GetMnemoschemeInfo (int componentId)
+        {
+            using RDPContext rdp_base = new();
+
+            Mnemoscheme mnemoschemeInfo =
+                (from mnemoscheme in rdp_base.Mnemoscheme
+                 where mnemoscheme.MnemoschemeId == componentId
+                 select mnemoscheme)
+                 .First();
+
+            return mnemoschemeInfo;
+        }
     }
 }

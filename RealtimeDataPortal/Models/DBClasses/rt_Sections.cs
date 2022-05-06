@@ -16,9 +16,9 @@ namespace RealtimeDataPortal.Models
             // секциям)
             //
 
-            using(RDPContext rdp_base = new())
+            using (RDPContext rdp_base = new())
             {
-                List <rt_Sections> initialSections = rdp_base.rt_Sections
+                List<rt_Sections> initialSections = rdp_base.rt_Sections
                     .Where(section => section.TableId == tableId)
                     .AsNoTracking()
                     .ToList();
@@ -37,13 +37,13 @@ namespace RealtimeDataPortal.Models
                         .Contains(section.SectionId))
                     .ToList();
 
-                foreach(var section in sections)
+                foreach (var section in sections)
                 {
                     var sectionProduct = sectionProducts.Where(product => product.SectionId == section.SectionId).ToList();
 
                     section.TableId = tableId;
 
-                    if(!initialSections.Select(section => section.SectionId).Contains(section.SectionId))
+                    if (!initialSections.Select(section => section.SectionId).Contains(section.SectionId))
                     {
                         section.SectionId = 0;
                     }
@@ -54,7 +54,7 @@ namespace RealtimeDataPortal.Models
                     new rt_SectionProduct().AddChangeSectionProducts(section.SectionId, sectionProduct, initialSectionProducts);
                 }
 
-                foreach(var section in deletingSections)
+                foreach (var section in deletingSections)
                 {
                     new rt_SectionProduct().AddChangeSectionProducts(section.SectionId, new(), initialSectionProducts);
 
@@ -62,6 +62,19 @@ namespace RealtimeDataPortal.Models
                     rdp_base.SaveChanges();
                 }
             }
+        }
+
+        public List<rt_Sections> GetSectionsInfo(int tableId)
+        {
+            using RDPContext rdp_base = new();
+
+            List<rt_Sections> sectionInfo = 
+                (from section in rdp_base.rt_Sections
+                 where section.TableId == tableId
+                 select section)
+                 .ToList();
+
+            return sectionInfo;
         }
     }
 }

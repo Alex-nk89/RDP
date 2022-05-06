@@ -14,8 +14,7 @@ namespace RealtimeDataPortal.Models
         public List<rt_SectionProduct> SectionProducts { get; set; } = new();
         public Mnemoscheme Mnemoscheme { get; set; } = new();
         public int maxSectionId { get; set; }
-
-
+        public List<CustomTable> CustomTable { get; set; } = new();
         public string? ADGroupToAccess { get; set; }
         public string[]? ADGroups { get; set; }
         public string[]? ADGroupsOld { get; set; }
@@ -35,105 +34,42 @@ namespace RealtimeDataPortal.Models
 
         public Configurator GetComponentInformation(int id, string operation)
         {
-            using (RDPContext rdp_base = new ())
+            using (RDPContext rdp_base = new())
             {
-                Configurator componentInfo = new();
-                int? idChildren = operation.Contains("folder") ? 0 : null;
-
+                // Если создается новый компонент информацию о компоненте не получаем
                 if (id == 0)
-                {
-                    return componentInfo;
-                }
+                    return new Configurator();
 
-                componentInfo.TreesMenu = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ??
-                    throw new Exception();
+                operation = operation.Split('-')[1];
+                int? idChildren = operation == "folder" ? 0 : null;
 
-                string[] adGroups = rdp_base.AccessToComponent
-                    .Where(atc => atc.IdComponent == id && atc.IdChildren == idChildren)
-                    .Select(tm => tm.ADGroupToAccess).ToArray();
+                Configurator componentInfo = new()
+                {
+                    TreesMenu = new TreesMenu().GetComponentInfo(id),
+                    ADGroups = new AccessToComponent().GetComponentGroups(id, idChildren)
+                };
 
-                componentInfo.ADGroups = adGroups;
+                if (operation == "externalPage")
+                    componentInfo.ExternalPages = new ExternalPages().GetExternalPageInfo(componentInfo.TreesMenu.ComponentId);
 
-                if (operation.Contains("externalPage"))
+                else if (operation == "graphic")
+                    componentInfo.Graphics = new Graphics().GetGraphicsInfo(componentInfo.TreesMenu.ComponentId);
+
+                else if (operation == "table")
                 {
-                    componentInfo.ExternalPages = rdp_base.ExternalPages
-                        .Where(ep => ep.Id == componentInfo.TreesMenu.ComponentId).FirstOrDefault() ?? new();
-                }
-                else if (operation == "change-graphic")
-                {
-                    componentInfo.Graphics = (from treesMenu in rdp_base.TreesMenu
-                                              join product in rdp_base.Products
-                                                on treesMenu.ComponentId equals product.ProductId into products
-                                              from product in products.DefaultIfEmpty()
-                                              join parameter in rdp_base.Parameter
-                                                on product.ProductId equals parameter.ProductId into parameters
-                                              from parameter in parameters.DefaultIfEmpty()
-                                              where treesMenu.ComponentId == componentInfo.TreesMenu.ComponentId
-                                              select new Graphics()
-                                              {
-                                                  ComponentId = treesMenu.ComponentId,
-                                                  ProductId = product.ProductId,
-                                                  Name = product.ProductName,
-                                                  Position = parameter.Position
-                                              }).First() ?? new();
-                }
-                else if (operation.Contains("table"))
-                {
-                    componentInfo.Table = rdp_base.rt_Tables.Where(t => t.TableId == componentInfo.TreesMenu.ComponentId).FirstOrDefault() ?? new();
-                    componentInfo.TableSections = rdp_base.rt_Sections.Where(s => s.TableId == componentInfo.Table.TableId).ToList();
+                    componentInfo.Table = new rt_Tables().GetTableInfo(componentInfo.TreesMenu.ComponentId);
+                    componentInfo.TableSections = new rt_Sections().GetSectionsInfo(componentInfo.Table.TableId);
 
                     int[] sectionsIds = componentInfo.TableSections.Select(s => s.SectionId).Distinct().ToArray();
 
-                    // Так как есть необходимость выводить в названии продукта наименование позиции из первого параметра
-                    // выполняется дополнительная операция группировку по продукту и далее из каждой группы берет 
-                    // первая запись
-                    var sectionProducts = (from sectionProduct in rdp_base.rt_SectionProduct
-                                           join product in rdp_base.Products
-                                              on sectionProduct.ProductId equals product.ProductId into products
-                                           from product in products.DefaultIfEmpty()
-                                           join parameter in rdp_base.Parameter
-                                              on product.ProductId equals parameter.ProductId into parameters
-                                           from parameter in parameters.DefaultIfEmpty()
-                                           where sectionsIds.Contains(sectionProduct.SectionId)
-                                           select new rt_SectionProduct()
-                                           {
-                                               Id = sectionProduct.Id,
-                                               SectionId = sectionProduct.SectionId,
-                                               ProductId = sectionProduct.ProductId,
-                                               ProductName = product.ProductName,
-                                               Position = parameter.Position
-                                           })
-                                           .ToList()
-                                           .GroupBy(p => p.ProductId);
-
-                    foreach (var sectionProduct in sectionProducts)
-                    {
-                        componentInfo.SectionProducts.Add(sectionProduct.First());
-                    }
-
+                    componentInfo.SectionProducts = new rt_SectionProduct().GetSectionProductsInfo(sectionsIds);
                     componentInfo.maxSectionId = rdp_base.rt_Sections.Select(s => (int?)s.SectionId).Max() ?? 0;
                 }
-                else if (operation.Contains("mnemoscheme"))
-                {
-                    string mnemoschemeContain = string.Empty;
+                else if (operation == "mnemoscheme")
+                    componentInfo.Mnemoscheme = new Mnemoscheme().GetMnemoschemeInfo(componentInfo.TreesMenu.ComponentId);
 
-                    var mnemoschemeInfo = rdp_base.Mnemoscheme
-                        .Where(mnemoscheme => mnemoscheme.MnemoschemeId == componentInfo.TreesMenu.ComponentId)
-                        .ToList();
-
-                    foreach (var mnemoscheme in mnemoschemeInfo)
-                    {
-                        mnemoschemeContain += mnemoscheme.MnemoschemeContain;
-                    }
-
-                    componentInfo.Mnemoscheme = mnemoschemeInfo.Count() > 0
-                        ? new Mnemoscheme()
-                        {
-                            MnemoschemeId = mnemoschemeInfo.First().MnemoschemeId,
-                            MnemoschemeContain = mnemoschemeContain
-                        }
-                        : new();
-                }
+                else if (operation == "customtable")
+                    componentInfo.CustomTable = new CustomTable().GetCustomTables(componentInfo.TreesMenu.ComponentId);
 
                 return componentInfo;
             }
@@ -173,7 +109,8 @@ namespace RealtimeDataPortal.Models
                         .Where(tm => tm.ParentId == id)
                         .Count();
 
-                    if (countChildsElement > 0) {
+                    if (countChildsElement > 0)
+                    {
                         throw new Exception("NotDeletedNoEmptyFolder");
                     }
                 }
@@ -208,7 +145,7 @@ namespace RealtimeDataPortal.Models
                         .Where(mnemoscheme => mnemoscheme.MnemoschemeId == removedElement.ComponentId)
                         .ToList();
 
-                    if(mnemoscheme.Count() != 0)
+                    if (mnemoscheme.Count() != 0)
                     {
                         rdp_base.Mnemoscheme.RemoveRange(mnemoscheme);
                     }

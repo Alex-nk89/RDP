@@ -18,10 +18,10 @@ namespace RealtimeDataPortal.Models
             if (!check.GetAccess(id, currentUser))
                 throw new Exception("NotAccessForView");
 
-            using (RDPContext rdp_base = new ())
+            using (RDPContext rdp_base = new())
             {
                 List<Attributes> attributes = (from product in rdp_base.Products
-                                               join parameter in rdp_base.Parameter 
+                                               join parameter in rdp_base.Parameter
                                                     on product.ProductId equals parameter.ProductId into parameters
                                                from parameter in parameters.DefaultIfEmpty()
                                                join parameterType in rdp_base.ParameterType
@@ -65,6 +65,31 @@ namespace RealtimeDataPortal.Models
 
                 return attributes;
             }
+        }
+
+        public Graphics GetGraphicsInfo(int componentId)
+        {
+            using RDPContext rdp_base = new();
+
+            Graphics graphicsInfo =
+                (from treesMenu in rdp_base.TreesMenu
+                 join product in rdp_base.Products
+                    on treesMenu.ComponentId equals product.ProductId into products
+                 from product in products.DefaultIfEmpty()
+                 join parameter in rdp_base.Parameter
+                    on product.ProductId equals parameter.ProductId into parameters
+                 from parameter in parameters.DefaultIfEmpty()
+                 where treesMenu.ComponentId == componentId
+                 select new Graphics()
+                 {
+                     ComponentId = treesMenu.ComponentId,
+                     ProductId = product.ProductId,
+                     Name = product.ProductName,
+                     Position = parameter.Position
+                 })
+                 .First();
+
+            return graphicsInfo;
         }
     }
 }

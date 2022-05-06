@@ -59,5 +59,44 @@ namespace RealtimeDataPortal.Models
                 rdp_base.SaveChanges();
             }
         }
+
+        public List<rt_SectionProduct> GetSectionProductsInfo(int[] sectionsIds)
+        {
+            using RDPContext rdp_base = new();
+
+            // Так как есть необходимость выводить в названии продукта наименование позиции из первого параметра
+            // выполняется дополнительная операция группировку по продукту и далее из каждой группы берет 
+            // первая запись
+            List<rt_SectionProduct> sectionProducts =
+                (from sectionProduct in rdp_base.rt_SectionProduct
+                 join product in rdp_base.Products
+                    on sectionProduct.ProductId equals product.ProductId into products
+                 from product in products.DefaultIfEmpty()
+                 join parameter in rdp_base.Parameter
+                    on product.ProductId equals parameter.ProductId into parameters
+                 from parameter in parameters.DefaultIfEmpty()
+                 where sectionsIds.Contains(sectionProduct.SectionId)
+                 select new rt_SectionProduct()
+                 {
+                     Id = sectionProduct.Id,
+                     SectionId = sectionProduct.SectionId,
+                     ProductId = sectionProduct.ProductId,
+                     ProductName = product.ProductName,
+                     Position = parameter.Position
+                 })
+                 .ToList()
+                 .GroupBy(p => p.ProductId)
+                 .Select(sectionProduct => new rt_SectionProduct()
+                 {
+                     Id = sectionProduct.First().Id,
+                     SectionId = sectionProduct.First().SectionId,
+                     ProductId = sectionProduct.First().ProductId,
+                     ProductName = sectionProduct.First().ProductName,
+                     Position = sectionProduct.First().Position
+                 })
+                 .ToList();
+
+            return sectionProducts;
+        }
     }
 }

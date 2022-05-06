@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { BsFileEarmarkRichtextFill, BsGridFill, BsFillBarChartFill, BsDiagram3Fill } from 'react-icons/bs';
+import { BsFileEarmarkRichtextFill, BsGridFill, BsFillBarChartFill, BsDiagram3Fill, BsGrid1X2Fill } from 'react-icons/bs';
 import { Tooltip } from '@mantine/core';
 
 import MenuOptions from '../../../../configurator/menu-options/MenuOptions';
@@ -51,6 +51,15 @@ const Page = ({ id, name, componentId, type }) => {
                 <Tooltip openDelay={delay} label={name} placement='start'>
                     <NavLink to={`/mnemoscheme/${id}`}>
                         <BsDiagram3Fill size={14} />
+                        <span>{name}</span>
+                    </NavLink>
+                </Tooltip>
+            break;
+        case 'customtable':
+            link =
+                <Tooltip openDelay={delay} label={name} placement='start'>
+                    <NavLink to={`/custom-table/${id}`}>
+                        <BsGrid1X2Fill size={14} />
                         <span>{name}</span>
                     </NavLink>
                 </Tooltip>

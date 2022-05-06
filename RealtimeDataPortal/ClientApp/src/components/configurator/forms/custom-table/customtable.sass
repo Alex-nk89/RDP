@@ -1,9 +1,68 @@
+@import '../../../../style/_variables'
+@import '../../../../style/_mixins'
+
 .custom-table-editor
     &__count-tables
+        display: flex
+        justify-content: space-between
+        align-items: center
         padding: 2rem
-    &__new-table
+    &__new-table-form
         padding: 2rem
         &__delete-button
             position: absolute
             right: .5rem
             top: .5rem
+        &__header
+            display: flex
+            justify-content: space-between
+            align-items: center
+            &__title
+                flex-grow: .4
+            &__count-rows-columns
+                flex-grow: .25
+                padding: 2rem 1rem 0
+        &__table
+            padding: 2rem
+            overflow: auto
+            @include scrollbar
+            table
+                tr
+                    td
+                        position: relative
+                        padding: .2rem .5rem
+                        border: 1px solid $table-border-color
+                        color: $table-text-color
+                        text-align: center
+                        cursor: pointer
+                        &:focus
+                            background: $table-border-color
+                        & > div
+                            display: flex
+                            justify-content: center
+                            align-items: center
+                            position: absolute
+            &__delete-row
+                height: 100%
+                right: -1.7rem
+                top: 0rem
+            &__delete-column
+                width: 100%
+                top: 2.2rem
+                left: 0rem
+            &__number-column
+                width: 100%
+                top: -1.7rem
+                left: 0
+            &__number-row
+                height: 100%
+                top: 0
+                left: -2.2rem
+        &__table-settings
+            max-height: 0px
+            margin-top: 2rem
+            padding: 0 2rem
+            overflow: hidden
+            transition: all .5s ease-out
+                
+            

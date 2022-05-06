@@ -10,6 +10,7 @@ import { updateNavbar } from '../../../../reducers/navbarSlice';
 
 const AddChangeElement = () => {
     const { componentInfo, operation } = useSelector(state => state.configurator);
+    const { tables } = useSelector(state => state.customTable);
     const { treesMenu, externalPages, graphics, mnemoscheme, adGroups } = { ...componentInfo };
 
     const [accesses, setAccesses] = useState([]);
@@ -95,6 +96,11 @@ const AddChangeElement = () => {
                 MnemoschemeId: action === 'add' ? 0 : mnemoscheme.mnemoschemeId,
                 MnemoschemeContain: values.mnemoschemeContain
             },
+            CustomTable: tables.map(table => ({
+                CustomTableId: table.customTableId,
+                ComponentId: table.componentId,
+                CustomTableName: table.name,
+            })),
             ADGroups: accesses,
             AdGroupsOld: oldAccesses
         };

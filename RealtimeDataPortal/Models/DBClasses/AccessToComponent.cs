@@ -16,15 +16,16 @@
         // элементов с таким же доступом
         public void AddAccessToComponent(int idComponent, int? idChildren, string adGroupToAccess)
         {
-            using(RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new RDPContext())
             {
                 bool isAlreadyExist = rdp_base.AccessToComponent
                     .Where(atc => atc.IdComponent == idComponent && atc.IdChildren == idChildren && atc.ADGroupToAccess == adGroupToAccess)
                     .Count() == 0 ? true : false;
 
-                if(isAlreadyExist)
+                if (isAlreadyExist)
                 {
-                    AccessToComponent accessToComponent = new AccessToComponent() { 
+                    AccessToComponent accessToComponent = new AccessToComponent()
+                    {
                         IdComponent = idComponent,
                         IdChildren = idChildren,
                         ADGroupToAccess = adGroupToAccess
@@ -35,39 +36,41 @@
                     idChildren = idComponent;
                     idComponent = rdp_base.TreesMenu.Where(tm => tm.Id == idComponent).Select(tm => tm.ParentId).First();
 
-                    if(idComponent != 0)
+                    if (idComponent != 0)
                         AddAccessToComponent(idComponent, idChildren, adGroupToAccess);
                 }
 
                 rdp_base.SaveChanges();
-            } 
+            }
         }
 
         public void DeleteAccessToComponent(int idComponent, int? idChildren, string adGroupToAccess)
         {
-            using(RDPContext rdp_base = new RDPContext())
+            using (RDPContext rdp_base = new RDPContext())
             {
                 AccessToComponent accessToComponent = rdp_base.AccessToComponent
-                    .Where(atc => atc.IdComponent == idComponent 
-                        && atc.IdChildren == idChildren 
+                    .Where(atc => atc.IdComponent == idComponent
+                        && atc.IdChildren == idChildren
                         && atc.ADGroupToAccess == adGroupToAccess)
                     .FirstOrDefault() ?? new();
 
-                if(accessToComponent.Id != 0)
+                if (accessToComponent.Id != 0)
                 {
                     rdp_base.AccessToComponent.Remove(accessToComponent);
                     rdp_base.SaveChanges();
 
                     int idParent = rdp_base.TreesMenu.Where(tm => tm.Id == idComponent).Select(tm => tm.ParentId).First();
-                    var childrens = (from treeMenu in rdp_base.TreesMenu
-                                         join access in rdp_base.AccessToComponent
-                                            on treeMenu.Id equals access.IdComponent into accesses
-                                         from access in accesses.DefaultIfEmpty()
-                                         where access.IdComponent == idParent
-                                            && access.ADGroupToAccess == adGroupToAccess
-                                         select
-                                            new { treeMenu.Id, treeMenu.ParentId, access.IdComponent, access.IdChildren })
-                                           .Distinct().ToList();
+
+                    var childrens =
+                        (from treeMenu in rdp_base.TreesMenu
+                         join access in rdp_base.AccessToComponent
+                            on treeMenu.Id equals access.IdComponent into accesses
+                         from access in accesses.DefaultIfEmpty()
+                         where access.IdComponent == idParent
+                            && access.ADGroupToAccess == adGroupToAccess
+                         select
+                            new { treeMenu.Id, treeMenu.ParentId, access.IdComponent, access.IdChildren })
+                                               .Distinct().ToList();
 
                     if (childrens.Count == 1)
                     {
@@ -81,15 +84,28 @@
                             .Where(atc => atc.ADGroupToAccess == adGroupToAccess)
                             .FirstOrDefault() ?? new();
 
-                        if(accessToComponent.IdChildren != 0 && accessToComponent.IdChildren != null)
+                        if (accessToComponent.IdChildren != 0 && accessToComponent.IdChildren != null)
                         {
                             rdp_base.AccessToComponent.Remove(accessToComponent);
                             rdp_base.SaveChanges();
                         }
                     }
-                    
+
                 }
             }
+        }
+
+        public string[] GetComponentGroups(int idComponent, int? idChildren)
+        {
+            using RDPContext rdp_base = new();
+
+            string[] componentGroups =
+                (from groups in rdp_base.AccessToComponent
+                 where (groups.IdComponent == idComponent && groups.IdChildren == idChildren)
+                 select groups.ADGroupToAccess)
+                 .ToArray();
+
+            return componentGroups;
         }
     }
 }

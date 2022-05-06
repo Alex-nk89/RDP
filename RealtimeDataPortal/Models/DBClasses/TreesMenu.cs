@@ -102,25 +102,6 @@ namespace RealtimeDataPortal.Models
             }
         }
 
-        //public TreesMenu GetComponentInformation(int id, string operation)
-        //{
-        //    using (RDPContext rdp_base = new RDPContext())
-        //    {
-        //        TreesMenu treesMenus = rdp_base.TreesMenu.Where(tm => tm.Id == id).FirstOrDefault() ?? new TreesMenu();
-        //
-        //        string[] adGroups = rdp_base.AccessToComponent
-        //            .Where(atc => atc.IdComponent == id && atc.IdChildren == 0)
-        //            .Select(tm => tm.ADGroupToAccess).ToArray();
-        //
-        //        treesMenus.ADGroups = adGroups;
-        //
-        //        if (operation.Contains("external-page"))
-        //            treesMenus.ExternalPages = rdp_base.ExternalPages.Where(ep => ep.Id == treesMenus.ComponentId).FirstOrDefault();
-        //
-        //        return treesMenus;
-        //    }
-        //}
-
         public int AddNewComponent(TreesMenu treesMenu)
         {
             using (RDPContext rdp_base = new RDPContext())
@@ -149,6 +130,18 @@ namespace RealtimeDataPortal.Models
 
                 rdp_base.SaveChanges();
             }
+        }
+
+        public TreesMenu GetComponentInfo(int id)
+        {
+            using RDPContext rdp_base = new();
+
+            TreesMenu componentInfo = 
+                (from treesMenu in rdp_base.TreesMenu
+                 where treesMenu.Id == id
+                 select treesMenu)
+                 .First();
+            return componentInfo;
         }
     }
 }

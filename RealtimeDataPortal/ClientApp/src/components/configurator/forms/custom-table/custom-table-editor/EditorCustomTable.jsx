@@ -1,57 +1,88 @@
 import {
-    useState
-    , ActionIcon, Group, Text
+    useEffect, useMemo
+    , useSelector, useDispatch
+    , ActionIcon, Button, Group, Text
     , BsDash, BsPlus
     , NewCustomTable
 } from '..';
 
-export const EditorCustomTable = () => {
-    const table = {
-        id: 0
-    };
+import { addTable, removeTable, getFocusedElement, resetFocusedElemet } from '../../../../../reducers/customTableSlice';
 
-    const [tables, setTables] = useState([table]);
+export const EditorCustomTable = ({ submitForm, form }) => {
+    const tables = useSelector(state => state.customTable.tables);
+    const dispatch = useDispatch();
 
-    const addTable = () => {
+    const addNewTable = () => {
         if (tables.length < 5) {
-            setTables([...tables, table]);
+            dispatch(addTable());
         }
     };
 
-    const removeTable = (index) => {
+    const removeOneTable = (index) => {
         if (tables.length > 1) {
-            const indexRemovableTable = index
+            const indexRemovableTable = !isNaN(index)
                 ? index
                 : tables.length - 1;
 
-            tables.splice(indexRemovableTable, 1)
-            setTables([...tables]);
+            dispatch(removeTable(indexRemovableTable));
         }
     };
+
+    const focusOnCell = (event) => {
+        const dataset = event.target.dataset
+        if (dataset?.table) {
+            dispatch(getFocusedElement({ indexTable: dataset.table, indexRow: dataset.row, indexCell: dataset.column }));
+        }
+        else {
+            if (!document.activeElement.getAttribute('data-settings')) {
+                dispatch(resetFocusedElemet());
+            }
+        }
+    };
+
+    const saveCustomTable = () => {
+        submitForm({ ...form.values })
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', focusOnCell);
+
+        return () => document.removeEventListener('click', focusOnCell);
+        //eslint-disable-next-line
+    }, []);
+
+    const countTables = useMemo(() => {
+        return (
+            <Group>
+                <Text color='gray' size='sm'>Количество таблиц на странице:  </Text>
+
+                <ActionIcon color='red' variant='light' onClick={removeOneTable}>
+                    <BsDash />
+                </ActionIcon>
+
+                <Text color='gray' size='sm'> {tables.length} </Text>
+
+                <ActionIcon color='blue' variant='light' onClick={addNewTable}>
+                    <BsPlus />
+                </ActionIcon>
+            </Group>
+        );
+        //eslint-disable-next-line
+    }, [tables.length]);
 
     return (
         <>
             <div className='custom-table-editor'>
                 <div className='custom-table-editor__count-tables info-block'>
-                    <Group>
-                        <Text color='gray' size='sm'>Количество таблиц на странице:  </Text>
+                    {countTables}
 
-                        <ActionIcon color='red' variant='light' onClick={removeTable}>
-                            <BsDash />
-                        </ActionIcon>
-
-                        <Text color='gray' size='sm'> {tables.length} </Text>
-
-                        <ActionIcon color='blue' variant='light' onClick={addTable}>
-                            <BsPlus />
-                        </ActionIcon>
-                    </Group>
+                    <Button size='xs' variant='light' onClick={saveCustomTable}>Сохранить</Button>
                 </div>
             </div>
 
             {
-                tables.map((_, index) =>
-                    <NewCustomTable key={index} index={index} removeTable={removeTable} />)
+                tables.map((_, indexTable) =>
+                    <NewCustomTable key={indexTable} indexTable={indexTable} />)
             }
         </>
 

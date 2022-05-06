@@ -28,51 +28,51 @@ namespace RealtimeDataPortal.Models
             using (RDPContext rdp_base = new())
             {
                 tableRealtime = (from treesMenu in rdp_base.TreesMenu
-                     join table in rdp_base.rt_Tables 
-                        on treesMenu.ComponentId equals table.TableId
-                     join section in rdp_base.rt_Sections 
-                        on table.TableId equals section.TableId
-                     join sectionProduct in rdp_base.rt_SectionProduct 
-                        on section.SectionId equals sectionProduct.SectionId
-                     join product in rdp_base.Products 
-                        on sectionProduct.ProductId equals product.ProductId
-                     join parameter in rdp_base.Parameter 
-                        on product.ProductId equals parameter.ProductId
-                     join parameterTag in rdp_base.ParameterTag 
-                        on parameter.ParameterId equals parameterTag.ParameterId
-                     join tag in rdp_base.Tag 
-                        on parameterTag.TagId equals tag.TagId
-                     join tagsType in rdp_base.TagsType 
-                        on tag.TagTypeId equals tagsType.TagTypeId
-                     join parameterType in rdp_base.ParameterType 
-                        on parameter.ParameterTypeId equals parameterType.ParameterTypeId
-                     join server in rdp_base.Server 
-                        on tag.ServerId equals server.ServerId
-                     where treesMenu.Id == id
-                     select new Query_rtTable()
-                     {
-                         Id = treesMenu.Id,
-                         Name = treesMenu.Name,
-                         PositionVisible = table.PositionVisible,
-                         UnitVisible = table.UnitVisible,
-                         ScaleVisible = table.ScaleVisible,
-                         LimitVisible = table.LimitVisible,
-                         SectionName = section.SectionName,
-                         ProductId = product.ProductId,
-                         ProductName = product.ProductName,
-                         NameParameter = parameterType.ParameterTypeName,
-                         ProductsParameterId = parameter.ParameterId,
-                         Position = parameter.Position,
-                         Round = parameter.Round,
-                         TagName = tag.TagName,
-                         TagTypeId = tagsType.TagTypeId,
-                         TypeShortName = tagsType.TypeShortName,
-                         ServerName = server.ServerName,
-                         ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
-                                $"User Id={server.UserName};Password={server.Password}"
-                     }).ToList();
+                                 join table in rdp_base.rt_Tables
+                                    on treesMenu.ComponentId equals table.TableId
+                                 join section in rdp_base.rt_Sections
+                                    on table.TableId equals section.TableId
+                                 join sectionProduct in rdp_base.rt_SectionProduct
+                                    on section.SectionId equals sectionProduct.SectionId
+                                 join product in rdp_base.Products
+                                    on sectionProduct.ProductId equals product.ProductId
+                                 join parameter in rdp_base.Parameter
+                                    on product.ProductId equals parameter.ProductId
+                                 join parameterTag in rdp_base.ParameterTag
+                                    on parameter.ParameterId equals parameterTag.ParameterId
+                                 join tag in rdp_base.Tag
+                                    on parameterTag.TagId equals tag.TagId
+                                 join tagsType in rdp_base.TagsType
+                                    on tag.TagTypeId equals tagsType.TagTypeId
+                                 join parameterType in rdp_base.ParameterType
+                                    on parameter.ParameterTypeId equals parameterType.ParameterTypeId
+                                 join server in rdp_base.Server
+                                    on tag.ServerId equals server.ServerId
+                                 where treesMenu.Id == id
+                                 select new Query_rtTable()
+                                 {
+                                     Id = treesMenu.Id,
+                                     Name = treesMenu.Name,
+                                     PositionVisible = table.PositionVisible,
+                                     UnitVisible = table.UnitVisible,
+                                     ScaleVisible = table.ScaleVisible,
+                                     LimitVisible = table.LimitVisible,
+                                     SectionName = section.SectionName,
+                                     ProductId = product.ProductId,
+                                     ProductName = product.ProductName,
+                                     NameParameter = parameterType.ParameterTypeName,
+                                     ProductsParameterId = parameter.ParameterId,
+                                     Position = parameter.Position,
+                                     Round = parameter.Round,
+                                     TagName = tag.TagName,
+                                     TagTypeId = tagsType.TagTypeId,
+                                     TypeShortName = tagsType.TypeShortName,
+                                     ServerName = server.ServerName,
+                                     ServerConnection = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
+                                            $"User Id={server.UserName};Password={server.Password}"
+                                 }).ToList();
 
-                     if (tableRealtime.Count == 0) throw new Exception("NotFound");
+                if (tableRealtime.Count == 0) throw new Exception("NotFound");
             }
 
             List<string> serverList = (from server in tableRealtime
@@ -81,13 +81,14 @@ namespace RealtimeDataPortal.Models
             // Получение значений для тегов
             List<QueryInServer_rtTable> listValues = new List<QueryInServer_rtTable>();
 
-            Parallel.ForEach(serverList, (string server) => {
+            Parallel.ForEach(serverList, (string server) =>
+            {
                 List<Query_rtTable> valueOneServer = tableRealtime.Where(tr => tr.ServerName == server).ToList();
 
                 // Список тегов
                 string tagNames = string.Empty;
 
-                foreach(var value in valueOneServer)
+                foreach (var value in valueOneServer)
                 {
                     tagNames += $"'{value.TagName}',";
                 }
@@ -98,7 +99,7 @@ namespace RealtimeDataPortal.Models
             });
 
             tableRealtime = (from table in tableRealtime
-                             join values in listValues 
+                             join values in listValues
                                 on table.TagName equals values.TagName into listValue
                              from value in listValue.DefaultIfEmpty()
                              orderby table.ProductName, table.TagTypeId
@@ -127,10 +128,10 @@ namespace RealtimeDataPortal.Models
                              })
                              .ToList();
 
-        return tableRealtime;
-     }
+            return tableRealtime;
+        }
 
-    public List<QueryInServer_rtTable> GetValueForTags(string tagNames, string stringConnectionServer, bool isLimitVisible)
+        public List<QueryInServer_rtTable> GetValueForTags(string tagNames, string stringConnectionServer, bool isLimitVisible)
         {
             List<QueryInServer_rtTable> listValues = new List<QueryInServer_rtTable>();
 
@@ -176,7 +177,7 @@ namespace RealtimeDataPortal.Models
             var listValueWithLimits = listValues.GroupBy(value => value.TagName);
             listValues = new List<QueryInServer_rtTable>();
 
-            foreach(var value in listValueWithLimits)
+            foreach (var value in listValueWithLimits)
             {
                 string limits = string.Empty;
                 string? Lolo = value.Where(value => value.LimitType == "1").Select(value => value.LimitValue).FirstOrDefault();
@@ -187,10 +188,12 @@ namespace RealtimeDataPortal.Models
                 if ((Lolo is not null || Hihi is not null) && (Lo is not null || Hi is not null))
                 {
                     limits = $"{Lolo}, {Lo} ... {Hi}, {Hihi}";
-                } else if (Lolo is not null || Hihi is not null)
+                }
+                else if (Lolo is not null || Hihi is not null)
                 {
                     limits = $"{Lolo} ... {Hihi}";
-                } else  if (Lo is not null || Hi is not null)
+                }
+                else if (Lo is not null || Hi is not null)
                 {
                     limits = $"{Lo} ... {Hi}";
                 }
@@ -208,15 +211,28 @@ namespace RealtimeDataPortal.Models
             return listValues;
         }
 
-        public int AddChangeRTTable (rt_Tables rt_Tables)
+        public int AddChangeRTTable(rt_Tables rt_Tables)
         {
-            using(RDPContext rdp_base = new())
+            using (RDPContext rdp_base = new())
             {
                 rdp_base.rt_Tables.Update(rt_Tables);
                 rdp_base.SaveChanges();
 
                 return rt_Tables.TableId;
             }
+        }
+
+        public rt_Tables GetTableInfo(int componentId)
+        {
+            using RDPContext rdp_base = new();
+
+            rt_Tables tableInfo =
+                (from table in rdp_base.rt_Tables
+                 where table.TableId == componentId
+                 select table)
+                 .First();
+
+            return tableInfo;
         }
     }
 }
