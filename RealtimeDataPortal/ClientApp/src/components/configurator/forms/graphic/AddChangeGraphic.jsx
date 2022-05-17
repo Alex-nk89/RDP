@@ -1,6 +1,6 @@
 import {
     useState, useEffect, useRef, useRequest, useNotification, useSelector,
-    TextInput, Space, Button, Loader, Text,
+    TextInput, Space, Button, Loader,
     attributesInputs
 } from '../../index';
 
@@ -17,9 +17,9 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
     const [loadingListProducts, setLoadingListProducts] = useState(false);
 
     const loaderProductList = loadingListProducts ? <Loader size={16} /> : null;
-    const visibleProductList = productListFound.length > 0 ? true : false;
+    const visibleProductList = productListFound.length > 0;
 
-    const productId = form.values.productId > 0 ? `id: ${form.values.productId}` : ''; 
+    const productId = form.values.productId > 0 ? `id: ${form.values.productId}` : '';
     const position = form.values.position?.length > 0 ? `, Позиция: ${form.values.position}` : '';
 
     const closeList = () => {
@@ -31,7 +31,20 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
         const selectedProductName = productListFound.find(product => product.productId === Number(selectedProductId)).productName;
 
         form.setValues((currentValues) => ({ ...currentValues, product: selectedProductName, productId: selectedProductId }));
-    }
+    };
+
+    const findedProductsList = productListFound.map(({ productId, productName, position }) => (
+        <div key={productId} className='dropdown-list__item' data-productid={productId} onClick={selectProduct}>
+            <div className="dropdown-list__item__value" data-productid={productId}>
+                {productName}
+            </div>
+
+            <div className="dropdown-list__item__description" data-productid={productId}>
+                {`id: ${productId},`}
+                {` Позиция: ${position.length > 0 ? position : 'Не указана'}`}
+            </div>
+        </div>
+    ));
 
     useEffect(() => {
         const nameProduct = form.getInputProps('product').value;
@@ -101,17 +114,8 @@ const AddChangeGraphic = ({ action, form, nameRef, submitForm, addAccessIcon, mu
                         description={productId + position}
                     />
 
-                    <div className="info-block__form__search-result" open={visibleProductList}>
-                        {productListFound.map(({ productId, productName, position }) =>
-                            <div
-                                key={productId}
-                                data-productid={productId}
-                                className="info-block__form__search-result__item"
-                                onClick={selectProduct}
-                            >
-                                <Text data-productid={productId}>{productName}</Text>
-                                <Text data-productid={productId}>id: {productId}{position.length > 0 ? `, Позиция: ${position}` : null}</Text>
-                            </div>)}
+                    <div className='dropdown-list' open={visibleProductList}>
+                        {findedProductsList}
                     </div>
 
                     <Space h="md" />

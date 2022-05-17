@@ -1,6 +1,6 @@
 @import '../../../../style/_variables'
 @import '../../../../style/_mixins'
-    
+
 .add-change-product
     margin: 0 auto
     margin-top: 2rem
@@ -10,16 +10,20 @@
         padding: 1rem 2rem
         &__form
             position: relative
-            @include search-result(calc(100% - 55px))
+            @include dropdown($width: calc(100% - 55px))
             &__fieldset
                 @include fieldset-title
                 &__tag-block
+                    position: relative
+                    @include dropdown($width: calc(100% - 32px))
+                    .mantine-Popover-root
+                        width: 100%
                     @include fieldset-block
             fieldset
-                padding-left: 2rem 
+                padding-left: 2rem
     .mantine-11178a2
         margin-right: 0
-    .mantine-1euen2d 
+    .mantine-1euen2d
         width: 100%
         padding: 0
     .mantine-Tabs-tabControl

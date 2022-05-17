@@ -20,7 +20,7 @@ namespace RealtimeDataPortal.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public bool CheckRoleUser (string role)
+        public bool CheckRoleUser(string role)
         {
             try
             {
@@ -52,12 +52,12 @@ namespace RealtimeDataPortal.Controllers
                 new CurrentUser().GetCurrentUser();
 
                 CurrentUser? currentUser = JsonSerializer.Deserialize<CurrentUser>(
-                    _httpContextAccessor.HttpContext?.Session.GetString("currentUser") 
+                    _httpContextAccessor.HttpContext?.Session.GetString("currentUser")
                     ?? throw new Exception("NoGetUser"));
-                
+
                 return currentUser;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Messages error = new Messages().GetMessage(ex.Message);
                 return StatusCode(error.StatusCode, new { error.Message });
@@ -70,13 +70,13 @@ namespace RealtimeDataPortal.Controllers
             try
             {
                 CurrentUser currentUser = JsonSerializer
-                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser")) 
+                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
                     ?? new CurrentUser().GetCurrentUser();
 
                 if (!treesMenu.isFullView)
                 {
-                    treesMenu.isFullView = 
-                        CheckRoleUser("IsFullView") || CheckRoleUser("IsConfigurator") 
+                    treesMenu.isFullView =
+                        CheckRoleUser("IsFullView") || CheckRoleUser("IsConfigurator")
                         || CheckRoleUser("IsAdministrator") || CheckRoleUser("IsConfiguratorRead");
                 }
 
@@ -111,9 +111,7 @@ namespace RealtimeDataPortal.Controllers
         {
             // Добавлениие/редактирование элементов таких как графики, таблицы РВ, папки и т.д.
             // Для всех элементов происходит добавление из дерева, добавление доступов
-            // Для каждого типа элемента происходит добавление данныз в зависимые таблицы
-
-            AccessToComponent accessToComponent = new();
+            // Для каждого типа элемента происходит добавление данных в зависимые таблицы
 
             (int id, _, _, string type, _, string[] adGroups, string[] adGroupsOld, _) = configurator;
             int? idChildren = type == "folder" ? 0 : null;
@@ -140,22 +138,12 @@ namespace RealtimeDataPortal.Controllers
                 {
                     configurator.TreesMenu.ComponentId = new Mnemoscheme().EditMnemoscheme(configurator.Mnemoscheme);
                 }
+                else if (type == "customtable")
+                    configurator.TreesMenu.ComponentId = new CustomTable().EditCustomTables(configurator.CustomTables, configurator.TreesMenu.ComponentId);
 
                 id = configurator.AddNewComponent(configurator.TreesMenu);
 
-                string[] addedAccesses = adGroups.Except(adGroupsOld).ToArray();
-
-                foreach (var addedAccess in addedAccesses)
-                {
-                    accessToComponent.AddAccessToComponent(id, idChildren, addedAccess);
-                }
-
-                string[] deletedAccesses = adGroupsOld.Except(adGroups).ToArray();
-
-                foreach (var deletedAccess in deletedAccesses)
-                {
-                    accessToComponent.DeleteAccessToComponent(id, idChildren, deletedAccess);
-                }
+                new AccessToComponent().EditAccessElement(id, idChildren, adGroups, adGroupsOld);
 
                 return new { new Messages().GetMessage("Saved").Message };
             }
@@ -190,19 +178,19 @@ namespace RealtimeDataPortal.Controllers
         }
 
         [Route("GetTags")]
-        public Object GetTags(string name, bool forMnemoscheme = false)
+        public Object GetTags(string name, bool forFindTags = false)
         {
             try
             {
                 if (!(CheckRoleUser("IsConfigurator") || CheckRoleUser("IsConfiguratorRead")))
                     throw new Exception("NotAccess");
 
-                if (forMnemoscheme)
+                if (forFindTags)
                     return new TagInfo().GetListTagsForMnemoscheme(name);
 
                 return new TagInfo().GetTags(name);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Messages error = new Messages().GetMessage(ex.Message);
                 return StatusCode(error.StatusCode, new { error.Message });
@@ -299,7 +287,7 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                if(!CheckRoleUser("IsConfigurator"))
+                if (!CheckRoleUser("IsConfigurator"))
                     throw new Exception("NotAccess");
 
                 return new { success = new QueryProduct().AddChangeProduct(queryProduct) };
@@ -710,6 +698,30 @@ namespace RealtimeDataPortal.Controllers
                 new MnemoschemeTemplates().DeleteMnemoschemeTemplate(id);
 
                 return new { new Messages().GetMessage("Deleted").Message };
+            }
+            catch (Exception ex)
+            {
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
+            }
+        }
+
+        [Route("GetCustomTable")]
+        public Object GetCustomTable(int id)
+        {
+            try
+            {
+                CurrentUser currentUser = JsonSerializer
+                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
+                    ?? new CurrentUser().GetCurrentUser();
+
+                using RDPContext rdpBase = new();
+
+                return new
+                {
+                    CustomTable = new CustomTable().GetCustomTables(id, currentUser),
+                    Title = rdpBase.TreesMenu.Where(c => (c.ComponentId == id && c.Type == "customtable")).FirstOrDefault()?.Name
+                };
             }
             catch (Exception ex)
             {

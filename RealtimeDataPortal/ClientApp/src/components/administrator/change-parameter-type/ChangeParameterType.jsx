@@ -56,7 +56,7 @@ export const ChangeParameterType = ({ operation }) => {
 
     const searchParameterTypes = () => {
         const parameterTypeName = form.getInputProps('parameterTypeName').value;
-        
+
 
         if (parameterTypeName.length > 0 && operation === 'change') {
             form.resetErrors();
@@ -105,6 +105,14 @@ export const ChangeParameterType = ({ operation }) => {
             .finally(() => setSavingData(false));
     }
 
+    const findedParameterTypes = listParameterTypes.map(({ parameterTypeId, label, parameterTypeName }) => (
+        <div key={parameterTypeId} className='dropdown-list__item'>
+            <div className="dropdown-list__item__value" data-parameterid={parameterTypeId} onClick={selectParameterType}>
+                {`${label} - ${parameterTypeName}`}
+            </div>
+        </div>
+    ));
+
     useEffect(() => {
         document.addEventListener("click", closeList);
 
@@ -130,15 +138,8 @@ export const ChangeParameterType = ({ operation }) => {
                     ref={parameterTypeNameRef}
                 />
 
-                <div className="info-block__form__search-result" open={visibleListParameterTypes}>
-                    {listParameterTypes.map(parameterType =>
-                        <p
-                            key={parameterType.parameterTypeId}
-                            data-parameterid={parameterType.parameterTypeId}
-                            className="info-block__form__search-result__item"
-                            onClick={selectParameterType}>
-                            {`${parameterType.label} - ${parameterType.parameterTypeName}`}
-                        </p>)}
+                <div className='dropdown-list' open={visibleListParameterTypes}>
+                    {findedParameterTypes}
                 </div>
 
                 <Space h="md" />

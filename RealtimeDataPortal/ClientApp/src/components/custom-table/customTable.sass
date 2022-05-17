@@ -1,0 +1,23 @@
+@import '../../style/_variables'
+
+.custom-table
+    &__header
+        display: flex
+        justify-content: space-between
+        align-items: center
+    &__table
+        &.info-block
+            padding: 2rem
+        &__header
+            display: flex
+            justify-content: center
+            align-items: center
+        table
+            width: 100%
+            tr
+                td
+                    min-width: 50px
+                    padding: .2rem .5rem
+                    border: 1px solid $table-border-color
+                    color: $table-text-color
+                    text-align: center

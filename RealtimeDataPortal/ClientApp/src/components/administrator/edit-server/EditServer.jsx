@@ -16,6 +16,8 @@ export const EditServer = ({ operation }) => {
     const [savingData, setSavingData] = useState(false);
     const [searchingData, setSearchingData] = useState(false);
 
+    const visibleFindedServers = listServers.length > 0;
+
     const form = useForm({
         initialValues: {
             serverId: 0,
@@ -100,6 +102,18 @@ export const EditServer = ({ operation }) => {
         setListServers([]);
     };
 
+    const findedServersList = listServers.map(({ serverId, serverName, database }) => (
+        <div key={serverId} className='dropdown-list__item' data-serverid={serverId} onClick={selectServer}>
+            <div className="dropdown-list__item__value" data-serverid={serverId}>
+                {serverName}
+            </div>
+
+            <div className="dropdown-list__item__description" data-serverid={serverId}>
+                {`База данных: ${database}`}
+            </div>
+        </div>
+    ));
+
     useEffect(() => {
         document.addEventListener("click", closeList);
 
@@ -125,18 +139,8 @@ export const EditServer = ({ operation }) => {
                     rightSection={searchButton}
                 />
 
-
-                <div className="info-block__form__search-result" open={listServers.length}>
-                    {listServers.map(server =>
-                        <p
-                            key={server.serverId}
-                            data-serverid={server.serverId}
-                            className="info-block__form__search-result__item"
-                            onClick={selectServer}
-                        >
-                            {server.serverName} ({server.database})
-                        </p>
-                    )}
+                <div className='dropdown-list' open={visibleFindedServers}>
+                    {findedServersList}
                 </div>
 
                 <Space h="md" />

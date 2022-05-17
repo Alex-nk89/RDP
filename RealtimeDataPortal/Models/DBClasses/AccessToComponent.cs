@@ -107,5 +107,22 @@
 
             return componentGroups;
         }
+
+        public void EditAccessElement (int id, int? idChildren, string[] adGroups, string[] adGroupsOld)
+        {
+            string[] addedAccesses = adGroups.Except(adGroupsOld).ToArray();
+
+            foreach (var addedAccess in addedAccesses)
+            {
+                AddAccessToComponent(id, idChildren, addedAccess);
+            }
+
+            string[] deletedAccesses = adGroupsOld.Except(adGroups).ToArray();
+
+            foreach (var deletedAccess in deletedAccesses)
+            {
+                DeleteAccessToComponent(id, idChildren, deletedAccess);
+            }
+        }
     }
 }

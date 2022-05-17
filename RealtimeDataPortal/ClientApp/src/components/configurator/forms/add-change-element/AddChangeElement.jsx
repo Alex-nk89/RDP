@@ -96,11 +96,7 @@ const AddChangeElement = () => {
                 MnemoschemeId: action === 'add' ? 0 : mnemoscheme.mnemoschemeId,
                 MnemoschemeContain: values.mnemoschemeContain
             },
-            CustomTable: tables.map(table => ({
-                CustomTableId: table.customTableId,
-                ComponentId: table.componentId,
-                CustomTableName: table.name,
-            })),
+            CustomTables: tables,
             ADGroups: accesses,
             AdGroupsOld: oldAccesses
         };

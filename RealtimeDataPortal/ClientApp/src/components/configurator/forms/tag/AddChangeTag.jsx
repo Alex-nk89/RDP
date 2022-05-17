@@ -2,7 +2,7 @@ import {
     useState, useEffect, useRef,
     useForm,
     useSelector,
-    TextInput, Space, attributesInputs, Select, Loader, Button, Text,
+    TextInput, Space, attributesInputs, Select, Loader, Button,
     useRequest, useNotification,
     BsSearch
 } from '../../index';
@@ -18,11 +18,11 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
     const [tagsList, setTagsList] = useState([]);
     const [loadingTagList, setLoadingTagList] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const visibleFindedTags = tagsList.length > 0;
 
     const typesList = tagAttributes.types.map(item => ({ label: `${item.type} - ${item.typeShortName}`, value: item.tagTypeId.toString() }));
     const serversList = tagAttributes.servers.map(item => ({ label: `${item.serverName}`, value: item.serverId.toString() }));
 
-    const visibleListTags = tagsList.length > 0 ? true : false;
     const loaderSubmitForm = loadingSubmit ? <Loader size={16} /> : null;
 
     const form = useForm({
@@ -112,6 +112,18 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
         loadingTagList ? <Loader size={18} /> : <BsSearch size={16} onClick={getListTags} />
         : null;
 
+    const findedTagsList = tagsList.map(({ tagId, tagName, serverName }, index) => (
+        <div key={index} className='dropdown-list__item' id={tagId} onClick={selectTag} >
+            <div className="dropdown-list__item__value" id={tagId}>
+                {tagName}
+            </div>
+
+            <div className="dropdown-list__item__description" id={tagId}>
+                {`Сервер: ${serverName}`}
+            </div>
+        </div>
+    ));
+
     useEffect(() => {
         document.addEventListener("click", closeList);
 
@@ -127,26 +139,17 @@ const AddChangeTag = ({ operation, tagAttributes }) => {
     return (
         <div className="info-block info-block__form">
             <form onSubmit={form.onSubmit(values => submitForm(values))}>
-
                 <TextInput
                     {...attributesInputs}
                     {...form.getInputProps('tagName')}
                     label='Наименование'
                     placeholder='Введите наименование тега'
                     ref={nameRef}
-                    rightSection={searchButton} />
+                    rightSection={searchButton}
+                />
 
-                <div className="info-block__form__search-result" open={visibleListTags}>
-                    {tagsList.map(tag =>
-                        <div
-                            key={tag.tagId}
-                            id={tag.tagId}
-                            className="info-block__form__search-result__item"
-                            onClick={selectTag}
-                        >
-                            <Text id={tag.tagId}>{tag.tagName}</Text>
-                            <Text id={tag.tagId}>Сервер: {tag.serverName}</Text>
-                        </div>)}
+                <div className='dropdown-list' open={visibleFindedTags}>
+                    {findedTagsList}
                 </div>
 
                 <Space h="md" />

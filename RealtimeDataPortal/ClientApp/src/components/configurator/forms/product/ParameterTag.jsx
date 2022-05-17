@@ -1,4 +1,10 @@
-import { useState, useEffect, useRef, useRequest, TextInput, Space, Loader, attributesInputs, ActionIcon, BsX, Text } from '../../index';
+import {
+    useState, useEffect, useRef
+    , useRequest
+    , ActionIcon, Loader, Space, TextInput
+    , BsX
+    , attributesInputs
+} from '../../index';
 
 const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
     const tagNameRef = useRef(null);
@@ -7,7 +13,7 @@ const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
     const [tagsList, setTagsList] = useState([]);
     const [loadingTagList, setLoadingTagList] = useState(false);
 
-    const visibleListTags = tagsList.length > 0 ? true : false;
+    const visibleListTags = tagsList.length > 0;
     const loaderTagList = loadingTagList ? <Loader size={16} /> : null;
 
     const tagSearch = event => {
@@ -51,6 +57,18 @@ const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
         removeTag(--number);
     };
 
+    const findedTagsList = tagsList.map(({ tagId, tagName, serverName }, index) => (
+        <div key={index} className='dropdown-list__item' id={tagId} onClick={selectTag}>
+            <div className="dropdown-list__item__value" id={tagId}>
+                {tagName}
+            </div>
+
+            <div className="dropdown-list__item__description" id={tagId}>
+                {`Сервер: ${serverName}`}
+            </div>
+        </div>
+    ));
+
     useEffect(() => {
         document.addEventListener("click", closeList);
 
@@ -74,26 +92,14 @@ const ParameterTag = ({ number, tag, enterTag, removeTag }) => {
                         ref={tagNameRef}
                         rightSection={loaderTagList}
                     />
-
                     <ActionIcon onClick={removeCurrentTag}>
-                        <BsX size={18}/>
+                        <BsX size={18} />
                     </ActionIcon>
                 </div>
 
-
-            </div>
-
-            <div className="info-block__form__search-result" open={visibleListTags}>
-                {tagsList.map(tag =>
-                    <div
-                        key={tag.tagId}
-                        id={tag.tagId}
-                        className="info-block__form__search-result__item"
-                        onClick={selectTag}
-                    >
-                        <Text id={tag.tagId}>{tag.tagName}</Text>
-                        <Text id={tag.tagId}>Сервер: {tag.serverName}</Text>
-                    </div>)}
+                <div className='dropdown-list' open={visibleListTags}>
+                    {findedTagsList}
+                </div>
             </div>
         </>
     );

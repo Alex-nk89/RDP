@@ -6,10 +6,10 @@ import { createSelector } from 'reselect';
 import { useNotification } from "../../hooks/useNotification";
 import { useForm } from '@mantine/hooks';
 import {
-    TextInput, Space, Button, MultiSelect, ActionIcon, Tabs, Select, Loader, Checkbox, Text, Group,
-    InputWrapper, Divider, NumberInput
+    ActionIcon, Button, Checkbox, Divider, Group, InputWrapper, Loader, MultiSelect, NumberInput, Popover, Select, Space, Tabs, Text, TextInput
 } from '@mantine/core';
 import { useModals } from '@mantine/modals';
+import { useResizeObserver } from '@mantine/hooks';
 
 import { BsSearch, BsDash, BsPlus, BsX } from 'react-icons/bs';
 
@@ -50,7 +50,7 @@ export {
     Parameter, ParameterTag, AddChangeElement, AddChangeGraphic, AddChangeTableRT, InstructionForConfigurator, 
     Section, SectionProducts, EditMnemoscheme, EditCustomTable,
     attributesInputs, settingsAddRemoveIcon,
-    TextInput, Space, Button, useForm, MultiSelect, ActionIcon, Tabs, Select, Loader, Checkbox, useModals, Text, Group,
-    InputWrapper, Divider, NumberInput,
+    ActionIcon, Button, Checkbox, Divider, Group, InputWrapper, Loader, MultiSelect, NumberInput, Popover, Select, Space, Tabs, Text, TextInput,
+    useForm, useModals, useResizeObserver,
     BsPlus, BsDash, BsX, BsSearch
 };

@@ -10,5 +10,8 @@
         padding: 1rem 2rem
         &__form
             position: relative
-            @include search-result(calc(100% - 55px))
+            .mantine-Popover-root
+                width: 100%
+            form
+                @include dropdown($width: calc(100% - 60px))
     @include add-change-form

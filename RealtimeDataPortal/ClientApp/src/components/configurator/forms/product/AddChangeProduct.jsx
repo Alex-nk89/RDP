@@ -37,7 +37,7 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
     const [searchingProduct, setSearchingProduct] = useState(false);
     const loaderSubmitForm = loadingSubmit ? <Loader size={16} /> : null;
 
-    const visibleProductList = productListFound.length > 0 ? true : false;
+    const visibleProductList = productListFound.length > 0;
 
     const entryProductName = (event) => setProductName({ value: event.target.value, error: '' });
 
@@ -202,6 +202,19 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
         )
         : null
 
+    const findedProductList = productListFound.map(({ productId, productName, position }) => (
+        <div className='dropdown-list__item' key={productId} data-productid={productId} data-productname={productName} onClick={selectProduct}>
+            <div className="dropdown-list__item__value" data-productid={productId} data-productname={productName}>
+                {productName}
+            </div>
+
+            <div className="dropdown-list__item__description" data-productid={productId} data-productname={productName}>
+                {`id: ${productId},`}
+                {` Позиция: ${position.length > 0 ? position : 'Не указана'}`}
+            </div>
+        </div>
+    ));
+
     useEffect(() => {
         productNameRef.current.focus();
 
@@ -231,19 +244,8 @@ const AddChangeProduct = ({ operation, attributesForProducts }) => {
                     rightSection={searchButton}
                 />
 
-                <div className="info-block__form__search-result" open={visibleProductList}>
-                    {productListFound.map(({ productId, productName, position }) =>
-                        <div
-                            key={productId}
-                            data-productid={productId}
-                            data-productname={productName}
-                            className="info-block__form__search-result__item"
-                            onClick={selectProduct}
-                        >
-                            <Text data-productid={productId} data-productname={productName}>{productName}</Text>
-                            <Text data-productid={productId} data-productname={productName}>(id: {productId}{position.length > 0 ? `, Позиция: ${position}` : null})</Text>
-                        </div>
-                    )}
+                <div className='dropdown-list' open={visibleProductList}>
+                    {findedProductList}
                 </div>
 
                 {productIdView}

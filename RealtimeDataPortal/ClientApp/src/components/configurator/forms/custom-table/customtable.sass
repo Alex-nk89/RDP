@@ -27,9 +27,11 @@
             overflow: auto
             @include scrollbar
             table
+                width: 100%
                 tr
                     td
                         position: relative
+                        min-width: 50px
                         padding: .2rem .5rem
                         border: 1px solid $table-border-color
                         color: $table-text-color
@@ -44,25 +46,34 @@
                             position: absolute
             &__delete-row
                 height: 100%
-                right: -1.7rem
+                left: calc(100% + .5rem)
                 top: 0rem
             &__delete-column
                 width: 100%
-                top: 2.2rem
+                top: calc(100% + .5rem)
                 left: 0rem
             &__number-column
                 width: 100%
-                top: -1.7rem
+                top: -2rem
                 left: 0
             &__number-row
                 height: 100%
                 top: 0
-                left: -2.2rem
+                left: -2rem
         &__table-settings
             max-height: 0px
-            margin-top: 2rem
+            margin: 2rem 0
             padding: 0 2rem
-            overflow: hidden
             transition: all .5s ease-out
+            &__cellContain
+                max-width: 330px
+                position: relative
+                @include dropdown(100%)
+                .mantine-Popover-root
+                    width: 100%
+                
+
+
+                    
                 
             

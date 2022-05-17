@@ -72,3 +72,23 @@ ul
         &:hover
             background: rgb(241, 243, 245)
             cursor: pointer
+
+.search-result
+    max-height: 200px
+    padding: .3em
+    border: 1px solid rgb(233, 236, 239)
+    border-radius: 5px
+    background: #fff
+    box-shadow: rgb(0 0 0 / 5%) 0px 1px 3px, rgb(0 0 0 / 5%) 0px 20px 25px -5px, rgb(0 0 0 / 4%) 0px 10px 10px -5px
+    overflow: auto
+    @include scrollbar
+    & &__item
+        border-radius: 4px
+        padding: .3em .5em
+        & > div
+            div:nth-child(1)
+                font-size: .92em
+            div:nth-child(2)
+                font-size: .85em
+        &:hover
+            background-color: rgb(241, 243, 245)

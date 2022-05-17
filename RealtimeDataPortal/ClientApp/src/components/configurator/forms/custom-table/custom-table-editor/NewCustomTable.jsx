@@ -40,7 +40,7 @@ export const NewCustomTable = ({ indexTable }) => {
     const addColumnThisTable = () => dispatch(addColumn(indexTable));
 
     const removeColumnThisTable = () => {
-        const lengthColumn = tables[indexTable].rows[0].length;
+        const lengthColumn = tables[indexTable].rows[0].cells.length;
         if (lengthColumn > 1) {
             dispatch(deleteColumn({ indexTable, indexColumn: lengthColumn - 1 }));
         }
@@ -59,7 +59,7 @@ export const NewCustomTable = ({ indexTable }) => {
                     <TextInput
                         label='Наименование'
                         placeholder='Введите наименование таблицы'
-                        value={tables[indexTable].name}
+                        value={tables[indexTable].customTableName}
                         onChange={inputNameThisTable}
                     />
                 </div>
@@ -88,7 +88,7 @@ export const NewCustomTable = ({ indexTable }) => {
                             <BsDash />
                         </ActionIcon>
 
-                        <Text color='gray' size='sm'> {tables[indexTable].rows[0].length} </Text>
+                        <Text color='gray' size='sm'> {tables[indexTable].rows[0].cells.length} </Text>
 
                         <ActionIcon color='blue' variant='light' onClick={addColumnThisTable}>
                             <BsPlus />

@@ -1,6 +1,6 @@
 import {
     useState, useEffect, useRef, useRequest,
-    TextInput, Space, ActionIcon, Loader, Text,
+    TextInput, Space, ActionIcon, Loader,
     BsX,
     attributesInputs
 } from '../../index';
@@ -12,7 +12,7 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
     const [productsList, setProductsList] = useState([]);
     const [loadingProductList, setLoadingProductList] = useState(false);
 
-    const visibleListTags = productsList.length > 0 ? true : false;
+    const visibleListTags = productsList.length > 0;
     const loaderProductList = loadingProductList ? <Loader size={16} /> : null;
 
     const removeCurrentProduct = () => removeProduct(--number);
@@ -63,6 +63,19 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
         setProductsList([]);
     };
 
+    const findedProductsList = productsList.map(({ productId, productName, position }) => (
+        <div key={productId} className='dropdown-list__item' data-productid={productId} onClick={selectProduct}>
+            <div className="dropdown-list__item__value" data-productid={productId}>
+                {productName}
+            </div>
+
+            <div className="dropdown-list__item__description" data-productid={productId}>
+                {`id: ${productId},`}
+                {` Позиция: ${position.length > 0 ? position : 'Не указана'}`}
+            </div>
+        </div>
+    ));
+
     useEffect(() => {
         document.addEventListener("click", closeList);
 
@@ -92,19 +105,10 @@ const SectionProducts = ({ number, product, removeProduct, enterProduct }) => {
                         <BsX />
                     </ActionIcon>
                 </div>
-            </div>
 
-            <div className="info-block__form__search-result" open={visibleListTags}>
-                {productsList.map(({ productId, productName, position }) =>
-                    <div
-                        key={productId}
-                        data-productid={productId}
-                        className="info-block__form__search-result__item"
-                        onClick={selectProduct}
-                    >
-                        <Text data-productid={productId}>{productName}</Text>
-                        <Text data-productid={productId}>id: {productId} {position.length > 0 ? `, Позиция: ${position}` : null}</Text>
-                    </div>)}
+                <div className='dropdown-list' open={visibleListTags}>
+                    {findedProductsList}
+                </div>
             </div>
         </>
     );

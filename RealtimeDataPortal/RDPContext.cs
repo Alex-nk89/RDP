@@ -33,6 +33,7 @@ namespace RealtimeDataPortal
         public  virtual DbSet<MnemoschemeTemplates> MnemoschemeTemplates {  get; set; } = null!;
         public virtual DbSet<CustomTable> CustomTable { get; set; } = null!;
         public virtual DbSet<CustomTableCells> CustomTableCells { get; set; } = null!;
+        public virtual DbSet<CustomTableRows> CustomTableRows { get; set; } = null!;
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=RDP_Base;Trusted_Connection=True;");
@@ -130,6 +131,11 @@ namespace RealtimeDataPortal
             modelBuilder.Entity<CustomTableCells>(entity =>
             {
                 entity.HasKey("Id");
+            });
+
+            modelBuilder.Entity<CustomTableRows>(entity =>
+            {
+                entity.HasKey("RowId");
             });
         }
     }

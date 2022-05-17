@@ -1,6 +1,6 @@
 @import './_variables'
 
-@mixin search-result($width)
+@mixin search-result
     &__search-result
         position: absolute
         width: $width
@@ -40,6 +40,45 @@
                 color: #808080
             &:hover
                 background-color: rgb(241, 243, 245)
+
+@mixin dropdown($width)
+    .dropdown-list
+        display: flex
+        flex-direction: column
+        justify-content: flex-start
+        align-items: stretch
+        position: absolute
+        width: $width
+        max-height: 0px
+        margin-top: .5rem
+        padding: 0
+        border-radius: 5px
+        background-color: #fff
+        overflow: hidden
+        @include scrollbar
+        transition: max-height .3s ease-out
+        &[open]
+            max-height: 200px
+            padding: .3em
+            border: 1px solid rgb(233, 236, 239)
+            box-shadow: rgb(0 0 0 / 5%) 0px 1px 3px, rgb(0 0 0 / 5%) 0px 20px 25px -5px, rgb(0 0 0 / 4%) 0px 10px 10px -5px
+            overflow: auto
+            z-index: 10
+            transition: max-height .3s ease-out
+        &__item
+            padding: .3em .5em
+            border-radius: 5px
+            line-height: 1.5
+            cursor: pointer
+            &:hover
+                background-color: rgb(241, 243, 245)
+            &__value
+                font-size: .92em
+                color: $table-text-color
+            &__description
+                font-size: .85em
+                font-weight: 300
+                color: $dropdown-text-color
 
 @mixin scrollbar
     &::-webkit-scrollbar
@@ -84,4 +123,3 @@
         color: $main-color
     .mantine-Tabs-tabActive:last-child
         color: #FF6B6B
-    

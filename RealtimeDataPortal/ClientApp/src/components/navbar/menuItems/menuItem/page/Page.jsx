@@ -58,7 +58,7 @@ const Page = ({ id, name, componentId, type }) => {
         case 'customtable':
             link =
                 <Tooltip openDelay={delay} label={name} placement='start'>
-                    <NavLink to={`/custom-table/${id}`}>
+                    <NavLink to={`/custom-table/${componentId}`}>
                         <BsGrid1X2Fill size={14} />
                         <span>{name}</span>
                     </NavLink>

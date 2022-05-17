@@ -1,7 +1,7 @@
 import {
-    useState, useEffect, useNotification, useRequest,
-    NumberInput, TextInput, Tooltip,
-    BsAlt, BsFonts
+    useState, useEffect, useNotification, useRequest
+    , NumberInput, TextInput, Tooltip
+    , BsAlt, BsFonts
 } from '..';
 
 export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectType, elementAttributes, setElementAttributes, mnemoscheme }) => {
@@ -9,7 +9,7 @@ export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectTyp
     const { show } = useNotification();
 
     const [listTags, setListTags] = useState([]);
-    const visibleListTags = listTags.length > 0 ? true : false;
+    const visibleFindedTags = listTags.length > 0;
 
     const closeList = () => setListTags([]);
 
@@ -20,7 +20,7 @@ export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectTyp
         if (mnemoscheme._activeObject) {
 
             if (text[0] === '%' && text.length > 3) {
-                request(`GetTags?name=${text.substring(1)}&forMnemoscheme=true`)
+                request(`GetTags?name=${text.substring(1)}&forFindTags=true`)
                     .then(listTags => {
                         setListTags(listTags);
                     })
@@ -103,6 +103,46 @@ export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectTyp
         </Tooltip>
     ) : null;
 
+    const findedTagsList = listTags.map(({ tagId, tagName, productName, position, productId, round, color }, index) => (
+        <div
+            className='dropdown-list__item'
+            key={index}
+            id={tagId}
+            data-tagid={tagId}
+            data-productid={productId}
+            data-tagname={tagName}
+            data-round={round}
+            data-color={color}
+            onClick={selectTag}
+        >
+            <div
+                className="dropdown-list__item__value"
+                id={tagId}
+                data-tagid={tagId}
+                data-productid={productId}
+                data-tagname={tagName}
+                data-round={round}
+                data-color={color}
+            >
+                {tagName}
+            </div>
+
+            <div
+                className="dropdown-list__item__description"
+                id={tagId}
+                data-tagid={tagId}
+                data-productid={productId}
+                data-tagname={tagName}
+                data-round={round}
+                data-color={color}
+            >
+                {`Продукт: ${productName.length > 0 ? productName : 'Не указан'}`}
+                <br />
+                {`Позиция: ${position.length > 0 ? position : 'Не указана'}`}
+            </div>
+        </div>
+    ));
+
     const selectText = ['text'].includes(mnemoschemeActiveObjectType)
         ? (
             <div className='info-block__mnemoscheme-editor__change-block__text-block'>
@@ -116,42 +156,8 @@ export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectTyp
                     />
                 </Tooltip>
 
-                <div className="info-block__mnemoscheme-editor__change-block__text-block__search-result" open={visibleListTags}>
-                    {
-                        listTags.map((tag, index) => (
-                            <p
-                                key={index}
-                                id={tag.tagId}
-                                data-tagid={tag.tagId}
-                                data-productid={tag.productId}
-                                data-tagname={tag.tagName}
-                                data-round={tag.round}
-                                data-color={tag.color}
-                                className='info-block__mnemoscheme-editor__change-block__text-block__search-result__item'
-                                onClick={selectTag}
-                            >
-                                <span
-                                    data-tagid={tag.tagId}
-                                    data-productid={tag.productId}
-                                    data-tagname={tag.tagName}
-                                    data-round={tag.round}
-                                    data-color={tag.color}
-                                    style={{ fontSize: '13px' }} >
-                                    {tag.tagName}
-                                </span>
-                                <br />
-                                <span
-                                    data-tagid={tag.tagId}
-                                    data-productid={tag.productId}
-                                    data-tagname={tag.tagName}
-                                    data-round={tag.round}
-                                    data-color={tag.color}
-                                    style={{ fontSize: '12px', color: '#909296' }}>
-                                    {tag.productName}
-                                </span>
-                            </p>
-                        ))
-                    }
+                <div className='dropdown-list' open={visibleFindedTags}>
+                    {findedTagsList}
                 </div>
             </div>
         )

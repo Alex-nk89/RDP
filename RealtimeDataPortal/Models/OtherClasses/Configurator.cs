@@ -14,10 +14,12 @@ namespace RealtimeDataPortal.Models
         public List<rt_SectionProduct> SectionProducts { get; set; } = new();
         public Mnemoscheme Mnemoscheme { get; set; } = new();
         public int maxSectionId { get; set; }
-        public List<CustomTable> CustomTable { get; set; } = new();
+        public List<CustomTable> CustomTables { get; set; } = new();
         public string? ADGroupToAccess { get; set; }
         public string[]? ADGroups { get; set; }
         public string[]? ADGroupsOld { get; set; }
+
+
 
         public void Deconstruct(out int Id, out string Name, out int ParentId, out string Type, out int ComponentId,
             out string[] ADGroups, out string[] ADGroupsOld, out string? Link)
@@ -69,7 +71,7 @@ namespace RealtimeDataPortal.Models
                     componentInfo.Mnemoscheme = new Mnemoscheme().GetMnemoschemeInfo(componentInfo.TreesMenu.ComponentId);
 
                 else if (operation == "customtable")
-                    componentInfo.CustomTable = new CustomTable().GetCustomTables(componentInfo.TreesMenu.ComponentId);
+                    componentInfo.CustomTables = new CustomTable().GetCustomTables(componentInfo.TreesMenu.ComponentId);
 
                 return componentInfo;
             }
@@ -164,5 +166,11 @@ namespace RealtimeDataPortal.Models
                 rdp_base.SaveChanges();
             }
         }
+    }
+
+    public class CustomTableSettings
+    {
+        public List<CustomTable> CustomTables { get; set; } = new();
+        public int MaxCustomTableId { get; set; }
     }
 }

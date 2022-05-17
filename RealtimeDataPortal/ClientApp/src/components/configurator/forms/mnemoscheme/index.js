@@ -3,10 +3,11 @@ import { useParams, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
-    ActionIcon, Button, ColorInput, Input, Loader, NumberInput, Popover, Select, Space, Stepper,
+    ActionIcon, Button, ColorInput, Group, Input, Loader, NumberInput, Popover, Select, Space, Stepper,
     Text, TextInput, Tooltip, NativeSelect
 } from '@mantine/core';
 import { useForm } from '@mantine/hooks';
+import { useResizeObserver } from '@mantine/hooks';
 
 import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react';
 import { fabric } from 'fabric';
@@ -42,8 +43,8 @@ export {
     useParams, Redirect,
     useSelector, useDispatch,
     useForm,
-    ActionIcon, Button, ColorInput, Input, Loader, NumberInput, Popover, Select, Space, Stepper, Text, TextInput,
-    Tooltip, NativeSelect,
+    ActionIcon, Button, ColorInput, Group, Input, Loader, NumberInput, Popover, Select, Space, Stepper, Text, TextInput,
+    Tooltip, NativeSelect, useResizeObserver,
     FabricJSCanvas, useFabricJSEditor, fabric,
     BsFillSquareFill, BsFillCircleFill, BsSlashLg, BsType, BsTriangleFill, BsFonts, BsGripHorizontal, BsSave, BsArrowDown, BsGripVertical,
     BsSquare, BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsArrowBarRight, BsArrowBarDown, BsTrash, BsOption, BsAlt,

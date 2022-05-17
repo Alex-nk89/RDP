@@ -29,7 +29,6 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme, mnemoscheme }) => {
 
         if (componentInfo.mnemoscheme.mnemoschemeContain.length > 0) {
             const loadedMnemoscheme = new fabric.Canvas().loadFromJSON(componentInfo.mnemoscheme.mnemoschemeContain);
-            console.log(loadedMnemoscheme._objects[0])
 
             mnemoscheme.setBackgroundColor(loadedMnemoscheme.backgroundColor, mnemoscheme.renderAll.bind(mnemoscheme));
 

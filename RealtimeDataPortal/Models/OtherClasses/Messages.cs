@@ -24,10 +24,5 @@
 
             return listErrors.FirstOrDefault(e => e.Type == typeError) ?? new Messages();
         }
-
-        //public Dictionary<string, string> Messages { get; set; } = new Dictionary<string, string>()
-        //{
-        //    { "NoGetUser", "Не удалось получить данные о пользователе." },
-        //};
     }
 }

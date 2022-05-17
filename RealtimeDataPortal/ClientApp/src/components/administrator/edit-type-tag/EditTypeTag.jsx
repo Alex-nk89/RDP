@@ -16,6 +16,8 @@ export const EditTypeTag = ({ operation }) => {
     const [savingData, setSavingData] = useState(false);
     const [searchingData, setSearchingData] = useState(false);
 
+    const visibleListTypesTag = listTypesTag.length > 0;
+
     const listCalendars = [
         { value: 'range', label: 'Произвольный' },
         { value: 'day', label: 'День' },
@@ -64,7 +66,7 @@ export const EditTypeTag = ({ operation }) => {
                 })
                 .catch(error => show('error', error))
                 .finally(() => setSearchingData(false));
-        }else {
+        } else {
             form.setErrors({ typeName: 'Введите минимум один символ' });
         }
 
@@ -123,6 +125,14 @@ export const EditTypeTag = ({ operation }) => {
         setListTypesTag([]);
     };
 
+    const findedListTypesTag = listTypesTag.map(({ tagTypeId, type, typeName, typeShortName }) => (
+        <div className='dropdown-list__item' key={tagTypeId} data-tagtypeid={tagTypeId} onClick={selectTypeTag}>
+            <div className="dropdown-list__item__value" data-tagtypeid={tagTypeId}>
+                {type} - {typeName} ({typeShortName})
+            </div>
+        </div>
+    ));
+
     useEffect(() => {
         document.addEventListener("click", closeList);
 
@@ -147,17 +157,9 @@ export const EditTypeTag = ({ operation }) => {
                     ref={typeNameRef}
                     rightSection={searchButton}
                 />
-                <div className="info-block__form__search-result" open={listTypesTag.length}>
-                    {listTypesTag.map(typeTag =>
-                        <p
-                            key={typeTag.tagTypeId}
-                            data-tagtypeid={typeTag.tagTypeId}
-                            className="info-block__form__search-result__item"
-                            onClick={selectTypeTag}
-                        >
-                            {typeTag.type} - {typeTag.typeName} ({typeTag.typeShortName})
-                        </p>
-                    )}
+
+                <div className='dropdown-list' open={visibleListTypesTag}>
+                    {findedListTypesTag}
                 </div>
 
                 <Space h='sm' />

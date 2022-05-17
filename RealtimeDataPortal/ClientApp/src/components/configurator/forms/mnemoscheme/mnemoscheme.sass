@@ -58,9 +58,11 @@
             position: relative
             width: 100%
             max-width: 270px
-            white-space: nowrap
+            @include dropdown($width: 100%)
+            
+            .mantine-Popover-root
+                width: 100%
             .mantine-Tooltip-root
                 width: 100%
             p
                 line-height: 1.1rem
-            @include search-result(270px)
