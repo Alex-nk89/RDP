@@ -7,8 +7,12 @@ import {
     , BsShareFill
     , AppPreloader, ErrorsPage, Table
 } from '.';
+
+import {
+    fetchingCustomTable, fetchingCustomTableError, fetchingCustomTableEnd, initializeTables, initialTitle, initialTagsIds, initialTagsLiveValues
+} from '../../reducers/customTableSlice';
+
 import './customTable.sass';
-import { fetchingCustomTable, fetchingCustomTableError, fetchingCustomTableEnd, initializeTables, initialTitle } from '../../reducers/customTableSlice';
 
 export const CustomTable = () => {
     const { request, error } = useRequest();
@@ -23,9 +27,18 @@ export const CustomTable = () => {
         dispatch(fetchingCustomTable());
 
         request(`GetCustomTable?id=${id}`)
-            .then(({ customTable, title }) => {
+            .then(({ customTable, title, listTagsIds }) => {
                 dispatch(initializeTables(customTable));
                 dispatch(initialTitle(title));
+                dispatch(initialTagsIds(listTagsIds));
+
+                return listTagsIds;
+            })
+            .then((listTagsIds) => {
+                request('GetLiveValueTags', 'POST', JSON.stringify(listTagsIds))
+                    .then(data => {
+                        dispatch(initialTagsLiveValues(data));
+                    })
             })
             .then(() => dispatch(fetchingCustomTableEnd()))
             .catch(() => dispatch(fetchingCustomTableError()));

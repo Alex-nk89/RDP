@@ -14,7 +14,7 @@ namespace RealtimeDataPortal.Models
         public int Round { get; set; }
         public bool isDateOffset { get; set; } = true;
 
-        public void Deconstruct(out string? startDate, out string? endDate, out string calendar, 
+        public void Deconstruct(out string? startDate, out string? endDate, out string calendar,
             out string? serverConnection, out string tagName, out int? wwResolution, out int round,
             out bool isDateOffset)
         {
@@ -26,6 +26,14 @@ namespace RealtimeDataPortal.Models
             wwResolution = this.WwResolution;
             round = this.Round;
             isDateOffset = this.isDateOffset;
+        }
+
+        public class LiveValueTag
+        {
+            public int TagId { get; set; }
+            public string TagName { get; set; } = string.Empty;
+            public double? Value { get; set; }
+            public int ServerId { get; set; }
         }
 
         public Object GetGraphic(Query query)
@@ -40,10 +48,10 @@ namespace RealtimeDataPortal.Models
             // Единицы измерения
             string? unit = null;
             // Шкала
-            double? scaleMinEU = 0; 
+            double? scaleMinEU = 0;
             double? scaleMaxEU = 0;
             //Лимиты
-            double? limitHi = null; 
+            double? limitHi = null;
             double? limitHihi = null;
             double? limitLo = null;
             double? limitLolo = null;
@@ -58,19 +66,20 @@ namespace RealtimeDataPortal.Models
             // (смещение определяется по признаку isDateOffset)
             if (calendar == "day")
             {
-                if(startDate is null || endDate is null)
+                if (startDate is null || endDate is null)
                 {
                     start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
                     end = start.AddDays(1);
                 }
 
-                if(isDateOffset) {
+                if (isDateOffset)
+                {
                     start = start.AddMinutes(10);
                     end = end.AddMinutes(10);
                 }
-                
+
             }
-            
+
             // Для суточных добавляем день (так данные от сегодня фактически показывают данные за вчера)
             // и добавляем 3 часа чтобы быть уверенным о том, что изменения успели записаться в БД
             if (calendar == "month")
@@ -85,14 +94,14 @@ namespace RealtimeDataPortal.Models
                 end = end.AddHours(3);
             }
 
-            if(calendar ==  "range" && (startDate is null || endDate is null))
+            if (calendar == "range" && (startDate is null || endDate is null))
             {
                 end = DateTime.Now;
                 start = end.AddHours(-1);
             }
 
             // Получение доп.значений для тэга (шкала, лимиты)
-            using(OleDbConnection connection = new OleDbConnection(serverConnection))
+            using (OleDbConnection connection = new OleDbConnection(serverConnection))
             {
                 try
                 {
@@ -141,18 +150,18 @@ namespace RealtimeDataPortal.Models
             }
 
             // История данных тега
-            using(OleDbConnection connection = new OleDbConnection(serverConnection))
+            using (OleDbConnection connection = new OleDbConnection(serverConnection))
             {
                 // Если выборка за большой период,то увеличиваем wwResolution так, 
                 // чтобы в результате было не более 480 значений
                 if ((end.Subtract(start).TotalMilliseconds / wwResolution) > 480)
-                        wwResolution = (int)Math.Round(end.Subtract(start).TotalMilliseconds / 480);
+                    wwResolution = (int)Math.Round(end.Subtract(start).TotalMilliseconds / 480);
 
                 // Дата в запросе форматируется под старые сервера
                 string sqlExpression = $"select v_History.DateTime, v_History.Value " +
                         $"from [Runtime].[dbo].[v_History] " +
                         $"where v_History.TagName = '{tagName}' " +
-                        $"and v_History.DateTime > '{start.ToString("yyyy-MM-dd HH:mm")}' " + 
+                        $"and v_History.DateTime > '{start.ToString("yyyy-MM-dd HH:mm")}' " +
                         $"and v_History.DateTime <= '{end.ToString("yyyy-MM-dd HH:mm")}' " +
                         $"and v_History.wwRetrievalMode = 'cyclic' " +
                         $"and v_History.wwResolution = '{wwResolution}'";
@@ -171,13 +180,70 @@ namespace RealtimeDataPortal.Models
                 }
             }
 
-            return new { History = history, 
-                Parameters = new { unit, scaleMaxEU, scaleMinEU,
-                LimitHi = new { limitHi, descrLimitHi },
-                LimitHihi = new { limitHihi, descrLimitHihi },
-                LimitLo = new { limitLo, descrLimitLo },
-                LimitLolo = new { limitLolo, descrLimitLolo }}};
-        } 
+            return new
+            {
+                History = history,
+                Parameters = new
+                {
+                    unit,
+                    scaleMaxEU,
+                    scaleMinEU,
+                    LimitHi = new { limitHi, descrLimitHi },
+                    LimitHihi = new { limitHihi, descrLimitHihi },
+                    LimitLo = new { limitLo, descrLimitLo },
+                    LimitLolo = new { limitLolo, descrLimitLolo }
+                }
+            };
+        }
+
+        public List<LiveValueTag> GetLiveValueTags(int[] tagsIds)
+        {
+            using RDPContext rdpBase = new();
+
+            var tagsWithServer =
+                (from tag in rdpBase.Tag
+                 join server in rdpBase.Server
+                    on tag.ServerId equals server.ServerId
+                 where tagsIds.Contains(tag.TagId)
+                 select new
+                 {
+                     TagId = tag.TagId,
+                     TagName = tag.TagName,
+                     ServerId = server.ServerId,
+                     ConnectionString = $"Provider=SQLOLEDB;Server={server.ServerName};Database={server.Database};" +
+                                        $"User Id={server.UserName};Password={server.Password}",
+                     Value = 0
+                 })
+                 .AsNoTracking()
+                 .ToList();
+
+            List<LiveValueTag> liveValueTags = new();
+
+            Parallel.ForEach(tagsWithServer.Select(t => t.ServerId).Distinct().ToArray(), serverId => {
+                string tagsNames = String.Join(", ", tagsWithServer.Where(t => t.ServerId == serverId).Select(t => $"'{t.TagName}'"));
+
+                using OleDbConnection connection = new(tagsWithServer.Where(t => t.ServerId == serverId).First().ConnectionString);
+
+                string sqlExpression = $"select [Runtime].[dbo].[Live].TagName, [Runtime].[dbo].[Live].Value " +
+                    $"from [Runtime].[dbo].[Live] " + 
+                    $"where [Runtime].[dbo].[Live].TagName in ({tagsNames})";
+
+                    connection.Open();
+                    OleDbCommand command = new (sqlExpression, connection);
+                    OleDbDataReader result = command.ExecuteReader();
+
+                    while(result.Read())
+                    {
+                        liveValueTags.Add(new LiveValueTag{
+                            TagId = tagsWithServer.Where(t => t.ServerId == serverId && t.TagName == result["TagName"].ToString()).First().TagId,
+                            TagName = result["TagName"].ToString() ?? string.Empty,
+                            Value = (double?)result["Value"]
+                        });
+                    }
+            });
+
+            return liveValueTags;
+        }
     }
 }
 

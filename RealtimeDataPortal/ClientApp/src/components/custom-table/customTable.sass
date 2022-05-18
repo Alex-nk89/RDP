@@ -21,3 +21,27 @@
                     border: 1px solid $table-border-color
                     color: $table-text-color
                     text-align: center
+                    a
+                        position: relative
+                        text-decoration: none
+                        color: $table-text-color
+                        svg
+                            fill: $main-color
+                        span:before
+                            content: ""
+                            position: absolute
+                            left: 50%
+                            bottom: -.1em
+                            width: 0%
+                            border-bottom: 1px solid $main-color
+                            opacity: 0
+                            transition: width .3s ease, left .3s ease
+                        span:hover:before
+                            content: ""
+                            position: absolute
+                            left: -.3em
+                            bottom: -.1em
+                            width: calc(100% + .6em)
+                            border-bottom: 1px solid $main-color
+                            opacity: 1
+                            transition: width .3s ease, left .3s ease

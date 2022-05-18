@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 import { useRequest } from '../../hooks/useRequest';
 
 import { ActionIcon } from '@mantine/core';
@@ -15,7 +15,7 @@ import { TableCell } from './TableCell';
 export {
     useEffect, useMemo
     , useSelector, useDispatch
-    , useParams
+    , useParams, NavLink
     , useRequest
     , ActionIcon
     , BsShareFill

@@ -22,18 +22,19 @@ export const NewCustomTableRow = ({ indexTable, indexRow }) => {
         if (rows[indexRow].cells.length > 1) {
             dispatch(deleteColumn({ indexTable, indexColumn: Number(event.target.dataset.column) }));
         }
-    }
+    };
 
     const cells = useMemo(() => {
-        return rows[indexRow].cells.map((cell, indexCell) =>
+        return rows[indexRow].cells.map((cell, indexCell) => (
             <td
                 key={indexCell}
                 tabIndex={`${indexTable + 1}${indexRow + 1}${indexCell + 1}`}
                 data-table={indexTable}
                 data-row={indexRow}
                 data-column={indexCell}
+                style={{ ...JSON.parse(cell.cellStyle) }}
             >
-                {cell.cellContain}
+                {cell.cellContain.length > 0 ? JSON.parse(cell.cellContain)?.value : ''}
 
                 {
                     rows[indexRow].cells.length === indexCell + 1
@@ -74,10 +75,7 @@ export const NewCustomTableRow = ({ indexTable, indexRow }) => {
                         </div>
                         : null
                 }
-            </td>
-
-
-        )
+            </td>))
         //eslint-disable-next-line
     }, [rows[indexRow], rows.length]);
 

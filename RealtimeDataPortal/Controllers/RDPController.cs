@@ -717,11 +717,28 @@ namespace RealtimeDataPortal.Controllers
 
                 using RDPContext rdpBase = new();
 
+                var customTable = new CustomTable().GetCustomTables(id, currentUser);
+
                 return new
                 {
-                    CustomTable = new CustomTable().GetCustomTables(id, currentUser),
-                    Title = rdpBase.TreesMenu.Where(c => (c.ComponentId == id && c.Type == "customtable")).FirstOrDefault()?.Name
+                    CustomTable = customTable,
+                    Title = rdpBase.TreesMenu.Where(c => (c.ComponentId == id && c.Type == "customtable")).FirstOrDefault()?.Name,
+                    ListTagsIds = new CustomTable().GetTagsFromCustomTable(customTable)
                 };
+            }
+            catch (Exception ex)
+            {
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
+            }
+        }
+
+        [Route("GetLiveValueTags")]
+        public Object GetLiveValueTags(int[] tagsIds)
+        {
+            try
+            {
+                return new Query().GetLiveValueTags(tagsIds);
             }
             catch (Exception ex)
             {

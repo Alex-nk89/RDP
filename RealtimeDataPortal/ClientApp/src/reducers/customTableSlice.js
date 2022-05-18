@@ -4,8 +4,17 @@ const cell = {
     id: 0,
     rowId: 0,
     typeCell: 'text',
-    cellContain: '123',
-    cellStyle: {}
+    cellContain: JSON.stringify({
+        value: '',
+        tagId: 0,
+        tagName: '',
+        productId: 0,
+        round: 0
+    }),
+    cellStyle: JSON.stringify({
+        fontWeight: 400,
+        textAlign: 'start'
+    })
 };
 
 const row = {
@@ -25,7 +34,9 @@ const initialState = {
     tables: [table],
     focusedElement: undefined,
     statusFetcing: 'idle',
-    title: ''
+    title: '',
+    tagsIds: [],
+    tagsLiveValues: []
 };
 
 const customTableSlice = createSlice({
@@ -69,6 +80,9 @@ const customTableSlice = createSlice({
             state.tables[indexTable].rows[indexRow].cells[indexCell].cellContain = cellContain;
             state.tables[indexTable].rows[indexRow].cells[indexCell].typeCell = typeCell;
         },
+        inputCellStyle: (state, { payload: { indexTable, indexRow, indexCell, cellStyle }}) => {
+            state.tables[indexTable].rows[indexRow].cells[indexCell].cellStyle = cellStyle;
+        },
         getFocusedElement: (state, { payload: { indexTable, indexRow, indexCell } }) => {
             state.focusedElement = {
                 indexTable,
@@ -92,6 +106,12 @@ const customTableSlice = createSlice({
         initialTitle: (state, action) => {
             state.title = action.payload
         },
+        initialTagsIds: (state, action) => {
+            state.tagsIds = action.payload
+        },
+        initialTagsLiveValues: (state, action) => {
+            state.tagsLiveValues = action.payload
+        }
         //resetState: (state) => {
         //    state = initialState;
         //}
@@ -118,5 +138,8 @@ export const {
     , fetchingCustomTableError
     , fetchingCustomTableEnd
     , initialTitle
+    , initialTagsIds
+    , initialTagsLiveValues
+    , inputCellStyle
     //, resetState
 } = actions;

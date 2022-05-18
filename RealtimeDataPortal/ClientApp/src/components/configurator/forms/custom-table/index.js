@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { ActionIcon, Badge, Button, Group, Loader, Popover, Space, Stepper, Text, TextInput } from '@mantine/core';
-import { BsDash, BsPlus, BsX } from 'react-icons/bs';
+import { ActionIcon, Badge, Button, Group, Loader, Popover, Space, Stepper, Text, TextInput, Tooltip } from '@mantine/core';
+import { BsDash, BsPlus, BsX, BsTypeBold, BsTextLeft, BsTextCenter, BsTextRight } from 'react-icons/bs';
 
 import { useRequest } from '../../../../hooks/useRequest';
 import { useNotifications } from '@mantine/notifications';
@@ -15,8 +15,8 @@ import { NewCustomTableSettings } from './custom-table-editor/NewCustomTableSett
 export {
     useState, useEffect, useRef, useMemo
     , useSelector, useDispatch
-    , ActionIcon, Badge, Button, Group, Loader, Popover, Space, Stepper, Text, TextInput
-    , BsDash, BsPlus, BsX
+    , ActionIcon, Badge, Button, Group, Loader, Popover, Space, Stepper, Text, TextInput, Tooltip
+    , BsDash, BsPlus, BsX, BsTypeBold, BsTextLeft, BsTextCenter, BsTextRight
     , useRequest, useNotifications
     , FormCustomTable, EditorCustomTable, NewCustomTable, NewCustomTableRow, NewCustomTableSettings
 };

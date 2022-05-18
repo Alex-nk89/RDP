@@ -11,6 +11,32 @@ namespace RealtimeDataPortal.Models.DBClasses
         [NotMapped]
         public List<CustomTableRows> Rows { get; set; } = new();
 
+        public class CellWithTag
+        {
+            public string value { get; set; } = string.Empty;
+            public int ProductId { get; set; }
+            public string tagName { get; set; } = string.Empty;
+            public int tagId { get; set; }
+        }
+
+        public IEnumerable<int> GetTagsFromCustomTable(List<CustomTable> customTables)
+        {
+            foreach(var customTable in customTables)
+            {
+                foreach(var rows in customTable.Rows)
+                {
+                    foreach(var cell in rows.Cells)
+                    {
+                        int tagId = cell.CellContain.Length != 0
+                            ? (JsonSerializer.Deserialize<CellWithTag>(cell.CellContain) ?? new CellWithTag()).tagId
+                            : 0;
+
+                        yield return tagId;
+                    }
+                }
+            }
+        }
+
         public List<CustomTable> GetCustomTables(int componentId, CurrentUser? currentUser = null)
         {
             // Получение данных о кастомной таблице с приведением в необходимую фронту структуру
@@ -36,7 +62,7 @@ namespace RealtimeDataPortal.Models.DBClasses
                      Id = cells.Id,
                      TypeCell = cells.TypeCell,
                      CellContain = cells.CellContain,
-                     Style = cells.Style
+                     Style = cells.CellStyle
                  })
                  .AsNoTracking()
                  .ToList()
@@ -61,7 +87,7 @@ namespace RealtimeDataPortal.Models.DBClasses
                                      RowId = cells.RowId,
                                      TypeCell = cells.TypeCell,
                                      CellContain = cells.CellContain,
-                                     Style = cells.Style
+                                     CellStyle = cells.Style
                                  })
                                  .ToList()
                          })
@@ -79,7 +105,7 @@ namespace RealtimeDataPortal.Models.DBClasses
             // Если создается новый элемент получаем новый componentId, который задается как +1 к максимальному
             using RDPContext rdpBase = new();
             int newComponentId = componentId == 0
-                ? rdpBase.CustomTable.Select(c => c.ComponentId).Max() + 1
+                ? rdpBase.CustomTable.Select(c => c.ComponentId).Count() == 0 ? 1 : rdpBase.CustomTable.Select(c => c.ComponentId).Max() + 1 //Если нет еще ни одной таблицы присваиваем 1
                 : customTables.First().ComponentId;
 
             Parallel.ForEach(customTables, customTable =>
