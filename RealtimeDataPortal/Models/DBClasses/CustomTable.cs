@@ -108,8 +108,12 @@ namespace RealtimeDataPortal.Models.DBClasses
                 ? rdpBase.CustomTable.Select(c => c.ComponentId).Count() == 0 ? 1 : rdpBase.CustomTable.Select(c => c.ComponentId).Max() + 1 //Если нет еще ни одной таблицы присваиваем 1
                 : customTables.First().ComponentId;
 
-            Parallel.ForEach(customTables, customTable =>
-                AddCustomTable(customTable, oldCustomTables, newComponentId));
+            //Parallel.ForEach(customTables, customTable =>
+            //    AddCustomTable(customTable, oldCustomTables, newComponentId));
+            foreach(var customTable in customTables)
+            {
+                AddCustomTable(customTable, oldCustomTables, newComponentId);
+            }
 
             if (oldCustomTables.Count != 0)
             {
@@ -119,8 +123,12 @@ namespace RealtimeDataPortal.Models.DBClasses
                     .Where(c => removingCustomTablesIds.Contains(c.CustomTableId))
                     .ToList();
 
-                Parallel.ForEach(removingCustomTables, removeCustomTable =>
-                    RemoveCustomTable(new List<CustomTable>() { removeCustomTable }));
+                //Parallel.ForEach(removingCustomTables, removeCustomTable =>
+                //    RemoveCustomTable(new List<CustomTable>() { removeCustomTable }));
+                foreach(var removeCustomTable in removingCustomTables)
+                {
+                    RemoveCustomTable(new List<CustomTable>() { removeCustomTable });
+                }
             }
 
             return customTables.First().ComponentId;
@@ -141,11 +149,17 @@ namespace RealtimeDataPortal.Models.DBClasses
             rdpBase.CustomTable.Update(customTable);
             rdpBase.SaveChanges();
 
-            Parallel.ForEach(customTable.Rows, row =>
+            //Parallel.ForEach(customTable.Rows, row =>
+            //{
+            //    row.CustomTableId = customTable.CustomTableId;
+            //    new CustomTableRows().AddCustomTableRow(row, oldRows);
+            //});
+
+            foreach(var row in customTable.Rows)
             {
                 row.CustomTableId = customTable.CustomTableId;
                 new CustomTableRows().AddCustomTableRow(row, oldRows);
-            });
+            }
 
             if (oldRows.Count != 0)
             {

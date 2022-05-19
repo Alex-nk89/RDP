@@ -2,11 +2,12 @@ import {
     useState
     , useSelector, useDispatch
     , useRequest
-    , ActionIcon, Loader, TextInput, Tooltip
-    , BsTypeBold, BsTextLeft, BsTextCenter, BsTextRight
+    , ActionIcon, ColorInput, Loader, NumberInput, TextInput, Tooltip
+    , BsTypeBold, BsTextLeft, BsTextCenter, BsTextRight, BsArrowBarRight, BsArrowBarDown, BsChevronUp, BsChevronDown
+    , BsChevronBarContract, BsChevronBarUp, BsChevronBarDown
 } from '..';
 
-import { inputCellContain, inputCellStyle } from '../../../../../reducers/customTableSlice';
+import { inputCellContain, inputCellStyle, addColSpan, removeColSpan, addRowSpan, removeRowSpan } from '../../../../../reducers/customTableSlice';
 
 export const NewCustomTableSettings = ({ indexTable }) => {
     const dispatch = useDispatch();
@@ -32,6 +33,7 @@ export const NewCustomTableSettings = ({ indexTable }) => {
         : JSON.parse(cell.cellContain).value
 
     const cellStyle = JSON.parse(cell.cellStyle);
+    const { colSpan, rowSpan, color, backgroundColor } = JSON.parse(cell.cellStyle);
 
     const fontWeightStyle = cellStyle?.fontWeight === 400 ? { variant: 'light' } : { variant: 'filled' };
 
@@ -39,7 +41,13 @@ export const NewCustomTableSettings = ({ indexTable }) => {
         start: cellStyle?.textAlign === 'start' ? { variant: 'filled' } : { variant: 'light' },
         center: cellStyle?.textAlign === 'center' ? { variant: 'filled' } : { variant: 'light' },
         end: cellStyle?.textAlign === 'end' ? { variant: 'filled' } : { variant: 'light' }
-    }
+    };
+
+    const verticalAlignStyle = {
+        top: cellStyle?.verticalAlign === 'top' ? { variant: 'filled' } : { variant: 'light' },
+        middle: cellStyle?.verticalAlign === 'middle' ? { variant: 'filled' } : { variant: 'light' },
+        bottom: cellStyle?.verticalAlign === 'bottom' ? { variant: 'filled' } : { variant: 'light' }
+    };
 
     const inputThisCellContain = (event) => {
         const cellContain = event.target.value;
@@ -96,6 +104,77 @@ export const NewCustomTableSettings = ({ indexTable }) => {
         }));
     };
 
+    const toogleVerticalAlignStyle = (event) => {
+        dispatch(inputCellStyle({
+            indexTable,
+            indexRow,
+            indexCell,
+            cellStyle: JSON.stringify({ ...cellStyle, verticalAlign: event.target.dataset.verticalalign })
+        }));
+    };
+
+    const addColSpanValue = () => {
+        if (tables.rows[indexRow].cells.length > Number(indexCell) + 1) {
+            dispatch(addColSpan({
+                indexTable,
+                indexRow,
+                indexCell,
+                cellStyle: JSON.stringify({ ...cellStyle, colSpan: colSpan + 1 })
+            }));
+        }
+    };
+
+    const removeColSpanValue = () => {
+        if (colSpan > 1) {
+            dispatch(removeColSpan({
+                indexTable,
+                indexRow,
+                indexCell,
+                cellStyle: JSON.stringify({ ...cellStyle, colSpan: colSpan - 1 })
+            }));
+        }
+    };
+
+    const addRowSpanValue = () => {
+        if (tables.rows.length > Number(indexRow) + rowSpan) {
+            dispatch(addRowSpan({
+                indexTable,
+                indexRow,
+                indexCell,
+                cellStyle: JSON.stringify({ ...cellStyle, rowSpan: rowSpan + 1 })
+            }));
+        }
+    };
+
+    const removeRowSpanValue = () => {
+        if (rowSpan > 1) {
+            dispatch(removeRowSpan({
+                indexTable,
+                indexRow,
+                indexCell,
+                cellStyle: JSON.stringify({ ...cellStyle, rowSpan: rowSpan - 1 })
+            }));
+        }
+    };
+
+    const inputColor = (color) => {
+        dispatch(inputCellStyle({
+            indexTable,
+            indexRow,
+            indexCell,
+            cellStyle: JSON.stringify({ ...cellStyle, color })
+        }));
+    };
+
+    const inputBackgroundColor = (backgroundColor) => {
+        dispatch(inputCellStyle({
+            indexTable,
+            indexRow,
+            indexCell,
+            cellStyle: JSON.stringify({ ...cellStyle, backgroundColor })
+        }));
+    };
+
     const findedTagsList = findedTags.map(({ tagId, tagName, productId, productName, position, round }, index) => (
         <div key={index} className='dropdown-list__item' onClick={selectTag} data-tagid={tagId} data-productid={productId} data-tagname={tagName} data-round={round}>
             <div className="dropdown-list__item__value" data-tagid={tagId} data-productid={productId} data-tagname={tagName} data-round={round}>
@@ -129,7 +208,7 @@ export const NewCustomTableSettings = ({ indexTable }) => {
             </div >
 
             <div className="custom-table-editor__new-table-form__table-settings__font-weight">
-                <Tooltip label='Полужирный'>
+                <Tooltip label='Полужирный' openDelay={1000}>
                     <ActionIcon {...fontWeightStyle} color='blue' onClick={toogleFontWeightStyle} data-settings>
                         <BsTypeBold size={20} />
                     </ActionIcon>
@@ -137,22 +216,106 @@ export const NewCustomTableSettings = ({ indexTable }) => {
             </div>
 
             <div className="custom-table-editor__new-table-form__table-settings__contain-alignment">
-                <Tooltip label='По левому краю'>
+                <Tooltip label='По левому краю' openDelay={1000}>
                     <ActionIcon color='blue' data-settings data-textalign={'start'} {...textAlignStyle.start} onClick={toogleTextAlignStyle}>
                         <BsTextLeft size={20} data-textalign={'start'} />
                     </ActionIcon>
                 </Tooltip>
 
-                <Tooltip label='По центру'>
+                <Tooltip label='По центру' openDelay={1000}>
                     <ActionIcon color='blue' data-settings data-textalign={'center'} {...textAlignStyle.center} onClick={toogleTextAlignStyle}>
                         <BsTextCenter size={20} data-textalign={'center'} />
                     </ActionIcon>
                 </Tooltip>
 
-                <Tooltip label='По правому краю'>
+                <Tooltip label='По правому краю' openDelay={1000}>
                     <ActionIcon color='blue' data-settings data-textalign={'end'} {...textAlignStyle.end} onClick={toogleTextAlignStyle}>
                         <BsTextRight size={20} data-textalign={'end'} />
                     </ActionIcon>
+                </Tooltip>
+            </div>
+
+            <div className="custom-table-editor__new-table-form__table-settings__vertical-alignment">
+                <Tooltip label='По верхнему краю' openDelay={1000}>
+                    <ActionIcon color='blue' data-settings data-verticalalign={'top'} {...verticalAlignStyle.top} onClick={toogleVerticalAlignStyle}>
+                        <BsChevronBarUp size={20} data-verticalalign={'top'} />
+                    </ActionIcon>
+                </Tooltip>
+
+                <Tooltip label='По середине' openDelay={1000}>
+                    <ActionIcon color='blue' data-settings data-verticalalign={'middle'} {...verticalAlignStyle.middle} onClick={toogleVerticalAlignStyle}>
+                        <BsChevronBarContract size={20} data-verticalalign={'middle'} />
+                    </ActionIcon>
+                </Tooltip>
+
+                <Tooltip label='По нижнему краю' openDelay={1000}>
+                    <ActionIcon color='blue' data-settings data-verticalalign={'bottom'} {...verticalAlignStyle.bottom} onClick={toogleVerticalAlignStyle}>
+                        <BsChevronBarDown size={20} data-verticalalign={'bottom'} />
+                    </ActionIcon>
+                </Tooltip>
+            </div>
+
+            <div className="custom-table-editor__new-table-form__table-settings__colspan">
+                <Tooltip label='Объединение столбцов' openDelay={1000}>
+                    <NumberInput
+                        size='xs'
+                        data-settings
+                        value={colSpan}
+                        icon={<BsArrowBarRight size={16} color='blue' />}
+                        rightSection={(
+                            <div>
+                                <ActionIcon size={13} variant='light' data-settings onClick={addColSpanValue}>
+                                    <BsChevronUp size={10} />
+                                </ActionIcon>
+
+                                <ActionIcon size={13} variant='light' data-settings onClick={removeColSpanValue}>
+                                    <BsChevronDown size={10} />
+                                </ActionIcon>
+                            </div>)}
+                    />
+                </Tooltip>
+            </div>
+
+            <div className="custom-table-editor__new-table-form__table-settings__rowspan">
+                <Tooltip label='Объединение строк' openDelay={1000}>
+                    <NumberInput
+                        size='xs'
+                        data-settings
+                        value={rowSpan}
+                        icon={<BsArrowBarDown size={16} color='blue' />}
+                        rightSection={(
+                            <div>
+                                <ActionIcon size={13} variant='light' data-settings onClick={addRowSpanValue}>
+                                    <BsChevronUp size={10} />
+                                </ActionIcon>
+
+                                <ActionIcon size={13} variant='light' data-settings onClick={removeRowSpanValue}>
+                                    <BsChevronDown size={10} />
+                                </ActionIcon>
+                            </div>)}
+                    />
+                </Tooltip>
+            </div>
+
+            <div className="custom-table-editor__new-table-form__table-settings__color">
+                <Tooltip label='Цвет текста' openDelay={1000}>
+                    <ColorInput
+                        size='xs'
+                        data-settings
+                        value={color}
+                        onChange={inputColor}
+                    />
+                </Tooltip>
+            </div>
+
+            <div className="custom-table-editor__new-table-form__table-settings__background">
+                <Tooltip label='Цвет фона' openDelay={1000}>
+                    <ColorInput
+                        size='xs'
+                        data-settings
+                        value={backgroundColor}
+                        onChange={inputBackgroundColor}
+                    />
                 </Tooltip>
             </div>
         </>

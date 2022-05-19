@@ -7,7 +7,7 @@ import {
 
 import './customtable.sass';
 
-import { initializeTables } from '../../../../reducers/customTableSlice';
+import { initializeTables, resetState } from '../../../../reducers/customTableSlice';
 
 export const EditCustomTable = ({ action, form, submitForm, addAccessIcon, multiSelect }) => {
     const dispatch = useDispatch();
@@ -21,6 +21,8 @@ export const EditCustomTable = ({ action, form, submitForm, addAccessIcon, multi
     useEffect(() => {
         if (customTables.length > 0) {
             dispatch(initializeTables(customTables));
+        } else {
+            dispatch(resetState());
         }
         //eslint-disable-next-line
     }, []);

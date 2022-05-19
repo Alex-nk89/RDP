@@ -36,9 +36,9 @@
                         border: 1px solid $table-border-color
                         color: $table-text-color
                         text-align: center
+                        empty-cells: hide
                         cursor: pointer
-                        &:focus
-                            background: $table-border-color
+                        transition: all .3s ease
                         & > div
                             display: flex
                             justify-content: center
@@ -79,6 +79,20 @@
                 margin-left: .5em
             &__contain-alignment
                 margin-left: .5em
+            &__vertical-alignment
+                margin-left: .5em
+            &__colspan
+                margin-left: .5em
+                max-width: 80px
+            &__rowspan
+                margin-left: .5em
+                max-width: 80px
+            &__color
+                margin-left: .5em
+                max-width: 100px
+            &__background
+                margin-left: .5em
+                max-width: 100px
                 
 
 

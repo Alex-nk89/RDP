@@ -22,22 +22,27 @@ namespace RealtimeDataPortal.Models.DBClasses
             rdpBase.CustomTableRows.Update(row);
             rdpBase.SaveChanges();
 
-            Parallel.ForEach(row.Cells, cell => 
+            //Parallel.ForEach(row.Cells, cell => 
+            //{
+            //    cell.RowId = row.RowId;
+            //    new CustomTableCells().AddCustomTableCell(cell);
+            //});
+            foreach (var cell in row.Cells)
             {
                 cell.RowId = row.RowId;
                 new CustomTableCells().AddCustomTableCell(cell);
-            });
+            }
 
-            if(oldCells.Count != 0)
+            if (oldCells.Count != 0)
             {
                 int[] removingCellsIds = oldCells.Select(c => c.Id).Except(row.Cells.Select(c => c.Id)).ToArray();
 
                 IEnumerable<CustomTableCells> removingCells = oldCells
                     .Where(c => removingCellsIds.Contains(c.Id))
-                    .ToList();    
+                    .ToList();
 
                 Parallel.ForEach(removingCells, removingCell =>
-                    new CustomTableCells().RemoveCustomTableCells(new List<CustomTableCells>() { removingCell }));            
+                    new CustomTableCells().RemoveCustomTableCells(new List<CustomTableCells>() { removingCell }));
             }
         }
 
@@ -48,7 +53,8 @@ namespace RealtimeDataPortal.Models.DBClasses
             rdpBase.CustomTableRows.RemoveRange(rows);
             rdpBase.SaveChanges();
 
-            Parallel.ForEach(rows, row => {
+            Parallel.ForEach(rows, row =>
+            {
                 new CustomTableCells().RemoveCustomTableCells(row.Cells);
             });
         }

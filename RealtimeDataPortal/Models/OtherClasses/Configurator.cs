@@ -153,6 +153,12 @@ namespace RealtimeDataPortal.Models
                     }
                 }
 
+                if(removedElement.Type == "customtable")
+                {
+                    List<CustomTable> removingTables = new CustomTable().GetCustomTables(removedElement.ComponentId);
+                    new CustomTable().RemoveCustomTable(removingTables);
+                }
+
                 rdp_base.TreesMenu.Remove(removedElement);
 
                 List<AccessToComponent> accessToComponent = rdp_base.AccessToComponent

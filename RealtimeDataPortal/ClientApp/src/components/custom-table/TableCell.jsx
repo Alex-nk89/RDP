@@ -15,16 +15,18 @@ export const TableCell = ({ indexTable, indexRow, indexCell }) => {
     }
 
     const cell = JSON.parse(cellContain);
+    const { colSpan, rowSpan } = JSON.parse(cellStyle);
 
     const cellValue = cell.tagId !== 0
         ? <NavLink to={`/graphics/${cell.productId}`}>
-            <span>{tagsLiveValues.find(tag => tag.tagId === cell.tagId)?.value.toFixed(cell.round)}</span> 
+            <span>{tagsLiveValues.find(tag => tag.tagId === cell.tagId)?.value.toFixed(cell.round)}</span>
         </NavLink>
         : cell.value;
 
     return (
         <>
-            <td style={{...JSON.parse(cellStyle)}} >{cellValue}</td>
+            <td style={{ ...JSON.parse(cellStyle) }} rowSpan={rowSpan} colSpan={colSpan}>{cellValue}</td>
         </>
     );
 }
+//style={{ ...JSON.parse(cellStyle) }}
