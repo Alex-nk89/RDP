@@ -1,8 +1,8 @@
 import {
-    useEffect
+    useState, useEffect
     , useSelector, useDispatch
     , useParams
-    , useRequest
+    , useRequest, useFormateDate
     , ActionIcon
     , BsShareFill
     , AppPreloader, ErrorsPage, Table
@@ -16,14 +16,21 @@ import './customTable.sass';
 
 export const CustomTable = () => {
     const { request, error } = useRequest();
+    const { formateDate } = useFormateDate();
     const dispatch = useDispatch();
     const { statusFetcing, title, tables } = useSelector(state => state.customTable);
     const { id } = useParams();
+    const [updateTable, setUpdateTable] = useState(0);
+    const [updateDate, setUpdateDate] = useState();
 
     const customTables = tables.map((table, indexTable) =>
         <Table key={table.customTableId} indexTable={indexTable} />)
 
     useEffect(() => {
+        const updateTable = setTimeout(() => {
+            setUpdateTable(updateTable + 1);
+        }, 57000);
+
         dispatch(fetchingCustomTable());
 
         request(`GetCustomTable?id=${id}`)
@@ -39,13 +46,16 @@ export const CustomTable = () => {
                     .then(data => {
                         dispatch(initialTagsLiveValues(data));
                     })
+                    .then(() => setUpdateDate(formateDate(new Date())));
             })
             .then(() => dispatch(fetchingCustomTableEnd()))
             .catch(() => dispatch(fetchingCustomTableError()));
-        //eslint-disable-next-line
-    }, [id]);
 
-    if (statusFetcing === 'loading') {
+        return () => clearTimeout(updateTable);
+        //eslint-disable-next-line
+    }, [id, updateTable]);
+
+    if (statusFetcing === 'loading' && updateTable < 2) {
         return <AppPreloader height='calc(100vh - 116px)' />
     }
 
@@ -56,11 +66,17 @@ export const CustomTable = () => {
     return (
         <div className='custom-table'>
             <div className='custom-table__header'>
-                <h3 className=''>{title}</h3>
+                <div>
+                    <h3 className=''>{title}</h3>
 
-                <ActionIcon>
-                    <BsShareFill size={18} />
-                </ActionIcon>
+                    <ActionIcon>
+                        <BsShareFill size={18} />
+                    </ActionIcon>
+                </div>
+
+                <div>
+                    Данные получены: {updateDate}
+                </div>
             </div>
 
             {customTables}

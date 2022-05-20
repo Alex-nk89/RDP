@@ -1,7 +1,8 @@
-import { useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, NavLink } from 'react-router-dom';
 import { useRequest } from '../../hooks/useRequest';
+import { useFormateDate } from '../../hooks/useFormateDate';
 
 import { ActionIcon } from '@mantine/core';
 import { BsShareFill } from 'react-icons/bs';
@@ -13,10 +14,10 @@ import { TableRow } from './TableRow';
 import { TableCell } from './TableCell';
 
 export {
-    useEffect, useMemo
+    useState, useEffect, useMemo
     , useSelector, useDispatch
     , useParams, NavLink
-    , useRequest
+    , useRequest, useFormateDate
     , ActionIcon
     , BsShareFill
     , AppPreloader, ErrorsPage, Table, TableRow, TableCell

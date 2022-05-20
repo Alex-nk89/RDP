@@ -1,13 +1,13 @@
 import {
-    useState
+    useState, useEffect
     , useSelector, useDispatch
     , useRequest
-    , ActionIcon, ColorInput, Loader, NumberInput, TextInput, Tooltip
+    , ActionIcon, Checkbox, ColorInput, Loader, NumberInput, TextInput, Tooltip
     , BsTypeBold, BsTextLeft, BsTextCenter, BsTextRight, BsArrowBarRight, BsArrowBarDown, BsChevronUp, BsChevronDown
     , BsChevronBarContract, BsChevronBarUp, BsChevronBarDown
 } from '..';
 
-import { inputCellContain, inputCellStyle, addColSpan, removeColSpan, addRowSpan, removeRowSpan } from '../../../../../reducers/customTableSlice';
+import { inputCellContain, inputCellStyle, addColSpan, removeColSpan, addRowSpan, removeRowSpan, getFocusedElement } from '../../../../../reducers/customTableSlice';
 
 export const NewCustomTableSettings = ({ indexTable }) => {
     const dispatch = useDispatch();
@@ -17,6 +17,16 @@ export const NewCustomTableSettings = ({ indexTable }) => {
 
     const [findedTags, setFindedTags] = useState([]);
     const [fetchingTags, setFetchinTags] = useState(false);
+
+    const closeList = () => {
+        setFindedTags([]);
+    };
+
+    useEffect(() => {
+        document.addEventListener("click", closeList);
+
+        return () => document.removeEventListener("click", closeList);
+    }, []);
 
     if (indexTable !== Number(focusedElement?.indexTable)) {
         return null;
@@ -49,6 +59,8 @@ export const NewCustomTableSettings = ({ indexTable }) => {
         bottom: cellStyle?.verticalAlign === 'bottom' ? { variant: 'filled' } : { variant: 'light' }
     };
 
+    const link = JSON.parse(cell.cellContain)?.link;
+
     const inputThisCellContain = (event) => {
         const cellContain = event.target.value;
 
@@ -67,7 +79,7 @@ export const NewCustomTableSettings = ({ indexTable }) => {
             indexTable,
             indexRow: focusedElement.indexRow,
             indexCell: focusedElement.indexCell,
-            cellContain: JSON.stringify({ value: cellContain, tagId: 0, productId: 0, tagName: cellContain, round: 0 })
+            cellContain: JSON.stringify({ value: cellContain, tagId: 0, productId: 0, tagName: cellContain, round: 0, link })
         }));
     };
 
@@ -84,6 +96,8 @@ export const NewCustomTableSettings = ({ indexTable }) => {
                 round: Number(event.target.dataset.round)
             })
         }));
+
+        dispatch(getFocusedElement({ indexTable, indexRow: focusedElement.indexRow, indexCell: focusedElement.indexCell }));
     };
 
     const toogleFontWeightStyle = () => {
@@ -110,6 +124,44 @@ export const NewCustomTableSettings = ({ indexTable }) => {
             indexRow,
             indexCell,
             cellStyle: JSON.stringify({ ...cellStyle, verticalAlign: event.target.dataset.verticalalign })
+        }));
+    };
+
+    const toogleLink = (event) => {
+        if (!event.target.checked) {
+            dispatch(inputCellContain({
+                indexTable,
+                indexRow: focusedElement.indexRow,
+                indexCell: focusedElement.indexCell,
+                cellContain: JSON.stringify({
+                    value: cellContain,
+                    tagId: 0,
+                })
+            }));
+        } else {
+            dispatch(inputCellContain({
+                indexTable,
+                indexRow: focusedElement.indexRow,
+                indexCell: focusedElement.indexCell,
+                cellContain: JSON.stringify({
+                    value: cellContain,
+                    tagId: 0,
+                    link: ''
+                })
+            }));
+        }
+    };
+
+    const inputLink = (event) => {
+        dispatch(inputCellContain({
+            indexTable,
+            indexRow: focusedElement.indexRow,
+            indexCell: focusedElement.indexCell,
+            cellContain: JSON.stringify({
+                value: cellContain,
+                tagId: 0,
+                link: event.target.value
+            })
         }));
     };
 
@@ -175,19 +227,31 @@ export const NewCustomTableSettings = ({ indexTable }) => {
         }));
     };
 
-    const findedTagsList = findedTags.map(({ tagId, tagName, productId, productName, position, round }, index) => (
-        <div key={index} className='dropdown-list__item' onClick={selectTag} data-tagid={tagId} data-productid={productId} data-tagname={tagName} data-round={round}>
-            <div className="dropdown-list__item__value" data-tagid={tagId} data-productid={productId} data-tagname={tagName} data-round={round}>
-                {tagName}
-            </div>
+    const findedTagsList = findedTags.map(({ tagId, tagName, productId, productName, position, round }, index) => {
+        const attributes = {
+            'data-table': indexTable,
+            'data-tagid': tagId,
+            'data-productid': productId,
+            'data-tagname': tagName,
+            'data-round': round,
+            'data-row': indexRow,
+            'data-column': indexCell
+        };
 
-            <div className="dropdown-list__item__description" data-tagid={tagId} data-productid={productId} data-tagname={tagName} data-round={round}>
-                {`Продукт: ${productName.length > 0 ? productName : 'Не указан'}`}
-                <br />
-                {`Позиция: ${position.length > 0 ? position : 'Не указана'}`}
+        return (
+            <div key={index} className='dropdown-list__item' onClick={selectTag} {...attributes} >
+                <div className="dropdown-list__item__value" {...attributes} >
+                    {tagName}
+                </div>
+
+                <div className="dropdown-list__item__description" {...attributes} >
+                    {`Продукт: ${productName.length > 0 ? productName : 'Не указан'}`}
+                    <br />
+                    {`Позиция: ${position.length > 0 ? position : 'Не указана'}`}
+                </div>
             </div>
-        </div>
-    ));
+        )
+    });
 
     return (
         <>
@@ -206,6 +270,23 @@ export const NewCustomTableSettings = ({ indexTable }) => {
                     {findedTagsList}
                 </div>
             </div >
+
+            <div className="custom-table-editor__new-table-form__table-settings__set-link">
+
+                <Tooltip label='Назначить как ссылку' openDelay={1000}>
+                    <Checkbox size='md' data-settings checked={typeof (link) === 'string'} onChange={toogleLink} /> {/* typeof (link) === 'string' */}
+                </Tooltip>
+
+                <div className="custom-table-editor__new-table-form__table-settings__set-link__link" open={typeof (link) === 'string'}>
+                    <TextInput
+                        placeholder='введите ссылку'
+                        size='xs'
+                        value={link ?? ''}
+                        onChange={inputLink}
+                        data-settings
+                    />
+                </div>
+            </div>
 
             <div className="custom-table-editor__new-table-form__table-settings__font-weight">
                 <Tooltip label='Полужирный' openDelay={1000}>

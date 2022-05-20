@@ -19,9 +19,15 @@ export const TableCell = ({ indexTable, indexRow, indexCell }) => {
 
     const cellValue = cell.tagId !== 0
         ? <NavLink to={`/graphics/${cell.productId}`}>
-            <span>{tagsLiveValues.find(tag => tag.tagId === cell.tagId)?.value.toFixed(cell.round)}</span>
+            <span>
+                {tagsLiveValues.find(tag => tag.tagId === cell.tagId)?.value !== null
+                    ? tagsLiveValues.find(tag => tag.tagId === cell.tagId)?.value?.toFixed(cell.round)
+                    : '###'}
+            </span>
         </NavLink>
-        : cell.value;
+        : cell?.link
+            ? <a href={cell.link}><span>{cell.value}</span></a>
+            : cell.value;
 
     return (
         <>
@@ -29,4 +35,3 @@ export const TableCell = ({ indexTable, indexRow, indexCell }) => {
         </>
     );
 }
-//style={{ ...JSON.parse(cellStyle) }}

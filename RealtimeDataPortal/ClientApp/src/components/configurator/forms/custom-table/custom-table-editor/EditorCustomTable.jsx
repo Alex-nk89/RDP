@@ -29,7 +29,8 @@ export const EditorCustomTable = ({ submitForm, form }) => {
     };
 
     const focusOnCell = (event) => {
-        const dataset = event.target.dataset
+        const dataset = event.target.dataset;
+
         if (dataset?.table) {
             dispatch(getFocusedElement({ indexTable: dataset.table, indexRow: dataset.row, indexCell: dataset.column }));
         }

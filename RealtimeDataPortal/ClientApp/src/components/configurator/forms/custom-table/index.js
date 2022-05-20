@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { ActionIcon, Badge, Button, ColorInput, Group, Loader, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip } from '@mantine/core';
+import { ActionIcon, Badge, Button, Checkbox, ColorInput, Group, Loader, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip } from '@mantine/core';
 import { BsDash, BsPlus, BsX, BsTypeBold, BsTextLeft, BsTextCenter, BsTextRight, BsArrowBarRight, BsArrowBarDown, 
     BsChevronUp, BsChevronDown, BsChevronBarContract, BsChevronBarUp, BsChevronBarDown } from 'react-icons/bs';
 
@@ -16,7 +16,7 @@ import { NewCustomTableSettings } from './custom-table-editor/NewCustomTableSett
 export {
     useState, useEffect, useRef, useMemo
     , useSelector, useDispatch
-    , ActionIcon, Badge, Button, ColorInput, Group, Loader, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip
+    , ActionIcon, Badge, Button, Checkbox, ColorInput, Group, Loader, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip
     , BsDash, BsPlus, BsX, BsTypeBold, BsTextLeft, BsTextCenter, BsTextRight, BsArrowBarRight, BsArrowBarDown
     , BsChevronUp, BsChevronDown, BsChevronBarContract, BsChevronBarUp, BsChevronBarDown
     , useRequest, useNotifications

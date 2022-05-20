@@ -107,11 +107,10 @@ const customTableSlice = createSlice({
             for (let i = Number(indexRow); i < Number(indexRow) + removingRows; i++) {
                 state.tables[indexTable].rows[i].cells.splice(Number(indexCell), removingCells);
             }
-            
+
             state.tables[indexTable].rows[indexRow].cells[indexCell].cellStyle = cellStyle;
         },
         removeColSpan: (state, { payload: { indexTable, indexRow, indexCell, cellStyle } }) => {
-            //const addingCells = JSON.parse(state.tables[indexTable].rows[indexRow].cells[Number(indexCell) + 1].cellStyle).colSpan;
             const addingRows = JSON.parse(state.tables[indexTable].rows[indexRow].cells[indexCell].cellStyle).rowSpan;
             state.tables[indexTable].rows[indexRow].cells[indexCell].cellStyle = cellStyle;
 
