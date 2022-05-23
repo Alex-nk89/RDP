@@ -1,7 +1,7 @@
 import {
-    useState, useEffect,
-    Space, Stepper,
-    MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanelCreateElements, MnemoschemeEditorPanelChangeElements
+    useState, useEffect, useRef
+    , Space, Stepper
+    , MnemoschemeEditorForm, MnemoschemeEditorPreview, MnemoschemeEditorPanelCreateElements, MnemoschemeEditorPanelChangeElements
 } from '.';
 import './mnemoscheme.sass';
 
@@ -11,6 +11,8 @@ export const EditMnemoscheme = ({ action, form, submitForm, addAccessIcon, multi
 
     const [activeStep, setActiveStep] = useState(0);
     const [mnemoscheme, setMnemoscheme] = useState(null);
+
+    const refCanvas = useRef();
 
     const saveMnemoscheme = () => {
         submitForm({ ...form.values, mnemoschemeContain: JSON.stringify(mnemoscheme) });
@@ -193,10 +195,13 @@ export const EditMnemoscheme = ({ action, form, submitForm, addAccessIcon, multi
 
                 <Stepper.Step label='Мнемосхема' description='Рисование мнемосхемы'>
                     <div className='info-block__mnemoscheme-editor' >
-                        <div className='info-block' >
+                        <div className="info-block__mnemoscheme-editor__settings info-block">
                             <MnemoschemeEditorPanelCreateElements mnemoscheme={mnemoscheme} saveMnemoscheme={saveMnemoscheme} />
                             <MnemoschemeEditorPanelChangeElements mnemoscheme={mnemoscheme} />
-                            <MnemoschemeEditorPreview setMnemoscheme={setMnemoscheme} mnemoscheme={mnemoscheme} />
+                        </div>
+
+                        <div className="info-block__mnemoscheme-editor__canvas info-block" ref={refCanvas}>
+                            <MnemoschemeEditorPreview setMnemoscheme={setMnemoscheme} mnemoscheme={mnemoscheme} refCanvas={refCanvas} />
                         </div>
                     </div>
                 </Stepper.Step>

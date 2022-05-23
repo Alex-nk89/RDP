@@ -13,10 +13,9 @@ export const MnemoschemeEditorPanelCanvasAttribute = ({ mnemoschemeActiveObjectT
     const selectMnemoschemeBackgroundColor = !mnemoschemeActiveObjectType
         ? (
             <>
-                <Tooltip label='Сменить цвет фона' >
+                <Tooltip label='Сменить цвет фона' openDelay={1000} >
                     <ColorInput
                         size='xs'
-                        variant='filled'
                         format='rgba'
                         icon={<BsFillPaletteFill color={elementAttributes.backgroundColor} size={18} />}
                         value={elementAttributes.backgroundColor}
@@ -33,22 +32,3 @@ export const MnemoschemeEditorPanelCanvasAttribute = ({ mnemoschemeActiveObjectT
         </>
     );
 }
-
-
-//let reader = new FileReader();
-//        //reader.readAsDataURL(event.target?.files[0]);
-//        //reader.onload = function () {
-//            const img = document.createElement('img');
-//            img.src = urlToUserImage;
-//            mnemoscheme.add(new fabric.Image(img, { width: 600, height: 600 }));
-//        //}
-
-
-//let reader = new FileReader();
-//reader.readAsDataURL(event.target?.files[0]);
-//reader.onload = function() {
-//    const img = document.createElement('img');
-//    img.src = reader.result;
-//    document.querySelector('.info-block__mnemoscheme-editor__create-block').append(img);
-//    //mnemoscheme.add(new fabric.Image(URL.createObjectURL(reader.result)));
-//}

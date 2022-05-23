@@ -1,7 +1,7 @@
 import {
     useState, useEffect, useNotification, useRequest
-    , NumberInput, TextInput, Tooltip
-    , BsAlt, BsFonts
+    , ActionIcon, NumberInput, TextInput, Tooltip
+    , BsFonts, BsChevronUp, BsChevronDown, BsType, BsTypeBold
 } from '..';
 
 export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectType, elementAttributes, setElementAttributes, mnemoscheme }) => {
@@ -41,12 +41,14 @@ export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectTyp
         }
     };
 
-    const changeFontWeight = (fontWeight) => {
-        if (fontWeight >= 300 && fontWeight <= 800) {
-            setElementAttributes({ ...elementAttributes, fontWeight });
-            mnemoscheme._activeObject.set({ fontWeight });
-            mnemoscheme.renderAll();
-        }
+    const increaseFontSize = () => changeFontSize(++elementAttributes.fontSize);
+
+    const decreaseFontSize = () => changeFontSize(--elementAttributes.fontSize);
+
+    const changeFontWeight = () => {
+        setElementAttributes({ ...elementAttributes, fontWeight: elementAttributes?.fontWeight === 400 ? 700 : 400 });
+        mnemoscheme._activeObject.set({ fontWeight: elementAttributes?.fontWeight === 400 ? 700 : 400 });
+        mnemoscheme.renderAll();
     };
 
     const selectTag = (event) => {
@@ -75,81 +77,73 @@ export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectTyp
 
     const selectFontSize = ['text'].includes(mnemoschemeActiveObjectType)
         ? (
-            <Tooltip label='Размер шрифта'>
+            <Tooltip label='Размер шрифта' openDelay={1000}>
                 <NumberInput
                     size='xs'
-                    variant='filled'
                     type='number'
                     min='5'
-                    icon={<BsAlt size={18} color='#5c5c5c' />}
+                    icon={<BsType size={18} color='#5c5c5c' />}
                     value={elementAttributes.fontSize}
                     onChange={changeFontSize}
+                    rightSection={(
+                        <div>
+                            <ActionIcon size={13} variant='light' data-settings onClick={increaseFontSize}>
+                                <BsChevronUp size={10} />
+                            </ActionIcon>
+
+                            <ActionIcon size={13} variant='light' data-settings onClick={decreaseFontSize}>
+                                <BsChevronDown size={10} />
+                            </ActionIcon>
+                        </div>
+                    )}
                 />
             </Tooltip>
         )
         : null;
 
-    const selectFontWeight = ['text'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Толщина текста'>
-            <NumberInput
-                size='xs'
-                variant='filled'
-                type='number'
-                min='300' max='800' step={100}
-                icon={<BsAlt size={18} color='#5c5c5c' />}
-                value={elementAttributes.fontWeight}
-                onChange={changeFontWeight}
-            />
-        </Tooltip>
-    ) : null;
+    const fontWeightStyle = elementAttributes?.fontWeight === 400 ? { variant: 'light' } : { variant: 'filled' };
 
-    const findedTagsList = listTags.map(({ tagId, tagName, productName, position, productId, round, color }, index) => (
-        <div
-            className='dropdown-list__item'
-            key={index}
-            id={tagId}
-            data-tagid={tagId}
-            data-productid={productId}
-            data-tagname={tagName}
-            data-round={round}
-            data-color={color}
-            onClick={selectTag}
-        >
-            <div
-                className="dropdown-list__item__value"
-                id={tagId}
-                data-tagid={tagId}
-                data-productid={productId}
-                data-tagname={tagName}
-                data-round={round}
-                data-color={color}
-            >
-                {tagName}
-            </div>
+    const selectFontWeight = ['text'].includes(mnemoschemeActiveObjectType)
+        ? (
+            <Tooltip label='Полужирный' openDelay={1000}>
+                <ActionIcon {...fontWeightStyle} color='blue' onClick={changeFontWeight} data-settings>
+                    <BsTypeBold size={20} />
+                </ActionIcon>
+            </Tooltip>
+        )
+        : null;
 
-            <div
-                className="dropdown-list__item__description"
-                id={tagId}
-                data-tagid={tagId}
-                data-productid={productId}
-                data-tagname={tagName}
-                data-round={round}
-                data-color={color}
-            >
-                {`Продукт: ${productName.length > 0 ? productName : 'Не указан'}`}
-                <br />
-                {`Позиция: ${position.length > 0 ? position : 'Не указана'}`}
+    const findedTagsList = listTags.map(({ tagId, tagName, productName, position, productId, round, color }, index) => {
+        const attributes = {
+            'id': tagId,
+            'data-tagid': tagId,
+            'data-productid': productId,
+            'data-tagname': tagName,
+            'data-round': round,
+            'data-color': color
+        };
+
+        return (
+            <div key={index} className='dropdown-list__item' {...attributes} onClick={selectTag} >
+                <div className="dropdown-list__item__value" {...attributes} >
+                    {tagName}
+                </div>
+
+                <div className="dropdown-list__item__description" {...attributes} >
+                    {`Продукт: ${productName.length > 0 ? productName : 'Не указан'}`}
+                    <br />
+                    {`Позиция: ${position.length > 0 ? position : 'Не указана'}`}
+                </div>
             </div>
-        </div>
-    ));
+        )
+    });
 
     const selectText = ['text'].includes(mnemoschemeActiveObjectType)
         ? (
-            <div className='info-block__mnemoscheme-editor__change-block__text-block'>
-                <Tooltip label='Изменить текст'>
+            <div className='info-block__mnemoscheme-editor__settings__change-block__text-block'>
+                <Tooltip label='Изменить текст' openDelay={1000}>
                     <TextInput
                         size='xs'
-                        variant='filled'
                         icon={<BsFonts size={18} color='#5c5c5c' />}
                         value={elementAttributes.text}
                         onChange={changeText}
@@ -165,9 +159,9 @@ export const MnemoschemeEditorPanelTextAttribute = ({ mnemoschemeActiveObjectTyp
 
     return (
         <>
+            {selectText}
             {selectFontSize}
             {selectFontWeight}
-            {selectText}
         </>
     );
 }

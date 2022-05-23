@@ -51,27 +51,30 @@ namespace RealtimeDataPortal.Models
                     ADGroups = new AccessToComponent().GetComponentGroups(id, idChildren)
                 };
 
-                if (operation == "externalPage")
-                    componentInfo.ExternalPages = new ExternalPages().GetExternalPageInfo(componentInfo.TreesMenu.ComponentId);
-
-                else if (operation == "graphic")
-                    componentInfo.Graphics = new Graphics().GetGraphicsInfo(componentInfo.TreesMenu.ComponentId);
-
-                else if (operation == "table")
+                if (componentInfo.TreesMenu.ComponentId != 0)
                 {
-                    componentInfo.Table = new rt_Tables().GetTableInfo(componentInfo.TreesMenu.ComponentId);
-                    componentInfo.TableSections = new rt_Sections().GetSectionsInfo(componentInfo.Table.TableId);
+                    if (operation == "externalPage")
+                        componentInfo.ExternalPages = new ExternalPages().GetExternalPageInfo(componentInfo.TreesMenu.ComponentId);
 
-                    int[] sectionsIds = componentInfo.TableSections.Select(s => s.SectionId).Distinct().ToArray();
+                    else if (operation == "graphic")
+                        componentInfo.Graphics = new Graphics().GetGraphicsInfo(componentInfo.TreesMenu.ComponentId);
 
-                    componentInfo.SectionProducts = new rt_SectionProduct().GetSectionProductsInfo(sectionsIds);
-                    componentInfo.maxSectionId = rdp_base.rt_Sections.Select(s => (int?)s.SectionId).Max() ?? 0;
+                    else if (operation == "table")
+                    {
+                        componentInfo.Table = new rt_Tables().GetTableInfo(componentInfo.TreesMenu.ComponentId);
+                        componentInfo.TableSections = new rt_Sections().GetSectionsInfo(componentInfo.Table.TableId);
+
+                        int[] sectionsIds = componentInfo.TableSections.Select(s => s.SectionId).Distinct().ToArray();
+
+                        componentInfo.SectionProducts = new rt_SectionProduct().GetSectionProductsInfo(sectionsIds);
+                        componentInfo.maxSectionId = rdp_base.rt_Sections.Select(s => (int?)s.SectionId).Max() ?? 0;
+                    }
+                    else if (operation == "mnemoscheme")
+                        componentInfo.Mnemoscheme = new Mnemoscheme().GetMnemoschemeInfo(componentInfo.TreesMenu.ComponentId);
+
+                    else if (operation == "customtable")
+                        componentInfo.CustomTables = new CustomTable().GetCustomTables(componentInfo.TreesMenu.ComponentId);
                 }
-                else if (operation == "mnemoscheme")
-                    componentInfo.Mnemoscheme = new Mnemoscheme().GetMnemoschemeInfo(componentInfo.TreesMenu.ComponentId);
-
-                else if (operation == "customtable")
-                    componentInfo.CustomTables = new CustomTable().GetCustomTables(componentInfo.TreesMenu.ComponentId);
 
                 return componentInfo;
             }
@@ -153,7 +156,7 @@ namespace RealtimeDataPortal.Models
                     }
                 }
 
-                if(removedElement.Type == "customtable")
+                if (removedElement.Type == "customtable")
                 {
                     List<CustomTable> removingTables = new CustomTable().GetCustomTables(removedElement.ComponentId);
                     new CustomTable().RemoveCustomTable(removingTables);

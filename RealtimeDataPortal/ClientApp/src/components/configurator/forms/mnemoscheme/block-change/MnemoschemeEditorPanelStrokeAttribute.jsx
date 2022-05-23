@@ -1,10 +1,9 @@
 import {
-    Input, NumberInput, Tooltip,
-    BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle
+    ActionIcon, Input, NumberInput, Tooltip,
+    BsBorderWidth, BsArrow90DegRight, BsArrow90DegUp, BsBorderStyle, BsChevronUp, BsChevronDown
 } from '..';
 
 export const MnemoschemeEditorPanelStrokeAttribute = ({ mnemoschemeActiveObjectType, elementAttributes, setElementAttributes, mnemoscheme }) => {
-
     const changeStrokeWidth = (strokeWidth) => {
         if (strokeWidth >= 0) {
             setElementAttributes({ ...elementAttributes, strokeWidth });
@@ -13,21 +12,33 @@ export const MnemoschemeEditorPanelStrokeAttribute = ({ mnemoschemeActiveObjectT
         }
     };
 
-    const changeRXElement = (rxElement) => {
-        if (rxElement >= 0) {
-            setElementAttributes({ ...elementAttributes, rxElement });
-            mnemoscheme?._activeObject.set({ rx: rxElement });
+    const increaseStrokeWidth = () => changeStrokeWidth(++elementAttributes.strokeWidth);
+
+    const decreaseStrokeWidth = () => changeStrokeWidth(--elementAttributes.strokeWidth);
+
+    const changeRX = (rx) => {
+        if (rx >= 0) {
+            setElementAttributes({ ...elementAttributes, rx });
+            mnemoscheme?._activeObject.set({ rx });
             mnemoscheme.renderAll();
         }
     };
 
-    const changeRYElement = (ryElement) => {
-        if (ryElement >= 0) {
-            setElementAttributes({ ...elementAttributes, ryElement });
-            mnemoscheme?._activeObject.set({ ry: ryElement });
+    const increaseRX = () => changeRX(++elementAttributes.rx);
+
+    const decreaseRX = () => changeRX(--elementAttributes.rx);
+
+    const changeRY = (ry) => {
+        if (ry >= 0) {
+            setElementAttributes({ ...elementAttributes, ry });
+            mnemoscheme?._activeObject.set({ ry });
             mnemoscheme.renderAll();
         }
     };
+
+    const increaseRY = () => changeRY(++elementAttributes.ry);
+
+    const decreaseRY = () => changeRY(--elementAttributes.ry);
 
     const changeStrokeDashArray = (event) => {
         setElementAttributes({ ...elementAttributes, strokeDashArray: event.target.value });
@@ -36,50 +47,80 @@ export const MnemoschemeEditorPanelStrokeAttribute = ({ mnemoschemeActiveObjectT
     };
 
     const selectStrokeWidth = ['rect', 'line', 'circle', 'triangle', 'path'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Изменить ширину обводки'>
+        <Tooltip label='Изменить ширину обводки' openDelay={1000}>
             <NumberInput
                 size='xs'
-                variant='filled'
                 type='number'
                 icon={<BsBorderWidth size={18} color='#5c5c5c' />}
                 value={elementAttributes.strokeWidth}
                 onChange={changeStrokeWidth}
+                rightSection={(
+                    <div>
+                        <ActionIcon size={13} variant='light' data-settings onClick={increaseStrokeWidth}>
+                            <BsChevronUp size={10} />
+                        </ActionIcon>
+
+                        <ActionIcon size={13} variant='light' data-settings onClick={decreaseStrokeWidth}>
+                            <BsChevronDown size={10} />
+                        </ActionIcon>
+                    </div>
+                )}
             />
         </Tooltip>
     ) : null;
 
     const selectRXElement = ['rect'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Скругление углов по оси X'>
+        <Tooltip label='Скругление углов по оси X' openDelay={1000}>
             <NumberInput
                 size='xs'
-                variant='filled'
                 type='number'
                 icon={<BsArrow90DegRight size={18} color='#5c5c5c' />}
-                value={elementAttributes.rxElement}
-                onChange={changeRXElement}
+                value={elementAttributes.rx}
+                onChange={changeRX}
+                rightSection={(
+                    <div>
+                        <ActionIcon size={13} variant='light' data-settings onClick={increaseRX}>
+                            <BsChevronUp size={10} />
+                        </ActionIcon>
+
+                        <ActionIcon size={13} variant='light' data-settings onClick={decreaseRX}>
+                            <BsChevronDown size={10} />
+                        </ActionIcon>
+                    </div>
+                )}
             />
         </Tooltip>
     ) : null;
 
     const selectRYElement = ['rect'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Скругление углов по оси Y'>
+        <Tooltip label='Скругление углов по оси Y' openDelay={1000}>
             <NumberInput
                 size='xs'
-                variant='filled'
                 type='number'
                 icon={<BsArrow90DegUp size={18} color='#5c5c5c' />}
-                value={elementAttributes.ryElement}
-                onChange={changeRYElement}
+                value={elementAttributes.ry}
+                onChange={changeRY}
+                rightSection={(
+                    <div>
+                        <ActionIcon size={13} variant='light' data-settings onClick={increaseRY}>
+                            <BsChevronUp size={10} />
+                        </ActionIcon>
+
+                        <ActionIcon size={13} variant='light' data-settings onClick={decreaseRY}>
+                            <BsChevronDown size={10} />
+                        </ActionIcon>
+                    </div>
+                )}
             />
         </Tooltip>
     ) : null;
 
     const selectStrokeDashArray = ['rect', 'line', 'circle', 'triangle', 'path'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Обводка пунктирной линией'>
+        <Tooltip label='Обводка пунктирной линией' openDelay={1000}>
             <Input
                 size='xs'
-                variant='filled'
                 icon={<BsBorderStyle size={18} color='#5c5c5c' />}
+                style={{ maxWidth: '100px'}}
                 value={elementAttributes.strokeDashArray}
                 onChange={changeStrokeDashArray}
             />

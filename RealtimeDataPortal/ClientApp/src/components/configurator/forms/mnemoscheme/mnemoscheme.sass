@@ -1,68 +1,100 @@
 @import '../../../../style/_mixins'
 
 .info-block__mnemoscheme-editor
-    .info-block
-        position: relative
-        margin-top: 0
-        padding: 0rem
-    &__canvas
-        display: flex
-        justify-content: center
-        align-items: center
-        aspect-ratio: 16/7
-        padding: 3.5rem 1rem 1rem 3.5rem
-        .canvas-container
-            max-height: 570px
-            overflow: auto
-            @include scrollbar
-            &::-webkit-scrollbar
-                width: 0px
-                height: 0px
-    &__create-block
-        display: flex
-        flex-direction: column
-        align-items: center
-        position: absolute
-        height: 100%
-        padding: 2.5rem .5rem .5rem .5rem
-        z-index: 2
-        button
-            margin: 0.1rem
-        &__form-template
-            padding: 1rem
-            border: 1px solid #e7e7e7
-            form
-                display: flex
-                flex-wrap: nowrap
-                justify-content: space-between
-                align-items: flex-end
-                .mantine-TextInput-root
-                    min-width: 250px
-    &__change-block
-        display: flex
-        justify-content: center
-        align-items: center
-        width: 100%
-        padding: 5px 5px 5px 60px
-        position: absolute
-        z-index: 2
-        & > div
-            margin: 0.5rem .15rem
-        .mantine-ColorInput-wrapper
-            input
+    &__settings
+        padding: 1rem
+        &__create-block
+            display: flex
+            justify-content: flex-start
+            align-items: center
+            flex-wrap: wrap
+            & > div
+                margin: .2em
+        &__change-block
+            display: flex
+            justify-content: flex-start
+            align-items: center
+            margin-top: 1em
+            .mantine-ColorInput-wrapper
                 max-width: 170px
-        .mantine-NumberInput-wrapper, .mantine-Input-wrapper
-            input
+                margin: 0 .2em
+            .mantine-NumberInput-wrapper
                 max-width: 80px
-        &__text-block
-            position: relative
-            width: 100%
-            max-width: 270px
-            @include dropdown($width: 100%)
-            
-            .mantine-Popover-root
+                margin: 0 .2em
+            &__text-block
+                position: relative
                 width: 100%
-            .mantine-Tooltip-root
-                width: 100%
-            p
-                line-height: 1.1rem
+                max-width: 300px
+                margin: 0 .2em
+                .mantine-Tooltip-root
+                    width: 100%
+                @include dropdown($width: 100%)
+    &__canvas
+        padding: 1em
+        aspect-ratio: 16/7.64
+        overflow: hidden
+    //.info-block
+    //    position: relative
+    //    margin-top: 0
+    //    padding: 0rem
+    //&__canvas
+    //    display: flex
+    //    justify-content: center
+    //    align-items: center
+    //    aspect-ratio: 16/7
+    //    padding: 3.5rem 1rem 1rem 3.5rem
+    //    .canvas-container
+    //        max-height: 570px
+    //        overflow: auto
+    //        @include scrollbar
+    //        &::-webkit-scrollbar
+    //            width: 0px
+    //            height: 0px
+    //&__create-block
+    //    display: flex
+    //    flex-direction: column
+    //    align-items: center
+    //    position: absolute
+    //    height: 100%
+    //    padding: 2.5rem .5rem .5rem .5rem
+    //    z-index: 2
+    //    button
+    //        margin: 0.1rem
+    //    &__form-template
+    //        padding: 1rem
+    //        border: 1px solid #e7e7e7
+    //        form
+    //            display: flex
+    //            flex-wrap: nowrap
+    //            justify-content: space-between
+    //            align-items: flex-end
+    //            .mantine-TextInput-root
+    //                min-width: 250px
+    //&__change-block
+    //    display: flex
+    //    justify-content: center
+    //    align-items: center
+    //    width: 100%
+    //    padding: 5px 5px 5px 60px
+    //    position: absolute
+    //    z-index: 2
+    //    & > div
+    //        margin: 0.5rem .15rem
+    //    .mantine-ColorInput-wrapper
+    //        input
+    //            max-width: 170px
+    //    .mantine-NumberInput-wrapper, .mantine-Input-wrapper
+    //        input
+    //            max-width: 80px
+    //    &__text-block
+    //        position: relative
+    //        width: 100%
+    //        max-width: 270px
+    //        @include dropdown($width: 100%)
+    //        
+    //        .mantine-Popover-root
+    //            width: 100%
+    //        .mantine-Tooltip-root
+    //            width: 100%
+    //        p
+    //            line-height: 1.1rem

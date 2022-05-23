@@ -19,10 +19,9 @@ export const MnemoschemeEditorPanelColorsAttribute = ({ mnemoschemeActiveObjectT
 
     const selectFill = ['rect', 'circle', 'triangle', 'text', 'path'].includes(mnemoschemeActiveObjectType)
         ? (
-            <Tooltip label='Изменить цвет заливки'>
+            <Tooltip label='Изменить цвет заливки' openDelay={1000}>
                 <ColorInput
                     size='xs'
-                    variant='filled'
                     format="rgba"
                     icon={<BsFillSquareFill color={elementAttributes.fill} size={18} />}
                     value={elementAttributes.fill}
@@ -33,10 +32,9 @@ export const MnemoschemeEditorPanelColorsAttribute = ({ mnemoschemeActiveObjectT
         : null;
 
     const selectStroke = ['rect', 'line', 'path', 'circle', 'triangle'].includes(mnemoschemeActiveObjectType) ? (
-        <Tooltip label='Изменить цвет обводки'>
+        <Tooltip label='Изменить цвет обводки' openDelay={1000}>
             <ColorInput
                 size='xs'
-                variant='filled'
                 format="rgba"
                 icon={<BsSquare color={elementAttributes.stroke} size={18} />}
                 value={elementAttributes.stroke}

@@ -2,7 +2,7 @@ import {
     useState, useForm, useSelector, useNotification, useRequest,
     ActionIcon, Button, Loader, Popover, TextInput, Tooltip,
     fabric, attributesInputs,
-    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, BsGripHorizontal, IoSend,
+    BsSlashLg, BsFillCircleFill, BsFillSquareFill, BsTriangleFill, BsArrowDown, IoSend,
     BsFillBadgeAdFill, BsFillFileEarmarkImageFill, BsWawyLine, BsSemicircle, BsFillPlusSquareFill, BsFillSaveFill,
     BsListOl
 } from "..";
@@ -39,59 +39,50 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
 
     const figureAttributes = { fill: 'rgba(255, 255, 255, 1)', stroke: 'rgba(0, 0, 0, 1)', width: 50, height: 50 };
 
-    const addLine = () => {
-        const coords = mnemoscheme.getVpCenter();
+    const getCoords = () => {
+        return {
+            left: mnemoscheme.getVpCenter().x - mnemoscheme.getCenter().left / 2,
+            top: mnemoscheme.getVpCenter().y - mnemoscheme.getCenter().top / 2
+        }
+    }
 
+    const addLine = () => {
         mnemoscheme.add(new fabric.Line([10, 20, 100, 20],
-            { stroke: '#000', top: coords.y, left: coords.x, strokeWidth: 2 }));
+            { stroke: '#000', ...getCoords(), strokeWidth: 2 }));
     };
 
     const addWawyLine = () => {
-        const coords = mnemoscheme.getVpCenter();
-
         mnemoscheme.add(new fabric.Path(`M 8 1 Q 14 5 8 8 Q 0 12 8 16 Q 9 16 8 15 Q 2 12 8 9 Q 16 5 8 0 Q 7 0 8 1z`,
-            { top: coords.y, left: coords.x, fill: 'rgba(0, 0, 0, 1)', stroke: 'rgba(0, 0, 0, 1)' }));
+            { ...getCoords(), fill: 'rgba(0, 0, 0, 1)', stroke: 'rgba(0, 0, 0, 1)' }));
     }
 
     const addArrow = () => {
-        const coords = mnemoscheme.getVpCenter();
-
         mnemoscheme.add(new fabric.Path(`M 8 1 a 0.5 0.5 0 0 1 0.5 0.5 v 11.793 l 3.146 -3.147 a 0.5 0.5 0 0 
             1 0.708 0.708 l -4 4 a 0.5 0.5 0 0 1 -0.708 0 l -4 -4 a 0.5 0.5 0 0 1 0.708 
-            -0.708 L 7.5 13.293 V 1.5 A 0.5 0.5 0 0 1 8 1 Z`, { stroke: 'rgba(0, 0, 0, 1)', strokeWidth: 1, top: coords.y, left: coords.x }));
+            -0.708 L 7.5 13.293 V 1.5 A 0.5 0.5 0 0 1 8 1 Z`, { stroke: 'rgba(0, 0, 0, 1)', strokeWidth: 1, ...getCoords() }));
     };
 
     const addCircle = () => {
-        const coords = mnemoscheme.getVpCenter();
-
-        mnemoscheme.add(new fabric.Circle({ radius: 20, top: coords.y - 20, left: coords.x - 20, ...figureAttributes }));
+        mnemoscheme.add(new fabric.Circle({ radius: 20, ...getCoords(), ...figureAttributes }));
     };
 
     const addSemicircle = () => {
-        const coords = mnemoscheme.getVpCenter();
-
         mnemoscheme.add(new fabric.Path(`M 0 8 A 1 1 0 0 1 16 8 A 1 1 0 0 1 15 8 A 1 1 0 0 0 1 8 Q 1 8 1 8 A 1 1 0 0 1 0 8`,
-            { top: coords.y, left: coords.x, fill: 'rgba(0, 0, 0, 1)' }));
+            { ...getCoords(), fill: 'rgba(0, 0, 0, 1)' }));
     }
 
     const addTriangle = () => {
-        const coords = mnemoscheme.getVpCenter();
-
-        mnemoscheme.add(new fabric.Triangle({ top: coords.y - 25, left: coords.x - 25, ...figureAttributes }));
+        mnemoscheme.add(new fabric.Triangle({ ...getCoords(), ...figureAttributes }));
     };
 
     const addRectangle = () => {
-        const coords = mnemoscheme.getVpCenter();
-
-        mnemoscheme.add(new fabric.Rect({ top: coords.y - 25, left: coords.x - 25, ...figureAttributes }));
+        mnemoscheme.add(new fabric.Rect({ ...getCoords(), ...figureAttributes }));
     };
 
     const addTag = () => {
-        const coords = mnemoscheme.getVpCenter();
-
         const tag = new fabric.Text('text', {
             fontSize: 14, fontFamily: 'system-ui',
-            fontWeight: 400, top: coords.y - 7, left: coords.x - 10, strokeWidth: 0
+            fontWeight: 400, ...getCoords(), strokeWidth: 0
         });
 
         tag.toObject = (function (toObject) {
@@ -110,7 +101,6 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     };
 
     const addSelectedTemplate = (event) => {
-        const coords = mnemoscheme.getVpCenter();
         const id = event.target.dataset.templateid;
 
         request(`GetMnemoschemeTemplates?id=${id}`)
@@ -144,7 +134,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
                     }
 
                     // Сдвиг вставляемого объекта в левую верхнюю часть холста
-                    newObject.set({ left: object.left + coords.x, top: object.top + coords.y });
+                    newObject.set({ ...getCoords() });
                     mnemoscheme.add(newObject);
                     setIsOpenedListTemplates(false);
                 });
@@ -265,75 +255,74 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
 
     const divListTemplates = (
         <ul className='list'>
-            {listTemplates.map(template => (
-                <li key={template.templateId} data-templateid={template.templateId} onClick={addSelectedTemplate}>
-                    <span data-templateid={template.templateId} >{template.templateName}</span>
+            {listTemplates.map(({ templateId, templateName }) => (
+                <li key={templateId} data-templateid={templateId} onClick={addSelectedTemplate}>
+                    <span data-templateid={templateId} >{templateName}</span>
 
-                    <ActionIcon color='red' data-templateid={template.templateId} onClick={removeTemplate}>
-                        <BsTrash data-templateid={template.templateId} />
+                    <ActionIcon color='red' data-templateid={templateId} onClick={removeTemplate}>
+                        <BsTrash data-templateid={templateId} />
                     </ActionIcon>
                 </li>
             ))}
         </ul>);
 
     return (
-        <div className='info-block__mnemoscheme-editor__create-block'>
-            <Tooltip label='Добавить линию'>
-                <ActionIcon color="indigo" size="lg" onClick={addLine}>
-                    <BsSlashLg size={16} />
-                </ActionIcon>
+        <div className='info-block__mnemoscheme-editor__settings__create-block'>
+            <Tooltip label='Добавить линию' openDelay={1000}>
+                <Button color="indigo" size="xs" variant='light' compact onClick={addLine} leftIcon={<BsSlashLg size={14} />}>
+                    Линия
+                </Button>
             </Tooltip>
 
-            <Tooltip label='Добавить волнистую линию'>
-                <ActionIcon color="indigo" size="lg" onClick={addWawyLine}>
-                    <BsWawyLine size={16} />
-                </ActionIcon>
+            <Tooltip label='Добавить волнистую линию' openDelay={1000}>
+                <Button color="indigo" size="xs" variant='light' compact onClick={addWawyLine} leftIcon={<BsWawyLine size={14} />}>
+                    Волна
+                </Button>
             </Tooltip>
 
-            <Tooltip label='Добавить стрелку'>
-                <ActionIcon color="indigo" size="lg" onClick={addArrow}>
-                    <BsArrowDown size={16} />
-                </ActionIcon>
+            <Tooltip label='Добавить стрелку' openDelay={1000}>
+                <Button color="indigo" size="xs" variant='light' compact leftIcon={<BsArrowDown size={14} />} onClick={addArrow}>
+                    Стрелка
+                </Button>
             </Tooltip>
 
-            <Tooltip label='Добавить круг'>
-                <ActionIcon color="indigo" size="lg" onClick={addCircle}>
-                    <BsFillCircleFill size={18} />
-                </ActionIcon>
+            <Tooltip label='Добавить круг' openDelay={1000}>
+                <Button color="indigo" size="xs" variant='light' compact leftIcon={<BsFillCircleFill size={14} />} onClick={addCircle}>
+                    Круг
+                </Button>
             </Tooltip>
 
-            <Tooltip label='Добавить полукруг'>
-                <ActionIcon color="indigo" size="lg" onClick={addSemicircle}>
-                    <BsSemicircle size={18} />
-                </ActionIcon>
+            <Tooltip label='Добавить полукруг' openDelay={1000}>
+                <Button color="indigo" size="xs" variant='light' compact leftIcon={<BsSemicircle size={14} />} onClick={addSemicircle}>
+                    Полукруг
+                </Button>
             </Tooltip>
 
-            <Tooltip label='Добавить треугольник'>
-                <ActionIcon color="indigo" size="lg" onClick={addTriangle}>
-                    <BsTriangleFill size={18} />
-                </ActionIcon>
+            <Tooltip label='Добавить треугольник' openDelay={1000}>
+                <Button color="indigo" size="xs" variant='light' compact leftIcon={<BsTriangleFill size={14} />} onClick={addTriangle}>
+                    Треугольник
+                </Button>
             </Tooltip>
 
-            <Tooltip label='Добавить прямоугольник'>
-                <ActionIcon color="indigo" size="lg" onClick={addRectangle}>
-                    <BsFillSquareFill size={18} />
-                </ActionIcon>
+            <Tooltip label='Добавить квадрат' openDelay={1000}>
+                <Button color="indigo" size="xs" variant='light' compact leftIcon={<BsFillSquareFill size={14} />} onClick={addRectangle}>
+                    Квадрат
+                </Button>
             </Tooltip>
 
-            <Tooltip label='Добавить текст'>
-                <ActionIcon color='indigo' size='lg' onClick={addTag}>
-                    <BsFillBadgeAdFill size={18} />
-                </ActionIcon>
+            <Tooltip label='Добавить текст' openDelay={1000}>
+                <Button color='indigo' size="xs" variant='light' compact leftIcon={<BsFillBadgeAdFill size={14} />} onClick={addTag}>
+                    Текст
+                </Button>
             </Tooltip>
 
+            <Tooltip label='Добавить изображение' openDelay={1000}>
 
-            <Tooltip label='Добавить изображение'>
-
-                <ActionIcon color="indigo" size="lg">
+                <Button color="indigo" size="xs" variant='light' compact leftIcon={<BsFillFileEarmarkImageFill size={14} />} >
                     <label htmlFor='download'>
-                        <BsFillFileEarmarkImageFill size={18} />
+                        Изображение
                     </label>
-                </ActionIcon>
+                </Button>
 
                 <input id='download' type='file' style={{ display: 'none' }} onChange={selectImage} accept='image/*' />
             </Tooltip>
@@ -341,21 +330,19 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
             <Popover
                 opened={isOpenedListTemplates}
                 onClose={closeListTemplates}
-                position='right'
+                position='bottom'
                 width={250}
                 target={loadingTemplates
                     ? <Loader size={16} />
-                    : <Tooltip label='Добавить шаблон'>
-                        <ActionIcon color='indigo' size='lg' onClick={openListTemplates}>
-                            <BsListOl size={18} />
-                        </ActionIcon>
+                    : <Tooltip label='Добавить шаблон' openDelay={1000}>
+                        <Button color='indigo' size="xs" variant='light' compact leftIcon={<BsListOl size={14} />} onClick={openListTemplates}>
+                            Шаблоны
+                        </Button>
                     </Tooltip>
                 }
             >
                 {divListTemplates}
             </Popover>
-
-            <BsGripHorizontal size={24} style={{ color: '#aab3ba' }} />
 
             <Popover
                 opened={openFormSavingTemplate}
@@ -364,20 +351,20 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
                 width={320}
                 target={sendingTemplate
                     ? <Loader size={16} />
-                    : <Tooltip label='Сохранить шаблон'>
-                        <ActionIcon color="indigo" size="lg" onClick={getTemplate} disabled={disabledButton}>
-                            <BsFillPlusSquareFill size={18} />
-                        </ActionIcon>
+                    : <Tooltip label='Сохранить шаблон' openDelay={1000}>
+                        <Button color="indigo" size="xs" variant='light' compact leftIcon={<BsFillPlusSquareFill size={14} />} onClick={getTemplate} disabled={disabledButton}>
+                            + шаблон
+                        </Button>
                     </Tooltip>
                 }
             >
                 {templateForm}
             </Popover>
 
-            <Tooltip label='Сохранить'>
-                <ActionIcon color="indigo" size="lg" onClick={saveMnemoscheme} disabled={disabledButton}>
-                    <BsFillSaveFill size={18} />
-                </ActionIcon>
+            <Tooltip label='Сохранить' openDelay={1000}>
+                <Button color="indigo" size="xs" variant='light' compact leftIcon={<BsFillSaveFill size={14} />} onClick={saveMnemoscheme} disabled={disabledButton}>
+                    Сохранить
+                </Button>
             </Tooltip>
         </div>
     )

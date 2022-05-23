@@ -1,18 +1,21 @@
 import {
-    useEffect, useRef,
+    useEffect,
     useSelector,
     fabric
 } from '..';
 
-export const MnemoschemeEditorPreview = ({ setMnemoscheme, mnemoscheme }) => {
+export const MnemoschemeEditorPreview = ({ setMnemoscheme, refCanvas }) => {
     const componentInfo = useSelector(state => state.configurator.componentInfo);
-    const canvasContainerRef = useRef();
     const width = 1920;
     const height = 920;
 
     useEffect(() => {
-        const mnemoscheme = new fabric.Canvas('mnemoscheme', { width, height });
-        const zoom = (canvasContainerRef?.current?.clientWidth - 55) / 1920;
+        const mnemoscheme = new fabric.Canvas('mnemoscheme', { 
+            width, 
+            height, 
+            centeredRotation: true,
+        });
+        const zoom = (refCanvas?.current?.clientWidth - 15) / 1920;
         mnemoscheme.setZoom(zoom);
 
         // Ограничительные линии для холста
@@ -61,8 +64,8 @@ export const MnemoschemeEditorPreview = ({ setMnemoscheme, mnemoscheme }) => {
     }, []);
 
     return (
-        <div className='info-block__mnemoscheme-editor__canvas' ref={canvasContainerRef}>
+        <>
             <canvas id='mnemoscheme' ></canvas>
-        </div>
+        </>
     )
 }

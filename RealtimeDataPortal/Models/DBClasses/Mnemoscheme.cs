@@ -43,7 +43,7 @@ namespace RealtimeDataPortal.Models.DBClasses
                      .AsNoTracking()
                      .ToList();
 
-                if (mnemoscheme.Count == 0) 
+                if (mnemoscheme.Count == 0)
                     throw new Exception("PageNotFound");
 
                 return mnemoscheme;
@@ -143,15 +143,15 @@ namespace RealtimeDataPortal.Models.DBClasses
             return listTagsWithValues;
         }
 
-        public Mnemoscheme GetMnemoschemeInfo (int componentId)
+        public Mnemoscheme GetMnemoschemeInfo(int componentId)
         {
             using RDPContext rdp_base = new();
 
             Mnemoscheme mnemoschemeInfo =
-                (from mnemoscheme in rdp_base.Mnemoscheme
-                 where mnemoscheme.MnemoschemeId == componentId
-                 select mnemoscheme)
-                 .First();
+                 (from mnemoscheme in rdp_base.Mnemoscheme
+                  where mnemoscheme.MnemoschemeId == componentId
+                  select mnemoscheme)
+                     .First();
 
             return mnemoschemeInfo;
         }

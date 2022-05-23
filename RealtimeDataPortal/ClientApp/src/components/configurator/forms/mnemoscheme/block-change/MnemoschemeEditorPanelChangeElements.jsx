@@ -20,8 +20,8 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         fill: 'rgba(255, 255, 255, 1)',
         stroke: 'rgba(255, 255, 255, 1)',
         strokeWidth: 1,
-        rxElement: 0,
-        ryElement: 0,
+        rx: 0,
+        ry: 0,
         strokeDashArray: '',
         skewX: 0,
         skewY: 0,
@@ -114,7 +114,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
     ) : null;
 
     return (
-        <div className='info-block__mnemoscheme-editor__change-block'>
+        <div className='info-block__mnemoscheme-editor__settings__change-block'>
             <MnemoschemeEditorPanelTextAttribute
                 mnemoschemeActiveObjectType={mnemoschemeActiveObjectType}
                 elementAttributes={elementAttributes}
