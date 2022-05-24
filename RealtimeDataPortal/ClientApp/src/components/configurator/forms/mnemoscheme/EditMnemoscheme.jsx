@@ -93,9 +93,11 @@ export const EditMnemoscheme = ({ action, form, submitForm, addAccessIcon, multi
                     activeObjects.forEach(object => mnemoscheme.remove(object));
                     break;
                 case 'KeyC':
-                    mnemoscheme.getActiveObject().clone(function (cloned) {
-                        copiedObject = cloned;
-                    });
+                    if (mnemoscheme?.getActiveObject()) {
+                        mnemoscheme?.getActiveObject()?.clone(function (cloned) {
+                            copiedObject = cloned;
+                        });
+                    }
                     break;
                 case 'KeyV':
                     if (copiedObject) pasteObject(copiedObject);

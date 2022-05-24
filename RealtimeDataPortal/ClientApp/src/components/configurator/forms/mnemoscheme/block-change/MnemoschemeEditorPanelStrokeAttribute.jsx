@@ -4,41 +4,41 @@ import {
 } from '..';
 
 export const MnemoschemeEditorPanelStrokeAttribute = ({ mnemoschemeActiveObjectType, elementAttributes, setElementAttributes, mnemoscheme }) => {
-    const changeStrokeWidth = (strokeWidth) => {
-        if (strokeWidth >= 0) {
+    const changeStrokeWidth = (strokeWidth, permision = false) => {
+        if (strokeWidth >= 0 && (elementAttributes.strokeWidth !== strokeWidth || permision)) {
             setElementAttributes({ ...elementAttributes, strokeWidth });
             mnemoscheme?._activeObject.set({ strokeWidth });
             mnemoscheme.renderAll();
         }
     };
 
-    const increaseStrokeWidth = () => changeStrokeWidth(++elementAttributes.strokeWidth);
+    const increaseStrokeWidth = () => changeStrokeWidth(++elementAttributes.strokeWidth, true);
 
-    const decreaseStrokeWidth = () => changeStrokeWidth(--elementAttributes.strokeWidth);
+    const decreaseStrokeWidth = () => changeStrokeWidth(elementAttributes.strokeWidth - 1, true);
 
-    const changeRX = (rx) => {
-        if (rx >= 0) {
+    const changeRX = (rx, permision = false) => {
+        if (rx >= 0 && (elementAttributes.rx !== rx || permision)) {
             setElementAttributes({ ...elementAttributes, rx });
             mnemoscheme?._activeObject.set({ rx });
             mnemoscheme.renderAll();
         }
     };
 
-    const increaseRX = () => changeRX(++elementAttributes.rx);
+    const increaseRX = () => changeRX(++elementAttributes.rx, true);
 
-    const decreaseRX = () => changeRX(--elementAttributes.rx);
+    const decreaseRX = () => changeRX(elementAttributes.rx - 1, true);
 
-    const changeRY = (ry) => {
-        if (ry >= 0) {
+    const changeRY = (ry, permision = false) => {
+        if (ry >= 0 && (elementAttributes.ry !== ry || permision)) {
             setElementAttributes({ ...elementAttributes, ry });
             mnemoscheme?._activeObject.set({ ry });
             mnemoscheme.renderAll();
         }
     };
 
-    const increaseRY = () => changeRY(++elementAttributes.ry);
+    const increaseRY = () => changeRY(++elementAttributes.ry, true);
 
-    const decreaseRY = () => changeRY(--elementAttributes.ry);
+    const decreaseRY = () => changeRY(elementAttributes.ry - 1, true);
 
     const changeStrokeDashArray = (event) => {
         setElementAttributes({ ...elementAttributes, strokeDashArray: event.target.value });
@@ -120,7 +120,7 @@ export const MnemoschemeEditorPanelStrokeAttribute = ({ mnemoschemeActiveObjectT
             <Input
                 size='xs'
                 icon={<BsBorderStyle size={18} color='#5c5c5c' />}
-                style={{ maxWidth: '100px'}}
+                style={{ maxWidth: '100px' }}
                 value={elementAttributes.strokeDashArray}
                 onChange={changeStrokeDashArray}
             />

@@ -46,6 +46,8 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
 
         setMnemoschemeActiveObjectType(event.target.type);
 
+        document?.activeElement.blur();
+
         setElementAttributes({
             ...elementAttributes,
             width, height, radius, angle, fill, stroke, strokeWidth, rx, ry, skewX, skewY, fontSize, fontWeight,
@@ -107,7 +109,7 @@ export const MnemoschemeEditorPanelChangeElements = ({ mnemoscheme }) => {
         <>
             <BsGripVertical size={24} style={{ color: '#aab3ba' }} />
 
-            <ActionIcon color="red" size="lg" variant='light' onClick={deleteSelectedItem}>
+            <ActionIcon color="red" size="sm" variant='light' onClick={deleteSelectedItem}>
                 <BsTrash size={18} />
             </ActionIcon>
         </>

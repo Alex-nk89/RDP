@@ -4,72 +4,83 @@ import {
 } from '..';
 
 export const MnemoschemeEditorPanelDimensionsAttribute = ({ mnemoschemeActiveObjectType, elementAttributes, setElementAttributes, mnemoscheme }) => {
+    // Если установить вручную значение, например, ширины (не стрелками), 
+    // фокус оставить в input'е и далее выбрать другой обект, 
+    // то установленное значение будет перенесо на выбранный обьект
+    // Для избежания такой особенности работы, вводиться дополнительное принудительное 
+    // разрешение для изменения свойства
 
-    const changeWidth = (width) => {
-        if (width > 0) {
+    const changeWidth = (width, permision = false) => {
+        if (width > 0 && (elementAttributes.width !== width || permision)) {
             setElementAttributes({ ...elementAttributes, width });
             mnemoscheme?._activeObject.set({ width });
             mnemoscheme.renderAll();
         }
     };
 
-    const increaseWidth = () => changeWidth(++elementAttributes.width);
+    const increaseWidth = () => changeWidth(++elementAttributes.width, true);
 
-    const decreaseWidth = () => changeWidth(--elementAttributes.width);
+    const decreaseWidth = () => changeWidth(elementAttributes.width - 1, true);
 
-    const changeHeight = (height) => {
-        if (height > 0) {
+    const changeHeight = (height, permision = false) => {
+        if (height > 0 && (elementAttributes.height !== height || permision)) {
             setElementAttributes({ ...elementAttributes, height });
             mnemoscheme?._activeObject.set({ height });
             mnemoscheme.renderAll();
         }
     };
 
-    const increaseHeight = () => changeHeight(++elementAttributes.height);
+    const increaseHeight = () => changeHeight(++elementAttributes.height, true);
 
-    const decreaseHeight = () => changeHeight(--elementAttributes.height);
+    const decreaseHeight = () => changeHeight(elementAttributes.height - 1, true);
 
-    const changeAngle = (angle) => {
-        setElementAttributes({ ...elementAttributes, angle });
-        mnemoscheme?._activeObject.set({ angle });
-        mnemoscheme.renderAll();
+    const changeAngle = (angle, permision = false) => {
+        if (elementAttributes.angle !== angle || permision) {
+            setElementAttributes({ ...elementAttributes, angle });
+            mnemoscheme?._activeObject.set({ angle });
+            mnemoscheme.renderAll();
+        }
     };
 
-    const increaseAngle = () => changeAngle(++elementAttributes.angle);
+    const increaseAngle = () => changeAngle(++elementAttributes.angle, true);
 
-    const decreaseAngle = () => changeAngle(--elementAttributes.angle);
+    const decreaseAngle = () => changeAngle(elementAttributes.angle - 1, true);
 
-    const changeRadius = (radius) => {
-        if (radius > 0) {
+    const changeRadius = (radius, permision = false) => {
+        if (radius > 0 && (elementAttributes.radius !== radius || permision)) {
             setElementAttributes({ ...elementAttributes, radius });
             mnemoscheme?._activeObject.set({ radius });
             mnemoscheme.renderAll();
         }
     };
 
-    const increaseRadius = () => changeRadius(++elementAttributes.radius);
+    const increaseRadius = () => changeRadius(++elementAttributes.radius, true);
 
-    const decreaseRadius = () => changeRadius(--elementAttributes.radius);
+    const decreaseRadius = () => changeRadius(elementAttributes.radius - 1, true);
 
-    const changeSkewX = (skewX) => {
-        setElementAttributes({ ...elementAttributes, skewX });;
-        mnemoscheme?._activeObject.set({ skewX });
-        mnemoscheme.renderAll();
+    const changeSkewX = (skewX, permision = false) => {
+        if (skewX >= 0 && (elementAttributes.skewX !== skewX || permision)) {
+            setElementAttributes({ ...elementAttributes, skewX });;
+            mnemoscheme?._activeObject.set({ skewX });
+            mnemoscheme.renderAll();
+        }
     };
 
-    const increaseSkewX = () => changeSkewX(++elementAttributes.skewX);
+    const increaseSkewX = () => changeSkewX(++elementAttributes.skewX, true);
 
-    const decreaseSkewX = () => changeSkewX(--elementAttributes.skewX);
+    const decreaseSkewX = () => changeSkewX(elementAttributes.skewX - 1, true);
 
-    const changeSkewY = (skewY) => {
-        setElementAttributes({ ...elementAttributes, skewY });
-        mnemoscheme?._activeObject.set({ skewY });
-        mnemoscheme.renderAll();
+    const changeSkewY = (skewY, permision = false) => {
+        if (skewY >= 0 && (elementAttributes.skewY !== skewY || permision)) {
+            setElementAttributes({ ...elementAttributes, skewY });
+            mnemoscheme?._activeObject.set({ skewY });
+            mnemoscheme.renderAll();
+        }
     };
 
-    const increaseSkewY = () => changeSkewY(++elementAttributes.skewY);
+    const increaseSkewY = () => changeSkewY(++elementAttributes.skewY, true);
 
-    const decreaseSkewY = () => changeSkewY(--elementAttributes.skewY);
+    const decreaseSkewY = () => changeSkewY(elementAttributes.skewY - 1, true);
 
     const selectWidth = ['rect', 'line'].includes(mnemoschemeActiveObjectType)
         ? (
@@ -207,7 +218,7 @@ export const MnemoschemeEditorPanelDimensionsAttribute = ({ mnemoschemeActiveObj
                             <ActionIcon size={13} variant='light' data-settings onClick={increaseSkewY}>
                                 <BsChevronUp size={10} />
                             </ActionIcon>
-    
+
                             <ActionIcon size={13} variant='light' data-settings onClick={decreaseSkewY}>
                                 <BsChevronDown size={10} />
                             </ActionIcon>

@@ -76,7 +76,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     };
 
     const addRectangle = () => {
-        mnemoscheme.add(new fabric.Rect({ ...getCoords(), ...figureAttributes }));
+        mnemoscheme.add(new fabric.Rect({ ...getCoords(), ...figureAttributes, id: mnemoscheme.size() + 1 }));
     };
 
     const addTag = () => {
@@ -106,6 +106,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
         request(`GetMnemoschemeTemplates?id=${id}`)
             .then((template) => {
                 const objects = JSON.parse(template[0].templateContain);
+                console.log(objects)
 
                 objects.forEach(object => {
                     let newObject = null;
@@ -134,7 +135,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
                     }
 
                     // Сдвиг вставляемого объекта в левую верхнюю часть холста
-                    newObject.set({ ...getCoords() });
+                    newObject.set({ left: getCoords().left + object.left, top: getCoords().top + object.top });
                     mnemoscheme.add(newObject);
                     setIsOpenedListTemplates(false);
                 });
@@ -223,13 +224,12 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
     };
 
     const templateForm = (
-        <div className='info-block__mnemoscheme-editor__create-block__form-template'>
+        <div className='info-block__mnemoscheme-editor__settings__create-block__form-template'>
             <form onSubmit={form.onSubmit(values => saveTemplate(values))}>
                 <TextInput
                     {...attributesInputs}
                     {...form.getInputProps('name')}
-                    label='Наименование шаблона'
-                    placeholder='Введите наименование'
+                    placeholder='Введите наименование шаблона'
                     size='xs'
                 />
 
@@ -347,7 +347,7 @@ export const MnemoschemeEditorPanelCreateElements = ({ mnemoscheme, saveMnemosch
             <Popover
                 opened={openFormSavingTemplate}
                 onClose={closeTemplateForm}
-                position='right'
+                position='bottom'
                 width={320}
                 target={sendingTemplate
                     ? <Loader size={16} />
