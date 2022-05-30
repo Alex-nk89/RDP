@@ -1,6 +1,7 @@
 import {
     useSelector, NavLink
 } from '.';
+import { evaluate } from 'mathjs';
 
 export const TableCell = ({ indexTable, indexRow, indexCell }) => {
     const { cellContain, cellStyle } = useSelector(state => state.customTable.tables[indexTable].rows[indexRow].cells[indexCell]);
@@ -19,24 +20,19 @@ export const TableCell = ({ indexTable, indexRow, indexCell }) => {
     let cellKey;
 
     const convertValue = () => {
-        const getValue = (str) => {
-            try {
+        try {
+            const getValue = (str) => {
                 const rowNumber = str.match(/"[0-9]:/)[0].replace(/"/, '').replace(/:/, '');
                 const colNumber = str.match(/:[0-9]"/)[0].replace(/"/, '').replace(/:/, '');
 
-                const cell = Number(document.querySelectorAll('table')[indexTable].querySelectorAll('tr')[rowNumber].querySelectorAll('td')[colNumber].textContent);
-                console.log(cell)
-
-
-
-            } catch {
-                return 'Error';
+                return document.querySelectorAll('table')[indexTable].querySelectorAll('tr')[rowNumber].querySelectorAll('td')[colNumber].textContent;
             }
+
+            const formula = cell.value.replace(/"[0-9]:[0-9]"/g, getValue).replace(/=/, '');
+            return evaluate(formula)?.toFixed(3);
+        } catch {
+            return 'Error';
         }
-
-
-
-        return cell.value.replace(/"[0-9]:[0-9]"/g, getValue);
     };
 
     const cellValue = {

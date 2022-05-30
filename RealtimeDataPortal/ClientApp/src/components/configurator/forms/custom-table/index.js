@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ActionIcon, Badge, Button, Checkbox, ColorInput, Group, Loader, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip } from '@mantine/core';
 import { BsDash, BsPlus, BsX, BsTypeBold, BsTextLeft, BsTextCenter, BsTextRight, BsArrowBarRight, BsArrowBarDown, 
-    BsChevronUp, BsChevronDown, BsChevronBarContract, BsChevronBarUp, BsChevronBarDown } from 'react-icons/bs';
+    BsChevronUp, BsChevronDown, BsChevronBarContract, BsChevronBarUp, BsChevronBarDown, BsInfo } from 'react-icons/bs';
 
 import { useRequest } from '../../../../hooks/useRequest';
 import { useNotifications } from '@mantine/notifications';
@@ -18,7 +18,7 @@ export {
     , useSelector, useDispatch
     , ActionIcon, Badge, Button, Checkbox, ColorInput, Group, Loader, NumberInput, Popover, Space, Stepper, Text, TextInput, Tooltip
     , BsDash, BsPlus, BsX, BsTypeBold, BsTextLeft, BsTextCenter, BsTextRight, BsArrowBarRight, BsArrowBarDown
-    , BsChevronUp, BsChevronDown, BsChevronBarContract, BsChevronBarUp, BsChevronBarDown
+    , BsChevronUp, BsChevronDown, BsChevronBarContract, BsChevronBarUp, BsChevronBarDown, BsInfo
     , useRequest, useNotifications
     , FormCustomTable, EditorCustomTable, NewCustomTable, NewCustomTableRow, NewCustomTableSettings
 };

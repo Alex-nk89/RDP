@@ -1,6 +1,6 @@
 import {
-    useMemo
-    , useSelector//, useDispatch
+    useMemo , useSelector, BsInfo,//, useDispatch
+    Tooltip
     //, ActionIcon, Badge
     //, BsX
 } from '..';
@@ -45,6 +45,12 @@ export const NewCustomTableRow = ({ indexTable, indexRow }) => {
                     rowSpan={JSON.parse(cell.cellStyle).rowSpan}
                 >
                     {cell.cellContain.length > 0 ? JSON.parse(cell.cellContain)?.value : ''}
+
+                    <div>
+                        <Tooltip label={`${indexRow}:${indexCell}`} openDelay={500}>
+                            <BsInfo color='blue' />
+                        </Tooltip>
+                    </div>
                 </td>)
         });
         //eslint-disable-next-line
