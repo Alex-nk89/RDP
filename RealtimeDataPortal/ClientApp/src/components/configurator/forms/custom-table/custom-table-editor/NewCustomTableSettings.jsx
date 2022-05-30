@@ -64,7 +64,7 @@ export const NewCustomTableSettings = ({ indexTable }) => {
     const inputThisCellContain = (event) => {
         const cellContain = event.target.value;
 
-        if (cellContain.at(0) === '%') {
+        if (cellContain.startsWith('%')) {
 
             if (cellContain.length >= 4) {
                 setFetchinTags(true);

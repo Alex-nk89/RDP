@@ -3,8 +3,6 @@ import {
     , useSelector, useDispatch
     , useParams
     , useRequest, useFormateDate
-    , ActionIcon
-    , BsShareFill
     , AppPreloader, ErrorsPage, Table
 } from '.';
 
@@ -68,10 +66,6 @@ export const CustomTable = () => {
             <div className='custom-table__header'>
                 <div>
                     <h3 className=''>{title}</h3>
-
-                    <ActionIcon>
-                        <BsShareFill size={18} />
-                    </ActionIcon>
                 </div>
 
                 <div>
