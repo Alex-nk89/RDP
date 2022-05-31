@@ -1,5 +1,5 @@
 import {
-    useMemo , useSelector, BsInfo,//, useDispatch
+    useMemo , useSelector, Badge, BsInfo,//, useDispatch
     Tooltip
     //, ActionIcon, Badge
     //, BsX
@@ -46,7 +46,7 @@ export const NewCustomTableRow = ({ indexTable, indexRow }) => {
                 >
                     {cell.cellContain.length > 0 ? JSON.parse(cell.cellContain)?.value : ''}
 
-                    <div>
+                    <div className='custom-table-editor__new-table-form__table__cell-info'>
                         <Tooltip label={`${indexRow}:${indexCell}`} openDelay={500}>
                             <BsInfo color='blue' />
                         </Tooltip>
