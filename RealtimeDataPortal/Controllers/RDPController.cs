@@ -51,9 +51,9 @@ namespace RealtimeDataPortal.Controllers
             {
                 new CurrentUser().GetCurrentUser();
 
-                CurrentUser? currentUser = JsonSerializer.Deserialize<CurrentUser>(
-                    _httpContextAccessor.HttpContext?.Session.GetString("currentUser")
-                    ?? throw new Exception("NoGetUser"));
+                CurrentUser? currentUser = _httpContextAccessor.HttpContext?.Session.GetString("currentUser") is not null
+                    ? JsonSerializer.Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser"))
+                    : new CurrentUser().GetCurrentUser() ?? throw new Exception("NoGetUser");
 
                 return currentUser;
             }
@@ -69,9 +69,9 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                CurrentUser currentUser = JsonSerializer
-                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
-                    ?? new CurrentUser().GetCurrentUser();
+                CurrentUser? currentUser = _httpContextAccessor.HttpContext?.Session.GetString("currentUser") is not null
+                    ? JsonSerializer.Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser"))
+                    : new CurrentUser().GetCurrentUser() ?? throw new Exception("NoGetUser");
 
                 if (!treesMenu.isFullView)
                 {
@@ -80,7 +80,7 @@ namespace RealtimeDataPortal.Controllers
                         || CheckRoleUser("IsAdministrator") || CheckRoleUser("IsConfiguratorRead");
                 }
 
-                return new TreesMenu().GetMenu(treesMenu.ParentId, currentUser.ADGroups, treesMenu.isFullView);
+                return new TreesMenu().GetMenu(treesMenu.ParentId, currentUser?.ADGroups, treesMenu.isFullView);
             }
             catch (Exception ex)
             {
@@ -367,9 +367,9 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                CurrentUser currentUser = JsonSerializer
-                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
-                    ?? new CurrentUser().GetCurrentUser();
+                CurrentUser? currentUser = _httpContextAccessor.HttpContext?.Session.GetString("currentUser") is not null
+                    ? JsonSerializer.Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser"))
+                    : new CurrentUser().GetCurrentUser() ?? throw new Exception("NoGetUser");
 
                 List<Attributes> attributesGraphic = new Graphics().GetAttributesForGraphic(id, currentUser);
 
@@ -403,9 +403,9 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                CurrentUser currentUser = JsonSerializer
-                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
-                    ?? new CurrentUser().GetCurrentUser();
+                CurrentUser? currentUser = _httpContextAccessor.HttpContext?.Session.GetString("currentUser") is not null
+                    ? JsonSerializer.Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser"))
+                    : new CurrentUser().GetCurrentUser() ?? throw new Exception("NoGetUser");
 
                 var tableRealtime = new rt_Tables().GetTableRealtime(id, currentUser);
 
@@ -423,9 +423,9 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                CurrentUser currentUser = JsonSerializer
-                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
-                    ?? new CurrentUser().GetCurrentUser();
+                CurrentUser? currentUser = _httpContextAccessor.HttpContext?.Session.GetString("currentUser") is not null
+                    ? JsonSerializer.Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser"))
+                    : new CurrentUser().GetCurrentUser() ?? throw new Exception("NoGetUser");
 
                 var mnemoscheme = new Mnemoscheme().GetMnemoschemeImage(id, currentUser);
                 return mnemoscheme;
@@ -711,9 +711,9 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                CurrentUser currentUser = JsonSerializer
-                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
-                    ?? new CurrentUser().GetCurrentUser();
+                CurrentUser? currentUser = _httpContextAccessor.HttpContext?.Session.GetString("currentUser") is not null
+                    ? JsonSerializer.Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser"))
+                    : new CurrentUser().GetCurrentUser() ?? throw new Exception("NoGetUser");
 
                 using RDPContext rdpBase = new();
 
