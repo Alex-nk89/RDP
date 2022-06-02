@@ -24,16 +24,16 @@ namespace RealtimeDataPortal.Controllers
         {
             try
             {
-                CurrentUser currentUser = JsonSerializer
-                    .Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser") ?? throw new Exception("NoGetUser"))
-                    ?? new CurrentUser().GetCurrentUser();
+                CurrentUser? currentUser = _httpContextAccessor.HttpContext?.Session.GetString("currentUser") is not null
+                    ? JsonSerializer.Deserialize<CurrentUser>(_httpContextAccessor.HttpContext?.Session.GetString("currentUser"))
+                    : new CurrentUser().GetCurrentUser() ?? throw new Exception("NoGetUser");
 
                 Dictionary<string, bool> roles = new Dictionary<string, bool>()
                 {
-                    { "IsFullView", currentUser.IsFullView },
-                    { "IsConfigurator", currentUser.IsConfigurator },
-                    { "IsAdministrator", currentUser.IsAdministrator },
-                    { "IsConfiguratorRead", currentUser.IsConfiguratorRead }
+                    { "IsFullView", currentUser?.IsFullView ?? false},
+                    { "IsConfigurator", currentUser?.IsConfigurator ?? false },
+                    { "IsAdministrator", currentUser?.IsAdministrator ?? false },
+                    { "IsConfiguratorRead", currentUser?.IsConfiguratorRead ?? false }
                 };
 
                 return roles[role];
@@ -354,6 +354,27 @@ namespace RealtimeDataPortal.Controllers
 
                 new Products().DeleteProducts(id);
                 return new { new Messages().GetMessage("Deleted").Message };
+            }
+            catch (Exception ex)
+            {
+                Messages error = new Messages().GetMessage(ex.Message);
+                return StatusCode(error.StatusCode, new { error.Message });
+            }
+        }
+
+        [Route("GetListUnusedElements")]
+        public Object GetListUnusedElements(string type)
+        {
+            try
+            {
+                if (!(CheckRoleUser("IsConfigurator") || CheckRoleUser("IsConfiguratorRead")))
+                    throw new Exception("NotAccess");
+
+                var listUnusedElements = type == "tag"
+                    ? new {}
+                    : null;
+
+                return new { };
             }
             catch (Exception ex)
             {

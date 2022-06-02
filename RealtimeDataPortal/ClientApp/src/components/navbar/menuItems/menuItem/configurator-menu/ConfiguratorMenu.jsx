@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Collapse } from '@mantine/core';
-import { BsFillGearFill, BsFillFileEarmarkTextFill, BsFillTagsFill, BsChevronDown, BsPencilSquare } from 'react-icons/bs';
+import { BsFillGearFill, BsFillFileEarmarkTextFill, BsFillTagsFill, BsChevronDown, BsPencilSquare, BsFillQuestionOctagonFill } from 'react-icons/bs';
 
 const ConfiguratorMenu = () => {
     const { configMode } = useSelector(state => state.navbar);
@@ -42,6 +42,15 @@ const ConfiguratorMenu = () => {
                             <span>Редактор продуктов</span>
                         </NavLink>
                     </li>
+                    {/* <li>
+                        <NavLink
+                            to='/Unused'
+                            className='page-with-configurator'
+                            activeStyle={{ background: 'rgba(255, 255, 255, .2)' }}>
+                            <BsFillQuestionOctagonFill size={16} />
+                            <span>Неиспользуемые элементы</span>
+                        </NavLink>
+                    </li> */}
                     <li>
                         <NavLink
                             to='/Configurator/instruction/0'

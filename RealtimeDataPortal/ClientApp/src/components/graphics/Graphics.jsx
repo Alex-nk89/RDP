@@ -6,7 +6,7 @@ import {
     useRequest
 } from './Index';
 
-import { initialStateGraphics, getAttributesForGraphic } from '../../reducers/graphicsSlice';
+import { initialStateGraphics, getAttributesForGraphic, fetchedAttributesGraphicError } from '../../reducers/graphicsSlice';
 import './graphics.sass';
 
 const Graphics = () => {
@@ -26,7 +26,8 @@ const Graphics = () => {
         dispatch(initialStateGraphics());
 
         request(`GetAttributesForGraphic?id=${id}`)
-            .then(attributesGraphic => dispatch(getAttributesForGraphic(attributesGraphic)));
+            .then(attributesGraphic => dispatch(getAttributesForGraphic(attributesGraphic)))
+            .catch(() => dispatch(fetchedAttributesGraphicError()));
         //eslint-disable-next-line
     }, [id]);
 

@@ -16,6 +16,7 @@ import { Administrstor } from './components/administrator/Administrator';
 import AppPreloader from './components/loader/appPreloader';
 import { useRequest } from './hooks/useRequest';
 import { ScrollToTop } from './components/scroll-to-top/ScrollToTop';
+import { UnusedElements } from './components/configurator/forms/unusedElements/UnusedElements';
 
 import { userInitialize, userFetching, userFetchingError } from './reducers/userSlice';
 
@@ -47,6 +48,7 @@ const App = () => {
                         <Route exact path="/Configurator/:operation/:id" component={Configurator} />
                         <Route exact path="/Administrator/:operation" component={Administrstor} />
                         <Route exact path="/Error" component={ErrorsPage} />
+                        <Route exact path='/Unused' component={UnusedElements} />
                         <Route path="*" render={props => <ErrorsPage statusCode={404} statusText='Page not found' message='Страница не найдена' {...props} />} />
                     </Switch>
 

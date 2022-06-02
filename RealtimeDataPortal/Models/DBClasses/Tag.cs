@@ -52,5 +52,15 @@ namespace RealtimeDataPortal.Models
                 throw new Exception("NotDeleted");
             }
         }
+
+        //public Object GetListUnusedTags ()
+        //{
+        //    using RDPContext rdpBase = new();
+
+        //    var listUnusedTags = 
+        //        (from unusedTags in rdpBase)
+
+        //    return {};
+        //}
     }
 }

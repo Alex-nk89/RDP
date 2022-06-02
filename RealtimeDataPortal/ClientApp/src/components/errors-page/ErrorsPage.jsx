@@ -8,8 +8,8 @@ const ErrorsPage = ({ statusCode = 500, statusText = 'Internal Server Error', me
     return (
         <div className='errors-page' style={{ height: height }}>
             <h1>{statusCode}</h1>
-            <h2>{statusText}.</h2>
-            <p>{message}.</p>
+            <h2>{statusText}</h2>
+            <p>{message}</p>
             <Link to="/"><Button>На главную</Button></Link>
         </div>
     )
